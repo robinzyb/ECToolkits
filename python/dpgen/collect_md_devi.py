@@ -85,10 +85,10 @@ def collect_model_devi(dpgen_dir, param_file, iteration):
         #print(md_num)
         # get the task dir
         # count is current task number
-        count = 0
-        for j in range(md_num):
-            for temp in devi_setup["temps"]:
-                for sys_idx in devi_setup["sys_idx"]:
+        for sys_idx in devi_setup["sys_idx"]:
+            count = 0
+            for j in range(md_num):
+                for temp in devi_setup["temps"]:
                     task_dir = get_task_dir(devi_dir, sys_idx, count)
                     #get the model deviation .out path
                     model_devi_file = get_model_devi_path(task_dir)

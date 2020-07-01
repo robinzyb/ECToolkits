@@ -2,6 +2,7 @@
 this script put misc function here.
 """
 from ase.geometry.analysis import Analysis
+import numpy as np
 
 # frequently used unit convertion
 au2eV = 27.211386245988

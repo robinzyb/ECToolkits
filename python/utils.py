@@ -1,7 +1,32 @@
-
+"""
+this script put misc function here.
+"""
 # frequently used unit convertion
 au2eV = 27.211386245988
 au2A = 0.529177210903
+
+
+def set_pbc(pos, cell):
+    """set pbc for a list of Atoms object"""
+    for single_pos in pos:
+        single_pos.set_cell(cell)
+        single_pos.set_pbc(True)
+
+def get_rdf(pos, r, nbin, frames, elements):
+    """
+    pos: a list of atoms object
+    r: the radial length
+    nbin: the bin number in the radial range
+    frames: how much pos number will you consider
+    elements: the atom pair
+    """
+    tmp_info = Analysis(pos)
+    # this wil get a rdf for every snapshot
+    tmp_rdf_list = tmp_info.get_rdf(r, nbin, imageIdx=slice(0, frames, 1), elements=elements)
+    tot_gr = np.zeros(nbin)
+    for s_gr in tmp_rdf_list:
+        tot_gr += s_gr/frames
+    return tot_gr
 
 def printtbox(arg):
     """

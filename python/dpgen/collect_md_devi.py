@@ -18,12 +18,11 @@ def get_task_dir(devi_dir, sys_idx, task_idx):
     task_dir = os.path.join(devi_dir, "task.{0:03d}.{1:06d}".format(sys_idx, task_idx))
     return task_dir
 
-def get_md_init_num(sys_config, devi_setup):
+def get_md_init_num(sys_entry):
     """get md initial structure number"""
     md_num = 0
-    for sys_idx in devi_setup["sys_idx"]:
-        for structs in sys_config[sys_idx]:
-            md_num += len(glob.glob(structs))
+    for structs in sys_entry:
+        md_num += len(glob.glob(structs))
     if md_num == 0:
         raise ValueError("Can't find any structs")
     else:
@@ -81,12 +80,12 @@ def collect_model_devi(dpgen_dir, param_file, iteration):
         devi_setup = jdata["model_devi_jobs"][i]
         # get the md initial structure number
         sys_config = jdata["sys_configs"]
-        md_num = get_md_init_num(sys_config, devi_setup)
         #print(md_num)
         # get the task dir
         # count is current task number
         for sys_idx in devi_setup["sys_idx"]:
             count = 0
+            md_num = get_md_init_num(sys_config[sys_idx])
             for j in range(md_num):
                 for temp in devi_setup["temps"]:
                     task_dir = get_task_dir(devi_dir, sys_idx, count)

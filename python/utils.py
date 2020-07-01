@@ -1,6 +1,8 @@
 """
 this script put misc function here.
 """
+from ase.geometry.analysis import Analysis
+
 # frequently used unit convertion
 au2eV = 27.211386245988
 au2A = 0.529177210903

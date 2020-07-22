@@ -15,7 +15,7 @@ def set_pbc(pos, cell):
         single_pos.set_cell(cell)
         single_pos.set_pbc(True)
 
-def get_rdf(pos, r, nbin, frames, elements):
+def get_rdf_list(pos, r, nbin, frames, elements):
     """
     pos: a list of atoms object
     r: the radial length
@@ -26,6 +26,13 @@ def get_rdf(pos, r, nbin, frames, elements):
     tmp_info = Analysis(pos)
     # this wil get a rdf for every snapshot
     tmp_rdf_list = tmp_info.get_rdf(r, nbin, imageIdx=slice(0, frames, 1), elements=elements)
+    return tmp_rdf_list
+
+def get_rdf(pos, r, nbin, frames, elements):
+    """
+
+    """
+    tmp_rdf_list = get_rdf_list(pos, r, nbin, frames, elements)
     tot_gr = np.zeros(nbin)
     for s_gr in tmp_rdf_list:
         tot_gr += s_gr/frames

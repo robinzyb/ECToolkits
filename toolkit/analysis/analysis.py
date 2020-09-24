@@ -158,6 +158,12 @@ class Analysis():
 
         self.o_density = density
         self.o_density_z = z
+        np.savetxt(
+                "o_density.dat",
+                np.stack((self.o_density_z, self.o_density)).T,
+                header="FIELD: z[A], o_density"
+        )
+        fancy_print("Oxygen Density Profile Data Save to o_density.dat")
 
     def dump_o_density(self):
         fancy_print("---------------------------")

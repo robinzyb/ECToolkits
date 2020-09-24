@@ -38,7 +38,7 @@ class Analysis():
         self.surf2 = np.array(self.surf2)
         fancy_print("Read Surface 2 Atoms Index: {0}".format(inp["surf2"]))
 
-        self.shift_center =inp["shift_center"]
+        self.shift_center = inp["shift_center"]
         fancy_print("Density will shift center to water center: {0}".format(self.shift_center))
 
         # how many structures will be read
@@ -47,7 +47,7 @@ class Analysis():
         else:
             index = ':'
         # Start reading structure
-        self.poses = read(inp["xyz_file"], index=index)
+        self.poses = read(inp["xyz_file"], format='xyz', index=index)
 
         self.nframe = len(self.poses)
         fancy_print("Read Frame Number: {0}".format(self.nframe))
@@ -134,7 +134,7 @@ class Analysis():
         # get the bin number
         bins = int(self.cell[2]/dz)
 
-        density, z = np.histogram(o_z.flatten(), bins=bins)
+        density, z = np.histogram(o_z.flatten(), bins=bins, range=(0, self.cell[2]))
 
         # throw the last one and move the number half bin
         z = z[:-1] + dz/2

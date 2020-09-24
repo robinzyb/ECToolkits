@@ -9,6 +9,9 @@ au2eV = 27.211386245988
 au2A = 0.529177210903
 
 
+def fancy_print(string):
+    print("ToolKit: {0}".format(string))
+
 def set_pbc(pos, cell):
     """set pbc for a list of Atoms object"""
     for single_pos in pos:

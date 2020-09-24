@@ -1,0 +1,8 @@
+{
+    "Analysis": ["O_density"],
+    "xyz_file": "Hematite-pos-1.xyz",
+    "cell": [10.0564, 8.7091, 39.5354],
+    "surf2": [37, 38, 39, 40],
+    "surf1": [153, 154, 155, 156],
+    "shift_center": "True"
+}

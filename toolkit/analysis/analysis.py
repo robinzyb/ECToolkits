@@ -62,6 +62,11 @@ class Analysis():
             pos.wrap()
             #z
             self.all_z.append(pos.get_positions().T[2])
+
+        # cell info
+        self.cell_volume = self.poses[0].get_volume()
+        self.xy_area = self.cell_volume/self.cell[2]
+
         # turn into np array
         self.all_z = np.stack(self.all_z)
         if self.surf1_ave > self.surf2_ave:
@@ -139,7 +144,7 @@ class Analysis():
         bulk_density = 32/9.86**3
 
         # normalized wrt density of bulk water
-        density = density/(self.cell[0]*self.cell[1]*dz)/self.nframe/bulk_density
+        density = density/(self.xy_area*dz)/self.nframe/bulk_density
 
         # shift the center to water center
         if self.shift_center:

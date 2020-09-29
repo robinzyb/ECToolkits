@@ -1,5 +1,5 @@
 from scipy.ndimage import gaussian_filter1d
-from utils import au2eV
+from toolkit.utils import au2eV
 import numpy as np
 
 def read_dos_element(file):
@@ -11,7 +11,8 @@ def read_dos_element(file):
 def read_dos_fermi(file):
     with open(file) as f:
         first_line = f.readline()
-        fermi = first_line.split()[15]
+        fermi_idx = first_line.split().index("E(Fermi)")
+        fermi = first_line.split()[fermi_idx+2]
         fermi = float(fermi)*au2eV
     return fermi
 
@@ -20,10 +21,11 @@ def read_dos_energies(file):
     energies = energies * au2eV
     return energies
 
-def get_raw_dos(energies, fermi, weights, step=0.1):
-    bins = int((energies[-1]-energies[0])/step)
-    dos, ener = np.histogram(energies, bins, weights=weights)
-    ener = ener[:-1] - fermi + 0.5*step
+def get_raw_dos(energies, fermi, weights, steplen=0.1):
+    bins = int((energies[-1]-energies[0])/steplen)
+    dos, ener = np.histogram(energies, bins, weights=weights, range=(energies[0], energies[-1]))
+    dos = dos/steplen
+    ener = ener[:-1] - fermi + 0.5*steplen
     return dos, ener
 
 def dos_smth(dos, sigma=0.2):
@@ -59,3 +61,8 @@ def get_dos(file, dos_type="total"):
     # smooth
     smth_dos = dos_smth(dos)
     return smth_dos, ener, info
+
+class pdos():
+    def __init__(self, file_name, fermi, element):
+        self.element = read_dos_element(file_name)
+        self.fermi = read_dos_fermi(file_name)

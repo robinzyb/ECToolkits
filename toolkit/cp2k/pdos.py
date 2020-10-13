@@ -33,7 +33,7 @@ def dos_smth(dos, sigma=0.2):
     smth_dos = gaussian_filter1d(dos, sigma)
     return smth_dos
 
-def get_dos(file, dos_type="total"):
+def get_dos(file, dos_type="total", ldos=False):
     # get the dos from cp2k pdos file
     # dos_type: total, s, p, d
     # return information, dos, ener
@@ -43,19 +43,31 @@ def get_dos(file, dos_type="total"):
     # read energy
     energies = read_dos_energies(file)
     # decide the weight from dos_type
-    if dos_type == "total":
-        tmp_len = len(np.loadtxt(file, usecols = 2))
-        weights = np.ones(tmp_len)
-    elif dos_type == "s":
-        weights = np.loadtxt(file, usecols = 3)
-    elif dos_type == "p":
-        weights = np.loadtxt(file, usecols = (4,5,6)).sum(axis=1)
-    elif dos_type == "d":
-        weights = np.loadtxt(file, usecols = (7,8,9,10,11)).sum(axis=1)
-    elif dos_type == "f":
-        weights = np.loadtxt(file, usecols = (12,13,14,15,16,17,18)).sum(axis=1)
+    if ldos :
+        if dos_type == "total":
+            weights = np.loadtxt(file, usecols = (3, 4, 5)).sum(axis=1)
+        elif dos_type == "s":
+            weights = np.loadtxt(file, usecols = 3)
+        elif dos_type == "p":
+            weights = np.loadtxt(file, usecols = 4)
+        elif dos_type == "d":
+            weights = np.loadtxt(file, usecols = 5)
+        elif dos_type == "f":
+            weights = np.loadtxt(file, usecols = 6)
     else:
-        raise NameError("dos type does not exist!")
+        if dos_type == "total":
+            tmp_len = len(np.loadtxt(file, usecols = 2))
+            weights = np.ones(tmp_len)
+        elif dos_type == "s":
+            weights = np.loadtxt(file, usecols = 3)
+        elif dos_type == "p":
+            weights = np.loadtxt(file, usecols = (4,5,6)).sum(axis=1)
+        elif dos_type == "d":
+            weights = np.loadtxt(file, usecols = (7,8,9,10,11)).sum(axis=1)
+        elif dos_type == "f":
+            weights = np.loadtxt(file, usecols = (12,13,14,15,16,17,18)).sum(axis=1)
+        else:
+            raise NameError("dos type does not exist!")
     # make dos by histogram
     dos, ener = get_raw_dos(energies, info['fermi'], weights)
     # smooth

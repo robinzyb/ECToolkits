@@ -1,5 +1,5 @@
-from utils import file_content
-from utils import au2A
+from toolkit.utils import file_content
+from toolkit.utils import au2A, au2eV
 import numpy as np
 
 
@@ -46,3 +46,35 @@ def read_cube(cube_file):
     info["elements"], info["pos"] = read_cube_pos(cube_file, info["num_atom"])
     info["cube_val"] = read_cube_val(cube_file, info["num_atom"], info["num_point"])
     return info
+
+def cube_pav(cube_file, axis, interpolate=True):
+    # do the planar average along specific axis
+    cube_info = read_cube(cube_file)
+    if axis == 'x':
+        vals = cube_info["cube_val"].mean(axis=(1,2))*au2eV
+        points = np.arange(0, cube_info["num_point"][0])*cube_info["step"][0]
+        length = cube_info["num_point"][0]*cube_info["step"][0]
+    elif axis == 'y':
+        vals = cube_info["cube_val"].mean(axis=(0,2))*au2eV
+        points = np.arange(0, cube_info["num_point"][1])*cube_info["step"][1]
+        length = cube_info["num_point"][1]*cube_info["step"][1]
+    elif axis == 'z':
+        vals = cube_info["cube_val"].mean(axis=(0,1))*au2eV
+        points = np.arange(0, cube_info["num_point"][2])*cube_info["step"][2]
+        length = cube_info["num_point"][2]*cube_info["step"][2]
+    else:
+        print("not implement average style!")
+
+    # interpolate or note
+    if interpolate:
+        new_points = np.linspace(0, length, len(points)*10)
+        new_points, new_vals = interpolate_spline(points, vals, new_points)
+        return new_points, new_vals
+    else:
+        return points, vals
+
+def interpolate_spline(old_x, old_y, new_x):
+    from scipy import interpolate
+    f = interpolate.splrep(old_x, old_y, s=0)
+    new_y = interpolate.splev(new_x, f)
+    return new_x, new_y

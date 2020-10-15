@@ -44,20 +44,29 @@ def get_max_force_devi(model_devi_path):
     force_devi = np.loadtxt(model_devi_path, usecols=4)
     return force_devi
 
-def store_devi_data(model_devi_data, force_devi, temp, i):
+def store_devi_data(model_devi_data, force_devi, sys_idx, temp, i):
     """
     store the deviation force into a dictionary
     """
     if temp in model_devi_data:
-        if "{0:06d}".format(i) in model_devi_data[temp]:
-            model_devi_data[temp]["{0:06d}".format(i)].append(force_devi)
+        if "{0:03d}".format(sys_idx) in model_devi_data[temp]:
+            if "{0:06d}".format(i) in model_devi_data[temp]["{0:03d}".format(sys_idx)]:
+                model_devi_data[temp]["{0:03d}".format(sys_idx)]["{0:06d}".format(i)].append(force_devi)
+            else:
+                model_devi_data[temp]["{0:03d}".format(sys_idx)]["{0:06d}".format(i)] = []
+                model_devi_data[temp]["{0:03d}".format(sys_idx)]["{0:06d}".format(i)].append(force_devi)
         else:
-            model_devi_data[temp]["{0:06d}".format(i)] = []
-            model_devi_data[temp]["{0:06d}".format(i)].append(force_devi)
+            model_devi_data[temp]["{0:03d}".format(sys_idx)] = {}
+            if "{0:06d}".format(i) in model_devi_data[temp]["{0:03d}".format(sys_idx)]:
+                model_devi_data[temp]["{0:03d}".format(sys_idx)]["{0:06d}".format(i)].append(force_devi)
+            else:
+                model_devi_data[temp]["{0:03d}".format(sys_idx)]["{0:06d}".format(i)] = []
+                model_devi_data[temp]["{0:03d}".format(sys_idx)]["{0:06d}".format(i)].append(force_devi)
     else:
         model_devi_data[temp] = {}
-        model_devi_data[temp]["{0:06d}".format(i)] = []
-        model_devi_data[temp]["{0:06d}".format(i)].append(force_devi)
+        model_devi_data[temp]["{0:03d}".format(sys_idx)] = {}
+        model_devi_data[temp]["{0:03d}".format(sys_idx)]["{0:06d}".format(i)] = []
+        model_devi_data[temp]["{0:03d}".format(sys_idx)]["{0:06d}".format(i)].append(force_devi)
 
 def collect_model_devi(dpgen_dir, param_file, iteration):
     """
@@ -93,7 +102,7 @@ def collect_model_devi(dpgen_dir, param_file, iteration):
                     model_devi_file = get_model_devi_path(task_dir)
                     max_force_devi = get_max_force_devi(model_devi_file)
                     #add to the dictionary
-                    store_devi_data(model_devi_data, max_force_devi, temp, i)
+                    store_devi_data(model_devi_data, max_force_devi, sys_idx, temp, i)
                     print("temperature: {0}K \n trajectory directory: {1}".format(temp, task_dir))
                     count += 1
     return model_devi_data

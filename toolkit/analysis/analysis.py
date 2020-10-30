@@ -9,19 +9,17 @@ from toolkit.utils import fancy_print
 
 def analysis_run(args):
     if args.CONFIG:
+        import json
         fancy_print("Analysis Start!")
-        system = Analysis(args.CONFIG)
+        with open(args.CONFIG, 'r') as f:
+            inp = json.load(f)
+        system = Analysis(inp)
         system.run()
         fancy_print("FINISHED")
 
 
 class Analysis():
-    def __init__(self, inp_file):
-
-        import json
-        with open(inp_file, 'r') as f:
-            inp = json.load(f)
-
+    def __init__(self, inp):
 
         # print file name
         self.xyz_file = inp["xyz_file"]
@@ -69,10 +67,25 @@ class Analysis():
 
         # turn into np array
         self.all_z = np.stack(self.all_z)
+
+        # surface 1 and 2 position along the trajectory
+        self.surf1_ave_s = self.surf1_ave()
+        self.surf2_ave_s = self.surf2_ave()
+
+        self.surf1_ave = self.surf1_ave_s.mean()
+        self.surf2_ave = self.surf2_ave_s.mean()
+
+        # find the water center along the trajectory
         if self.surf1_ave > self.surf2_ave:
+            self.water_cent_s = (self.surf2_ave_s + self.cell[2] + self.surf1_ave_s)/2
             self.water_cent = (self.surf2_ave + self.cell[2] + self.surf1_ave)/2
         else:
+            self.water_cent_s = (self.surf2_ave_s + self.surf1_ave_s)/2
             self.water_cent = (self.surf2_ave + self.surf1_ave)/2
+
+        # water center relative to fisrt frame
+        self.water_cent_rel_s = self.water_cent_s - self.water_cent_s[0]
+
         fancy_print("Calculated Origin Water Center Position: {0} A".format(self.water_cent))
         fancy_print("Water Center will shift to Cell Center: {0} A".format(self.cell[2]/2))
 
@@ -89,20 +102,18 @@ class Analysis():
 
 
 
-    @property
     def surf1_ave(self):
         # calculate the surface 1 average position
 
         surf1_z = self.all_z.T[self.surf1-1]
-        surf_ave = surf1_z.flatten().mean()
+        surf_ave = surf1_z.mean(axis=0)
         return surf_ave
 
-    @property
     def surf2_ave(self):
         # calculate the surface 2 average position
 
         surf2_z = self.all_z.T[self.surf2-1]
-        surf_ave = surf2_z.flatten().mean()
+        surf_ave = surf2_z.mean(axis=0)
         return surf_ave
 
     @property
@@ -129,12 +140,24 @@ class Analysis():
         fancy_print("START GETING OXYGEN DENSITY")
 
         o_z = self.all_z.T[self.o_idx]
-        o_z = o_z.T
+#        o_z = o_z.T
+        # shift the o_z to eliminate the effect of slab drift
+        o_z = o_z - self.water_cent_rel_s
+
+
+        # this might cause the num exceed cell boundary, need wrap the number
+        o_z_new = []
+        for num in o_z.flatten():
+            o_z_new.append(self.wrap_number(num))
+        o_z = np.array(o_z_new)
+
+
+
         dz = 0.2
         # get the bin number
         bins = int(self.cell[2]/dz)
 
-        density, z = np.histogram(o_z.flatten(), bins=bins, range=(0, self.cell[2]))
+        density, z = np.histogram(o_z, bins=bins, range=(0, self.cell[2]))
 
         # throw the last one and move the number half bin
         z = z[:-1] + dz/2

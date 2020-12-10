@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import os
 
 from ase.io import read, write
+from ase.neighborlist import neighbor_list
 
 from toolkit.utils import fancy_print
 
@@ -21,6 +22,11 @@ def analysis_run(args):
 class Analysis():
     def __init__(self, inp):
 
+        # print the function we choose
+        self.functions = inp["functions"]
+        fancy_print("The following analysis will be performed")
+        for i in self.functions:
+            fancy_print("Function: {0}".format(i))
         # print file name
         self.xyz_file = inp["xyz_file"]
         fancy_print("Read Structure File: {0}".format(inp["xyz_file"]))
@@ -36,26 +42,45 @@ class Analysis():
         self.surf2 = np.array(self.surf2)
         fancy_print("Read Surface 2 Atoms Index: {0}".format(inp["surf2"]))
 
-        self.shift_center = inp["shift_center"]
-        fancy_print("Density will shift center to water center: {0}".format(self.shift_center))
+#        self.shift_center = inp["shift_center"]
+#        fancy_print("Density will shift center to water center: {0}".format(self.shift_center))
 
         # how many structures will be read
         if "nframe" in inp:
             index = '::{0}'.format(inp["nframe"])
         else:
             index = ':'
+
         # Start reading structure
+        fancy_print("Now Start Reading Structures")
+        fancy_print("----------------------------")
         self.poses = read(inp["xyz_file"], format='xyz', index=index)
+        fancy_print("Reading Structures is Finished")
 
         self.nframe = len(self.poses)
         fancy_print("Read Frame Number: {0}".format(self.nframe))
         self.natom = len(self.poses[0])
         fancy_print("Read Atom Number: {0}".format(self.natom))
 
+        # Check the Index method
+        self.O_idx_method = inp["O_density"]["O_index_method"]
+        # get the idx
+
+        if self.O_idx_method == "GEUSS_init":
+            fancy_print("Use the Oxygen index of water guessed from coordination number")
+            self.Ow_idx = self.water_O_idx()
+        elif self.O_idx_method == "external":
+            fancy_print("Use the Oxygen index from external input")
+            self.Ow_idx = self.external_idx(inp)
+        else:
+            fancy_print("Not implement")
+
+
     def run(self):
         # read all structure and corresponding z
         self.all_z = []
         for pos in self.poses:
+            # wrap the cell
             pos.set_cell(self.cell)
             pos.wrap()
             #z
@@ -89,13 +114,13 @@ class Analysis():
         fancy_print("Calculated Origin Water Center Position: {0} A".format(self.water_cent))
         fancy_print("Water Center will shift to Cell Center: {0} A".format(self.cell[2]/2))
 
-        if self.shift_center:
-            self.surf1_ave_shift = self.wrap_number(self.surf1_ave - self.z_shift)
-            self.surf2_ave_shift = self.wrap_number(self.surf2_ave - self.z_shift)
-        else:
-            # no shift one, just for convenience
-            self.surf1_ave_shift = self.surf1_ave
-            self.surf2_ave_shift = self.surf2_ave
+#        if self.shift_center:
+#            self.surf1_ave_shift = self.wrap_number(self.surf1_ave - self.z_shift)
+#            self.surf2_ave_shift = self.wrap_number(self.surf2_ave - self.z_shift)
+#        else:
+#            # no shift one, just for convenience
+#            self.surf1_ave_shift = self.surf1_ave
+#            self.surf2_ave_shift = self.surf2_ave
         self.get_o_density()
         self.dump_o_density()
 
@@ -116,13 +141,25 @@ class Analysis():
         surf_ave = surf2_z.mean(axis=0)
         return surf_ave
 
-    @property
-    def o_idx(self):
-        o_idx = []
-        for at in self.poses[0]:
-            if at.symbol == 'O':
-                o_idx.append(at.index)
-        return o_idx
+    def water_O_idx(self):
+        # guess the o index of water
+        i = neighbor_list('i', self.poses[0], {('O', 'H'): 1.3})
+        j = neighbor_list('j', self.poses[0], {('O', 'H'): 1.3})
+        cn = np.bincount(i)
+
+        H2O_pair_list = []
+        Ow_idx = np.where(cn == 2)[0]
+        np.savetxt("Ow_idx.dat", Ow_idx, fmt='%d')
+        return Ow_idx
+
+    def external_idx(self, inp):
+        # get the idx from external input
+
+        O_idx = inp["O_density"]["O_index"]
+        np.savetxt("O_idx.dat", O_idx, fmt='%d')
+        return O_idx
+
+
 
     @property
     def z_shift(self):
@@ -136,14 +173,15 @@ class Analysis():
         return num
 
     def get_o_density(self):
-        fancy_print("---------------------------")
-        fancy_print("START GETING OXYGEN DENSITY")
+        fancy_print("START GETTING OXYGEN DENSITY")
+        fancy_print("----------------------------")
 
-        o_z = self.all_z.T[self.o_idx]
+
+        o_z = self.all_z.T[self.Ow_idx]
 #        o_z = o_z.T
         # shift the o_z to eliminate the effect of slab drift
-        o_z = o_z - self.water_cent_rel_s
-
+        # o_z = o_z - self.water_cent_rel_s
+        o_z = o_z - self.surf1_ave_s
 
         # this might cause the num exceed cell boundary, need wrap the number
         o_z_new = []
@@ -155,9 +193,16 @@ class Analysis():
 
         dz = 0.2
         # get the bin number
-        bins = int(self.cell[2]/dz)
 
-        density, z = np.histogram(o_z, bins=bins, range=(0, self.cell[2]))
+        # find the length between two surface
+        if self.surf1_ave_s[0] > self.surf2_ave_s[0]:
+            self.surf_space = self.surf2_ave + self.cell[2] - self.surf1_ave
+        else:
+            self.surf_space = self.surf2_ave - self.surf1_ave
+
+        bins = int(self.surf_space/dz)
+
+        density, z = np.histogram(o_z, bins=bins, range=(0, self.surf_space))
 
         # throw the last one and move the number half bin
         z = z[:-1] + dz/2
@@ -170,13 +215,13 @@ class Analysis():
         density = density/(self.xy_area*dz)/self.nframe/bulk_density
 
         # shift the center to water center
-        if self.shift_center:
-            z = z - self.z_shift
-            shift_idx = np.where(z<0)
-            z[shift_idx] = z[shift_idx] + self.cell[2]
+        #if self.shift_center:
+        #    z = z - self.z_shift
+        #    shift_idx = np.where(z<0)
+        #    z[shift_idx] = z[shift_idx] + self.cell[2]
 
-            z = np.roll(z, -len(shift_idx[0]))
-            density = np.roll(density, -len(shift_idx[0]))
+        #    z = np.roll(z, -len(shift_idx[0]))
+        #    density = np.roll(density, -len(shift_idx[0]))
 
 
         self.o_density = density
@@ -193,8 +238,6 @@ class Analysis():
         fancy_print("START PLOT OXYGEN DENSITY")
         plt.figure()
         plt.plot(self.o_density_z, self.o_density)
-        plt.vlines(self.surf1_ave_shift , 0, 10)
-        plt.vlines(self.surf2_ave_shift , 0, 10)
         plt.savefig("o_density.pdf")
         fancy_print("Oxygen Density Profile Save to o_density.pdf")
 

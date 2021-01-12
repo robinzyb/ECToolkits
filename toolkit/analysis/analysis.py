@@ -149,14 +149,14 @@ class Analysis():
 
         H2O_pair_list = []
         Ow_idx = np.where(cn == 2)[0]
-        np.savetxt("Ow_idx.dat", Ow_idx, fmt='%d')
+        np.savetxt(os.path.join(os.path.dirname(self.xyz_file), "Ow_idx.dat"), Ow_idx, fmt='%d')
         return Ow_idx
 
     def external_idx(self, inp):
         # get the idx from external input
 
         O_idx = inp["O_density"]["O_index"]
-        np.savetxt("O_idx.dat", O_idx, fmt='%d')
+        np.savetxt(os.path.join(os.path.dirname(self.xyz_file), "O_idx.dat"), O_idx, fmt='%d')
         return O_idx
 
 
@@ -191,7 +191,7 @@ class Analysis():
 
 
 
-        dz = 0.2
+        dz = 0.05
         # get the bin number
 
         # find the length between two surface
@@ -227,7 +227,7 @@ class Analysis():
         self.o_density = density
         self.o_density_z = z
         np.savetxt(
-                "o_density.dat",
+                os.path.join(os.path.dirname(self.xyz_file), "o_density.dat"),
                 np.stack((self.o_density_z, self.o_density)).T,
                 header="FIELD: z[A], o_density"
         )
@@ -238,6 +238,6 @@ class Analysis():
         fancy_print("START PLOT OXYGEN DENSITY")
         plt.figure()
         plt.plot(self.o_density_z, self.o_density)
-        plt.savefig("o_density.pdf")
+        plt.savefig(os.path.join(os.path.dirname(self.xyz_file), "o_density.pdf"))
         fancy_print("Oxygen Density Profile Save to o_density.pdf")
 

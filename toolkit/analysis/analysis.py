@@ -41,6 +41,7 @@ class Analysis():
         self.surf2 = inp["surf2"]
         self.surf2 = np.array(self.surf2)
         fancy_print("Read Surface 2 Atoms Index: {0}".format(inp["surf2"]))
+        self.output = inp["output"]
 
 #        self.shift_center = inp["shift_center"]
 #        fancy_print("Density will shift center to water center: {0}".format(self.shift_center))
@@ -130,14 +131,14 @@ class Analysis():
     def surf1_ave(self):
         # calculate the surface 1 average position
 
-        surf1_z = self.all_z.T[self.surf1-1]
+        surf1_z = self.all_z.T[self.surf1]
         surf_ave = surf1_z.mean(axis=0)
         return surf_ave
 
     def surf2_ave(self):
         # calculate the surface 2 average position
 
-        surf2_z = self.all_z.T[self.surf2-1]
+        surf2_z = self.all_z.T[self.surf2]
         surf_ave = surf2_z.mean(axis=0)
         return surf_ave
 
@@ -227,7 +228,7 @@ class Analysis():
         self.o_density = density
         self.o_density_z = z
         np.savetxt(
-                os.path.join(os.path.dirname(self.xyz_file), "o_density.dat"),
+                os.path.join(os.path.dirname(self.xyz_file), self.output),
                 np.stack((self.o_density_z, self.o_density)).T,
                 header="FIELD: z[A], o_density"
         )

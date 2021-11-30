@@ -1,5 +1,6 @@
 from scipy.ndimage import gaussian_filter1d
 from toolkit.utils import au2eV
+from toolkit.cp2k.cube import interpolate_spline
 import numpy as np
 
 def read_dos_element(file):
@@ -33,7 +34,7 @@ def dos_smth(dos, sigma=0.2):
     smth_dos = gaussian_filter1d(dos, sigma)
     return smth_dos
 
-def get_dos(file, dos_type="total", ldos=False):
+def get_dos(file, dos_type="total", ldos=False, smooth=True):
     # get the dos from cp2k pdos file
     # dos_type: total, s, p, d
     # return information, dos, ener
@@ -71,8 +72,10 @@ def get_dos(file, dos_type="total", ldos=False):
     # make dos by histogram
     dos, ener = get_raw_dos(energies, info['fermi'], weights)
     # smooth
-    smth_dos = dos_smth(dos)
-    return smth_dos, ener, info
+    if smooth:
+        new_points = np.linspace(-10, 5, 500)
+        new_points, new_vals = interpolate_spline(ener, dos, new_points)
+    return new_vals, new_points, info
 
 class pdos():
     def __init__(self, file_name, fermi, element):

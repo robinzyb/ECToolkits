@@ -55,7 +55,7 @@ class Analysis():
         # Start reading structure
         fancy_print("Now Start Reading Structures")
         fancy_print("----------------------------")
-        self.poses = read(inp["xyz_file"], format='xyz', index=index)
+        self.poses = read(inp["xyz_file"], index=index)
         fancy_print("Reading Structures is Finished")
 
         self.nframe = len(self.poses)

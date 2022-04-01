@@ -19,7 +19,8 @@ setuptools.setup(
     install_requires=[
         "numpy",
         "matplotlib",
-        "ase"
+        "ase",
+        "cp2kdata"
   ],
     entry_points={
         'console_scripts': [

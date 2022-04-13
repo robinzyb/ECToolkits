@@ -8,6 +8,22 @@ import numpy as np
 au2eV = 27.211386245988
 au2A = 0.529177210903
 
+def get_cum_mean(array):
+    tot = 0.0
+    cum_mean_array = []
+    for idx, i in enumerate(array):
+        tot += i
+        cum_mean_array.append(tot/(idx+1))
+    cum_mean_array = np.array(cum_mean_array)
+    return cum_mean_array
+
+def get_idx_from_range(atoms, element, zmin, zmax):
+    idx_list = []
+    for atom in atoms:
+        if atom.symbol == element:
+            if (atom.position[2] < zmax) and (atom.position[2] > zmin):
+                idx_list.append(atom.index)
+    return idx_list
 
 def fancy_print(string):
     print("ToolKit: {0}".format(string))

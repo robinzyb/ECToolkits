@@ -1,8 +1,10 @@
 from cp2kdata.cube import Cp2kCube
 import numpy as np
 import os
+import pandas as pd
 import matplotlib.pyplot as plt
 
+from toolkit.utils import get_cum_mean
 
 def get_pav_list(prefix, index, save=True, axis='z', save_path="."):
     # index last number is exclude
@@ -10,7 +12,7 @@ def get_pav_list(prefix, index, save=True, axis='z', save_path="."):
     pav_list = []
     for idx in range(*index):
         cube = Cp2kCube(f"{prefix}{idx}.cube")
-        x, pav = cube.get_pav()
+        x, pav = cube.get_pav(interpolate=True)
         x_list.append(x)
         pav_list.append(pav)
         print(f"process cube {idx} finished", end="\r")
@@ -42,6 +44,10 @@ def get_nearest_idx(array, value):
     idx = np.argmin(np.abs(array-value))
     return idx
 
+def get_z_mean(atoms, idx_list):
+    z_mean = atoms[idx_list].get_positions().T[2].mean()
+    return z_mean
+
 def get_slab_cent(traj, surf1_idx, surf2_idx, cell_z):
     slab_cent_list = []
     for snapshot in traj:
@@ -71,3 +77,110 @@ def align_to_slab_cent(x_list, pav_list, traj, surf1_idx, surf2_idx, cell_z):
         new_pav_list.append(new_pav)
     new_pav_list = np.array(new_pav_list)
     return new_pav_list
+
+
+def get_alignment_water(level, ref_water_hartree):
+    U = -level + ref_water_hartree + 15.35 - 15.81 + 0.35
+    return U
+
+def get_alignment_water_2(level, ref_water_hartree, ref_solid_hartree):
+    U = -level - ref_solid_hartree + ref_water_hartree + 15.35 - 15.81 + 0.35
+    return U
+
+def get_alignment_vac(level, ref_vac_hartree):
+    U = -level + ref_vac_hartree -4.44
+    return U
+
+def get_alignment_vac_2(level, ref_vac_hartree, ref_solid_hartree):
+    U = -level -ref_solid_hartree + ref_vac_hartree -4.44
+    return U
+
+
+def get_alignment(level, ref_hartree, ref_solid_hartree=None, vac_model=False, ref_bulk=False):
+    if vac_model:
+        if ref_bulk:
+            U = get_alignment_vac_2(level=level, ref_vac_hartree=ref_hartree, ref_solid_hartree=ref_solid_hartree)
+        else:
+            U = get_alignment_vac(level=level, ref_vac_hartree=ref_hartree)
+    else:
+        if ref_bulk:
+            U = get_alignment_water_2(level=level, ref_water_hartree=ref_hartree, ref_solid_hartree=ref_solid_hartree)
+        else:
+            U = get_alignment_water(level=level, ref_water_hartree=ref_hartree)
+    return U
+
+def get_z_mean(atoms, idx_list):
+    z_mean = atoms[idx_list].get_positions().T[2].mean()
+    return z_mean
+
+def get_water_center_list(traj, surf1_idx, surf2_idx, cell_z):
+    # not recommend for surface atoms shift at boundary
+    water_center_list = []
+    for snapshot in traj:
+        surf1_z = get_z_mean(snapshot, surf1_idx)
+        surf2_z = get_z_mean(snapshot, surf2_idx)
+        if surf2_z < surf1_z:
+            surf2_z =+ cell_z
+        water_center = (surf1_z + surf2_z)/2
+        water_center_list.append(water_center)
+    water_center_list = np.array(water_center_list)
+    return water_center_list
+
+def get_water_hartree(x_list, pav_list, water_center_list, width_list):
+    hartree_list = {}
+    for width in width_list:
+        hartree_list_per_width = []
+        for x, pav, water_center in zip(x_list, pav_list, water_center_list):
+            water_pav = pav[np.logical_and((x > water_center-width/2), (x < water_center+width/2))]
+            hartree_list_per_width.append(water_pav.mean())
+        
+        hartree_list[f"width{width}"] = np.array(hartree_list_per_width)
+    hartree_list = pd.DataFrame(hartree_list)
+    return hartree_list
+
+
+def get_layer_space_list(traj, layer1_idx, layer2_idx):
+    layer1_z_list = []
+    layer2_z_list = []
+    for snapshot in traj:
+        layer1_z = get_z_mean(snapshot, layer1_idx)
+        layer2_z = get_z_mean(snapshot, layer2_idx)
+        layer1_z_list.append(layer1_z)
+        layer2_z_list.append(layer2_z)
+    layer1_z_list = np.array(layer1_z_list)
+    layer2_z_list = np.array(layer2_z_list)
+    layer_space_list = layer2_z_list - layer1_z_list
+
+    return layer_space_list 
+
+def get_solid_hartree(x_list, mav_list, slab_center_list, width_list):
+    hartree_list = {}
+    for width in width_list:
+        hartree_list_per_width = []
+        for x, mav, slab_center in zip(x_list, mav_list, slab_center_list):
+            solid_mav = mav[np.logical_and((x > slab_center-width/2), (x < slab_center+width/2))]
+            hartree_list_per_width.append(solid_mav.mean())
+        
+        hartree_list[f"width{width}"] = np.array(hartree_list_per_width)
+    hartree_list = pd.DataFrame(hartree_list)
+    return hartree_list
+
+def plot_hartree_per_width(hartree_list):
+    plt.rc('font', size=18) #controls default text size
+    plt.rc('axes', titlesize=23) #fontsize of the title
+    plt.rc('axes', labelsize=20) #fontsize of the x and y labels
+    plt.rc('xtick', labelsize=18) #fontsize of the x tick labels
+    plt.rc('ytick', labelsize=18) #fontsize of the y tick labels
+    plt.rc('legend', fontsize=16) #fontsize of the legend
+
+    plt.rc('lines', linewidth=2, markersize=10) #controls default text size
+
+    plt.rc('axes', linewidth=2)
+    plt.rc('xtick.major', size=10, width=2)
+    plt.rc('ytick.major', size=10, width=2)
+    fig = plt.figure(figsize=(16,9), dpi=200)
+    ax = fig.add_subplot(111)
+    for width, hartree_list_per_width in hartree_list.items():
+        ax.plot(get_cum_mean(hartree_list_per_width), label=f"width {width}")
+    ax.legend(ncol=2)
+    fig.show()

@@ -17,14 +17,6 @@ def get_cum_mean(array):
     cum_mean_array = np.array(cum_mean_array)
     return cum_mean_array
 
-def get_idx_from_range(atoms, element, zmin, zmax):
-    idx_list = []
-    for atom in atoms:
-        if atom.symbol == element:
-            if (atom.position[2] < zmax) and (atom.position[2] > zmin):
-                idx_list.append(atom.index)
-    return idx_list
-
 def fancy_print(string):
     print("ToolKit: {0}".format(string))
 

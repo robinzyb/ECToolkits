@@ -5,6 +5,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from toolkit.utils import get_cum_mean
+#plt.style.use('./matplotlibstyle/project.mplstyle')
+
 
 def get_pav_list(prefix, index, save=True, axis='z', save_path="."):
     # index last number is exclude
@@ -54,7 +56,7 @@ def get_slab_cent(traj, surf1_idx, surf2_idx, cell_z):
         surf1_z = get_z_mean(snapshot, surf1_idx)
         surf2_z = get_z_mean(snapshot, surf2_idx)
         if surf1_z < surf2_z:
-            surf2_z =- cell_z
+            surf2_z -= cell_z
         slab_cent = (surf1_z + surf2_z)/2
         slab_cent_list.append(slab_cent)
     slab_cent_list = np.array(slab_cent_list)
@@ -120,7 +122,7 @@ def get_water_center_list(traj, surf1_idx, surf2_idx, cell_z):
         surf1_z = get_z_mean(snapshot, surf1_idx)
         surf2_z = get_z_mean(snapshot, surf2_idx)
         if surf2_z < surf1_z:
-            surf2_z =+ cell_z
+            surf2_z += cell_z
         water_center = (surf1_z + surf2_z)/2
         water_center_list.append(water_center)
     water_center_list = np.array(water_center_list)
@@ -134,7 +136,7 @@ def get_water_hartree(x_list, pav_list, water_center_list, width_list):
             water_pav = pav[np.logical_and((x > water_center-width/2), (x < water_center+width/2))]
             hartree_list_per_width.append(water_pav.mean())
         
-        hartree_list[f"width{width}"] = np.array(hartree_list_per_width)
+        hartree_list[f"{width}"] = np.array(hartree_list_per_width)
     hartree_list = pd.DataFrame(hartree_list)
     return hartree_list
 
@@ -161,9 +163,10 @@ def get_solid_hartree(x_list, mav_list, slab_center_list, width_list):
             solid_mav = mav[np.logical_and((x > slab_center-width/2), (x < slab_center+width/2))]
             hartree_list_per_width.append(solid_mav.mean())
         
-        hartree_list[f"width{width}"] = np.array(hartree_list_per_width)
+        hartree_list[f"{width}"] = np.array(hartree_list_per_width)
     hartree_list = pd.DataFrame(hartree_list)
     return hartree_list
+
 
 def plot_hartree_per_width(hartree_list):
     plt.rc('font', size=18) #controls default text size
@@ -178,9 +181,37 @@ def plot_hartree_per_width(hartree_list):
     plt.rc('axes', linewidth=2)
     plt.rc('xtick.major', size=10, width=2)
     plt.rc('ytick.major', size=10, width=2)
-    fig = plt.figure(figsize=(16,9), dpi=200)
-    ax = fig.add_subplot(111)
+    num_width = len(hartree_list.columns)
+    num_row = int(num_width/2) + 2
+    num_col = 2
+    
+    fig = plt.figure(figsize=(16,4.5*num_row), dpi=200)
+    gs = fig.add_gridspec(num_row, num_col)
+    
+    # plot cum lines
+    ax0 = fig.add_subplot(gs[0])
     for width, hartree_list_per_width in hartree_list.items():
-        ax.plot(get_cum_mean(hartree_list_per_width), label=f"width {width}")
-    ax.legend(ncol=2)
-    fig.show()
+        ax0.plot(get_cum_mean(hartree_list_per_width), label=f"width {width}")
+    ax0.legend(ncol=2)
+    ax0.set_xlabel("Frame Index")
+    ax0.set_ylabel("Hartree [eV]")
+    ax0.set_title("Cumulative Hartree")
+    
+    # plot mean alignwidth
+    ax1 = fig.add_subplot(gs[1])
+    mean_serial = hartree_list.mean()
+    ax1.plot(mean_serial, '-o', markerfacecolor='white', markeredgecolor='black')
+    ax1.set_xlabel("Width [Å]")
+    ax1.set_ylabel("Hartree [eV]")
+    ax1.set_title("Last Mean Hartree")
+    
+    # plot cum lines
+    for idx, (width, hartree_list_per_width) in enumerate(hartree_list.items()):
+        tmp_ax = fig.add_subplot(gs[idx+2])
+        tmp_ax.plot(hartree_list_per_width, label=f"width {width}")
+        tmp_ax.set_xlabel("Frame Index")
+        tmp_ax.set_ylabel("Hartree [eV]")
+        tmp_ax.set_title(f"Width {width}")
+    fig.tight_layout()
+    #fig.show()
+    return fig

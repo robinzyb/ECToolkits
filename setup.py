@@ -17,10 +17,11 @@ setuptools.setup(
     ],
     python_requires='>=3.6',
     install_requires=[
-        "numpy",
-        "matplotlib",
-        "ase",
-        "cp2kdata"
+        "numpy >= 1.19.5",
+        "matplotlib >= 3.3.2",
+        "ase >= 3.20.1",
+        "cp2kdata >= 0.2.0",
+        "pandas"
   ],
     entry_points={
         'console_scripts': [

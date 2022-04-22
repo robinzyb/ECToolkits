@@ -3,9 +3,185 @@ import numpy as np
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
-
+from ase.io import read, write
 from toolkit.utils import get_cum_mean
+from toolkit.utils import fancy_print
 #plt.style.use('./matplotlibstyle/project.mplstyle')
+
+# inp = {
+#     "input_type": "cube", 
+#     "ave_param":{
+#         "prefix": xx, 
+#         "index", 
+#         "l1", 
+#         "l2":0, 
+#         "ncov":2, 
+#         "save":True, 
+#         "axis":'z', 
+#         "save_path":"."
+#     }
+#     "shift_param":{
+#         "surf1_idx":
+#         "surf2_idx":
+#     }
+#     "water_width_list": []
+#     "solid_width_list": []
+
+# }
+
+class BandAlign():
+    def __init__(self, inp):
+        self.input_type = inp.get("input_type")
+        fancy_print("The following is input you have")
+        print(inp)
+
+        if self.input_type == "cube":
+            self.pav_x_list, self.pav_list, self.mav_x_list, self.mav_list, self.traj = \
+                self.get_pav_mav_traj_list_from_cube(**inp.get("ave_param"))
+        elif self.input_type == "file":
+            self.pav_x_list, self.pav_list, self.mav_x_list, self.mav_list, self.traj = \
+                self.get_pav_mav_traj_list_from_file(inp.get("ave_param").get("save_path"))
+        
+        self.surf1_idx = inp.get("shift_param").get("surf1_idx")
+        self.surf2_idx = inp.get("shift_param").get("surf2_idx")
+        self.water_width_list = inp.get("water_width_list")
+        self.solid_width_list = inp.get("solid_width_list")
+        self.water_cent_list, self.solid_cent_list = self.get_cent_list()
+        self.water_hartree_list = self.get_water_hartree()
+        self.solid_hartree_list = self.get_solid_hartree()
+
+
+
+    def plot_hartree_per_width(self, part='solid'):
+        if part == 'solid':
+            hartree_list = self.solid_hartree_list
+        elif part == 'water':
+            hartree_list = self.water_hartree_list
+        plt.rc('font', size=18) #controls default text size
+        plt.rc('axes', titlesize=23) #fontsize of the title
+        plt.rc('axes', labelsize=20) #fontsize of the x and y labels
+        plt.rc('xtick', labelsize=18) #fontsize of the x tick labels
+        plt.rc('ytick', labelsize=18) #fontsize of the y tick labels
+        plt.rc('legend', fontsize=16) #fontsize of the legend
+
+        plt.rc('lines', linewidth=2, markersize=10) #controls default text size
+
+        plt.rc('axes', linewidth=2)
+        plt.rc('xtick.major', size=10, width=2)
+        plt.rc('ytick.major', size=10, width=2)
+        num_width = len(hartree_list.columns)
+        num_row = int(num_width/2) + 2
+        num_col = 2
+        
+        fig = plt.figure(figsize=(16,4.5*num_row), dpi=200)
+        gs = fig.add_gridspec(num_row, num_col)
+        
+        # plot cum lines
+        ax0 = fig.add_subplot(gs[0])
+        for width, hartree_list_per_width in hartree_list.items():
+            ax0.plot(get_cum_mean(hartree_list_per_width), label=f"width {width}")
+        ax0.legend(ncol=2)
+        ax0.set_xlabel("Frame Index")
+        ax0.set_ylabel("Hartree [eV]")
+        ax0.set_title("Cumulative Hartree")
+        
+        # plot mean alignwidth
+        ax1 = fig.add_subplot(gs[1])
+        mean_serial = hartree_list.mean()
+        ax1.plot(mean_serial, '-o', markerfacecolor='white', markeredgecolor='black')
+        ax1.set_xlabel("Width [Å]")
+        ax1.set_ylabel("Hartree [eV]")
+        ax1.set_title("Last Mean Hartree")
+        
+        # plot cum lines
+        for idx, (width, hartree_list_per_width) in enumerate(hartree_list.items()):
+            tmp_ax = fig.add_subplot(gs[idx+2])
+            tmp_ax.plot(hartree_list_per_width, label=f"width {width}")
+            tmp_ax.set_xlabel("Frame Index")
+            tmp_ax.set_ylabel("Hartree [eV]")
+            tmp_ax.set_title(f"Width {width}")
+        fig.tight_layout()
+        #fig.show()
+        return fig
+    
+    def get_water_hartree(self):
+        hartree_list = {}
+        for width in self.water_width_list:
+            hartree_list_per_width = []
+            for x, pav, water_cent in zip(self.pav_x_list, self.pav_list, self.water_cent_list):
+                water_pav = pav[np.logical_and((x > water_cent-width/2), (x < water_cent+width/2))]
+                hartree_list_per_width.append(water_pav.mean())
+            
+            hartree_list[f"{width}"] = np.array(hartree_list_per_width)
+        water_hartree_list = pd.DataFrame(hartree_list)
+        return water_hartree_list
+
+    def get_solid_hartree(self):
+        hartree_list = {}
+        for width in self.solid_width_list:
+            hartree_list_per_width = []
+            for x, mav, solid_cent in zip(self.mav_x_list, self.mav_list, self.solid_cent_list):
+                solid_mav = mav[np.logical_and((x > solid_cent-width/2), (x < solid_cent+width/2))]
+                hartree_list_per_width.append(solid_mav.mean())
+            
+            hartree_list[f"{width}"] = np.array(hartree_list_per_width)
+        hartree_list = pd.DataFrame(hartree_list)
+        return hartree_list
+
+    def get_cent_list(self):
+        # not recommend for surface atoms shift at boundary
+        water_cent_list = []
+        solid_cent_list = []
+        for snapshot in self.traj:
+            surf1_z = get_z_mean(snapshot, self.surf1_idx)
+            surf2_z = get_z_mean(snapshot, self.surf2_idx)
+            cell_z = snapshot.get_cell()[2][2]
+            if surf2_z < surf1_z:
+                surf2_z += cell_z
+            water_cent = (surf1_z + surf2_z)/2
+            water_cent_list.append(water_cent)
+            solid_cent_list.append(water_cent-cell_z/2)
+        water_cent_list = np.array(water_cent_list)
+        return water_cent_list, solid_cent_list
+
+    def get_pav_mav_traj_list_from_file(self, save_path):
+        pav_x_list = np.loadtxt(os.path.join(save_path, "pav_x_list.dat"))
+        pav_list = np.loadtxt(os.path.join(save_path, "pav_list.dat"))
+        mav_x_list = np.loadtxt(os.path.join(save_path, "mav_x_list.dat"))
+        mav_list = np.loadtxt(os.path.join(save_path, "mav_list.dat"))
+        traj = read(os.path.join(save_path, "cube_traj.xyz"), index=":")
+        return pav_x_list, pav_list, mav_x_list, mav_list, traj
+
+    def get_pav_mav_traj_list_from_cube(self, prefix, index, l1, l2=0, ncov=2, save=True, axis='z', save_path="."):
+        pav_x_list = []
+        pav_list = []
+        mav_x_list = []
+        mav_list = []
+        traj = []
+        for idx in range(*index):
+            cube = Cp2kCube(f"{prefix}{idx}.cube")
+
+            x, pav = cube.get_pav(interpolate=True)
+            pav_x_list.append(x)
+            pav_list.append(pav)
+
+            x, mav = cube.get_mav(l1=l1, l2=l2, ncov=ncov, interpolate=True)
+            mav_x_list.append(x)
+            mav_list.append(mav)
+
+            stc = cube.get_stc()
+            traj.append(stc)
+            print(f"process cube {idx} finished", end="\r")
+        pav_x_list = np.array(pav_x_list)
+        pav_list = np.array(pav_list)
+        if save:
+            np.savetxt(os.path.join(save_path, "pav_x_list.dat"), pav_x_list, fmt="%3.4f")
+            np.savetxt(os.path.join(save_path, "pav_list.dat"), pav_list, fmt="%3.4f")
+            np.savetxt(os.path.join(save_path, "mav_x_list.dat"), pav_x_list, fmt="%3.4f")
+            np.savetxt(os.path.join(save_path, "mav_list.dat"), pav_list, fmt="%3.4f")
+            write(os.path.join(save_path, "cube_traj.xyz"), traj)
+        
+        return pav_x_list, pav_list, mav_x_list, mav_list, traj
 
 
 def get_pav_list(prefix, index, save=True, axis='z', save_path="."):

@@ -5,7 +5,7 @@ import setuptools
 
 setuptools.setup(
     name="ECToolKits",
-    version="0.1.1",
+    version="0.1.2",
     author="Yongbin Zhuang",
     author_email="robinzhuang@outlook.com",
     description="Small Package to Postprocessing Results",

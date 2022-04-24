@@ -149,7 +149,6 @@ class BandAlign():
             for x, mav, solid_cent, snapshot in zip(self.mav_x_list, self.mav_list, self.solid_cent_list, self.traj):
                 cell_z = snapshot.get_cell()[2][2]
                 solid_mav = mav[get_range_bool(x, solid_cent, width, cell_z)]
-                counter+=1
                 hartree_list_per_width.append(solid_mav.mean())
             
             hartree_list[f"{width}"] = np.array(hartree_list_per_width)

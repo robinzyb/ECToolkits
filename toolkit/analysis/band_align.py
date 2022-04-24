@@ -1,3 +1,5 @@
+from sqlite3 import enable_callback_tracebacks
+from tracemalloc import Snapshot
 from cp2kdata.cube import Cp2kCube
 import numpy as np
 import os
@@ -30,7 +32,21 @@ from toolkit.utils import fancy_print
 # }
 
 class BandAlign():
-    def __init__(self, inp):
+    """
+    Class for Band Alignment.
+    only require hartree cube input.
+
+    _extended_summary_
+    """    
+    def __init__(self, inp: dict):
+        """
+        input neccesary argument.
+
+        _extended_summary_
+
+        Args:
+            inp (dict): _description_
+        """        
         self.input_type = inp.get("input_type")
         fancy_print("The following is input you have")
         print(inp)
@@ -104,12 +120,21 @@ class BandAlign():
         #fig.show()
         return fig
     
-    def get_water_hartree(self):
+    def get_water_hartree(self) -> pd.DataFrame:
+        """Obtain hartree from water region in interface model.
+        
+
+        _extended_summary_
+
+        Returns:
+            pd.DataFrame: return the hartree_list as pandas DataFrame
+        """        
         hartree_list = {}
         for width in self.water_width_list:
             hartree_list_per_width = []
-            for x, pav, water_cent in zip(self.pav_x_list, self.pav_list, self.water_cent_list):
-                water_pav = pav[np.logical_and((x > water_cent-width/2), (x < water_cent+width/2))]
+            for x, pav, water_cent, snapshot in zip(self.pav_x_list, self.pav_list, self.water_cent_list, self.traj):
+                cell_z = snapshot.get_cell()[2][2]
+                water_pav = pav[get_range_bool(x, water_cent, width, cell_z)]
                 hartree_list_per_width.append(water_pav.mean())
             
             hartree_list[f"{width}"] = np.array(hartree_list_per_width)
@@ -120,8 +145,11 @@ class BandAlign():
         hartree_list = {}
         for width in self.solid_width_list:
             hartree_list_per_width = []
-            for x, mav, solid_cent in zip(self.mav_x_list, self.mav_list, self.solid_cent_list):
-                solid_mav = mav[np.logical_and((x > solid_cent-width/2), (x < solid_cent+width/2))]
+            counter =0 
+            for x, mav, solid_cent, snapshot in zip(self.mav_x_list, self.mav_list, self.solid_cent_list, self.traj):
+                cell_z = snapshot.get_cell()[2][2]
+                solid_mav = mav[get_range_bool(x, solid_cent, width, cell_z)]
+                counter+=1
                 hartree_list_per_width.append(solid_mav.mean())
             
             hartree_list[f"{width}"] = np.array(hartree_list_per_width)
@@ -182,6 +210,19 @@ class BandAlign():
             write(os.path.join(save_path, "cube_traj.xyz"), traj)
         
         return pav_x_list, pav_list, mav_x_list, mav_list, traj
+
+def get_range_bool(x, cent, width, cell_z):
+    print(cent)
+    left_bound = cent-width/2
+    left_bound = left_bound%cell_z
+    right_bound = cent+width/2
+    right_bound = right_bound%cell_z
+
+    if left_bound < right_bound:
+        range_bool = np.logical_and((x<=right_bound), (x>=left_bound))
+    else:
+        range_bool = np.logical_or((x<=right_bound), (x>=left_bound))
+    return range_bool
 
 def get_nearest_idx(array, value):
     idx = np.argmin(np.abs(array-value))

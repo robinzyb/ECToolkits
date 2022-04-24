@@ -1,3 +1,5 @@
+from sqlite3 import enable_callback_tracebacks
+from tracemalloc import Snapshot
 from cp2kdata.cube import Cp2kCube
 import numpy as np
 import os
@@ -30,7 +32,21 @@ from toolkit.utils import fancy_print
 # }
 
 class BandAlign():
-    def __init__(self, inp):
+    """
+    Class for Band Alignment.
+    only require hartree cube input.
+
+    _extended_summary_
+    """    
+    def __init__(self, inp: dict):
+        """
+        input neccesary argument.
+
+        _extended_summary_
+
+        Args:
+            inp (dict): _description_
+        """        
         self.input_type = inp.get("input_type")
         fancy_print("The following is input you have")
         print(inp)
@@ -104,12 +120,21 @@ class BandAlign():
         #fig.show()
         return fig
     
-    def get_water_hartree(self):
+    def get_water_hartree(self) -> pd.DataFrame:
+        """Obtain hartree from water region in interface model.
+        
+
+        _extended_summary_
+
+        Returns:
+            pd.DataFrame: return the hartree_list as pandas DataFrame
+        """        
         hartree_list = {}
         for width in self.water_width_list:
             hartree_list_per_width = []
-            for x, pav, water_cent in zip(self.pav_x_list, self.pav_list, self.water_cent_list):
-                water_pav = pav[np.logical_and((x > water_cent-width/2), (x < water_cent+width/2))]
+            for x, pav, water_cent, snapshot in zip(self.pav_x_list, self.pav_list, self.water_cent_list, self.traj):
+                cell_z = snapshot.get_cell()[2][2]
+                water_pav = pav[get_range_bool(x, water_cent, width, cell_z)]
                 hartree_list_per_width.append(water_pav.mean())
             
             hartree_list[f"{width}"] = np.array(hartree_list_per_width)
@@ -120,8 +145,11 @@ class BandAlign():
         hartree_list = {}
         for width in self.solid_width_list:
             hartree_list_per_width = []
-            for x, mav, solid_cent in zip(self.mav_x_list, self.mav_list, self.solid_cent_list):
-                solid_mav = mav[np.logical_and((x > solid_cent-width/2), (x < solid_cent+width/2))]
+            counter =0 
+            for x, mav, solid_cent, snapshot in zip(self.mav_x_list, self.mav_list, self.solid_cent_list, self.traj):
+                cell_z = snapshot.get_cell()[2][2]
+                solid_mav = mav[get_range_bool(x, solid_cent, width, cell_z)]
+                counter+=1
                 hartree_list_per_width.append(solid_mav.mean())
             
             hartree_list[f"{width}"] = np.array(hartree_list_per_width)
@@ -183,40 +211,18 @@ class BandAlign():
         
         return pav_x_list, pav_list, mav_x_list, mav_list, traj
 
+def get_range_bool(x, cent, width, cell_z):
+    print(cent)
+    left_bound = cent-width/2
+    left_bound = left_bound%cell_z
+    right_bound = cent+width/2
+    right_bound = right_bound%cell_z
 
-def get_pav_list(prefix, index, save=True, axis='z', save_path="."):
-    # index last number is exclude
-    x_list = []
-    pav_list = []
-    for idx in range(*index):
-        cube = Cp2kCube(f"{prefix}{idx}.cube")
-        x, pav = cube.get_pav(interpolate=True)
-        x_list.append(x)
-        pav_list.append(pav)
-        print(f"process cube {idx} finished", end="\r")
-    x_list = np.array(x_list)
-    pav_list = np.array(pav_list)
-    if save:
-        np.savetxt(os.path.join(save_path, "x_list.dat"), x_list, fmt="%3.4f")
-        np.savetxt(os.path.join(save_path, "pav_list.dat"), pav_list, fmt="%3.4f")
-    return x_list, pav_list
-
-def get_mav_list(prefix, index, l1, l2=0, ncov=2, save=True, axis='z', save_path="."):
-    # index last number is exclude
-    x_list = []
-    mav_list = []
-    for idx in range(*index):
-        cube = Cp2kCube(f"{prefix}{idx}.cube")
-        x, mav = cube.get_mav(l1=l1, l2=l2, ncov=ncov, interpolate=True)
-        x_list.append(x)
-        mav_list.append(mav)
-        print(f"process cube {idx} finished", end="\r")
-    x_list = np.array(x_list)
-    mav_list = np.array(mav_list)
-    if save:
-        np.savetxt(os.path.join(save_path, "x_list.dat"), x_list, fmt="%3.4f")
-        np.savetxt(os.path.join(save_path, "mav_list.dat"), mav_list, fmt="%3.4f")
-    return x_list, mav_list
+    if left_bound < right_bound:
+        range_bool = np.logical_and((x<=right_bound), (x>=left_bound))
+    else:
+        range_bool = np.logical_or((x<=right_bound), (x>=left_bound))
+    return range_bool
 
 def get_nearest_idx(array, value):
     idx = np.argmin(np.abs(array-value))
@@ -342,52 +348,3 @@ def get_solid_hartree(x_list, mav_list, slab_center_list, width_list):
         hartree_list[f"{width}"] = np.array(hartree_list_per_width)
     hartree_list = pd.DataFrame(hartree_list)
     return hartree_list
-
-
-def plot_hartree_per_width(hartree_list):
-    plt.rc('font', size=18) #controls default text size
-    plt.rc('axes', titlesize=23) #fontsize of the title
-    plt.rc('axes', labelsize=20) #fontsize of the x and y labels
-    plt.rc('xtick', labelsize=18) #fontsize of the x tick labels
-    plt.rc('ytick', labelsize=18) #fontsize of the y tick labels
-    plt.rc('legend', fontsize=16) #fontsize of the legend
-
-    plt.rc('lines', linewidth=2, markersize=10) #controls default text size
-
-    plt.rc('axes', linewidth=2)
-    plt.rc('xtick.major', size=10, width=2)
-    plt.rc('ytick.major', size=10, width=2)
-    num_width = len(hartree_list.columns)
-    num_row = int(num_width/2) + 2
-    num_col = 2
-    
-    fig = plt.figure(figsize=(16,4.5*num_row), dpi=200)
-    gs = fig.add_gridspec(num_row, num_col)
-    
-    # plot cum lines
-    ax0 = fig.add_subplot(gs[0])
-    for width, hartree_list_per_width in hartree_list.items():
-        ax0.plot(get_cum_mean(hartree_list_per_width), label=f"width {width}")
-    ax0.legend(ncol=2)
-    ax0.set_xlabel("Frame Index")
-    ax0.set_ylabel("Hartree [eV]")
-    ax0.set_title("Cumulative Hartree")
-    
-    # plot mean alignwidth
-    ax1 = fig.add_subplot(gs[1])
-    mean_serial = hartree_list.mean()
-    ax1.plot(mean_serial, '-o', markerfacecolor='white', markeredgecolor='black')
-    ax1.set_xlabel("Width [Å]")
-    ax1.set_ylabel("Hartree [eV]")
-    ax1.set_title("Last Mean Hartree")
-    
-    # plot cum lines
-    for idx, (width, hartree_list_per_width) in enumerate(hartree_list.items()):
-        tmp_ax = fig.add_subplot(gs[idx+2])
-        tmp_ax.plot(hartree_list_per_width, label=f"width {width}")
-        tmp_ax.set_xlabel("Frame Index")
-        tmp_ax.set_ylabel("Hartree [eV]")
-        tmp_ax.set_title(f"Width {width}")
-    fig.tight_layout()
-    #fig.show()
-    return fig

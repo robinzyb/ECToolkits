@@ -211,7 +211,6 @@ class BandAlign():
         return pav_x_list, pav_list, mav_x_list, mav_list, traj
 
 def get_range_bool(x, cent, width, cell_z):
-    print(cent)
     left_bound = cent-width/2
     left_bound = left_bound%cell_z
     right_bound = cent+width/2

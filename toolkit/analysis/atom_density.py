@@ -45,6 +45,7 @@ class AtomDensity():
         fancy_print("Read Surface 2 Atoms Index: {0}".format(inp["surf2"]))
 
         self.atom_density = {}
+        self.atom_density_z = {}
 #        self.shift_center = inp["shift_center"]
 #        fancy_print("Density will shift center to water center: {0}".format(self.shift_center))
 
@@ -69,17 +70,6 @@ class AtomDensity():
         fancy_print("Read Frame Number: {0}".format(self.nframe))
         self.natom = len(self.poses[0])
         fancy_print("Read Atom Number: {0}".format(self.natom))
-
-        # Check the Index method
-        #self.atom_idx_method = inp["O_density"]["O_index_method"]
-        # get the idx
-
-        # if self.O_idx_method == "GEUSS_init":
-        #     fancy_print("Use the Oxygen index of water guessed from coordination number")
-        #     self.Ow_idx = self.water_O_idx()
-        # elif self.O_idx_method == "external":
-        #     fancy_print("Use the Oxygen index from external input")
-        #     self.Ow_idx = self.external_idx(inp)
 
 
 
@@ -111,7 +101,8 @@ class AtomDensity():
             idx_list = self.get_idx_list(param)
             self.get_atom_density(param, idx_list=idx_list)
 
-        #self.atom_density = pd.DataFrame(self.atom_density)
+        self.atom_density = pd.DataFrame(self.atom_density)
+        self.atom_density_z = pd.DataFrame(self.atom_density_z)
         #self.get_o_density()
         #self.dump_o_density()
 
@@ -202,17 +193,6 @@ class AtomDensity():
         idx_list = self.poses[0].find_element_idx_list(element=element)
         return idx_list
 
-    # @property
-    # def z_shift(self):
-    #     return self.water_cent - self.cell[2]/2
-
-    #def wrap_number(self, num):
-    #     if num < 0:
-    #         num += self.cell[2]
-    #     elif num > self.cell[2]:
-    #         num -= self.cell[2]
-    #     return num
-
     def get_atom_density(self, param, idx_list):
         fancy_print("START GETTING ATOM DENSITY")
         fancy_print("----------------------------")
@@ -220,9 +200,7 @@ class AtomDensity():
         dz = param.get("dz", 0.05)
 
         atom_z = self.all_z.T[idx_list]
-#        atom_z = atom_z.T
-        # shift the atom_z to eliminate the effect of slab drift
-        # atom_z = atom_z - self.water_cent_rel_s
+
         atom_z = atom_z - self.surf1_z_list
 
         # this might cause the num exceed cell boundary, need wrap the number
@@ -254,20 +232,12 @@ class AtomDensity():
         # normalized wrt density of bulk water
         density = density/self.nframe * unit_conversion
 
-        
-        # shift the center to water center
-        #if self.shift_center:
-        #    z = z - self.z_shift
-        #    shift_idx = np.where(z<0)
-        #    z[shift_idx] = z[shift_idx] + self.cell[2]
-
-        #    z = np.roll(z, -len(shift_idx[0]))
-        #    density = np.roll(density, -len(shift_idx[0]))
-        
-
         element = param.get("element")
         output_file = param.get("name", f"{element}_output")
-        self.atom_density[output_file] = [z, density]
+
+        self.atom_density_z[output_file] = z
+        self.atom_density[output_file] = density
+
 
         output_file = f"{output_file}.dat"
         np.savetxt(
@@ -288,13 +258,47 @@ class AtomDensity():
 
         return unit_conversion
 
+    def get_ave_density(self, width_list):
+        all_cent_density = {}
+        all_cent_density[f"width"] = width_list
+        for name, density in self.atom_density.items():
+            z = self.atom_density_z[name]
+            cent = z.values[-1]/2
+            cent_density_list = []
+            for width in width_list:
+                left_bound = cent - width/2
+                right_bound = cent + width/2
+                part_density = density[np.logical_and((z>=left_bound), (z<=right_bound))]
+                cent_density = part_density.mean()
+                cent_density_list.append(cent_density)
+            
+            all_cent_density[f"{name}"] = cent_density_list
+        
+        return pd.DataFrame(all_cent_density)
+    
+    def plot_density(self, sym=False):
+        plt.rc('font', size=18) #controls default text size
+        plt.rc('axes', titlesize=23) #fontsize of the title
+        plt.rc('axes', labelsize=20) #fontsize of the x and y labels
+        plt.rc('xtick', labelsize=18) #fontsize of the x tick labels
+        plt.rc('ytick', labelsize=18) #fontsize of the y tick labels
+        plt.rc('legend', fontsize=16) #fontsize of the legend
 
-    def dump_o_density(self):
-        fancy_print("---------------------------")
-        fancy_print("START PLOT ATOM DENSITY")
-        plt.figure()
-        plt.plot(self.atom_density_z, self.atom_density)
-        plt.show()
-        #plt.savefig(os.path.join(os.path.dirname(self.xyz_file), "o_density.pdf"))
-        #fancy_print("Oxygen Density Profile Save to o_density.pdf")
+        plt.rc('lines', linewidth=2, markersize=10) #controls default text size
+
+        plt.rc('axes', linewidth=2)
+        plt.rc('xtick.major', size=10, width=2)
+        plt.rc('ytick.major', size=10, width=2)
+        fig = plt.figure(figsize=(16,9))
+        ax = fig.add_subplot()
+        for name, density in self.atom_density.items():
+            z = self.atom_density_z[name]
+            density = density.values
+            if sym:
+                density = (np.flip(density) + density)/2
+            ax.plot(z, density, label=name)
+        ax.legend()
+        ax.set_ylabel("Density")
+        ax.set_xlabel("z [A]")
+        return fig
 

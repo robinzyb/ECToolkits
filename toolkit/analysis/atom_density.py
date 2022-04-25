@@ -267,7 +267,7 @@ class AtomDensity():
 
         element = param.get("element")
         output_file = param.get("name", f"{element}_output")
-        self.atom_density["name"] = [z, density]
+        self.atom_density[output_file] = [z, density]
 
         output_file = f"{output_file}.dat"
         np.savetxt(

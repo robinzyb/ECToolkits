@@ -7,6 +7,7 @@ from ase.neighborlist import neighbor_list
 
 from toolkit.utils import fancy_print
 from toolkit.slab import Slab
+import pandas as pd
 
 
 def analysis_run(args):
@@ -43,6 +44,7 @@ class AtomDensity():
         self.surf2 = np.array(self.surf2)
         fancy_print("Read Surface 2 Atoms Index: {0}".format(inp["surf2"]))
 
+        self.atom_density = {}
 #        self.shift_center = inp["shift_center"]
 #        fancy_print("Density will shift center to water center: {0}".format(self.shift_center))
 
@@ -56,6 +58,11 @@ class AtomDensity():
         fancy_print("----------------------------")
         self.poses = read(self.xyz_file, index=index)
         self.poses[0] = Slab(self.poses[0])
+        for pos in self.poses:
+            # wrap the cell
+            pos.set_cell(self.cell)
+            pos.set_pbc(True)
+            pos.wrap()
         fancy_print("Reading Structures is Finished")
 
         self.nframe = len(self.poses)
@@ -104,7 +111,7 @@ class AtomDensity():
             idx_list = self.get_idx_list(param)
             self.get_atom_density(param, idx_list=idx_list)
 
-
+        self.atom_density = pd.DataFrame(self.atom_density)
         #self.get_o_density()
         #self.dump_o_density()
 
@@ -119,9 +126,6 @@ class AtomDensity():
         
         all_z = []
         for pos in self.poses:
-            # wrap the cell
-            pos.set_cell(self.cell)
-            pos.wrap()
             #z
             all_z.append(pos.get_positions().T[2])
         all_z = np.stack(all_z)
@@ -223,7 +227,7 @@ class AtomDensity():
 
         # this might cause the num exceed cell boundary, need wrap the number
         atom_z_new = []
-        cell_z = self.cell[2]
+        cell_z = self.poses[0].get_cell()[2][2]
         for num in atom_z.flatten():
             atom_z_new.append(num%cell_z)
         atom_z = np.array(atom_z_new)
@@ -231,7 +235,7 @@ class AtomDensity():
         
         # find the length between two surface
         if self.surf1_z > self.surf2_z:
-            self.surf_space = self.surf2_z + self.cell[2] - self.surf1_z
+            self.surf_space = self.surf2_z + cell_z - self.surf1_z
         else:
             self.surf_space = self.surf2_z - self.surf1_z
 
@@ -259,15 +263,16 @@ class AtomDensity():
 
         #    z = np.roll(z, -len(shift_idx[0]))
         #    density = np.roll(density, -len(shift_idx[0]))
+        
 
-
-        self.atom_density = density
-        self.atom_density_z = z
         element = param.get("element")
-        output_file = param.get("output", f"{element}_output.dat")
+        output_file = param.get("name", f"{element}_output")
+        self.atom_density["name"] = [z, density]
+
+        output_file = f"{output_file}.dat"
         np.savetxt(
                 output_file,
-                np.stack((self.atom_density_z, self.atom_density)).T,
+                np.stack((z, density)).T,
                 header="FIELD: z[A], atom_density"
         )
         fancy_print(f"Density Profile Data Save to {output_file}")

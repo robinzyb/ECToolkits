@@ -111,7 +111,7 @@ class AtomDensity():
             idx_list = self.get_idx_list(param)
             self.get_atom_density(param, idx_list=idx_list)
 
-        self.atom_density = pd.DataFrame(self.atom_density)
+        #self.atom_density = pd.DataFrame(self.atom_density)
         #self.get_o_density()
         #self.dump_o_density()
 

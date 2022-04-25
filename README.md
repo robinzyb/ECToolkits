@@ -2,7 +2,41 @@
 
 A toolbox collect some postprocessing workflow
 
+## quick water density
+```python
+from toolkit.analysis.atom_density import AtomDensity
+inp_dict={
+     "xyz_file": "./Hematite-pos-1.xyz",
+     "cell": [10.0564, 8.7091, 38.506],
+     "surf2": [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43],
+     "surf1": [112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 12],
+     "density_type":[
+         {
+             "element": "O",
+             "idx_method": "manual",
+             "idx_list": O_idx,
+             "density_unit": "water",
+             "dz": 0.05,
+             "name": "O_density"
+             },
+         {
+             "element": "H",
+             "idx_method": "manual",
+             "idx_list": H_idx,
+             "density_unit": "water",
+             "dz": 0.05,
+             "name": "H_density"
+             } 
+         ]
+ } 
+ad = AtomDensity(inp_dict)
+ad.run()
 
+# detail information is accessible in 
+ad.atom_density 
+# ad.atom_density is dictionary with "name" as key.
+# each key contain list type value, where the first element is z, second element is corresponding density.
+```
 
 ## quick band alignment 
 ```python

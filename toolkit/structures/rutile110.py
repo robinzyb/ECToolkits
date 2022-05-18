@@ -22,13 +22,14 @@ from ..utils.rutile110 import (get_rotM,
 
 class SlabRutile110(Slab):
 
-    def __init__(self, slab, M="Ti", nrow=2, cutoff=2.8):
+    def __init__(self, slab, M="Ti", nrow=2, cutoff=2.8, bridge_along="y"):
         self.slab = slab
         super().__init__(slab)
         self.cellpar = slab.cell.cellpar()
         self.M = M
         self.nrow = nrow
         self.cutoff = cutoff 
+        self.bridge_along = bridge_along
         # positions and indicies
         self.xyz    = slab.positions
         self.idx_H  = np.where(slab.symbols=="H")[0]
@@ -77,19 +78,21 @@ class SlabRutile110(Slab):
             tmp = []
             for ii in range(2):
                 idx_sorted = sort_by_rows(self.slab, self.indicies[key][ii],
-                        rotM=None, n_row=self.nrow)
+                        rotM=None, n_row=self.nrow,
+                        bridge_along=self.bridge_along)
                 tmp.append(idx_sorted)
             self.indicies[key] = np.array(tmp)
         return self.indicies
 
 class Rutile110(Interface):
 
-    def __init__(self, atoms, M="Ti", nrow=2):
+    def __init__(self, atoms, M="Ti", nrow=2, bridge_along="y"):
         self.atoms = atoms
         super().__init__(atoms)
         self.cellpar = atoms.cell.cellpar()
         self.M = M
         self.nrow = nrow
+        self.bridge_along = bridge_along
         # positions and indicies
         self.xyz    = atoms.positions
         self.idx_H  = np.where(atoms.symbols=="H")[0]
@@ -109,7 +112,8 @@ class Rutile110(Interface):
         idx_slab, slab = interface_2_slab(self.atoms, self.M)
         obj = SlabRutile110(slab, 
                 M=self.M, 
-                nrow=self.nrow)
+                nrow=self.nrow,
+                bridge_along=self.bridge_along)
         return idx_slab, obj
 
     def get_wat(self):
@@ -128,7 +132,7 @@ class Rutile110(Interface):
 
 class SlabRutile1p11Edge(Slab):
 
-    def __init__(self, slab, rotM, M="Ti", nrow=2, cutoff=2.8):
+    def __init__(self, slab, rotM, M="Ti", nrow=2, cutoff=2.8, bridge_along="y"):
         self.slab = slab
         super().__init__(slab)
         self.rotM = rotM
@@ -136,6 +140,7 @@ class SlabRutile1p11Edge(Slab):
         self.M = M
         self.nrow = nrow
         self.cutoff=cutoff
+        self.bridge_along = bridge_along
         # positions and indicies
         self.xyz    = slab.positions
         self.idx_H  = np.where(slab.symbols=="H")[0]
@@ -194,7 +199,8 @@ class SlabRutile1p11Edge(Slab):
             tmp = []
             for ii in range(2):
                 idx_sorted = sort_by_rows(self.slab, self.indicies[key][ii], 
-                                          rotM=self.rotM, n_row=self.nrow)
+                                          rotM=self.rotM, n_row=self.nrow,
+                                          bridge_along=self.bridge_along)
                 tmp.append(idx_sorted)
             self.indicies[key] = np.array(tmp)
         return self.indicies
@@ -241,12 +247,13 @@ class SlabRutile1p11Edge(Slab):
 
 class Rutile1p11Edge(Interface):
 
-    def __init__(self, atoms, vecy, vecz, M="Ti", nrow=2):
+    def __init__(self, atoms, vecy, vecz, M="Ti", nrow=2, bridge_along="y"):
         self.atoms = atoms
         super().__init__(atoms)
         self.cellpar = atoms.cell.cellpar()
         self.M = M
         self.nrow = nrow
+        self.bridge_along = bridge_along
         # tanslate the cell first
         self.atoms = get_sym_edge(self.atoms)
         # positions and indicies
@@ -271,7 +278,8 @@ class Rutile1p11Edge(Interface):
         obj = SlabRutile1p11Edge(slab, 
                 rotM=self.rotM,
                 M=self.M, 
-                nrow=self.nrow)
+                nrow=self.nrow,
+                bridge_along=self.bridge_along)
         return idx_slab, obj
 
     def get_wat(self):
@@ -289,7 +297,7 @@ class Rutile1p11Edge(Interface):
         return idx_slab[idx_target]
 
 # non-universal utilities
-def sort_by_rows(atoms, idx, rotM=None, n_row=2):
+def sort_by_rows(atoms, idx, rotM=None, n_row=2, bridge_along="y"):
     xyz = atoms.positions
     n_group = idx.shape[0]//n_row
     # FIRST: rotate xyz and cell param
@@ -298,10 +306,13 @@ def sort_by_rows(atoms, idx, rotM=None, n_row=2):
     else:
         xyz = atoms.positions
     # THEN: group ti5c by X-axis (AFTER ROTATE)
-    xx, yy = np.round(xyz[:, 0]), np.round(xyz[:, 1])
+    if bridge_along=="x":
+        yy, xx = np.round(xyz[:, 0]), np.round(xyz[:, 1])
+    elif bridge_along=="y":
+        xx, yy = np.round(xyz[:, 0]), np.round(xyz[:, 1])
     dm = distance_matrix(xx[idx].reshape(-1, 1), xx[idx].reshape(-1, 1))
     groups = np.unique(dm<=2, axis=0)
-   
+
     if groups.shape[0] == n_row:
         pass
     else:
@@ -314,7 +325,7 @@ def sort_by_rows(atoms, idx, rotM=None, n_row=2):
     rows = [idx[groups[ii, :]] for ii in range(n_row)]
     cols = np.array(list(map(sort_row, rows)))
     res = cols[np.argsort(xx[cols[:, 0]])]
-    return res 
+    return res
 
 def get_triangle(atoms, idx_obr, M="Ti", cutoff=2.8):
     idx_M = np.where(atoms.symbols==M)[0]

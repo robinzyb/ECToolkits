@@ -3,6 +3,8 @@ this script put misc function here.
 """
 from ase.geometry.analysis import Analysis
 import numpy as np
+import os
+import shutil
 
 # frequently used unit convertion
 au2eV = 27.211386245988
@@ -89,3 +91,30 @@ def file_content(file, num):
             return content
         else:
             raise ValueError("The length of range is wrong!")
+
+def create_path(path, bk=False):
+    """create 'path' directory. If 'path' already exists, then check 'bk':
+       if 'bk' is True, backup original directory and create new directory naming 'path';
+       if 'bk' is False, do nothing. 
+
+    Args:
+        path ('str' or 'os.path'): The direcotry you are making.
+        bk (bool, optional): If . Defaults to False.
+    """
+    path += '/'
+    if os.path.isdir(path):
+        if bk:
+            dirname = os.path.dirname(path)
+            counter = 0
+            while True:
+                bkdirname = dirname + ".bk{0:03d}".format(counter)
+                if not os.path.isdir(bkdirname):
+                    shutil.move(dirname, bkdirname)
+                    break
+                counter += 1
+            os.makedirs(path)
+            print("Target path '{0}' exsists. Backup this path to '{1}'.".format(path, bkdirname))
+        else:
+            print("Target path '{0}' exsists. No backup for this path.".format(path))
+    else:
+        os.makedirs(path)

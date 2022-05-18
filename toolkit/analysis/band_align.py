@@ -6,8 +6,8 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 from ase.io import read, write
-from toolkit.utils import get_cum_mean
-from toolkit.utils import fancy_print
+from ..utils.utils import get_cum_mean
+from ..utils.utils import fancy_print
 #plt.style.use('./matplotlibstyle/project.mplstyle')
 
 # inp = {

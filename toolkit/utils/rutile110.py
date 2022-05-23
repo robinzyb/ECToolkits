@@ -252,7 +252,7 @@ def pair_M5c_n_obr(atoms, idx_cn5, idx_obrs, M="Ti"):
 
 
 # tricks
-def get_sym_edge(atoms, idx_l_edge4=0):
+def get_sym_edge(atoms, idx_l_edge4=2):
     """Translate the rutile <1-11> edge-water interface model s.t. it looks
     pretty and symmetric. 
 

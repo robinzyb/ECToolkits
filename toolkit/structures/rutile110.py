@@ -86,12 +86,13 @@ class SlabRutile110(Slab):
 
 class Rutile110(Interface):
 
-    def __init__(self, atoms, M="Ti", nrow=2, bridge_along="y"):
+    def __init__(self, atoms, M="Ti", nrow=2, cutoff=2.8, bridge_along="y"):
         self.atoms = atoms
         super().__init__(atoms)
         self.cellpar = atoms.cell.cellpar()
         self.M = M
         self.nrow = nrow
+        self.cutoff = cutoff
         self.bridge_along = bridge_along
         # positions and indicies
         self.xyz    = atoms.positions
@@ -113,6 +114,7 @@ class Rutile110(Interface):
         obj = SlabRutile110(slab, 
                 M=self.M, 
                 nrow=self.nrow,
+                cutoff=self.cutoff,
                 bridge_along=self.bridge_along)
         return idx_slab, obj
 
@@ -247,12 +249,13 @@ class SlabRutile1p11Edge(Slab):
 
 class Rutile1p11Edge(Interface):
 
-    def __init__(self, atoms, vecy, vecz, M="Ti", nrow=2, bridge_along="y"):
+    def __init__(self, atoms, vecy, vecz, M="Ti", nrow=2, cutoff=2.8, bridge_along="y"):
         self.atoms = atoms
         super().__init__(atoms)
         self.cellpar = atoms.cell.cellpar()
         self.M = M
         self.nrow = nrow
+        self.cutoff = cutoff
         self.bridge_along = bridge_along
         # tanslate the cell first
         self.atoms = get_sym_edge(self.atoms)
@@ -279,6 +282,7 @@ class Rutile1p11Edge(Interface):
                 rotM=self.rotM,
                 M=self.M, 
                 nrow=self.nrow,
+                cutoff=self.cutoff,
                 bridge_along=self.bridge_along)
         return idx_slab, obj
 

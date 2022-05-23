@@ -43,7 +43,16 @@ class WatDensity(AnalysisBase):
                 Defaults to 2.8 angstrom.
         
         Usage example:
-            Please wait...
+            vecy = np.array([26.34844236,  1.8642182,  -2.0615678])
+            vecz = np.array([0.49339,  -0.070221,  9.201458])
+            rotM = get_rotM(vecy, vecz)             
+            # `u` is MDAnalysis universe for the trajectory
+            # use ASE to parse cell dimensions
+            u.dimensions = atoms.cell.cellpar()         
+            ag      = u.atoms                       
+
+            wd = WatDensity(ag, rotM=rotM)          
+            wd.run()                               
         """
         
         self._ag    = atomgroup
@@ -252,7 +261,27 @@ class RutileDisDeg(AnalysisBase):
                 adsorbed. Defaults to 2.8 angstrom.
         
         Usage example:
-            Please wait...
+            # provide [0 0 1] and [1 1 0] direction vector
+            # to calculate rotation matrix
+            vecy = np.array([26.34844236,  1.8642182,  -2.0615678])
+            vecz = np.array([0.49339,  -0.070221,  9.201458])
+
+            # Methods for getting surface atom indicies
+            # atoms is ASE.Atoms for the edge model
+            edge_water = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, M="Ti", nrow=2)
+            ind = edge_water.get_indicies()
+            ind['idx_M5c'][0] = np.flip(ind['idx_M5c'][0], axis=1)
+
+            # prepare all water adsorption sites (Ti_5c and Ti_4c)
+            cn5idx = ind['idx_M5c'].reshape(2, -1)
+            edge5idx = ind['idx_edge_M5c'].reshape(2, -1)
+            edge4idx = ind['idx_edge_M4c'].reshape(2, -1)
+
+            # Methods getting water oxygen indicies
+            idx_ow, idx_h = get_watOidx(atoms)
+
+            rdd = RutileDisDeg(ag, idx_ow, cn5idx, edge4idx=edge4idx, edge5idx=edge5idx)
+            rdd.run()
         """   
         # load inputs 
         self._ag = atomgroup
@@ -421,7 +450,30 @@ class dAdBridge(AnalysisBase):
                 Metal element in rutile strucure. Defaults to 'Ti'.. Defaults to 'Ti'.
 
         Examples:
-            Please wait ...
+            # provide [0 0 1] and [1 1 0] direction vector
+            # to calculate rotation matrix
+            vecy = np.array([26.34844236,  1.8642182,  -2.0615678])
+            vecz = np.array([0.49339,  -0.070221,  9.201458])
+
+            # Methods for getting surface atom indicies
+            # atoms is ASE.Atoms for the edge model
+            edge_water = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, M="Ti", nrow=2)
+            ind = edge_water.get_indicies()
+            ind['idx_M5c'][0] = np.flip(ind['idx_M5c'][0], axis=1)
+
+            cn5idx = ind['idx_M5c'].reshape(2, -1)
+            obr_idx = np.concatenate([ind['idx_Obr'].reshape(2, -1), ind['idx_hObr_upper'].reshape(2, -1)], axis=1)
+
+            # Methods pairs Ti5c and neighboring Obrs
+            # One Ti5c has 2 neighboring Obrs 
+            _, upper_obr = pair_M5c_n_obr(atoms, cn5idx[0], obr_idx[0])
+            _, lower_obr = pair_M5c_n_obr(atoms, cn5idx[1], obr_idx[1])
+            idx_obr = np.array([upper_obr, lower_obr])
+
+            # adsorption water indicies, obtained using 'RutileDisDeg' method
+            idx_adO = np.load("./data_output/ad_O_indicies.npy")
+            dab = dAdBridge(ag, cn5idx, idx_adO, idx_obr)
+            dab.run()
         """
         # load inputs 
         self._ag = atomgroup

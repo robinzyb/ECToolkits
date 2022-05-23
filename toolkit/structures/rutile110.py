@@ -21,8 +21,27 @@ from ..utils.rutile110 import (get_rotM,
                                interface_2_slab)
 
 class SlabRutile110(Slab):
+    """Slab object for rutile 110 slabs
+
+    Args:
+        Slab (Slab): Child class of ASE Atoms class. 
+    """
 
     def __init__(self, slab, M="Ti", nrow=2, cutoff=2.8, bridge_along="y"):
+        """Init rutile 110 slab
+
+        Args:
+            slab (ASE atoms): 
+                ASE atoms object for a rutile (110) slab model
+            M (str, optional): 
+                The metal element in the model. Defaults to "Ti".
+            nrow (int, optional): 
+                Nuber of Obr rows in the slab model. Defaults to 2.
+            cutoff (float, optional): 
+                Cutoff distances for Ti-O bond. Used for coordination number calculation. Defaults to 2.8.
+            bridge_along (str, optional): 
+                "x" or "y". The direction of Obr rows (i.e. [001] direction). Defaults to "y".
+        """
         self.slab = slab
         super().__init__(slab)
         self.cellpar = slab.cell.cellpar()
@@ -85,8 +104,27 @@ class SlabRutile110(Slab):
         return self.indicies
 
 class Rutile110(Interface):
+    """Class for rutile (110)-water interface model
+
+    Args:
+        Interface (Interface): A child class for ASE Atoms. Representing solid-water interface.
+    """
 
     def __init__(self, atoms, M="Ti", nrow=2, cutoff=2.8, bridge_along="y"):
+        """Initialize rutile110
+
+        Args:
+            slab (ASE atoms): 
+                ASE atoms object for a rutile (110) slab model
+            M (str, optional): 
+                The metal element in the model. Defaults to "Ti".
+            nrow (int, optional): 
+                Nuber of Obr rows in the slab model. Defaults to 2.
+            cutoff (float, optional): 
+                Cutoff distances for Ti-O bond. Used for coordination number calculation. Defaults to 2.8.
+            bridge_along (str, optional): 
+                "x" or "y". The direction of Obr rows (i.e. [001] direction). Defaults to "y".
+        """
         self.atoms = atoms
         super().__init__(atoms)
         self.cellpar = atoms.cell.cellpar()
@@ -133,8 +171,31 @@ class Rutile110(Interface):
         return idx_slab[idx_target]
 
 class SlabRutile1p11Edge(Slab):
+    """Slab object for rutile (110) slab with <1 -1 1> step edge
+
+    Args:
+        Slab (Slab): A child class of ASE Atoms. Representing slab model.
+    """
 
     def __init__(self, slab, rotM, M="Ti", nrow=2, cutoff=2.8, bridge_along="y"):
+        """intitialize 'Slab' object for rutile (110) slab with <1 -1 1> step edge
+
+        Args:
+            slab (ASE atoms): 
+                ASE atoms object for a rutile (110) slab model
+            rotM (numpy.ndarray): 
+                3x3 numpy array. A rotation matrix for triclicnic simulation box. 
+                To get positions after rotation, use 'np.matmul(slab.positions, rotM)'.
+                The results should be z-Axis of the triclicnic simulation box parallel to [1 1 0].
+            M (str, optional): 
+                The metal element in the model. Defaults to "Ti".
+            nrow (int, optional): 
+                Nuber of Obr rows in the slab model. Defaults to 2.
+            cutoff (float, optional): 
+                Cutoff distances for Ti-O bond. Used for coordination number calculation. Defaults to 2.8.
+            bridge_along (str, optional): 
+                "x" or "y". The direction of Obr rows (i.e. [001] direction). Defaults to "y".
+        """
         self.slab = slab
         super().__init__(slab)
         self.rotM = rotM
@@ -248,8 +309,30 @@ class SlabRutile1p11Edge(Slab):
 
 
 class Rutile1p11Edge(Interface):
+    """Interface object for rutile (110) with <1 -1 1> edge-water interface model.
 
+    Args:
+        Interface (ASE Atoms): A child class of ASE atoms
+    """
     def __init__(self, atoms, vecy, vecz, M="Ti", nrow=2, cutoff=2.8, bridge_along="y"):
+        """Initialize `Interface` object for rutile (110) with <1 -1 1> edge-water interface
+
+        Args:
+            slab (ASE atoms): 
+                ASE atoms object for a rutile (110) slab model
+            vecy (numpy.ndarray): 
+                (3, )-shaped numpy array. Could be any vector parallel to Obr rows ([001] direction).
+            vecz (numpy.ndarray): 
+                (3, )-shaped numpy array. Could be any vector parallel to [110] direction.
+            M (str, optional): 
+                The metal element in the model. Defaults to "Ti".
+            nrow (int, optional): 
+                Nuber of Obr rows in the slab model. Defaults to 2.
+            cutoff (float, optional): 
+                Cutoff distances for Ti-O bond. Used for coordination number calculation. Defaults to 2.8.
+            bridge_along (str, optional): 
+                "x" or "y". The direction of Obr rows (i.e. [001] direction). Defaults to "y".
+        """
         self.atoms = atoms
         super().__init__(atoms)
         self.cellpar = atoms.cell.cellpar()
@@ -302,6 +385,9 @@ class Rutile1p11Edge(Interface):
 
 # non-universal utilities
 def sort_by_rows(atoms, idx, rotM=None, n_row=2, bridge_along="y"):
+    """Non-robust temporary method for sorting surface atoms by their
+       'x' and 'y' coordinates.
+    """
     xyz = atoms.positions
     n_group = idx.shape[0]//n_row
     # FIRST: rotate xyz and cell param
@@ -332,6 +418,8 @@ def sort_by_rows(atoms, idx, rotM=None, n_row=2, bridge_along="y"):
     return res
 
 def get_triangle(atoms, idx_obr, M="Ti", cutoff=2.8):
+    """What the heck is this?
+    """
     idx_M = np.where(atoms.symbols==M)[0]
     xyz = atoms.positions
     pairs, _ = capped_distance(xyz[idx_obr], xyz[idx_M], max_cutoff=cutoff,
@@ -341,6 +429,8 @@ def get_triangle(atoms, idx_obr, M="Ti", cutoff=2.8):
     return res
 
 def trig_vec(atoms, trig):
+    """What the heck is this?
+    """
     xyz = atoms.positions
     idx_O = trig[:, 0]
     idx_M1 = trig[:, 2]

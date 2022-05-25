@@ -19,6 +19,8 @@ from ..utils.rutile110 import (get_rotM,
                                count_cn,
                                sep_upper_lower,
                                interface_2_slab)
+from ..utils.math import (fit_plane_normal, 
+                          fit_line_vec)
 
 class SlabRutile110(Slab):
     """Slab object for rutile 110 slabs
@@ -378,6 +380,48 @@ class Rutile1p11Edge(Interface):
         for key in indicies:
             indicies[key] = self.idxslab2idxatoms(indicies[key], self.idx_slab)
         return indicies
+
+    def refine_rotM(self):
+        _vecy = self._refine_vecy()
+        _vecz = self._refine_vecz()
+        return get_rotM(_vecy, _vecz)
+
+    def _refine_vecz(self):
+        ind = self.get_indicies()
+        xyz = self.positions
+        nTi_per_row  = ind['idx_M5c'].shape[-1]
+        idx_upperM5c, idx_lowerM5c = ind['idx_M5c'].reshape(2, self.nrow*nTi_per_row)
+        nObr_per_row = ind['idx_Obr'].shape[-1]
+        idx_upperObr, idx_lowerObr = ind['idx_Obr'].reshape(2, self.nrow*nObr_per_row)
+        plane_list = (idx_upperM5c, idx_lowerM5c, idx_upperObr, idx_lowerObr)
+        res = np.empty((len(plane_list), 3), dtype=float)
+        for ii, ind in enumerate(plane_list):
+            res[ii] = fit_plane_normal(xyz[ind])
+        res   = res.mean(axis=0)
+        _vecz = res/np.linalg.norm(res)
+        return _vecz
+
+    def _refine_vecy(self):
+        ind = self.get_indicies()
+        xyz = self.positions
+        nTi_per_row  = ind['idx_M5c'].shape[-1]
+        idx_M5c      = ind['idx_M5c'].reshape(-1, nTi_per_row)
+        nObr_per_row = ind['idx_Obr'].shape[-1]
+        idx_Obr      = ind['idx_Obr'].reshape(-1, nObr_per_row)
+        line_list = np.concatenate([idx_M5c, idx_Obr], axis=0)
+        res = np.empty((line_list.shape[0], 3), dtype=float)
+        for ii, ind in enumerate(line_list):
+            tmp = fit_line_vec(xyz[ind])
+            if tmp[0] < 0:
+                tmp = -1*tmp
+            if tmp[0] < 0.98:
+                res[ii] = np.ones(3) * np.nan
+            else:
+                res[ii] = tmp
+        res   = np.nanmean(res, axis=0)
+        _vecy = res/np.linalg.norm(res)
+        return _vecy
+
 
     @staticmethod
     def idxslab2idxatoms(idx_target, idx_slab):

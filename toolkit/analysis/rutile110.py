@@ -222,8 +222,193 @@ class WatDensity(AnalysisBase):
         dV = dV*ag2cm**3
         return M_wat/dV
 
-
 class RutileDisDeg(AnalysisBase):
+    
+    def __init__(self, atomgroup, owidx, cn5idx, edge4idx=None, edge5idx=None, nrow=2, M='Ti', bins=500):
+
+        # load inputs 
+        self._ag      = atomgroup
+        self.owidx    = owidx
+        self.cn5idx   = cn5idx.flatten()
+        if edge4idx is not None:
+            self.edge4idx = edge4idx.flatten()
+            self.edge5idx = edge5idx.flatten()
+            self.is_step  = True
+        else:
+            self.is_step = False
+        self.nrow     = nrow
+        self.M        = M
+        self.bins     = bins
+
+        # MDA analysis class routine
+        trajectory    = atomgroup.universe.trajectory
+        super(RutileDisDeg, self).__init__(trajectory)
+        
+        # make/backup data directories
+        self.datdir   = os.path.join(".", "data_output")
+        self.figdir   = os.path.join(".", "figure_output")
+        
+        create_path(self.datdir, bk=False)
+        create_path(self.figdir, bk=False)
+        
+        # the name for output files
+        self.fn_distOH5s   = os.path.join(self.datdir, "distOH-5s.npy")
+        self.fn_distOH5e   = os.path.join(self.datdir, "distOH-5e.npy")
+        self.fn_distOH4e   = os.path.join(self.datdir, "distOH-4e.npy")
+        self.fn_disdeg     = os.path.join(self.datdir, "disdeg.npy")
+        self.fn_histOadH1  = os.path.join(self.datdir, "histOH1.dat")
+        self.fn_histOadH2  = os.path.join(self.datdir, "histOH2.dat")
+        
+    def _prepare(self):
+        #------------------------ initialize usefule constants -------------------------        
+        self.cellpar     = self._ag.dimensions
+        self.xyz         = self._ag.positions
+        self.idx_M       = np.where(self._ag.elements==self.M)[0]
+        self.idx_O       = np.where(self._ag.elements=='O')[0]
+        self.idx_H       = np.where(self._ag.elements=='H')[0]
+        self.bin_edges   = np.linspace(0.85, 3.5, self.bins+1)
+        self.r           = self.bin_edges[:-1] + (self.bin_edges[1]-self.bin_edges[0])/2
+        
+        #-------------------------- prepare temporary arraies --------------------------
+        self._adO_5s     = np.empty(self.cn5idx.shape[0], dtype=int)
+        self.dm_cn5      = np.empty((self.cn5idx.shape[0], self.owidx.shape[0]), dtype=float)
+        self.dm_O5s      = np.empty((self.cn5idx.shape[0], self.idx_H.shape[0]), dtype=float)
+        if self.is_step:
+            self._adO_5e     = np.empty(self.edge5idx.shape[0], dtype=int)
+            self._adO_4e     = np.empty(self.edge4idx.shape[0]*2, dtype=int)
+            self.dm_edge4    = np.empty((self.edge4idx.shape[0], self.owidx.shape[0]), dtype=float)
+            self.dm_edge5    = np.empty((self.edge5idx.shape[0], self.owidx.shape[0]), dtype=float)
+            self.dm_O5e      = np.empty((self.edge5idx.shape[0], self.idx_H.shape[0]), dtype=float)
+            self.dm_O4e      = np.empty((self.edge4idx.shape[0]*2, self.idx_H.shape[0]), dtype=float)
+
+        
+        #---------------------------- prepare results array ----------------------------
+        self.dist_5s     = np.empty((self.n_frames, 2, self.cn5idx.shape[0]), dtype=np.float32)
+        if self.is_step:
+            self.dist_5e     = np.empty((self.n_frames, 2, self.edge5idx.shape[0]), dtype=np.float32)
+            self.dist_4e     = np.empty((self.n_frames, 2, self.edge4idx.shape[0]*2), dtype=np.float32)
+            self._n          = self.cn5idx.shape[0] + self.edge4idx.shape[0] + self.edge5idx.shape[0]
+        else:
+            self._n          = self.cn5idx.shape[0] 
+        self.disdeg      = np.empty((self.n_frames, 2), dtype=np.float32)
+    
+    def _single_frame(self):
+        self.get_neighbor_oxygen(self.cn5idx,   self.dm_cn5,   self._adO_5s, 1)
+        self.dist_5s[self._frame_index, ] = self.get_OH_dist(self._adO_5s, self.dm_O5s).T
+        if self.is_step:
+            self.get_neighbor_oxygen(self.edge5idx, self.dm_edge5, self._adO_5e, 1)
+            self.get_neighbor_oxygen(self.edge4idx, self.dm_edge4, self._adO_4e, 2)
+            # Here we sort self._adO4e such that, for all 8 Ti-4c adsorbed waters, we have 
+            # upper Oad*2, upper Oad-edge*2, lower Oad*2, lower Oad-edge*2.
+            # This way, we can use numpy reshape and mean method to get the averages of equivalent sites
+            sort_idx  = np.argsort(self._ag.positions[self._adO_4e][:, -1])
+            upper_tmp = np.flip(self._adO_4e[sort_idx][self.edge4idx.shape[0]:])
+            lower_tmp = self._adO_4e[sort_idx][:self.edge4idx.shape[0]]
+            self._adO_4e = np.array([upper_tmp.reshape(2, -1, order="F"), 
+                                    lower_tmp.reshape(2, -1, order="F")]).flatten()
+            # print(self._adO_4e)
+            self.dist_5e[self._frame_index, ] = self.get_OH_dist(self._adO_5e, self.dm_O5e).T
+            self.dist_4e[self._frame_index, ] = self.get_OH_dist(self._adO_4e, self.dm_O4e).T
+  
+    def _conclude(self):
+        np.save(self.fn_distOH5s, self.dist_5s)
+        if self.is_step:
+            np.save(self.fn_distOH5e, self.dist_5e)
+            np.save(self.fn_distOH4e, self.dist_4e)
+
+        hist1_5s, hist2_5s = self.dist2histo(self.dist_5s, self.bin_edges, self.nrow)
+        if self.is_step:
+            hist1_5e, hist2_5e = self.dist2histo(self.dist_5e, self.bin_edges, self.nrow)
+            hist1_4e, hist2_4e = self.dist2histo(self.dist_4e, self.bin_edges, self.nrow)
+            header_list = ["d(Oad-H) [A]"] + ["Oad-half"] + [r"Oad #{0}".format(ii) for ii in range(len(hist1_5s)+1)] + ["Oad-edge"]
+            hist1 = hist1_5e + hist1_5s + hist1_4e
+            hist2 = hist2_5e + hist2_5s + hist2_4e
+        else:
+            hist1 = hist1_5s
+            hist2 = hist2_5s
+            header_list = ["d(Oad-H) [A]"] + [r"Oad #{0}".format(ii) for ii in range(len(hist1_5s)+1)] 
+
+        res1  = np.concatenate([[self.r], hist1], axis=0) 
+        res2  = np.concatenate([[self.r], hist2], axis=0) 
+        np.savetxt(self.fn_histOadH1, res1.T, fmt="%10.6f", header="\t".join(header_list))
+        np.savetxt(self.fn_histOadH2, res2.T, fmt="%10.6f", header="\t".join(header_list))
+
+        if self.is_step:
+            cn_5s      = self.dist2cn(self.dist_5s)
+            cn_5e      = self.dist2cn(self.dist_5e)
+            cn_4e      = self.dist2cn(self.dist_4e)
+            cn         = np.concatenate([cn_5s, cn_5e, cn_4e], axis=-1)
+        else:
+            cn         = self.dist2cn(self.dist_5s)
+        self.disdeg[:] = self.cn2disdeg(cn)
+        np.save(self.fn_disdeg, self.disdeg)
+        
+    def get_neighbor_oxygen(self, idx_ti, res_dm, res_idx, n_ow=1):
+        """Give a group of ti atoms, find their neighboring water oxygen within cutoff rasius `self.cutoff`.
+        Returns water oxygen indicies
+
+        Args:
+            idx_ti (np.ndarray): 
+                1-d integer array containing indicies for Ti5c atoms.
+            res_dm (np.ndarray): 
+                2-d distance array containing pair-wise distance between Ti and all water oxygen atoms. 
+                This array is prepared in `_prepare`.
+            n_ow (int, optional): 
+                number of neighboring oxygen for input group of Ti atoms. For example, Ti5c has 1 ad-water; 
+                and edge Ti4c has 2 ad-water. Defaults to 1.
+
+        Returns:
+            np.ndarray: 
+                1-d array containing adsorbed water oxygen indicies. If these is no water oxygen within the 
+                cutoff raidius, a masking value of '-1' is provided
+        """
+        # group_idx 
+        distance_array(self._ag.positions[idx_ti], self._ag.positions[self.owidx], result=res_dm, box=self.cellpar)
+        sort_idx = np.argsort(res_dm, axis=1)
+        res_idx[:] = self.owidx[sort_idx[:, :n_ow]].flatten()
+    
+    def get_OH_dist(self, idx_O, res_dm):
+        distance_array(self._ag.positions[idx_O], self._ag.positions[self.idx_H], 
+                       result=res_dm, box=self.cellpar) 
+        return np.sort(res_dm, axis=1)[:, :2]
+    
+    @staticmethod
+    def dist2histo(dist, bin_edges, nrow):
+        n_frames     = dist.shape[0]
+        dist1        = dist[:, 0].reshape(n_frames, 2, nrow, -1)
+        dist2        = dist[:, 1].reshape(n_frames, 2, nrow, -1)
+        nTiTerms     = dist1.shape[-1]
+        dist1, dist2 = dist1.reshape(-1, nTiTerms), dist2.reshape(-1, nTiTerms)
+        hist1_list = []
+        hist2_list = []
+        for ii in range(dist1.shape[-1]):
+            hist1, _  = np.histogram(dist1[:, ii], bins=bin_edges, density=True)
+            hist2, _  = np.histogram(dist2[:, ii], bins=bin_edges, density=True)
+            hist1_list.append(hist1)
+            hist2_list.append(hist2)
+        return hist1_list, hist2_list
+    
+    @staticmethod
+    def dist2cn(dist):
+        cn    = dist[:, 0].astype(np.int8)
+        cn[:] = -100
+        cn[dist[:, 1]<1.2] = 2
+        cn[dist[:, 0]>1.2] = 0
+        cn[(dist[:, 0]<1.2)&(dist[:, 1]>1.2)] = 1
+        return cn
+
+    @staticmethod
+    def cn2disdeg(cn):
+        nframes = cn.shape[0]
+        nsite   = cn.shape[-1]//2
+        cn      = cn.reshape(nframes, 2, nsite)
+        return 1 - np.sum(cn==2, axis=-1)/nsite
+
+class staleRutileDisDeg(AnalysisBase):
+    # stale rutile dissociation degree analysis.
+    # Feature: 
+    # - use hard cutoff (1.2 A) to determine proton dissociation
+    # - will save raw data: coordination number surf-water and surf-water oxygen atom indicies
     """MDAnalysis class calculating surface water dissociation degree for rutile \hkl(110)-water interface.
     Besides dissociation, this method will also output surface adsorption water oxygen index, which is useful for 
     TiO2-water interface, because adsorbed water in this system sometimes exchange with sub-interface water.  
@@ -317,7 +502,9 @@ class RutileDisDeg(AnalysisBase):
         self.fn_adind_edge5 = os.path.join(self.datdir, "ad_O_indicies-edge5.npy")
         self.fn_adind_edge4 = os.path.join(self.datdir, "ad_O_indicies-edge4.npy")
         self.fn_cn          = os.path.join(self.datdir, "SurfaceOxygenCN.npy")
-        self.fn_disdeg      = os.path.join(self.datdir, "disdeg.npy")
+        self.fn_disdeg5s    = os.path.join(self.datdir, "disdeg-Ti5s.npy")
+        self.fn_disdeg4e    = os.path.join(self.datdir, "disdeg-Ti4e.npy")
+        self.fn_disdeg5e    = os.path.join(self.datdir, "disdeg-Ti5e.npy")
         
     def _prepare(self):
         #------------------------ initialize usefule constants -------------------------        
@@ -336,7 +523,9 @@ class RutileDisDeg(AnalysisBase):
         self._n          = self.n_cn5idx + self.n_edge4idx*2 + self.n_edge5idx
         self.ad_indicies = np.empty((self.n_frames, 2, self._n), dtype=int)
         self.cn          = np.empty((self.n_frames, 2, self._n), dtype=float)
-        self.disdeg      = np.empty((self.n_frames, 2, 4), dtype=float)
+        self.disdeg5s    = np.empty((self.n_frames, 2, 4), dtype=float)
+        self.disdeg4e    = np.empty((self.n_frames, 2, 4), dtype=float)
+        self.disdeg5e    = np.empty((self.n_frames, 2, 4), dtype=float)
     
     
     def _single_frame(self):

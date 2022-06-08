@@ -108,6 +108,10 @@ def get_rotM(vecy, vecz):
     edge model s.t x is parrallel to [001], y is parrallel to [1-10], and z is parallel 
     to \hkl<110>.
 
+    reference:
+      https://www.cnblogs.com/armme/p/10596697.html#:~:text=旋转坐标系的方法又有两种：%20Proper%20Euler%20angles%2C%20第一次与第三次旋转相同的坐标轴（z-x-z%2Cx-y-x%2C%20y-z-y%2Cz-y-z%2C%20x-z-x%2C,y-x-y）%E3%80%82%20Tait–Bryan%20angles%2C%20依次旋转三个不同的坐标轴（x-y-z%2Cy-z-x%2C%20z-x-y%2Cx-z-y%2C%20z-y-x%2C%20y-x-z）；
+      or see https://shorturl.at/pvxyE
+
     Args:
         vecy (numpy.ndarray): 
             Array with shape (3, ). This direction parallels to Obr/Ti5c direction of the 
@@ -120,8 +124,18 @@ def get_rotM(vecy, vecz):
         return vec/np.linalg.norm(vec)
     vecx = np.cross(vecz, vecy)
     vecx, vecy, vecz = list(map(e_vec, [vecx, vecy, vecz]))
-    M = np.array([vecx, vecy, vecz])
-    return np.linalg.pinv(M)
+    vece1, vece2, vece3 = [1, 0, 0], [0, 1, 0], [0, 0, 1]
+
+    refj = [vecx, vecy, vecz]
+    refi = [vece1, vece2, vece3]
+    rotM    = np.empty((3, 3), dtype=float)
+    rotM[:] = np.nan
+    def get_cos(vec1, vec2):
+        return np.dot(vec1, vec2)/(np.linalg.norm(vec1)*np.linalg.norm(vec2))
+    for ii in range(3):
+        for jj in range(3):
+            rotM[ii, jj] = get_cos(refj[ii], refi[jj])
+    return rotM
 
 def sep_upper_lower(z, indicies):
     """given indicies, seperate them to upper and lower. More specifically, from 

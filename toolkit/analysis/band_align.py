@@ -11,15 +11,15 @@ from toolkit.utils import fancy_print
 #plt.style.use('./matplotlibstyle/project.mplstyle')
 
 # inp = {
-#     "input_type": "cube", 
+#     "input_type": "cube",
 #     "ave_param":{
-#         "prefix": xx, 
-#         "index", 
-#         "l1", 
-#         "l2":0, 
-#         "ncov":2, 
-#         "save":True, 
-#         "axis":'z', 
+#         "prefix": xx,
+#         "index",
+#         "l1",
+#         "l2":0,
+#         "ncov":2,
+#         "save":True,
+#         "axis":'z',
 #         "save_path":"."
 #     }
 #     "shift_param":{
@@ -37,7 +37,7 @@ class BandAlign():
     only require hartree cube input.
 
     _extended_summary_
-    """    
+    """
     def __init__(self, inp: dict):
         """
         input neccesary argument.
@@ -46,7 +46,7 @@ class BandAlign():
 
         Args:
             inp (dict): _description_
-        """        
+        """
         self.input_type = inp.get("input_type")
         fancy_print("The following is input you have")
         print(inp)
@@ -57,7 +57,7 @@ class BandAlign():
         elif self.input_type == "file":
             self.pav_x_list, self.pav_list, self.mav_x_list, self.mav_list, self.traj = \
                 self.get_pav_mav_traj_list_from_file(inp.get("ave_param").get("save_path"))
-        
+
         self.surf1_idx = inp.get("shift_param").get("surf1_idx")
         self.surf2_idx = inp.get("shift_param").get("surf2_idx")
         self.water_width_list = inp.get("water_width_list")
@@ -88,10 +88,10 @@ class BandAlign():
         num_width = len(hartree_list.columns)
         num_row = int(num_width/2) + 2
         num_col = 2
-        
+
         fig = plt.figure(figsize=(16,4.5*num_row), dpi=200)
         gs = fig.add_gridspec(num_row, num_col)
-        
+
         # plot cum lines
         ax0 = fig.add_subplot(gs[0])
         for width, hartree_list_per_width in hartree_list.items():
@@ -100,7 +100,7 @@ class BandAlign():
         ax0.set_xlabel("Frame Index")
         ax0.set_ylabel("Hartree [eV]")
         ax0.set_title("Cumulative Hartree")
-        
+
         # plot mean alignwidth
         ax1 = fig.add_subplot(gs[1])
         mean_serial = hartree_list.mean()
@@ -108,7 +108,7 @@ class BandAlign():
         ax1.set_xlabel("Width [Å]")
         ax1.set_ylabel("Hartree [eV]")
         ax1.set_title("Last Mean Hartree")
-        
+
         # plot cum lines
         for idx, (width, hartree_list_per_width) in enumerate(hartree_list.items()):
             tmp_ax = fig.add_subplot(gs[idx+2])
@@ -119,16 +119,16 @@ class BandAlign():
         fig.tight_layout()
         #fig.show()
         return fig
-    
+
     def get_water_hartree(self) -> pd.DataFrame:
         """Obtain hartree from water region in interface model.
-        
+
 
         _extended_summary_
 
         Returns:
             pd.DataFrame: return the hartree_list as pandas DataFrame
-        """        
+        """
         hartree_list = {}
         for width in self.water_width_list:
             hartree_list_per_width = []
@@ -136,7 +136,7 @@ class BandAlign():
                 cell_z = snapshot.get_cell()[2][2]
                 water_pav = pav[get_range_bool(x, water_cent, width, cell_z)]
                 hartree_list_per_width.append(water_pav.mean())
-            
+
             hartree_list[f"{width}"] = np.array(hartree_list_per_width)
         water_hartree_list = pd.DataFrame(hartree_list)
         return water_hartree_list
@@ -145,12 +145,12 @@ class BandAlign():
         hartree_list = {}
         for width in self.solid_width_list:
             hartree_list_per_width = []
-            counter =0 
+            counter =0
             for x, mav, solid_cent, snapshot in zip(self.mav_x_list, self.mav_list, self.solid_cent_list, self.traj):
                 cell_z = snapshot.get_cell()[2][2]
                 solid_mav = mav[get_range_bool(x, solid_cent, width, cell_z)]
                 hartree_list_per_width.append(solid_mav.mean())
-            
+
             hartree_list[f"{width}"] = np.array(hartree_list_per_width)
         hartree_list = pd.DataFrame(hartree_list)
         return hartree_list
@@ -207,7 +207,7 @@ class BandAlign():
             np.savetxt(os.path.join(save_path, "mav_x_list.dat"), pav_x_list, fmt="%3.4f")
             np.savetxt(os.path.join(save_path, "mav_list.dat"), pav_list, fmt="%3.4f")
             write(os.path.join(save_path, "cube_traj.xyz"), traj)
-        
+
         return pav_x_list, pav_list, mav_x_list, mav_list, traj
 
 def get_range_bool(x, cent, width, cell_z):
@@ -262,11 +262,11 @@ def align_to_slab_cent(x_list, pav_list, traj, surf1_idx, surf2_idx, cell_z):
 
 
 def get_alignment_water(level, ref_water_hartree):
-    U = -level + ref_water_hartree + 15.35 - 15.81 + 0.35
+    U = -level + ref_water_hartree + 15.35 - 15.81 - 0.35
     return U
 
 def get_alignment_water_2(level, ref_water_hartree, ref_solid_hartree):
-    U = -level - ref_solid_hartree + ref_water_hartree + 15.35 - 15.81 + 0.35
+    U = -level - ref_solid_hartree + ref_water_hartree + 15.35 - 15.81 - 0.35
     return U
 
 def get_alignment_vac(level, ref_vac_hartree):
@@ -315,7 +315,7 @@ def get_water_hartree(x_list, pav_list, water_center_list, width_list):
         for x, pav, water_center in zip(x_list, pav_list, water_center_list):
             water_pav = pav[np.logical_and((x > water_center-width/2), (x < water_center+width/2))]
             hartree_list_per_width.append(water_pav.mean())
-        
+
         hartree_list[f"{width}"] = np.array(hartree_list_per_width)
     hartree_list = pd.DataFrame(hartree_list)
     return hartree_list
@@ -333,7 +333,7 @@ def get_layer_space_list(traj, layer1_idx, layer2_idx):
     layer2_z_list = np.array(layer2_z_list)
     layer_space_list = layer2_z_list - layer1_z_list
 
-    return layer_space_list 
+    return layer_space_list
 
 def get_solid_hartree(x_list, mav_list, slab_center_list, width_list):
     hartree_list = {}
@@ -342,7 +342,7 @@ def get_solid_hartree(x_list, mav_list, slab_center_list, width_list):
         for x, mav, slab_center in zip(x_list, mav_list, slab_center_list):
             solid_mav = mav[np.logical_and((x > slab_center-width/2), (x < slab_center+width/2))]
             hartree_list_per_width.append(solid_mav.mean())
-        
+
         hartree_list[f"{width}"] = np.array(hartree_list_per_width)
     hartree_list = pd.DataFrame(hartree_list)
     return hartree_list

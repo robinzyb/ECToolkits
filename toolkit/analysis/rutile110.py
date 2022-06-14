@@ -1,4 +1,5 @@
 import os
+from tkinter import W
 import numpy as np
 
 from MDAnalysis.analysis.base import AnalysisBase
@@ -6,6 +7,7 @@ from MDAnalysis.lib.distances import (calc_bonds,
                                       distance_array,
                                       apply_PBC,
                                       minimize_vectors)
+from requests import head
 from ..utils.rutile110 import (count_cn, 
                                cellpar2volume)
 from ..utils.utils import create_path
@@ -13,6 +15,35 @@ from ..utils.utils import create_path
 import numpy as np
 import matplotlib.pyplot as plt
 
+# # # # # # # # # # # # # # # # # # N O T I C E # # # # # # # # # # # # # # # # # #
+# All of the following analysis methods are child classes for
+# MDAnalysis's AnalysisBase. They all use MDAnalysis's atomgroup object as input.
+# Below are some ways for you to properly prepare such atomgroup objects:
+#    >>> from MDAnalysis import Universe
+#    >>> from ase.io import read
+# 1. from a xyz file "traj.xyz"
+#    >>> atoms = read("init.cif")
+#    >>> u = Universe("traj.xyz")
+#    >>> u.dimensions = atoms.cell.cellpar()   # Required. Provide cell info for NVT traj.  
+#    >>> u.trajectory.ts.dt = 0.00005          # Optional. To suppress a warning.
+#    >>> ag = u.atoms
+# 2. from a pickled universe file "traj.uni"
+#    >>> import pickle
+#    >>> atoms = read("init.cif")
+#    >>> with open("traj.uni", 'rb') as f:
+#    ...     u = pickle.load(f)
+#    >>> u.dimensions = atoms.cell.cellpar()   # Required. Provide cell info for NVT traj.  
+#    >>> u.trajectory.ts.dt = 0.00005          # Optional. To suppress a warning.
+#    >>> ag = u.atoms
+# 3. from a AMBER netCDF file "traj.ncdf"
+#    >>> atoms = read("init.cif")
+#    >>> u = Universe("traj.ncdf")
+#    >>> u.add_TopologyAttr("elements", np.array(atoms.get_chemical_symbols())) 
+#                                              # Required. AMBER netCDF trajs don't have element info
+#    >>> u.dimensions = atoms.cell.cellpar()   # Required. Provide cell info for NVT traj.  
+#    >>> u.trajectory.ts.dt = 0.00005          # Optional. To suppress a warning.
+#    >>> ag = u.atoms
+# # # # # # # # # # # # # # # # # # N O T I C E # # # # # # # # # # # # # # # # # #
 
 class WatDensity(AnalysisBase):
     """MDAnalysis class calculating z-axis averaged water densities 
@@ -25,19 +56,20 @@ class WatDensity(AnalysisBase):
     Usage example:
     (1) Rutile (110)-water interface with <1-11> edge
         ```python
+        from toolkit.utils.rutile110 import get_rotM
+
         vecy = np.array([26.34844236,  1.8642182,  -2.0615678])
         vecz = np.array([0.49339,  -0.070221,  9.201458])
         rotM = get_rotM(vecy, vecz)             
-        # `u` is MDAnalysis universe for the trajectory
-        # use ASE to parse cell dimensions
-        u.dimensions = atoms.cell.cellpar()         
-        ag      = u.atoms                       
 
         wd = WatDensity(ag, rotM=rotM)          
         wd.run()
         ```
     (2) Flat rutile                
-
+        ```python
+        wd = WatDensity(ag, rotM=None)
+        wd.run()
+        ```
     """
     
     def __init__(self, atomgroup, M='Ti', rotM=None, dz_bin=0.1, cutoff=2.8):
@@ -114,7 +146,7 @@ class WatDensity(AnalysisBase):
         """
         # such that the water are centered in the box
         self.d_halfslab = (self.xyz[:, -1][self.idx_M].max() - self.xyz[:, -1][self.idx_M].min())/2
-        self._idxanchor = 1
+        self._idxanchor = 2
         self._transtarget = np.array([0.3, 0.3, -self.d_halfslab])
         
         #---------------------------- prepare results array ----------------------------
@@ -151,7 +183,8 @@ class WatDensity(AnalysisBase):
         dat_hydrogen = np.array([dat_z, self.hist_hydrogen.mean(axis=0)]).T
         np.savetxt(os.path.join(self.datdir, "oxygen.dat"), dat_oxygen, header="z\tdensity", fmt="%2.6f")
         np.savetxt(os.path.join(self.datdir, "hydrogen.dat"), dat_hydrogen, header="z\tdensity", fmt="%2.6f")
-        np.savetxt(os.path.join(self.datdir, "hist2rho_scale.dat"), np.array([const]))
+        np.savetxt(os.path.join(self.datdir, "hist2rho_scale.dat"), np.array([const]), 
+                   header="multiply this constant to histogram density to get number densiity in g/cm^{3} in post-process")
         
         #-------------------------------- plot density ---------------------------------
         self.plot_density_z(dat_oxygen, dat_hydrogen)
@@ -237,11 +270,30 @@ class RutileDisDeg(AnalysisBase):
     Usage examples:
     1) Rutile 110 with <1-11> Edge:
         ```python
+        from toolkit.structures.rutile110 import Rutile1p11Edge
 
+        atoms = read("init.cif")
+        r110edge = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, cutoff=2.9)
+        owidx, _ = r110edge.get_wat()
+        ind      = r110edge.get_indicies()
+        ind['idx_M5c'][0] = np.flip(ind['idx_M5c'][0], axis=1)
+
+        cn5idx = ind['idx_M5c'].reshape(2, -1)
+        edge5idx = ind['idx_edge_M5c'].reshape(2, -1)
+        edge4idx = ind['idx_edge_M4c'].reshape(2, -1)
+
+        disdeg   = RutileDisDeg(ag, owidx, cn5idx, nrow=r110edge.nrow,
+                                edge4idx=edge4idx, edge5idx=edge5idx,)
+        disdeg.run()
         ```
     2) Flat model:
         ```python
-
+        atoms = read("init.cif")
+        r110  = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)
+        owidx, _ = r110.get_wat()
+        cn5idx   = r110.get_indicies()['idx_M5c']
+        disdeg   = RutileDisDeg(ag, owidx, cn5idx, nrow=r110.nrow)
+        disdeg.run()
         ```
     """
     
@@ -463,28 +515,20 @@ class staleRutileDisDeg(AnalysisBase):
         AnalysisBase (object): MDAnalysis Analysis class base
 
     Usage example:
-        # provide [0 0 1] and [1 1 0] direction vector
-        # to calculate rotation matrix
+    1. for rutile 110 (water) interface with <1-11> edge 
+        ```python
         vecy = np.array([26.34844236,  1.8642182,  -2.0615678])
         vecz = np.array([0.49339,  -0.070221,  9.201458])
-
-        # Methods for getting surface atom indicies
-        # atoms is ASE.Atoms for the edge model
-        edge_water = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, M="Ti", nrow=2)
-        ind = edge_water.get_indicies()
+        r110edge = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, M="Ti", nrow=2)
+        ind = r110edge.get_indicies()
+        idx_ow, _ = r110edge.get_wat()
         ind['idx_M5c'][0] = np.flip(ind['idx_M5c'][0], axis=1)
-
-        # prepare all water adsorption sites (Ti_5c and Ti_4c)
         cn5idx = ind['idx_M5c'].reshape(2, -1)
         edge5idx = ind['idx_edge_M5c'].reshape(2, -1)
         edge4idx = ind['idx_edge_M4c'].reshape(2, -1)
-
-        # Methods getting water oxygen indicies
-        idx_ow, idx_h = get_watOidx(atoms)
-
         rdd = RutileDisDeg(ag, idx_ow, cn5idx, edge4idx=edge4idx, edge5idx=edge5idx)
         rdd.run()
-   
+        ```
     """
     
     def __init__(self, atomgroup, owidx, cn5idx, edge4idx=None, edge5idx=None, M='Ti', cutoff=2.8):
@@ -659,31 +703,39 @@ class dAdBridge(AnalysisBase):
         AnalysisBase (object): MDAnalysis Analysis class base
 
     Usage example:
-        # provide [0 0 1] and [1 1 0] direction vector
-        # to calculate rotation matrix
+    1. for flat rutile 110 water interface
+        ```python
+        atoms = read(os.path.join("init.cif"))
+        r110  = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)
+        idx_owat, _ = r110.get_wat()
+        ind = edge_water.get_indicies()
+        # split cn5idx and obr_idx to [<upper idx>, <lower idx>]
+        idx_cn5     = ind['idx_M5c'].reshape(2, -1)
+        idx_obr     = ind['idx_Obr'].reshape(2, -1)
+        _, upper_obr = pair_M5c_n_obr(atoms, idx_cn5[0], idx_obr[0])
+        _, lower_obr = pair_M5c_n_obr(atoms, idx_cn5[1], idx_obr[1])
+        idx_obr = np.array([upper_obr, lower_obr])
+        dab = dAdBridge(ag, idx_cn5, idx_obr, idx_owat, idx_adO=None)
+        dab.run()
+        ``` 
+    2. for rutile 110 water interface with edge along <1-11>
+        ```python
+        atoms = read(os.path.join("init.cif"))
         vecy = np.array([26.34844236,  1.8642182,  -2.0615678])
         vecz = np.array([0.49339,  -0.070221,  9.201458])
-
-        # Methods for getting surface atom indicies
-        # atoms is ASE.Atoms for the edge model
-        edge_water = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, M="Ti", nrow=2)
-        ind = edge_water.get_indicies()
+        r110edge = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, M="Ti", nrow=2)
+        ind = r110edge.get_indicies()
         ind['idx_M5c'][0] = np.flip(ind['idx_M5c'][0], axis=1)
+        idx_cn5 = ind['idx_M5c'].reshape(2, -1)
+        idx_obr = np.concatenate([ind['idx_Obr'].reshape(2, -1), 
+                                  ind['idx_hObr_upper'].reshape(2, -1)], axis=1)
 
-        cn5idx = ind['idx_M5c'].reshape(2, -1)
-        obr_idx = np.concatenate([ind['idx_Obr'].reshape(2, -1), ind['idx_hObr_upper'].reshape(2, -1)], axis=1)
-
-        # Methods pairs Ti5c and neighboring Obrs
-        # One Ti5c has 2 neighboring Obrs 
-        _, upper_obr = pair_M5c_n_obr(atoms, cn5idx[0], obr_idx[0])
-        _, lower_obr = pair_M5c_n_obr(atoms, cn5idx[1], obr_idx[1])
+        _, upper_obr = pair_M5c_n_obr(atoms, idx_cn5[0], idx_obr[0])
+        _, lower_obr = pair_M5c_n_obr(atoms, idx_cn5[1], idx_obr[1])
         idx_obr = np.array([upper_obr, lower_obr])
-
-        # adsorption water indicies, obtained using 'RutileDisDeg' method
-        idx_adO = np.load("./data_output/ad_O_indicies.npy")
-        dab = dAdBridge(ag, cn5idx, idx_adO, idx_obr)
+        dab = dAdBridge(ag, cn5idx, idx_obr)
         dab.run()
-
+        ```
     """
 
     def __init__(self, atomgroup, idx_cn5, idx_obr, idx_owat, idx_adO=None, ref_vec=None, M='Ti', cutoff=2.8):
@@ -857,10 +909,17 @@ class dAdBridge(AnalysisBase):
         return res_idx.reshape(-1)
 
 class dInterLayer(AnalysisBase):
-    """MDAnalysis class for interlayer distances calculation. Note that this utility is only good for flat TiO2 (110)-water interface
+    """MDAnalysis class for interlayer distances calculation. Note that this utility is only good 
+    for flat TiO2 (110)-water interface
+    Notice: Because the rotation matrix 'get_rotM' method is not very robust, this interlayer distances 
+    method is only for flat rutile 110 water interface currently.
 
     Usage example:
-      soon...
+    1. for flat rutile 110 water interface:
+        ```python
+        dil  = dInterLayer(ag)
+        dil.run()
+        ```
     """
     
     def __init__(self, atomgroup, dz=0.005):
@@ -963,7 +1022,19 @@ class SurfTiOBondLenght(AnalysisBase):
         AnalysisBase (MDA): MDAnalysis AnalysisBase
     
     Usage example:
-        soon...
+    1. for flat rutile 110 water interface:
+        ```python 
+        atoms = read(os.path.join("init.cif"))
+        r110  = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)
+        idx_owat, _ = r110.get_wat()
+        ind = inp.r110.get_indicies()
+        ind['idx_M5c'][0] = np.flip(ind['idx_M5c'][0], axis=1)
+        ind['idx_Obr'][0] = np.flip(ind['idx_M5c'][0], axis=1)
+        idx_cn5  = ind['idx_M5c'].reshape(2, -1)
+        idx_obr  = ind['idx_Obr'].reshape(2, -1)
+        sbl = SurfTiOBondLenght(ag, idx_cn5, idx_obr, idx_owat)
+        sbl.run()
+        ```
     """
     
     def __init__(self, atomgroup, idx_cn5, idx_obr, idx_ow, M='Ti'):
@@ -1000,8 +1071,8 @@ class SurfTiOBondLenght(AnalysisBase):
         self.datdir  = os.path.join(".", "data_output")
         self.figdir  = os.path.join(".", "figure_output")
         
-        create_path(self.datdir, bk=True)
-        create_path(self.figdir, bk=True)
+        create_path(self.datdir, bk=False)
+        create_path(self.figdir, bk=False)
         
         # the name for output files
         self.fn_dist_tioad = os.path.join(self.datdir, "d_TiOad.npy")
@@ -1071,11 +1142,38 @@ class dObr_NearestH(AnalysisBase):
 
     Usage example:
     (1) (110)-water interface with <1-11> edge
+        ```python 
+        from toolkit.structures.rutile110 import Rutile1p11Edge
 
+        atoms = read("init.cif")
+        r110edge = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, cutoff=2.9)
+        idx_owat, _ = r110edge.get_wat()
+        ind         = r110edge.get_indicies()
+        ind['idx_Obr'][0] = np.flip(ind['idx_Obr'][0], axis=1)
+        idx_obr  = ind['idx_Obr'].reshape(2, -1)
+        idx_hobr1 = ind['idx_hObr_mid'].reshape(2, -1)
+        idx_hobr2 = ind['idx_hObr_upper'].reshape(2, -1)
+        idx_eobr  = ind['idx_edge_O2'].reshape(2, -1)
+        doh = dObr_NearestH(ag, idx_obr, nrow=r110edge.nrow, idx_hobr1=idx_hobr1,
+                            idx_hobr2=idx_hobr2, idx_eobr=idx_eobr)
+        doh.run()
+        ```
     (2) Flat (110)-water interface
+        ```python 
+        from toolkit.structures.rutile110 import Rutile110
+
+        atoms    = read("init.cif")
+        r110     = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)
+        idx_owat, _ = r110.get_wat()
+        ind = inp.r110.get_indicies()
+        ind['idx_Obr'][0] = np.flip(ind['idx_Obr'][0], axis=1)
+        idx_obr  = ind['idx_Obr'].reshape(2, -1)
+        doh = dObr_NearestH(ag, idx_obr, nrow=r110.nrow, idx_hobr1=None, idx_hobr2=None, idx_eobr=None)
+        doh.run()
+        ```
     """
 
-    def __init__(self, atomgroup, idx_obr, idx_hobr1=None, idx_hobr2=None, idx_eobr=None, M='Ti', bins=500):
+    def __init__(self, atomgroup, idx_obr, nrow=2, idx_hobr1=None, idx_hobr2=None, idx_eobr=None, M='Ti', bins=500):
         """Initializing analysis method
 
         Args:
@@ -1097,8 +1195,10 @@ class dObr_NearestH(AnalysisBase):
                 angstrom. Defaults to 500 -> typical binsize 0.005 angstrom.
         """
 
-        self._ag = atomgroup 
-        self.M = M
+        self._ag  = atomgroup 
+        self.M    = M
+        self.bins = bins
+        self.nrow = nrow
 
         # initializing plane_idx_array
         self.idx_obr   = idx_obr.flatten()
@@ -1128,6 +1228,7 @@ class dObr_NearestH(AnalysisBase):
         
         # the file names for output data
         self.fn_obr_h   = os.path.join(self.datdir, "d_Obr-H.npy")
+        self.fn_histObrH  = os.path.join(self.datdir, "histObrH.dat")
         if not self.is_flat:
             self.fn_hobr1_h = os.path.join(self.datdir, "d_hObr1-H.npy")
             self.fn_hobr2_h = os.path.join(self.datdir, "d_hObr2-H.npy")
@@ -1140,6 +1241,8 @@ class dObr_NearestH(AnalysisBase):
         self.idx_M   = np.where(self._ag.elements==self.M)[0]
         self.idx_O   = np.where(self._ag.elements=='O')[0]
         self.idx_H   = np.where(self._ag.elements=='H')[0]
+        self.bin_edges   = np.linspace(0.85, 3.5, self.bins+1)
+        self.r           = self.bin_edges[:-1] + (self.bin_edges[1]-self.bin_edges[0])/2
         self.n_obr   = self.idx_obr.shape[-1]
         if not self.is_flat:
             self.n_hobr1 = self.idx_hobr1.shape[-1]
@@ -1161,19 +1264,30 @@ class dObr_NearestH(AnalysisBase):
     def _conclude(self):
         self.distances  = self.distances.reshape(self.n_frames, 2,
                                                  self.n_total_obr//2)
-        self.dist_obr_h = self.distances[:, :, :self.n_obr]
-        self.fn_obr_h   = os.path.join(self.datdir, "d_Obr-H.npy")
+        self.dist_obr_h = self.distances[:, :, :self.n_obr//2]
+        hist_obr = self.dist2histo(self.dist_obr_h, self.bin_edges, self.nrow)
         np.save(self.fn_obr_h  , self.dist_obr_h  )
         if not self.is_flat:
-            self.dist_hobr1_h = self.distances[:, :, self.n_obr:(self.n_obr+self.n_hobr1)]
-            self.dist_hobr2_h = self.distances[:, :, (self.n_obr+self.n_hobr1):(self.n_obr+self.n_hobr1+self.n_hobr2)]
-            self.dist_eobr_h  = self.distances[:, :, (self.n_obr+self.n_hobr1+self.n_hobr2):]
-            self.fn_hobr1_h = os.path.join(self.datdir, "d_hObr1-H.npy")
-            self.fn_hobr2_h = os.path.join(self.datdir, "d_hObr2-H.npy")
-            self.fn_eobr_h  = os.path.join(self.datdir, "d_eObr-H.npy")
+            self.dist_hobr1_h = self.distances[:, :, self.n_obr//2:(self.n_obr+self.n_hobr1)//2]
+            hist_obr_n1 = self.dist2histo(self.dist_hobr1_h, self.bin_edges, self.nrow)
+            self.dist_hobr2_h = self.distances[:, :, (self.n_obr+self.n_hobr1)//2:(self.n_obr+self.n_hobr1+self.n_hobr2)//2]
+            hist_hobr   = self.dist2histo(self.dist_hobr2_h, self.bin_edges, self.nrow)
+            self.dist_eobr_h  = self.distances[:, :, (self.n_obr+self.n_hobr1+self.n_hobr2)//2:]
+            hist_e2     = self.dist2histo(self.dist_eobr_h, self.bin_edges, self.nrow)
             np.save(self.fn_hobr1_h, self.dist_hobr1_h)
             np.save(self.fn_hobr2_h, self.dist_hobr2_h)
             np.save(self.fn_eobr_h , self.dist_eobr_h )
+            hist_list = hist_hobr + hist_obr + hist_obr_n1 + hist_e2
+            header = "\t".join(['bin edges [A]'] + [r"O_br-half"] + \
+                                                   [r"O_br#%d"%(ii) for ii in range(self.n_obr//self.nrow//2)] + \
+                                                   [r"O_br#%d"%(self.n_obr//self.nrow//2)] + \
+                                                   [r"O_br-edge"])
+        else:
+            header = "\t".join(['bin edges [A]'] + [r"O_br#%d"%(ii) for ii in range(self.n_obr//self.nrow//2)])
+            hist_list = hist_obr
+
+        hist_dat = np.concatenate([[self.r], hist_list], axis=0)
+        np.savetxt(self.fn_histObrH, hist_dat.T, fmt="%10.6f", header=header)
 
     def get_min_OH(self, obr_indicies):
         xyz = self._ag.positions
@@ -1184,3 +1298,15 @@ class dObr_NearestH(AnalysisBase):
         #sel_h_idx = self.idx_H[np.argmin(self._dmatrix, axis=1)]
         #return d_oh_min, sel_h_idx 
         return d_oh_min
+
+    @staticmethod
+    def dist2histo(dist, bin_edges, nrow):
+        n_frames     = dist.shape[0]
+        dist         = dist.reshape(n_frames, 2, nrow, -1)
+        nO2Terms     = dist.shape[-1]
+        dist         = dist.reshape(-1, nO2Terms)
+        hist_list = []
+        for ii in range(dist.shape[-1]):
+            hist, _  = np.histogram(dist[:, ii], bins=bin_edges, density=True)
+            hist_list.append(hist)
+        return hist_list

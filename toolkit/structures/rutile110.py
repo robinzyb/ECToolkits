@@ -3,6 +3,7 @@
 # 2021-2022
 
 # Fater classes 
+from cgi import test
 from .slab import Slab
 from .interface import Interface
 
@@ -384,7 +385,13 @@ class Rutile1p11Edge(Interface):
     def refine_rotM(self):
         _vecy = self._refine_vecy()
         _vecz = self._refine_vecz()
-        return get_rotM(_vecy, _vecz)
+        testy = np.isnan(_vecy).sum()
+        testz = np.isnan(_vecz).sum()
+        if (testy+testz) > 0:
+            print("warning! couldn't refine rotM for some reason. Return the original rotM instead")
+            return self.rotM
+        else:
+            return get_rotM(_vecy, _vecz)
 
     def _refine_vecz(self):
         ind = self.get_indicies()
@@ -421,7 +428,6 @@ class Rutile1p11Edge(Interface):
         res   = np.nanmean(res, axis=0)
         _vecy = res/np.linalg.norm(res)
         return _vecy
-
 
     @staticmethod
     def idxslab2idxatoms(idx_target, idx_slab):

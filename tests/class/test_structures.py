@@ -1,3 +1,4 @@
+import os
 import pytest 
 import numpy as np
 from ase.io import read
@@ -5,15 +6,22 @@ from ase.io import read
 from toolkit.structures.rutile110 import (Rutile110, 
                                           Rutile1p11Edge)
 
+# External test files 
+FIXTURE_DIR = os.path.dirname(
+    os.path.dirname(os.path.realpath(__file__))
+    )
+
 # test flat Rutile110
 flat_file_list = [
-    "../_structures/4x2-flat-alongy.cif",
-    "../_structures/8x4-flat-alongy.cif",
+    os.path.join(FIXTURE_DIR, "_structures/4x2-flat-alongy.cif"),
+    os.path.join(FIXTURE_DIR, "_structures/8x4-flat-alongy.cif"),
+    os.path.join(FIXTURE_DIR, "_structures/4x2-flat-alongx.cif"),
 ]
 flat_atoms_list    = list(map(read, flat_file_list))
 rutile110_to_try   = (Rutile110(flat_atoms_list[0], nrow=2),
-                      Rutile110(flat_atoms_list[1], nrow=4))
-rutile110_task_ids = ("4x2 supercell", "8x4 supercell")
+                      Rutile110(flat_atoms_list[1], nrow=4),
+                      Rutile110(flat_atoms_list[2], nrow=2, bridge_along="x"))
+rutile110_task_ids = ("4x2 supercell", "8x4 supercell", "4x2 supercell - obr along x-axis")
 
 @pytest.mark.parametrize('r110', rutile110_to_try, ids=rutile110_task_ids)
 class TestRutile110():
@@ -31,9 +39,9 @@ class TestRutile110():
 
 # test step Rutile1p11Edge
 step_file_list = [
-    "../_structures/16wat-edge.cif",
-    "../_structures/8wat-edge.cif",
-    "../_structures/4wat-edge.cif"
+    os.path.join(FIXTURE_DIR, "_structures/16wat-edge.cif"),
+    os.path.join(FIXTURE_DIR, "_structures/8wat-edge.cif"),
+    os.path.join(FIXTURE_DIR, "_structures/4wat-edge.cif")
 ]
 step_atoms_list = list(map(read, step_file_list))
 rutile1p11_to_try = (Rutile1p11Edge(step_atoms_list[0], 

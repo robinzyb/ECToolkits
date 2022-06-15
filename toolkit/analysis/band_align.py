@@ -201,11 +201,14 @@ class BandAlign():
             print(f"process cube {idx} finished", end="\r")
         pav_x_list = np.array(pav_x_list)
         pav_list = np.array(pav_list)
+        mav_x_list = np.array(mav_x_list)
+        mav_list = np.array(mav_list)
+
         if save:
             np.savetxt(os.path.join(save_path, "pav_x_list.dat"), pav_x_list, fmt="%3.4f")
             np.savetxt(os.path.join(save_path, "pav_list.dat"), pav_list, fmt="%3.4f")
-            np.savetxt(os.path.join(save_path, "mav_x_list.dat"), pav_x_list, fmt="%3.4f")
-            np.savetxt(os.path.join(save_path, "mav_list.dat"), pav_list, fmt="%3.4f")
+            np.savetxt(os.path.join(save_path, "mav_x_list.dat"), mav_x_list, fmt="%3.4f")
+            np.savetxt(os.path.join(save_path, "mav_list.dat"), mav_list, fmt="%3.4f")
             write(os.path.join(save_path, "cube_traj.xyz"), traj)
 
         return pav_x_list, pav_list, mav_x_list, mav_list, traj

@@ -917,32 +917,37 @@ class dInterLayer(AnalysisBase):
     Usage example:
     1. for flat rutile 110 water interface:
         ```python
-        dil  = dInterLayer(ag)
+        atoms  = read(os.path.join("init.cif"))
+        r110   = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)
+        n_ti5c = r110.get_indicies()['idx_M5c'].flatten().shape[0]//2 
+        dil    = dInterLayer(ag, n_ti5c)
         dil.run()
         ```
     """
     
-    def __init__(self, atomgroup, dz=0.005):
+    def __init__(self, atomgroup, n_ti5c, dz=0.005):
         """ Initializing interlayer distances calculation
 
         Args:
             atomgroup (MDAnalysis.Atomgroup): 
                 Just use all the atoms in your universe. universe.atoms
+            n_ti5c (int): 
+                Number of Ti5c's, which is also half of Ti numbers per layer
             dz (float, optional): 
                 Bin size for inter-layer distances histogram. Defaults to 0.005 angstrom.
         """
 
         self._ag            = atomgroup
-        idx_Ti              = np.where(self._ag.elements=="Ti")[0]
-        n, _, _ = self.get_n_trilayers(self._ag.positions, idx_Ti)
-        n_ti = idx_Ti.shape[0] // n
-        z_ti = self._ag.positions[idx_Ti][:, -1]
-        args = np.argsort(z_ti)
-        idx_Ti_layered = idx_Ti[args].reshape(n, n_ti)
+        self.idx_Ti         = np.where(self._ag.elements=="Ti")[0]
+        self.n_ti           = 2*n_ti5c
+        n                   = self.idx_Ti.shape[0] // self.n_ti
+        z_ti                = self._ag.positions[self.idx_Ti][:, -1]
+        args                = np.argsort(z_ti)
+        idx_Ti_layered      = self.idx_Ti[args].reshape(n, self.n_ti)
         self.idx_Ti_layered = idx_Ti_layered
         self.n              = idx_Ti_layered.shape[0]
         self.n_ti           = idx_Ti_layered.shape[1]
-        self.dz = dz
+        self.dz             = dz
         
         trajectory  = atomgroup.universe.trajectory
         super(dInterLayer, self).__init__(trajectory)
@@ -961,7 +966,6 @@ class dInterLayer(AnalysisBase):
         #------------------------ initialize usefule constants -------------------------
         self.cellpar = self._ag.dimensions
         self.xyz = self._ag.positions
-        self.idx_Ti = np.where(self._ag.elements=="Ti")[0]
         self.idx_O = np.where(self._ag.elements=='O')[0]
         self.idx_H = np.where(self._ag.elements=='H')[0]
         
@@ -1003,7 +1007,7 @@ class dInterLayer(AnalysisBase):
 
     @staticmethod
     def get_n_trilayers(xyz, idx_Ti):
-        EXP_D = 3.25
+        EXP_D = 3.3
         z_min = xyz[idx_Ti][:, -1].min()
         z_max = xyz[idx_Ti][:, -1].max()
         n = round((z_max - z_min)/EXP_D) + 1

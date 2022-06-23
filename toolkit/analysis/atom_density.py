@@ -5,8 +5,8 @@ import os
 from ase.io import read, write
 from ase.neighborlist import neighbor_list
 
-from toolkit.utils import fancy_print
-from toolkit.slab import Slab
+from ..utils.utils import fancy_print
+from ..structures.slab import Slab
 import pandas as pd
 
 

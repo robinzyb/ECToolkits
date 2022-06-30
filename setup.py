@@ -21,7 +21,8 @@ setuptools.setup(
         "matplotlib >= 3.3.2",
         "ase >= 3.20.1",
         "cp2kdata >= 0.2.0",
-        "pandas"
+        "pandas",
+        "MDAnalysis >= 2.1.0"
   ],
     entry_points={
         'console_scripts': [

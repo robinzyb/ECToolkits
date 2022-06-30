@@ -1,6 +1,9 @@
 from ase import Atoms
 from ase.neighborlist import neighbor_list
+from ase.io import read, write
 import numpy as np
+import os
+import shutil
 
 
 class Slab(Atoms):
@@ -119,3 +122,111 @@ class Slab(Atoms):
         
         return tmp
     
+    def generate_interface(self, water_box_len, top_surface_idx, bottom_surface_idx):
+        """merge slab model and water box together
+
+        Args:
+            water_box_len:
+            top_surface_idx:
+            bottom_surface_idx:
+
+        Returns:
+            tmp:
+        """
+        # find the water box
+        if os.path.exists("gen_water/watbox.xyz"):
+            water_box = read("gen_water/watbox.xyz")
+            print("Water Box Found")
+        else:
+            print("Water Box Not Found")
+            raise FileNotFoundError('Water box not found, please install packmol')
+
+        tmp = self.copy()
+        cell_z = tmp.get_cell()[2][2]
+        # shift the water in z directions (to add in slab model)
+        tmp_water_positions = water_box.get_positions()
+        for i in range(len(tmp_water_positions)):
+            tmp_water_positions[i] += [0, 0, cell_z + 0.5]
+        water_box.set_positions(tmp_water_positions)
+        # add the water box to slab model
+        tmp.extend(water_box)
+        # modify the z length
+        tmp.set_cell(tmp.get_cell() + [[0, 0, 0], [0, 0, 0], [0, 0, water_box_len + 1]])
+        # shift the water center to box center
+        top_surface_z = tmp[top_surface_idx].get_positions().T[2].mean()
+        bottom_surface_z = tmp[bottom_surface_idx].get_positions().T[2].mean()
+        slab_center_z = 0.5 * (top_surface_z + bottom_surface_z)
+        tmp.translate([0, 0, -slab_center_z])
+        tmp.set_pbc([False, False, True])
+        tmp.wrap()
+        print("Merge Water and Slab Box Finished")
+        return tmp
+    
+    def generate_water_box(self, water_box_len):
+        """function to generate water box
+        x and y length is from self length
+        Args:
+            water_box_len:
+
+        Returns:
+
+        """
+        cell_x = self.get_cell()[0][0]
+        cell_y = self.get_cell()[1][1]
+        header = "-"
+        print(header * 50)
+        print("Now Generate Water Box")
+        space_per_water = 9.86 ** 3 / 32
+        wat_num = (cell_x * cell_y * water_box_len) / space_per_water
+        wat_num = int(wat_num)
+        print("Read Cell X: {0:03f} A".format(cell_x))
+        print("Read Cell Y: {0:03f} A".format(cell_y))
+        print("Read Water Box Length: {0:03f} A".format(water_box_len))
+        print("Predict Water Number: {0}".format(wat_num))
+
+        if os.path.exists('gen_water'):
+            print("found gen_water direcotry, now remove it")
+            shutil.rmtree('gen_water')
+        print("Generate New Directory: gen_water")
+        os.mkdir('gen_water')
+        print("Generate Packmol Input: gen_wat_box.inp")
+        with open(os.path.join("gen_water", "gen_wat_box.inp"), 'w') as f:
+            txt = "#packmol input generate by python"
+            txt += "\n"
+            txt += "tolerance 2.0\n"
+            txt += "filetype xyz\n"
+            txt += "output watbox.xyz"
+            txt += "\n"
+            txt += "structure water.xyz\n"
+            txt += "  number {0}\n".format(int(wat_num))
+            txt += "  inside box 0. 0. 0. {0} {1} {2}\n".format(cell_x - 1, cell_y - 1, water_box_len)
+            txt += "end structure\n"
+            f.write(txt)
+        print("Generate A Water Molecule: water.xyz")
+        with open(os.path.join("gen_water", "water.xyz"), 'w') as f:
+            txt = '3\n'
+            txt += ' water\n'
+            txt += ' H            9.625597       6.787278      12.673000\n'
+            txt += ' H            9.625597       8.420323      12.673000\n'
+            txt += ' O           10.203012       7.603800      12.673000\n'
+            f.write(txt)
+        print("Generate Water Box: watbox.xyz")
+        os.chdir("./gen_water")
+        os.system("packmol < gen_wat_box.inp")
+        os.chdir("../")
+        print("Generate Water Box Finished")
+
+    def remove_cell_vacuum(self, adopt_space=2):
+        """remove the vacuum of z direction
+         cell z must be perpendicular to xy plane
+        """
+        tmp = self.copy()
+        z_list = tmp.get_positions().T[2]
+        slab_length = z_list.max() - z_list.min()
+        slab_length += 2
+        a = tmp.get_cell()[0]
+        b = tmp.get_cell()[1]
+        c = [0, 0, slab_length]
+        tmp.set_cell([a, b, c])
+        tmp.center()
+        return tmp

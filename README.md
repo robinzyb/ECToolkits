@@ -2,9 +2,11 @@
 
 A toolbox collect some postprocessing workflow
 
-## quick water density
+## Atom Density Analysis
 ```python
 from toolkit.analysis.atom_density import AtomDensity
+
+# from 
 inp_dict={
      "xyz_file": "./Hematite-pos-1.xyz",
      "cell": [10.0564, 8.7091, 38.506],
@@ -26,7 +28,7 @@ inp_dict={
              "density_unit": "water",
              "dz": 0.05,
              "name": "H_density"
-             } 
+             }
          ]
  } 
 ad = AtomDensity(inp_dict)
@@ -34,18 +36,7 @@ ad.run()
 
 # detail information is accessible in 
 ad.atom_density
-# ad.atom_density is dictionary with "name" as key.
-# each key contain list type value, where the first element is z, second element is corresponding density.
-ad.atom_density ==
-{
-    "O_density": "o_density"
-    "H_density": "h_density"
-}
-ad.atom_density_z ==
-{
-    "O_density": "o_density_z"
-    "H_density": "h_density_z"
-}
+ad.atom_density_z
 
 # get average denstiy from center
 width_list = [5, 6, 7, 8, 9, 10]
@@ -57,7 +48,7 @@ ad.plot_density(self, sym=False)
 
 ```
 ![density](./figures/density.png)
-## quick band alignment 
+## Band Alignment 
 ```python
 from toolkit.analysis.band_align import BandAlign
 inp = {

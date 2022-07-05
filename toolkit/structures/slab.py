@@ -1,6 +1,8 @@
+from re import sub
 from ase import Atoms
 from ase.neighborlist import neighbor_list
 from ase.io import read, write
+from ase.build import surface
 import numpy as np
 import os
 import shutil
@@ -47,7 +49,7 @@ class Slab(Atoms):
         idx_list = np.where(cs==element)[0]
         return list(idx_list)
 
-    def find_surf_idx(self, element: str, tolerance=0.1, dsur='up') -> list:
+    def find_surf_idx(self, element: str =None, tolerance=0.1, dsur='up') -> list:
         """
             find atom indexs at surface
 
@@ -62,10 +64,11 @@ class Slab(Atoms):
         Returns:
             list: list of atom indices
         """        
-        
-        idx_list = self.find_element_idx_list(element)
-        z_list = self[idx_list].get_positions().T[2]
-
+        if element:
+            idx_list = self.find_element_idx_list(element)
+            z_list = self[idx_list].get_positions().T[2]
+        else: 
+            z_list = self.get_positions().T[2]
         if dsur == 'up':
             z = z_list.max()
         elif dsur == 'dw':
@@ -76,6 +79,26 @@ class Slab(Atoms):
         idx_list = self.find_idx_from_range(zmin=zmin, zmax=zmax, element=element)
     
         return idx_list
+
+    def del_surf_layer(self, element: str =None, tolerance=0.1, dsur='up'):
+        """ delete the layer atoms,
+
+        _extended_summary_
+
+        Args:
+            element (str, optional): _description_. Defaults to None.
+            tolerance (float, optional): _description_. Defaults to 0.1.
+            dsur (str, optional): _description_. Defaults to 'up'.
+
+        Returns:
+            _type_: _description_
+        """        
+
+        del_list = self.find_surf_idx(element=element, tolerance=tolerance, dsur=dsur)
+        
+        tmp = self.copy()
+        del tmp[del_list]
+        return tmp
 
     def find_idx_from_range(self, zmin:int, zmax:int, element: str =None) -> list:
         """_summary_
@@ -230,3 +253,66 @@ class Slab(Atoms):
         tmp.set_cell([a, b, c])
         tmp.center()
         return tmp
+    
+
+class SemiConductor(Slab):
+    """
+    class atoms used for semiconductor system
+    """        
+
+    def get_cus(self, input_idx, coord_num, cutoff):
+        """
+        function to get atom index of coordinate unsaturated sites.
+        slab: Atoms object, the slab model
+        input_idx: the index of the atom you want get the coordination number
+        coord_num: coordination number for coordinate unsaturated sites, the number must be less then the full coordination
+        cutoff: the cutoff radius defining coordination. something like: {('Ti', 'O'): 2.2}
+        return: the index for cus atoms
+        """
+        coord_num_list = np.bincount(neighbor_list('i', self, cutoff))[input_idx]
+        target_idx = input_idx[coord_num_list == coord_num]
+        return target_idx
+
+class RutileType(Slab):
+    """
+    class atoms used for rutile like(structure) system
+    space group: P42/mnm
+    """
+
+    def get_slab(self, indices: tuple, n_layers, lateral_repeat: tuple=(2, 4), vacuum=10.0):
+        h, k, l = indices
+        entry = str(h)+str(k)+str(l)
+        method_entry = {
+            "110": self.rutile_slab_110
+        }
+        
+        method = method_entry.get(entry, None)
+
+        if method is None:
+            raise ValueError("Current Miller Index has not implemented yet")
+
+        slab = method(n_layers=n_layers, lateral_repeat=lateral_repeat, vacuum=vacuum)
+
+        return slab
+
+    def rutile_slab_110(self, n_layers=5, lateral_repeat: tuple=(2, 4), vacuum=10.0):
+        """
+        function for create symmetry slab for rutile structure 110 surface
+        space group: P42/mnm
+        """
+        # create six layer and a supercell
+        
+        slab = surface(self, (1, 1, 0), n_layers+1, vacuum)
+
+        # remove bottom layer
+        slab = slab.del_surf_layer(tolerance=0.1, dsur='dw')
+        slab = slab.del_surf_layer(tolerance=0.1, dsur='dw')
+        slab = slab.del_surf_layer(tolerance=0.1, dsur='up')
+
+        # create the super cell
+        slab = slab * (lateral_repeat[0], lateral_repeat[1], 1)
+
+        # sort according the z value
+        slab = slab[slab.positions.T[2].argsort()]
+
+        return slab

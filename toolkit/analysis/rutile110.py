@@ -1318,7 +1318,7 @@ class dObr_NearestH(AnalysisBase):
 
 
 class dObr_NearH(AnalysisBase):
-    """Distance between Obr and it's near proton.
+    """Distance between Obr and it's near n_oh proton.
 
     Args:
         AnalysisBase (MDAnalysis): MDAnalysis analysis base

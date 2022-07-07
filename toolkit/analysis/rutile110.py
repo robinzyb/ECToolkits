@@ -1,5 +1,4 @@
 import os
-from tkinter import W
 import numpy as np
 
 from MDAnalysis.analysis.base import AnalysisBase
@@ -7,7 +6,7 @@ from MDAnalysis.lib.distances import (calc_bonds,
                                       distance_array,
                                       apply_PBC,
                                       minimize_vectors)
-from requests import head
+
 from ..utils.rutile110 import (count_cn, 
                                cellpar2volume)
 from ..utils.utils import create_path

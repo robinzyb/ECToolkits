@@ -1315,3 +1315,179 @@ class dObr_NearestH(AnalysisBase):
             hist, _  = np.histogram(dist[:, ii], bins=bin_edges, density=True)
             hist_list.append(hist)
         return hist_list
+
+
+class dObr_NearH(AnalysisBase):
+    """Distance between Obr and it's near proton.
+
+    Args:
+        AnalysisBase (MDAnalysis): MDAnalysis analysis base
+
+    Usage example:
+    (1) (110)-water interface with <1-11> edge
+        ```python 
+        from toolkit.structures.rutile110 import Rutile1p11Edge
+
+        atoms = read("init.cif")
+        r110edge = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, cutoff=2.9)
+        idx_owat, _ = r110edge.get_wat()
+        ind         = r110edge.get_indicies()
+        ind['idx_Obr'][0] = np.flip(ind['idx_Obr'][0], axis=1)
+        idx_obr  = ind['idx_Obr'].reshape(2, -1)
+        idx_hobr1 = ind['idx_hObr_mid'].reshape(2, -1)
+        idx_hobr2 = ind['idx_hObr_upper'].reshape(2, -1)
+        idx_eobr  = ind['idx_edge_O2'].reshape(2, -1)
+        doh = dObr_NearestH(ag, idx_obr, nrow=r110edge.nrow, idx_hobr1=idx_hobr1,
+                            idx_hobr2=idx_hobr2, idx_eobr=idx_eobr)
+        doh.run()
+        ```
+    (2) Flat (110)-water interface
+        ```python 
+        from toolkit.structures.rutile110 import Rutile110
+
+        atoms    = read("init.cif")
+        r110     = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)
+        idx_owat, _ = r110.get_wat()
+        ind = inp.r110.get_indicies()
+        ind['idx_Obr'][0] = np.flip(ind['idx_Obr'][0], axis=1)
+        idx_obr  = ind['idx_Obr'].reshape(2, -1)
+        doh = dObr_NearestH(ag, idx_obr, nrow=r110.nrow, idx_hobr1=None, idx_hobr2=None, idx_eobr=None)
+        doh.run()
+        ```
+    """
+
+    def __init__(self, atomgroup, idx_obr, nrow=2, idx_hobr1=None, idx_hobr2=None, idx_eobr=None, M='Ti', bins=500, n_oh = 5):
+        """Initializing analysis method
+
+        Args:
+            atomgroup (MDAnalysis.Atomgroup): 
+                Just use all the atoms in your universe. universe.atoms
+            idx_obr (numpy.ndarray):  
+                Index array for Surface bridge O atoms. The index array should be sorted st. [<upper surface indicies>,
+                <lower surface indicies>] 
+            idx_hobr1 (numpy.ndarray, optional): 
+                Use this for <1-11> edge. Index array for surface half-Obr atoms. Defaults to None.
+            idx_hobr2 (numpy.ndarray, optional): 
+                Use this for <1-11> edge. Index array for the last Obr, or the other half-Obr. Defaults to None.
+            idx_eobr (numpy.ndarray, optional): 
+                Use this for <1-11> edge. Index array for Obr-edge, 2-coordinated O between Ti-edge4 and Ti-edge5. Defaults to None.
+            M (str, optional): 
+                Metal element in rutile strucure. Defaults to 'Ti'.
+            bins (float, optional): 
+                Bin size for output O-H distances histogram ouput. Typical OH distances range from 0.85 to 3.5 
+                angstrom. Defaults to 500 -> typical binsize 0.005 angstrom.
+        """
+
+        self._ag  = atomgroup 
+        self.M    = M
+        self.bins = bins
+        self.nrow = nrow
+        self.n_oh = n_oh
+
+        # initializing plane_idx_array
+        self.idx_obr   = idx_obr.flatten()
+        self.is_flat   = True
+        if idx_hobr1 is not None:
+            self.is_flat   = False 
+            self.idx_hobr1 = idx_hobr1.flatten()
+            self.idx_hobr2 = idx_hobr2.flatten()
+            self.idx_eobr  = idx_eobr.flatten()
+            self.idx_total_obr = np.concatenate([self.idx_obr, 
+                                                 self.idx_hobr1, 
+                                                 self.idx_hobr2, 
+                                                 self.idx_eobr], axis=-1)
+        else:
+            self.idx_total_obr = self.idx_obr
+
+        # MDA analysis class routine
+        trajectory = atomgroup.universe.trajectory
+        super(dObr_NearestH, self).__init__(trajectory)
+        
+        # make/backup data directories
+        self.datdir = os.path.join(".", "data_output")
+        self.figdir = os.path.join(".", "figure_output")
+        
+        create_path(self.datdir, bk=False)
+        create_path(self.figdir, bk=False)
+        
+        # the file names for output data
+        self.fn_obr_h   = os.path.join(self.datdir, "d_Obr-H.npy")
+        self.fn_histObrH  = os.path.join(self.datdir, "histObrH.dat")
+        if not self.is_flat:
+            self.fn_hobr1_h = os.path.join(self.datdir, "d_hObr1-H.npy")
+            self.fn_hobr2_h = os.path.join(self.datdir, "d_hObr2-H.npy")
+            self.fn_eobr_h  = os.path.join(self.datdir, "d_eObr-H.npy")
+    
+    def _prepare(self):
+        #------------------------ initialize usefule constants -------------------------        
+        self.cellpar = self._ag.dimensions
+        self.xyz     = self._ag.positions
+        self.idx_M   = np.where(self._ag.elements==self.M)[0]
+        self.idx_O   = np.where(self._ag.elements=='O')[0]
+        self.idx_H   = np.where(self._ag.elements=='H')[0]
+        self.bin_edges   = np.linspace(0.85, 3.5, self.bins+1)
+        self.r           = self.bin_edges[:-1] + (self.bin_edges[1]-self.bin_edges[0])/2
+        self.n_obr   = self.idx_obr.shape[-1]
+        if not self.is_flat:
+            self.n_hobr1 = self.idx_hobr1.shape[-1]
+            self.n_hobr2 = self.idx_hobr2.shape[-1]
+            self.n_eobr  = self.idx_eobr.shape[-1]
+            self.n_total_obr = self.n_obr + self.n_hobr1 + self.n_hobr2 + self.n_eobr 
+        else:
+            self.n_total_obr = self.n_obr 
+
+        #-------------------------- prepare temporary arraies --------------------------
+        self._dmatrix = np.empty((self.n_total_obr, self.idx_H.shape[0]), dtype=float)
+
+        #---------------------------- prepare results array ----------------------------
+        self.distances = np.empty((self.n_frames, self.n_total_obr, self.n_oh), dtype=float)
+        
+    def _single_frame(self):
+        self.distances[self._frame_index, :] = self.get_OH_dist(self.idx_total_obr)
+                                              
+    def _conclude(self):
+        self.distances  = self.distances.reshape(self.n_frames, 2,
+                                                 self.n_total_obr//2, self.n_oh)
+        self.dist_obr_h = self.distances[:, :, :self.n_obr//2, self.n_oh]
+        hist_obr = self.dist2histo(self.dist_obr_h[:,:,:,0], self.bin_edges, self.nrow)
+        np.save(self.fn_obr_h  , self.dist_obr_h)
+        if not self.is_flat:
+            self.dist_hobr1_h = self.distances[:, :, self.n_obr//2:(self.n_obr+self.n_hobr1)//2, 0]
+            hist_obr_n1 = self.dist2histo(self.dist_hobr1_h, self.bin_edges, self.nrow)
+            self.dist_hobr2_h = self.distances[:, :, (self.n_obr+self.n_hobr1)//2:(self.n_obr+self.n_hobr1+self.n_hobr2)//2, 0]
+            hist_hobr   = self.dist2histo(self.dist_hobr2_h, self.bin_edges, self.nrow)
+            self.dist_eobr_h  = self.distances[:, :, (self.n_obr+self.n_hobr1+self.n_hobr2)//2:, 0]
+            hist_e2     = self.dist2histo(self.dist_eobr_h, self.bin_edges, self.nrow)
+            np.save(self.fn_hobr1_h, self.dist_hobr1_h)
+            np.save(self.fn_hobr2_h, self.dist_hobr2_h)
+            np.save(self.fn_eobr_h , self.dist_eobr_h )
+            hist_list = hist_hobr + hist_obr + hist_obr_n1 + hist_e2
+            header = "\t".join(['bin edges [A]'] + [r"O_br-half"] + \
+                                                   [r"O_br#%d"%(ii) for ii in range(self.n_obr//self.nrow//2)] + \
+                                                   [r"O_br#%d"%(self.n_obr//self.nrow//2)] + \
+                                                   [r"O_br-edge"])
+        else:
+            header = "\t".join(['bin edges [A]'] + [r"O_br#%d"%(ii) for ii in range(self.n_obr//self.nrow//2)])
+            hist_list = hist_obr
+
+        hist_dat = np.concatenate([[self.r], hist_list], axis=0)
+        np.savetxt(self.fn_histObrH, hist_dat.T, fmt="%10.6f", header=header)
+
+    def get_OH_dist(self, obr_indicies):
+        xyz = self._ag.positions
+        obr_pos = xyz[obr_indicies, :]
+        h_pos = xyz[self.idx_H, :]
+        distance_array(obr_pos, h_pos, result=self._dmatrix, box=self.cellpar) 
+        return np.sort(self._dmatrix, axis=1)[:, :self.n_oh]
+
+    @staticmethod
+    def dist2histo(dist, bin_edges, nrow):
+        n_frames     = dist.shape[0]
+        dist         = dist.reshape(n_frames, 2, nrow, -1)
+        nO2Terms     = dist.shape[-1]
+        dist         = dist.reshape(-1, nO2Terms)
+        hist_list = []
+        for ii in range(dist.shape[-1]):
+            hist, _  = np.histogram(dist[:, ii], bins=bin_edges, density=True)
+            hist_list.append(hist)
+        return hist_list

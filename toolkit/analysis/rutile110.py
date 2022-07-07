@@ -297,7 +297,7 @@ class RutileDisDeg(AnalysisBase):
         ```
     """
     
-    def __init__(self, atomgroup, owidx, cn5idx, edge4idx=None, edge5idx=None, nrow=2, M='Ti', bins=500):
+    def __init__(self, atomgroup, owidx, cn5idx, edge4idx=None, edge5idx=None, nrow=2, M='Ti', bins=500, n_oh=5):
         """Initializing rutile interface dissociation degree analysis
 
         Args:
@@ -337,6 +337,7 @@ class RutileDisDeg(AnalysisBase):
         self.nrow     = nrow
         self.M        = M
         self.bins     = bins
+        self.n_oh     = n_oh
 
         # MDA analysis class routine
         trajectory    = atomgroup.universe.trajectory
@@ -381,7 +382,7 @@ class RutileDisDeg(AnalysisBase):
 
         
         #---------------------------- prepare results array ----------------------------
-        self.dist_5s     = np.empty((self.n_frames, 2, self.cn5idx.shape[0]), dtype=np.float32)
+        self.dist_5s     = np.empty((self.n_frames, self.n_oh, self.cn5idx.shape[0]), dtype=np.float32)
         if self.is_step:
             self.dist_5e     = np.empty((self.n_frames, 2, self.edge5idx.shape[0]), dtype=np.float32)
             self.dist_4e     = np.empty((self.n_frames, 2, self.edge4idx.shape[0]*2), dtype=np.float32)
@@ -468,7 +469,7 @@ class RutileDisDeg(AnalysisBase):
     def get_OH_dist(self, idx_O, res_dm):
         distance_array(self._ag.positions[idx_O], self._ag.positions[self.idx_H], 
                        result=res_dm, box=self.cellpar) 
-        return np.sort(res_dm, axis=1)[:, :2]
+        return np.sort(res_dm, axis=1)[:, :self.n_oh]
     
     @staticmethod
     def dist2histo(dist, bin_edges, nrow):

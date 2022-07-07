@@ -1,5 +1,5 @@
 from ase import Atoms
-from slab import Slab
+from .slab import Slab
 import numpy as np
 
 class Interface(Slab):

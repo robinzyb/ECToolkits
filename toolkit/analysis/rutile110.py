@@ -1447,7 +1447,7 @@ class dObr_NearH(AnalysisBase):
     def _conclude(self):
         self.distances  = self.distances.reshape(self.n_frames, 2,
                                                  self.n_total_obr//2, self.n_oh)
-        self.dist_obr_h = self.distances[:, :, :self.n_obr//2, self.n_oh]
+        self.dist_obr_h = self.distances[:, :, :self.n_obr//2, :]
         hist_obr = self.dist2histo(self.dist_obr_h[:,:,:,0], self.bin_edges, self.nrow)
         np.save(self.fn_obr_h  , self.dist_obr_h)
         if not self.is_flat:

@@ -1400,7 +1400,7 @@ class dObr_NearH(AnalysisBase):
 
         # MDA analysis class routine
         trajectory = atomgroup.universe.trajectory
-        super(dObr_NearestH, self).__init__(trajectory)
+        super(dObr_NearH, self).__init__(trajectory)
         
         # make/backup data directories
         self.datdir = os.path.join(".", "data_output")

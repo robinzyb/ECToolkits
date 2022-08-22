@@ -277,6 +277,12 @@ class RutileType(Slab):
     """
     class atoms used for rutile like(structure) system
     space group: P42/mnm
+    Usage:
+    rutile = read("Rutile-exp.cif")
+    x = RutileType(rutile)
+    slab = []
+    for i in range(3, 7):
+        slab.append(x.get_slab(indices=(1, 1, 0), n_layers=i, lateral_repeat=(2, 4)))
     """
 
     def get_slab(self, indices: tuple, n_layers, lateral_repeat: tuple=(2, 4), vacuum=10.0):

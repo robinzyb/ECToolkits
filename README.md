@@ -2,7 +2,7 @@
 
 A toolbox collect some postprocessing workflow
 
-## Atom Density Analysis
+# Atom Density Analysis
 ```python
 from toolkit.analysis.atom_density import AtomDensity
 
@@ -48,7 +48,8 @@ ad.plot_density(self, sym=False)
 
 ```
 ![density](./figures/density.png)
-## Band Alignment 
+# Band Alignment 
+## Quick Start
 ```python
 from toolkit.analysis.band_align import BandAlign
 inp = {
@@ -79,3 +80,21 @@ fig = ba.plot_hartree_per_width('solid')
 ba.water_hartree_list
 ba.solid_hartree_list
 ```
+## Prepare Input Data
+One has to collect all hartree cube files from continuous MD simulations in one directory with same prefix and suffix of `.cube`.
+For example, in directory `./00.interface/hartree/`, one should prepare cube file named `Hematite-v_hartree-1_1.cube`, `Hematite-v_hartree-1_2.cube`, ..., `Hematite-v_hartree-1_501.cube`.
+
+## Explanation for Parameters
+![density](./figures/hartree_area.png)
+- `input_type`: `cube` for cp2k cube files
+- `prefix`: define prefix for cube files
+- `index`: define the index for cube files, see `Prepare Input Data`
+- `l1`: parameter for nanosmoothing. `l1` equals to natural number (`n`) times periodic length (`pl`) for oxides slab. For example, the z position of a layer for $\mathrm{SnO_2}$(110) slab is defined as the ensemble-averaged z positions of $\mathrm{Sn}$ atoms in the layer. Then, the periodic length is inter-layer distance between two layers. Assuming `pl` is 2.4 $\mathrm{\AA}$, `l1` can be 2.4, 4.8, and 7.2 $\mathrm{\AA}$.
+- `l2`: parameter for nanosmoothing. `l2` equals to natural number (`n`) times periodic length (`pl`) for water. Since water dose not have periodicity, we recommend to set `l2` same as `l1`.
+- `ncov`: parameter for nanosmoothing. `ncov` is number of convolution. `ncov` equals to 2 for interfaces and equals to 1 for surface (slab-vacuum). When `ncov` is 1, `l2` won't be used.
+- `save`: whether to save post processed hartree data. We recommend to set it as `True`.
+- `save_path`: save_path for post processed hartree data.
+- `surf1_idx`: `place holder`
+- `surf2_idx`: `place holder`
+- `water_width_list`: Width for bulk water. Bulk Water Width is plotted in above figure. Since one has to test multiple width value, the width is input as a list.
+-  `solid_width_list`: Width for Bulk Solid. Bulk Solid Width is plotted in above figure. Since one has to test multiple width value, the width is input as a list.

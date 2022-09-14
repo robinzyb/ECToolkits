@@ -1,3 +1,11 @@
+- [Introduction](#introduction)
+- [Atom Density Analysis](#atom-density-analysis)
+- [Band Alignment](#band-alignment)
+  - [Quick Start](#quick-start)
+  - [Prepare Input Data](#prepare-input-data)
+  - [Explanation for Parameters](#explanation-for-parameters)
+  - [Plot Band Alignment Data](#plot-band-alignment-data)
+  
 # Introduction
 
 A toolbox collect some postprocessing workflow
@@ -98,3 +106,26 @@ For example, in directory `./00.interface/hartree/`, one should prepare cube fil
 - `surf2_idx`: `place holder`
 - `water_width_list`: Width for bulk water. Bulk Water Width is plotted in above figure. Since one has to test multiple width value, the width is input as a list.
 -  `solid_width_list`: Width for Bulk Solid. Bulk Solid Width is plotted in above figure. Since one has to test multiple width value, the width is input as a list.
+
+## Plot Band Alignment Data
+After Obtain band positions from post processing, you can plot these data using `plot_band_alignment`
+```python
+from toolkit.plots.band_align import plot_band_alignment
+
+#prepare your band positions data in dictionary format
+ba_data = {
+    "sys_1": {
+        "vbm": 1.0,
+        "cbm": -0.5
+    },
+    "sys_2": {
+        "vbm": 1.2,
+        "cbm": -0.3
+    },
+    ....
+}
+fig = plot_band_alignment(ba_dict=ba_data, show_diff=True, vac_value=False)
+fig.savefig("bandalignment.png")
+```
+We assume the vbm and cbm values are in SHE scale. If the vbm and cbm values are referred to Vacuum scale, set `vac_value=True`. If you want to plot the difference between band position of first system and other systems, set `show_diff=True`.
+![density](./figures/bandalign.jpg)

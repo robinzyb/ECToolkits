@@ -3,12 +3,14 @@ import numpy as np
 
 from MDAnalysis.analysis.base import AnalysisBase
 from MDAnalysis.lib.distances import (calc_bonds,
+                                      calc_angles,
                                       distance_array,
                                       apply_PBC,
                                       minimize_vectors)
 
 from ..utils.rutile110 import (count_cn, 
-                               cellpar2volume)
+                               cellpar2volume,
+                               get_watOidx)
 from ..utils.utils import create_path
 
 import numpy as np
@@ -1490,3 +1492,119 @@ class dObr_NearH(AnalysisBase):
             hist, _  = np.histogram(dist[:, ii], bins=bin_edges, density=True)
             hist_list.append(hist)
         return hist_list
+
+
+class FindSurfaceOadH(AnalysisBase):
+    """_summary_
+    Not applicable to Edge models
+    Usage Examples:
+        1) Flat model:
+        ```python
+        atoms = read("init.cif")
+        r110  = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)
+        Ow_idx, _ = r110.get_wat()
+        Ti5c_idx  = r110.indicies["idx_M5c"].flatten()
+        findOH   = FindSurfaceOadH(ag, owidx, cn5idx, nrow=r110.nrow)
+        findOH.run()
+        ```
+    Args:
+        AnalysisBase (_type_): _description
+    """
+    def __init__(self, atomgroup, Ow_idx, M5c_idx, M='Ti'):
+        self._ag  = atomgroup
+        self.M    = M
+        self.Ow_idx = Ow_idx
+        self.M5c_idx = M5c_idx
+
+        # MDA analysis class routine
+        trajectory = atomgroup.universe.trajectory
+        super(FindSurfaceOadH, self).__init__(trajectory)
+
+        # make/backup data directories
+        self.datdir = os.path.join(".", "SurfaceOadH")
+
+        create_path(self.datdir, bk=False)
+
+        # the file names for output data
+        self.fn_all_info     = os.path.join(self.datdir, "surf_TiOH_cprs.npz")
+
+    def _prepare(self):
+        #------------------------ initialize usefule constants ------------------------- 
+        self.cellpar = self._ag.dimensions
+        self.xyz     = self._ag.positions
+        self.M_idx   = np.where(self._ag.elements==self.M)[0]
+        self.O_idx   = np.where(self._ag.elements=='O')[0]
+        self.H_idx   = np.where(self._ag.elements=='H')[0]
+
+        self.num_M5c = len(self.M5c_idx)
+
+        #-------------------------- prepare result arrays --------------------------
+        self.all_Oad_H_idx    = np.full((self.n_frames, self.num_M5c), -1)
+        self.all_M5c_OadH_idx = np.full((self.n_frames, self.num_M5c), -1)
+        self.all_Had_idx      = np.full((self.n_frames, self.num_M5c), -1)
+        self.all_bond_O_H     = np.full((self.n_frames, self.num_M5c), np.nan)
+        self.all_angle_M_O_H  = np.full((self.n_frames, self.num_M5c), np.nan)
+    
+    def _single_frame(self):
+        Oad_idx       = self._get_Oad_idx()
+        Oad_idx       = Oad_idx.flatten()
+        Oad_cn        = self._get_Oad_H_cn(Oad_idx)
+        Oad_H_idx     = Oad_idx[Oad_cn == 1]
+        M5c_OadH_idx  = self.M5c_idx[Oad_cn == 1]
+        Had_idx       = self._get_Had_idx(Oad_H_idx)
+        num_surf_spec = len(Oad_H_idx)
+
+        bond_O_H    = self._get_Oad_Had_dist(Oad_H_idx, Had_idx)
+        angle_M_O_H = self._get_Ti5c_Oad_Had_angle(M5c_OadH_idx, Oad_H_idx, Had_idx)
+
+        
+
+        self.all_Oad_H_idx   [self._frame_index, :num_surf_spec] = Oad_H_idx
+        self.all_M5c_OadH_idx[self._frame_index, :num_surf_spec] = M5c_OadH_idx
+        self.all_Had_idx     [self._frame_index, :num_surf_spec] = Had_idx
+        self.all_bond_O_H    [self._frame_index, :num_surf_spec] = bond_O_H
+        self.all_angle_M_O_H [self._frame_index, :num_surf_spec] = angle_M_O_H
+
+    def _conclude(self):
+        # save into a compress zip npy
+        np.savez_compressed(
+            self.fn_all_info,
+            all_Oad_H_idx    = self.all_Oad_H_idx,
+            all_M5c_OadH_idx = self.all_M5c_OadH_idx,
+            all_Had_idx      = self.all_Had_idx,
+            all_bond_O_H     = self.all_bond_O_H,
+            all_angle_M_O_H  = self.all_angle_M_O_H
+        )
+
+    def _get_Oad_idx(self, n_ow=1):
+        pos = self._ag.positions
+        M5c_idx = self.M5c_idx
+        Ow_idx = self.Ow_idx
+        cellpar = self.cellpar
+        M5c_Ow_darray = distance_array(pos[M5c_idx], pos[Ow_idx], box=cellpar)
+        sort_idx = np.argsort(M5c_Ow_darray , axis=1)
+        Oad_idx = Ow_idx[sort_idx[:, :n_ow]]
+        return Oad_idx
+
+    def _get_Oad_H_cn(self, Oad_idx):
+        pos = self._ag.positions
+        Oad_cn = count_cn(pos[Oad_idx], pos[self.H_idx], 1.2, None, cell=self.cellpar)
+        return Oad_cn
+
+    def _get_Had_idx(self, Oad_H_idx):
+        pos = self._ag.positions
+        # Had is H atom in OadH 
+        OadH_H_darray = distance_array(pos[Oad_H_idx], pos[self.H_idx], box=self.cellpar)
+        sort_idx = np.argsort(OadH_H_darray, axis=1)
+        Had_idx = self.H_idx[sort_idx[:, :1]]
+        return Had_idx.flatten()
+
+    def _get_Oad_Had_dist(self, Oad_H_idx, Had_idx):
+        pos = self._ag.positions
+        dist = calc_bonds(pos[Oad_H_idx], pos[Had_idx], box=self.cellpar)
+        return dist
+
+    def _get_Ti5c_Oad_Had_angle(self, M5c_idx, Oad_H_idx, Had_idx):
+        pos = self._ag.positions
+        angle = calc_angles(pos[M5c_idx], pos[Oad_H_idx], pos[Had_idx], box=self.cellpar)
+        return angle

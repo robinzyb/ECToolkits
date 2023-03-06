@@ -3,7 +3,7 @@ import pytest
 import numpy as np
 from ase.io import read
 
-from toolkit.structures.rutile110 import (Rutile110, 
+from ectoolkits.structures.rutile110 import (Rutile110, 
                                           Rutile1p11Edge)
 
 # External test files 

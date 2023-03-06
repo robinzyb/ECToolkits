@@ -1,4 +1,3 @@
-from re import sub
 from ase import Atoms
 from ase.neighborlist import neighbor_list
 from ase.io import read, write
@@ -201,7 +200,11 @@ class Slab(Atoms):
         return tmp_stc
         
 
-    def generate_interface(self, water_box_len, top_surface_idx, bottom_surface_idx):
+    def generate_interface(self, 
+                           water_box_len: float, 
+                           top_surface_idx: List[int], 
+                           bottom_surface_idx: List[int]
+                           ):
         """merge slab model and water box together
 
         Args:
@@ -352,6 +355,7 @@ class RutileSlab(Slab):
         """
         function for create symmetry slab for rutile structure 110 surface
         space group: P42/mnm
+        this function is valid only for 6 atoms conventional cell.
         """
         # create six layer and a supercell
         

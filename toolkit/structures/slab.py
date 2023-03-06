@@ -17,7 +17,19 @@ class Slab(Atoms):
     Args:
         Atoms (_type_): Atoms object int ASE
     """
-
+    def get_cus(self, input_idx, coord_num, cutoff):
+        """
+        function to get atom index of coordinate unsaturated sites.
+        slab: Atoms object, the slab model
+        input_idx: the index of the atom you want get the coordination number
+        coord_num: coordination number for coordinate unsaturated sites, the number must be less then the full coordination
+        cutoff: the cutoff radius defining coordination. something like: {('Ti', 'O'): 2.2}
+        return: the index for cus atoms
+        """
+        coord_num_list = np.bincount(neighbor_list('i', self, cutoff))[input_idx]
+        target_idx = input_idx[coord_num_list == coord_num]
+        return target_idx
+    
     def get_neighbor_list(self, idx: int, cutoff: dict) -> list:        
         """
             provided that atom index and return its neighbor in list
@@ -308,25 +320,7 @@ class Slab(Atoms):
         return tmp
     
 
-class SemiConductor(Slab):
-    """
-    class atoms used for semiconductor system
-    """        
-
-    def get_cus(self, input_idx, coord_num, cutoff):
-        """
-        function to get atom index of coordinate unsaturated sites.
-        slab: Atoms object, the slab model
-        input_idx: the index of the atom you want get the coordination number
-        coord_num: coordination number for coordinate unsaturated sites, the number must be less then the full coordination
-        cutoff: the cutoff radius defining coordination. something like: {('Ti', 'O'): 2.2}
-        return: the index for cus atoms
-        """
-        coord_num_list = np.bincount(neighbor_list('i', self, cutoff))[input_idx]
-        target_idx = input_idx[coord_num_list == coord_num]
-        return target_idx
-
-class RutileType(Slab):
+class RutileSlab(Slab):
     """
     class atoms used for rutile like(structure) system
     space group: P42/mnm

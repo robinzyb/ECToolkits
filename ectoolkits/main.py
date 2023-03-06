@@ -1,6 +1,6 @@
 import argparse
 import sys
-from toolkit.analysis.atom_density import analysis_run
+from ectoolkits.analysis.atom_density import analysis_run
 
 def main():
     print("Description\n------------")

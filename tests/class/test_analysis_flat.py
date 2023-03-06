@@ -4,9 +4,9 @@ import pytest
 import numpy as np
 from ase.io import read
 from MDAnalysis import Universe
-from toolkit.structures.rutile110 import Rutile110
-from toolkit.utils.rutile110 import pair_M5c_n_obr
-from toolkit.analysis.rutile110 import (WatDensity,        # z-axis water denstiy profile
+from ectoolkits.structures.rutile110 import Rutile110
+from ectoolkits.utils.rutile110 import pair_M5c_n_obr
+from ectoolkits.analysis.rutile110 import (WatDensity,        # z-axis water denstiy profile
                                         RutileDisDeg,      # Ad water dissociation degree
                                         dAdBridge,         # Ad water - Obr  distance 
                                         dInterLayer,       # TiO2 Interlayer distances

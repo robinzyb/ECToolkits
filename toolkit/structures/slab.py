@@ -7,6 +7,7 @@ from ..utils.math import get_plane_eq
 import numpy as np
 import os
 import shutil
+from typing import Tuple, List
 
 
 class Slab(Atoms):
@@ -50,7 +51,11 @@ class Slab(Atoms):
         idx_list = np.where(cs==element)[0]
         return list(idx_list)
 
-    def find_surf_idx(self, element: str =None, tolerance=0.1, dsur='up') -> list:
+    def find_surf_idx(self, 
+                      element:str=None, 
+                      tolerance:float=0.1, 
+                      dsur:str='up'
+                      ) -> list:
         """
             find atom indexs at surface
 
@@ -146,6 +151,44 @@ class Slab(Atoms):
         
         return tmp
     
+    def add_adsorbate(self, 
+                  ad_site_idx:int, 
+                  vertical_dist:float, 
+                  adsorbate:Atoms, 
+                  contact_atom_idx:int=0,
+                  lateral_shift:Tuple[float]=(0,0),
+                  ):
+
+        tmp_stc = self.copy()
+        site_pos = tmp_stc[ad_site_idx].position.copy()
+        tmp_adsorbate = adsorbate.copy()
+        # refer the positions of adsorbate to the contact_atom
+        contact_atom_pos = tmp_adsorbate[contact_atom_idx].position.copy()
+        tmp_adsorbate.translate(-contact_atom_pos)
+        # move the adsorbate to target position
+        target_pos = site_pos+np.array([lateral_shift[0], lateral_shift[1], vertical_dist])
+        tmp_adsorbate.translate(target_pos)
+        tmp_stc.extend(tmp_adsorbate)
+        return tmp_stc
+    
+    def add_adsorbates(self,
+                    ad_site_idx_list:List[int], 
+                    vertical_dist:float, 
+                    adsorbate:Atoms, 
+                    contact_atom_idx:int=0,
+                    lateral_shift:Tuple[float]=(0,0),
+                    ):
+        tmp_stc = self.copy()
+        for ad_site_idx in ad_site_idx_list:
+            tmp_stc = tmp_stc.add_adsorbate(ad_site_idx=ad_site_idx,
+                                      vertical_dist=vertical_dist,
+                                      adsorbate=adsorbate, 
+                                      contact_atom_idx=contact_atom_idx,
+                                      lateral_shift=lateral_shift,
+                                      )
+        return tmp_stc
+        
+
     def generate_interface(self, water_box_len, top_surface_idx, bottom_surface_idx):
         """merge slab model and water box together
 

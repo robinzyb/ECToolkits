@@ -3,6 +3,7 @@ from ase import Atoms
 from ase.neighborlist import neighbor_list
 from ase.io import read, write
 from ase.build import surface
+from ..utils.math import get_plane_eq
 import numpy as np
 import os
 import shutil
@@ -194,18 +195,22 @@ class Slab(Atoms):
         Returns:
 
         """
-        cell_x = self.get_cell()[0][0]
-        cell_y = self.get_cell()[1][1]
+        cell = self.get_cell()
+        cell_a = cell[0]
+        cell_b = cell[1]
         header = "-"
         print(header * 50)
         print("Now Generate Water Box")
         space_per_water = 9.86 ** 3 / 32
-        wat_num = (cell_x * cell_y * water_box_len) / space_per_water
+        wat_num = (np.linalg.norm(np.cross(cell_a,cell_b)) * water_box_len) / space_per_water
         wat_num = int(wat_num)
-        print("Read Cell X: {0:03f} A".format(cell_x))
-        print("Read Cell Y: {0:03f} A".format(cell_y))
+        #print("Read Cell X: {0:03f} A".format(cell_a))
+        #print("Read Cell Y: {0:03f} A".format(cell_b))
         print("Read Water Box Length: {0:03f} A".format(water_box_len))
         print("Predict Water Number: {0}".format(wat_num))
+        
+        n_vec_a, d1_a, d2_a, n_vec_b, d1_b, d2_b = get_plane_eq(cell_a, cell_b)
+        print("Calculate Plane Equation")
 
         if os.path.exists('gen_water'):
             print("found gen_water direcotry, now remove it")
@@ -222,7 +227,12 @@ class Slab(Atoms):
             txt += "\n"
             txt += "structure water.xyz\n"
             txt += "  number {0}\n".format(int(wat_num))
-            txt += "  inside box 0. 0. 0. {0} {1} {2}\n".format(cell_x - 1, cell_y - 1, water_box_len)
+            txt += "  above plane {0:6.4f} {1:6.4f} {2:6.4f} {3:6.4f}\n".format(n_vec_a[0], n_vec_a[1], n_vec_a[2], d1_a+0.5)
+            txt += "  below plane {0:6.4f} {1:6.4f} {2:6.4f} {3:6.4f}\n".format(n_vec_a[0], n_vec_a[1], n_vec_a[2], d2_a-0.5)
+            txt += "  above plane {0:6.4f} {1:6.4f} {2:6.4f} {3:6.4f}\n".format(n_vec_b[0], n_vec_b[1], n_vec_b[2], d1_b+0.5)
+            txt += "  below plane {0:6.4f} {1:6.4f} {2:6.4f} {3:6.4f}\n".format(n_vec_b[0], n_vec_b[1], n_vec_b[2], d2_b-0.5)
+            txt += "  above plane {0:6.4f} {1:6.4f} {2:6.4f} {3:6.4f}\n".format(0, 0, 1.0, 0.)
+            txt += "  below plane {0:6.4f} {1:6.4f} {2:6.4f} {3:6.4f}\n".format(0, 0, 1.0, water_box_len)
             txt += "end structure\n"
             f.write(txt)
         print("Generate A Water Molecule: water.xyz")

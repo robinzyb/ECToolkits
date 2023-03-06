@@ -1,6 +1,13 @@
+from re import sub
 from ase import Atoms
 from ase.neighborlist import neighbor_list
+from ase.io import read, write
+from ase.build import surface
+from ..utils.math import get_plane_eq
 import numpy as np
+import os
+import shutil
+from typing import Tuple, List
 
 
 class Slab(Atoms):
@@ -10,7 +17,19 @@ class Slab(Atoms):
     Args:
         Atoms (_type_): Atoms object int ASE
     """
-
+    def get_cus(self, input_idx, coord_num, cutoff):
+        """
+        function to get atom index of coordinate unsaturated sites.
+        slab: Atoms object, the slab model
+        input_idx: the index of the atom you want get the coordination number
+        coord_num: coordination number for coordinate unsaturated sites, the number must be less then the full coordination
+        cutoff: the cutoff radius defining coordination. something like: {('Ti', 'O'): 2.2}
+        return: the index for cus atoms
+        """
+        coord_num_list = np.bincount(neighbor_list('i', self, cutoff))[input_idx]
+        target_idx = input_idx[coord_num_list == coord_num]
+        return target_idx
+    
     def get_neighbor_list(self, idx: int, cutoff: dict) -> list:        
         """
             provided that atom index and return its neighbor in list
@@ -44,7 +63,11 @@ class Slab(Atoms):
         idx_list = np.where(cs==element)[0]
         return list(idx_list)
 
-    def find_surf_idx(self, element: str, tolerance=0.1, dsur='up') -> list:
+    def find_surf_idx(self, 
+                      element:str=None, 
+                      tolerance:float=0.1, 
+                      dsur:str='up'
+                      ) -> list:
         """
             find atom indexs at surface
 
@@ -59,10 +82,11 @@ class Slab(Atoms):
         Returns:
             list: list of atom indices
         """        
-        
-        idx_list = self.find_element_idx_list(element)
-        z_list = self[idx_list].get_positions().T[2]
-
+        if element:
+            idx_list = self.find_element_idx_list(element)
+            z_list = self[idx_list].get_positions().T[2]
+        else: 
+            z_list = self.get_positions().T[2]
         if dsur == 'up':
             z = z_list.max()
         elif dsur == 'dw':
@@ -73,6 +97,26 @@ class Slab(Atoms):
         idx_list = self.find_idx_from_range(zmin=zmin, zmax=zmax, element=element)
     
         return idx_list
+
+    def del_surf_layer(self, element: str =None, tolerance=0.1, dsur='up'):
+        """ delete the layer atoms,
+
+        _extended_summary_
+
+        Args:
+            element (str, optional): _description_. Defaults to None.
+            tolerance (float, optional): _description_. Defaults to 0.1.
+            dsur (str, optional): _description_. Defaults to 'up'.
+
+        Returns:
+            _type_: _description_
+        """        
+
+        del_list = self.find_surf_idx(element=element, tolerance=tolerance, dsur=dsur)
+        
+        tmp = self.copy()
+        del tmp[del_list]
+        return tmp
 
     def find_idx_from_range(self, zmin:int, zmax:int, element: str =None) -> list:
         """_summary_
@@ -119,3 +163,209 @@ class Slab(Atoms):
         
         return tmp
     
+    def add_adsorbate(self, 
+                  ad_site_idx:int, 
+                  vertical_dist:float, 
+                  adsorbate:Atoms, 
+                  contact_atom_idx:int=0,
+                  lateral_shift:Tuple[float]=(0,0),
+                  ):
+
+        tmp_stc = self.copy()
+        site_pos = tmp_stc[ad_site_idx].position.copy()
+        tmp_adsorbate = adsorbate.copy()
+        # refer the positions of adsorbate to the contact_atom
+        contact_atom_pos = tmp_adsorbate[contact_atom_idx].position.copy()
+        tmp_adsorbate.translate(-contact_atom_pos)
+        # move the adsorbate to target position
+        target_pos = site_pos+np.array([lateral_shift[0], lateral_shift[1], vertical_dist])
+        tmp_adsorbate.translate(target_pos)
+        tmp_stc.extend(tmp_adsorbate)
+        return tmp_stc
+    
+    def add_adsorbates(self,
+                    ad_site_idx_list:List[int], 
+                    vertical_dist:float, 
+                    adsorbate:Atoms, 
+                    contact_atom_idx:int=0,
+                    lateral_shift:Tuple[float]=(0,0),
+                    ):
+        tmp_stc = self.copy()
+        for ad_site_idx in ad_site_idx_list:
+            tmp_stc = tmp_stc.add_adsorbate(ad_site_idx=ad_site_idx,
+                                      vertical_dist=vertical_dist,
+                                      adsorbate=adsorbate, 
+                                      contact_atom_idx=contact_atom_idx,
+                                      lateral_shift=lateral_shift,
+                                      )
+        return tmp_stc
+        
+
+    def generate_interface(self, water_box_len, top_surface_idx, bottom_surface_idx):
+        """merge slab model and water box together
+
+        Args:
+            water_box_len:
+            top_surface_idx:
+            bottom_surface_idx:
+
+        Returns:
+            tmp:
+        """
+        # find the water box
+        if os.path.exists("gen_water/watbox.xyz"):
+            water_box = read("gen_water/watbox.xyz")
+            print("Water Box Found")
+        else:
+            print("Water Box Not Found")
+            raise FileNotFoundError('Water box not found, please install packmol')
+
+        tmp = self.copy()
+        cell_z = tmp.get_cell()[2][2]
+        # shift the water in z directions (to add in slab model)
+        tmp_water_positions = water_box.get_positions()
+        for i in range(len(tmp_water_positions)):
+            tmp_water_positions[i] += [0, 0, cell_z + 0.5]
+        water_box.set_positions(tmp_water_positions)
+        # add the water box to slab model
+        tmp.extend(water_box)
+        # modify the z length
+        tmp.set_cell(tmp.get_cell() + [[0, 0, 0], [0, 0, 0], [0, 0, water_box_len + 1]])
+        # shift the water center to box center
+        top_surface_z = tmp[top_surface_idx].get_positions().T[2].mean()
+        bottom_surface_z = tmp[bottom_surface_idx].get_positions().T[2].mean()
+        slab_center_z = 0.5 * (top_surface_z + bottom_surface_z)
+        tmp.translate([0, 0, -slab_center_z])
+        tmp.set_pbc([False, False, True])
+        tmp.wrap()
+        print("Merge Water and Slab Box Finished")
+        return tmp
+    
+    def generate_water_box(self, water_box_len):
+        """function to generate water box
+        x and y length is from self length
+        Args:
+            water_box_len:
+
+        Returns:
+
+        """
+        cell = self.get_cell()
+        cell_a = cell[0]
+        cell_b = cell[1]
+        header = "-"
+        print(header * 50)
+        print("Now Generate Water Box")
+        space_per_water = 9.86 ** 3 / 32
+        wat_num = (np.linalg.norm(np.cross(cell_a,cell_b)) * water_box_len) / space_per_water
+        wat_num = int(wat_num)
+        #print("Read Cell X: {0:03f} A".format(cell_a))
+        #print("Read Cell Y: {0:03f} A".format(cell_b))
+        print("Read Water Box Length: {0:03f} A".format(water_box_len))
+        print("Predict Water Number: {0}".format(wat_num))
+        
+        n_vec_a, d1_a, d2_a, n_vec_b, d1_b, d2_b = get_plane_eq(cell_a, cell_b)
+        print("Calculate Plane Equation")
+
+        if os.path.exists('gen_water'):
+            print("found gen_water direcotry, now remove it")
+            shutil.rmtree('gen_water')
+        print("Generate New Directory: gen_water")
+        os.mkdir('gen_water')
+        print("Generate Packmol Input: gen_wat_box.inp")
+        with open(os.path.join("gen_water", "gen_wat_box.inp"), 'w') as f:
+            txt = "#packmol input generate by python"
+            txt += "\n"
+            txt += "tolerance 2.0\n"
+            txt += "filetype xyz\n"
+            txt += "output watbox.xyz"
+            txt += "\n"
+            txt += "structure water.xyz\n"
+            txt += "  number {0}\n".format(int(wat_num))
+            txt += "  above plane {0:6.4f} {1:6.4f} {2:6.4f} {3:6.4f}\n".format(n_vec_a[0], n_vec_a[1], n_vec_a[2], d1_a+0.5)
+            txt += "  below plane {0:6.4f} {1:6.4f} {2:6.4f} {3:6.4f}\n".format(n_vec_a[0], n_vec_a[1], n_vec_a[2], d2_a-0.5)
+            txt += "  above plane {0:6.4f} {1:6.4f} {2:6.4f} {3:6.4f}\n".format(n_vec_b[0], n_vec_b[1], n_vec_b[2], d1_b+0.5)
+            txt += "  below plane {0:6.4f} {1:6.4f} {2:6.4f} {3:6.4f}\n".format(n_vec_b[0], n_vec_b[1], n_vec_b[2], d2_b-0.5)
+            txt += "  above plane {0:6.4f} {1:6.4f} {2:6.4f} {3:6.4f}\n".format(0, 0, 1.0, 0.)
+            txt += "  below plane {0:6.4f} {1:6.4f} {2:6.4f} {3:6.4f}\n".format(0, 0, 1.0, water_box_len)
+            txt += "end structure\n"
+            f.write(txt)
+        print("Generate A Water Molecule: water.xyz")
+        with open(os.path.join("gen_water", "water.xyz"), 'w') as f:
+            txt = '3\n'
+            txt += ' water\n'
+            txt += ' H            9.625597       6.787278      12.673000\n'
+            txt += ' H            9.625597       8.420323      12.673000\n'
+            txt += ' O           10.203012       7.603800      12.673000\n'
+            f.write(txt)
+        print("Generate Water Box: watbox.xyz")
+        os.chdir("./gen_water")
+        os.system("packmol < gen_wat_box.inp")
+        os.chdir("../")
+        print("Generate Water Box Finished")
+
+    def remove_cell_vacuum(self, adopt_space=2):
+        """remove the vacuum of z direction
+         cell z must be perpendicular to xy plane
+        """
+        tmp = self.copy()
+        z_list = tmp.get_positions().T[2]
+        slab_length = z_list.max() - z_list.min()
+        slab_length += 2
+        a = tmp.get_cell()[0]
+        b = tmp.get_cell()[1]
+        c = [0, 0, slab_length]
+        tmp.set_cell([a, b, c])
+        tmp.center()
+        return tmp
+    
+
+class RutileSlab(Slab):
+    """
+    class atoms used for rutile like(structure) system
+    space group: P42/mnm
+    Usage:
+    rutile = read("Rutile-exp.cif")
+    x = RutileType(rutile)
+    slab = []
+    for i in range(3, 7):
+        slab.append(x.get_slab(indices=(1, 1, 0), n_layers=i, lateral_repeat=(2, 4)))
+    """
+
+    def get_slab(self, indices: tuple, n_layers, lateral_repeat: tuple=(2, 4), vacuum=10.0):
+        h, k, l = indices
+        entry = str(h)+str(k)+str(l)
+        method_entry = {
+            "110": self.rutile_slab_110
+        }
+        
+        method = method_entry.get(entry, None)
+
+        if method is None:
+            raise ValueError("Current Miller Index has not implemented yet")
+
+        slab = method(n_layers=n_layers, lateral_repeat=lateral_repeat, vacuum=vacuum)
+
+        return slab
+
+    def rutile_slab_110(self, n_layers=5, lateral_repeat: tuple=(2, 4), vacuum=10.0):
+        """
+        function for create symmetry slab for rutile structure 110 surface
+        space group: P42/mnm
+        """
+        # create six layer and a supercell
+        
+        slab = surface(self, (1, 1, 0), n_layers+1, vacuum)
+
+        # remove bottom layer
+        slab = slab.del_surf_layer(tolerance=0.1, dsur='dw')
+        slab = slab.del_surf_layer(tolerance=0.1, dsur='dw')
+        slab = slab.del_surf_layer(tolerance=0.1, dsur='up')
+
+        # create the super cell
+        slab = slab * (lateral_repeat[0], lateral_repeat[1], 1)
+
+        # sort according the z value
+        slab = slab[slab.positions.T[2].argsort()]
+
+        return slab

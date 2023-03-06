@@ -11,6 +11,41 @@ from ase.geometry import cellpar_to_cell
 # distance caculation library functions
 from MDAnalysis.lib.distances import *
 
+def find_cn_idx(atoms1, atoms2, cutoff_hi, cutoff_lo=None, cell=None, **kwargs):
+    """count the coordination number(CN) for atoms1 (center atoms), where atoms2 are coordinate atom. 
+    This function will calculate CN within range cutoff_lo < d < cutoff_lo, where d is the distance 
+    between atoms1 and atoms2. Minimum image convention is applied if cell is not `None`
+
+    Args:
+        atoms1 (numpy.ndarray): 
+            Array with shape (N, 3), where N is the number of center atoms. 'atoms1' are the 
+            position of center atoms. 
+        atoms2 (numpy.ndarray): 
+            Array with shape (M, 3), where M is the number of coordination atoms. 'atoms2' are 
+            the positions of coordination atoms.
+        cutoff_hi (float): 
+            Max cutoff for calculating coordination number. 
+        cutoff_lo (float or None, optional): 
+            Min cutoff for calculating coordination number. This function will calculate CN within 
+            range cutoff_lo < d < cutoff_lo, where d is the distance between atoms1 and atoms2. 
+            Defaults to None.
+        cell (numpy.ndarray, optional): 
+            Array with shape (6,), Array([a, b, c, alpha, beta, gamma]). Simulation cell parameters. 
+            If it's not None, the CN calculation will use minimum image convention. Defaults to `None`.
+
+    Returns:
+        results: 
+            Array with shape (N,), CN of each atoms atoms1
+    """
+    cell = np.array(cell).astype(np.float32)
+
+    pairs, _ = capped_distance(reference=atoms1,
+                               configuration=atoms2,
+                               max_cutoff=cutoff_hi,
+                               min_cutoff=cutoff_lo,
+                               box=cell)
+    cn_idx = pairs[:, 1]
+    return cn_idx
 
 def count_cn(atoms1, atoms2, cutoff_hi, cutoff_lo=None, cell=None, **kwargs):
     """count the coordination number(CN) for atoms1 (center atoms), where atoms2 are coordinate atom. 
@@ -54,7 +89,7 @@ def cellpar2volume(cellpar):
     return np.abs(np.dot(np.cross(cell[0], cell[1]), cell[2]))
 
 
-def get_watOidx(atoms, M="Ti"):
+def get_watOidx(atoms, M="Ti", d_OH_cutoff=1.2, d_MO_cutoff=2.8, cn_M_cutoff=1):
     """gets all the water oxygen indicies in rutile (110)-water interface
 
     Args:
@@ -69,15 +104,15 @@ def get_watOidx(atoms, M="Ti"):
     """
     xyz = atoms.positions
     cell = atoms.cell.cellpar()
-    idx_Ti = np.where(atoms.symbols==M)[0]
+    idx_M = np.where(atoms.symbols==M)[0]
     idx_O = np.where(atoms.symbols=='O')[0]
     idx_H = np.where(atoms.symbols=='H')[0]
 
-    cn_H = count_cn(xyz[idx_O, :], xyz[idx_H, :], 1.2, None, cell)
-    cn_Ti = count_cn(xyz[idx_O, :], xyz[idx_Ti, :], 2.8, None, cell)
+    cn_H = count_cn(xyz[idx_O, :], xyz[idx_H, :], d_OH_cutoff, None, cell)
+    cn_M = count_cn(xyz[idx_O, :], xyz[idx_M, :], d_MO_cutoff, None, cell)
 
-    watOidx = idx_O[(cn_H >= 0) * (cn_Ti <= 1)]
-    watHidx = idx_H
+    watOidx = idx_O[(cn_H >= 0) * (cn_M <= cn_M_cutoff)]
+    watHidx = find_cn_idx(xyz[watOidx, :], xyz[idx_H, :], d_OH_cutoff, None, cell)
     return watOidx, watHidx
 
 def interface_2_slab(atoms, M="Ti"):

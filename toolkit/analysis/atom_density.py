@@ -79,7 +79,8 @@ class AtomDensity():
 
         # cell info
         self.cell_volume = self.poses[0].get_volume()
-        self.xy_area = self.cell_volume/self.cell[2]
+        _cell  = self.poses[0].get_cell()
+        self.xy_area = self.cell_volume/_cell[2][2]
 
         # surface 1 and 2 position along the trajectory
         self.surf1_z_list = self.get_surf1_z_list()

@@ -49,3 +49,78 @@ def fit_line_vec(xyz):
     line_vec   = vecs[np.argmax(vals)]
     # How to calculating error?
     return line_vec/np.linalg.norm(line_vec)
+
+
+def get_norm_vector(a, b):
+    """
+    obtain normal vector of a plane contain vectors a and b
+
+    Args:
+    -----------
+        a (_type_): 
+            _description_
+        b (_type_): 
+            _description_
+
+    Returns:
+    -----------
+        _type_: 
+            _description_
+
+    Notes:
+    -----------
+     _notes_ 
+
+    Examples:
+    -----------
+     _examples_ 
+    """    
+    nv_a = np.cross(a, b)
+    norm = np.linalg.norm(nv_a)
+    nv_a = nv_a/norm
+    return nv_a
+
+def get_plane_distance(a, b):
+
+    ### \
+    #    \
+    #     \
+    #      ---------> a
+    len_a = np.linalg.norm(a)
+    proj_b = np.dot(b, a) * a /len_a**2 
+    plane_d = np.linalg.norm(b - proj_b)
+    return plane_d
+
+def get_plane_eq(a, b, c=np.array([0, 0, 1])):
+    """
+    obtain plane equation
+
+    Args:
+    -----------
+        a (_type_): 
+            _description_
+        b (_type_): 
+            _description_
+        c (_type_, optional): 
+            _description_. Defaults to np.array([0, 0, 1]).
+
+    Returns:
+    -----------
+        _type_: 
+            _description_
+
+    Notes:
+    -----------
+     _notes_ 
+
+    Examples:
+    -----------
+     _examples_ 
+    """    
+    n_vec_a = get_norm_vector(c, a)
+    d1_a = np.abs(np.dot(n_vec_a, a ))
+    d2_a = np.abs(np.dot(n_vec_a, a+b))
+    n_vec_b = get_norm_vector(b, c)
+    d1_b = np.abs(np.dot(n_vec_b, b ))
+    d2_b = np.abs(np.dot(n_vec_b, a+b))
+    return n_vec_a, d1_a, d2_a, n_vec_b, d1_b, d2_b

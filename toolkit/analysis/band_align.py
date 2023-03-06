@@ -230,6 +230,8 @@ def get_nearest_idx(array, value):
     return idx
 
 def get_z_mean(atoms, idx_list):
+    # check_in_plane: switch to true to check the selected atoms are in similar z positions
+    # sometimes z postions will shift by pbc 
     z_mean = atoms[idx_list].get_positions().T[2].mean()
     return z_mean
 

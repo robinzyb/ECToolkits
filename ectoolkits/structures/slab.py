@@ -7,6 +7,7 @@ import numpy as np
 import os
 import shutil
 from typing import Tuple, List
+from MDAnalysis.lib.distances import minimize_vectors
 
 
 class Slab(Atoms):
@@ -80,12 +81,20 @@ class Slab(Atoms):
 
         Returns:
             list: list of atom indices
-        """        
+        """ 
+        tmp_stc = self.copy()  
+
+        trans_dist = 5
+        while tmp_stc.is_cross_z_boundary(element=element):
+            print(f"The slab part is cross z boundary, tranlate {trans_dist:3.3f} A!")
+            tmp_stc.translate([0,0,trans_dist])
+            tmp_stc.wrap()
+
         if element:
-            idx_list = self.find_element_idx_list(element)
-            z_list = self[idx_list].get_positions().T[2]
+            idx_list = tmp_stc.find_element_idx_list(element)
+            z_list = tmp_stc[idx_list].get_positions().T[2]
         else: 
-            z_list = self.get_positions().T[2]
+            z_list = tmp_stc.get_positions().T[2]
         if dsur == 'up':
             z = z_list.max()
         elif dsur == 'dw':
@@ -93,7 +102,7 @@ class Slab(Atoms):
 
         zmin = z-tolerance
         zmax = z+tolerance
-        idx_list = self.find_idx_from_range(zmin=zmin, zmax=zmax, element=element)
+        idx_list = tmp_stc.find_idx_from_range(zmin=zmin, zmax=zmax, element=element)
     
         return idx_list
 
@@ -321,6 +330,30 @@ class Slab(Atoms):
         tmp.set_cell([a, b, c])
         tmp.center()
         return tmp
+
+    def is_cross_z_boundary(
+        self,
+        element: str
+        ):
+        # check if slab cross z boundary
+        M_idx_list = self.find_element_idx_list(element=element)
+
+        cellpar = self.cell.cellpar()
+
+        coords = self[M_idx_list].get_positions()
+        coords_z = coords[:, 2]
+
+        coord_z_max = coords[coords_z.argmax()]
+        coord_z_min = coords[coords_z.argmin()]
+        vec_raw = coord_z_max - coord_z_min
+
+        vec_minimized = minimize_vectors(vectors=vec_raw, box=cellpar)
+        
+        #print(vec_minimized[2], vec_raw[2])
+        if np.isclose(vec_minimized[2], vec_raw[2], atol=1e-5, rtol=0):
+            return False
+        else:
+            return True
     
 
 class RutileSlab(Slab):

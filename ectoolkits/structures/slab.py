@@ -66,7 +66,9 @@ class Slab(Atoms):
     def find_surf_idx(self, 
                       element:str=None, 
                       tolerance:float=0.1, 
-                      dsur:str='up'
+                      dsur:str='up',
+                      check_cross_boundary=False,
+                      trans_z_dist = 5
                       ) -> list:
         """
             find atom indexs at surface
@@ -83,12 +85,11 @@ class Slab(Atoms):
             list: list of atom indices
         """ 
         tmp_stc = self.copy()  
-
-        trans_dist = 5
-        while tmp_stc.is_cross_z_boundary(element=element):
-            print(f"The slab part is cross z boundary, tranlate {trans_dist:3.3f} A!")
-            tmp_stc.translate([0,0,trans_dist])
-            tmp_stc.wrap()
+        if check_cross_boundary:
+            while tmp_stc.is_cross_z_boundary(element=element):
+                print(f"The slab part is cross z boundary, tranlate {trans_z_dist:3.3f} A!")
+                tmp_stc.translate([0,0,trans_z_dist])
+                tmp_stc.wrap()
 
         if element:
             idx_list = tmp_stc.find_element_idx_list(element)
@@ -106,7 +107,7 @@ class Slab(Atoms):
     
         return idx_list
 
-    def del_surf_layer(self, element: str =None, tolerance=0.1, dsur='up'):
+    def del_surf_layer(self, element: str =None, tolerance=0.1, dsur='up', check_cross_boundary=False):
         """ delete the layer atoms,
 
         _extended_summary_
@@ -120,7 +121,11 @@ class Slab(Atoms):
             _type_: _description_
         """        
 
-        del_list = self.find_surf_idx(element=element, tolerance=tolerance, dsur=dsur)
+        del_list = self.find_surf_idx(element=element, 
+                                      tolerance=tolerance, 
+                                      dsur=dsur, 
+                                      check_cross_boundary=check_cross_boundary
+                                      )
         
         tmp = self.copy()
         del tmp[del_list]
@@ -371,20 +376,25 @@ class RutileSlab(Slab):
         slab.append(x.get_slab(indices=(1, 1, 0), n_layers=i, lateral_repeat=(2, 4)))
     """
 
-    def get_slab(self, indices: tuple, n_layers, lateral_repeat: tuple=(2, 4), vacuum=10.0):
+    def get_slab(self, indices: Tuple[int], n_layers, lateral_repeat: Tuple[int]=(2, 4), vacuum=10.0):
         h, k, l = indices
         entry = str(h)+str(k)+str(l)
         method_entry = {
             "110": self.rutile_slab_110,
-            "001": self.rutile_slab_001
+            "001": self.rutile_slab_001,
+            "100": self.rutile_slab_100,
+            "101": self.rutile_slab_101,
         }
         
         method = method_entry.get(entry, None)
 
-        if method is None:
-            raise ValueError("Current Miller Index has not implemented yet")
-
-        slab = method(n_layers=n_layers, lateral_repeat=lateral_repeat, vacuum=vacuum)
+        try:
+            assert method is not None
+            slab = method(n_layers=n_layers, lateral_repeat=lateral_repeat, vacuum=vacuum)
+        except:
+            print("Current Miller Index has not implemented yet")
+        # if method is None:
+        #     raise ValueError("Current Miller Index has not implemented yet")
 
         return slab
 
@@ -413,7 +423,7 @@ class RutileSlab(Slab):
 
     def rutile_slab_001(self, n_layers=5, lateral_repeat: tuple=(2, 2), vacuum=10.0):
         """
-        function for create symmetry slab for rutile structure 110 surface
+        function for create symmetry slab for rutile structure 001 surface
         space group: P42/mnm
         this function is valid only for 6 atoms conventional cell.
         """
@@ -427,6 +437,52 @@ class RutileSlab(Slab):
 
         slab = slab * (lateral_repeat[0], lateral_repeat[1], 1)
 
+        # sort according the z value
+        slab = slab[slab.positions.T[2].argsort()]
+
+        return slab
+    
+    def rutile_slab_100(self, n_layers=5, lateral_repeat: tuple=(2, 3), vacuum=10.0):
+        """
+        function for create symmetry slab for rutile structure 100 surface
+        space group: P42/mnm
+        this function is valid only for 6 atoms conventional cell.
+        """
+        # create six layer and a supercell    
+
+        if n_layers%2 == 1:
+            slab = surface(self, (1, 0, 0), int(n_layers/2)+1, vacuum)
+            slab = slab.del_surf_layer(tolerance=0.1, dsur='dw')
+            slab = slab.del_surf_layer(tolerance=0.1, dsur='dw')
+            slab = slab.del_surf_layer(tolerance=0.1, dsur='up')
+        elif n_layers%2 == 0:
+            slab = surface(self, (1, 0, 0), int(n_layers/2)+1, vacuum)
+            slab = slab.del_surf_layer(tolerance=0.1, dsur='dw')
+            slab = slab.del_surf_layer(tolerance=0.1, dsur='dw')
+            slab = slab.del_surf_layer(tolerance=0.1, dsur='up')
+            slab = slab.del_surf_layer(tolerance=0.1, dsur='up')
+            slab = slab.del_surf_layer(tolerance=0.1, dsur='up')
+            slab = slab.del_surf_layer(tolerance=0.1, dsur='up')
+        slab = slab * (lateral_repeat[0], lateral_repeat[1], 1)
+
+        # sort according the z value
+        slab = slab[slab.positions.T[2].argsort()]
+
+        return slab
+    
+    def rutile_slab_101(self, n_layers=5, lateral_repeat: tuple=(2, 2), vacuum=10.0):
+        """
+        function for create symmetry slab for rutile structure 101 surface
+        space group: P42/mnm
+        this function is valid only for 6 atoms conventional cell.
+        """
+        # create six layer and a supercell    
+        slab = surface(self, (1, 0, 1), n_layers+1, vacuum)
+        slab = slab.del_surf_layer(tolerance=0.1, dsur='dw')
+        slab = slab.del_surf_layer(tolerance=0.1, dsur='dw')
+        slab = slab.del_surf_layer(tolerance=0.1, dsur='up')
+
+        slab = slab * (lateral_repeat[0], lateral_repeat[1], 1)
         # sort according the z value
         slab = slab[slab.positions.T[2].argsort()]
 

@@ -20,9 +20,9 @@ True
 
 ```python
 #Find the indices of the upper surface, which is defined as the surface in contact with water on the right.
-stc.find_surf_idx(element='Ti', tolerance=1, dsur='up')
+stc.find_surf_idx(element='Ti', tolerance=1, dsur='up', check_cross_boundary=True)
 #Find the indices of the bottom surface, which is defined as the surface in contact with water on the left.
-stc.find_surf_idx(element='Ti', tolerance=1, dsur='dw')
+stc.find_surf_idx(element='Ti', tolerance=1, dsur='dw', check_cross_boundary=True)
 ```
 
 ```shell

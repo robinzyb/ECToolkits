@@ -375,7 +375,8 @@ class RutileSlab(Slab):
         h, k, l = indices
         entry = str(h)+str(k)+str(l)
         method_entry = {
-            "110": self.rutile_slab_110
+            "110": self.rutile_slab_110,
+            "001": self.rutile_slab_001
         }
         
         method = method_entry.get(entry, None)
@@ -403,6 +404,27 @@ class RutileSlab(Slab):
         slab = slab.del_surf_layer(tolerance=0.1, dsur='up')
 
         # create the super cell
+        slab = slab * (lateral_repeat[0], lateral_repeat[1], 1)
+
+        # sort according the z value
+        slab = slab[slab.positions.T[2].argsort()]
+
+        return slab
+
+    def rutile_slab_001(self, n_layers=5, lateral_repeat: tuple=(2, 2), vacuum=10.0):
+        """
+        function for create symmetry slab for rutile structure 110 surface
+        space group: P42/mnm
+        this function is valid only for 6 atoms conventional cell.
+        """
+        # create six layer and a supercell
+
+        if n_layers%2 == 1:
+            slab = surface(self, (0, 0, 1), int(n_layers/2)+1, vacuum)
+            slab = slab.del_surf_layer(tolerance=0.1, dsur='dw')
+        elif n_layers%2 == 0:
+            slab = surface(self, (0, 0, 1), int(n_layers/2), vacuum)
+
         slab = slab * (lateral_repeat[0], lateral_repeat[1], 1)
 
         # sort according the z value

@@ -333,10 +333,13 @@ class Slab(Atoms):
 
     def is_cross_z_boundary(
         self,
-        element: str
+        element: str = None
         ):
         # check if slab cross z boundary
-        M_idx_list = self.find_element_idx_list(element=element)
+        if element:
+            M_idx_list = self.find_element_idx_list(element=element)
+        else:
+            M_idx_list = list(range(len(self)))
 
         cellpar = self.cell.cellpar()
 

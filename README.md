@@ -55,7 +55,7 @@ all_cent_density = ad.get_ave_density(width_list)
 
 # quick plot for denstiy 
 # if you want to symmetrize the density profile, set sym=True
-ad.plot_density(self, sym=False)
+ad.plot_density(sym=False)
 
 ```
 ![density](./figures/density.png)

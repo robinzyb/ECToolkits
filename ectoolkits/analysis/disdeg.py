@@ -45,7 +45,7 @@ def cumsum_arr(arr):
         cumulative_sum[i] =cumulative_sum[i]/(i+1)
     return cumulative_sum
 
-class DemoBlendeDisDeg(AnalysisBase):
+class DisDeg(AnalysisBase):
     
     
     def __init__(self,

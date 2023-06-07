@@ -139,14 +139,10 @@ We refer to paper for detailed description
 >2. Mangold, M. et al. Absolute pK a Values and Solvation Structure of Amino Acids from Density Functional Based Molecular Dynamics Simulation. J Chem Theory Comput 7, 1951–1961 (2011). 
 
 The pKa of a species $\ce{AH}$ in aqueous solution is defined as 
-$$
-\ce{AH(aq) -> A^- (aq) + H^+ (aq)} \\
-\mathrm{p}K_a = -\log{K_a}
-$$
+$$\ce{AH(aq) -> A^- (aq) + H^+ (aq)}$$ 
+$$\mathrm{p}K_a = -\log{K_a}$$
 The final expression for $\mathrm{p}K_a$ is
-$$
-2.3 k_{\mathrm{B}} T\mathrm{p}K_a =   (\Delta_{\mathrm{dp}} A_{\ce{AH}} - \Delta_{\mathrm{dp}}  A_{\ce{H3O+}} - \Delta A_{\ce{Ad}} + \Delta A_{\ce{H2Od}} - \Delta A_{\mathrm{qc}} (\ce{AH}) + \Delta A_{\mathrm{qc}}(\ce{H3O+}) +  \Delta A_{\ce{H3O+}})
-$$
+$$2.3 k_{\mathrm{B}} T\mathrm{p}K_a =   (\Delta_{\mathrm{dp}} A_{\ce{AH}} - \Delta_{\mathrm{dp}}  A_{\ce{H3O+}} - \Delta A_{\ce{Ad}} + \Delta A_{\ce{H2Od}} - \Delta A_{\mathrm{qc}} (\ce{AH}) + \Delta A_{\mathrm{qc}}(\ce{H3O+}) +  \Delta A_{\ce{H3O+}})$$
 
 ## Calculate Dummy Insertion Free Energy
 

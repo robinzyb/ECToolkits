@@ -3,12 +3,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+from typing import List,Optional
+
 from MDAnalysis.lib.distances import capped_distance
 from MDAnalysis.analysis.base import AnalysisBase
 
 
 
-def count_Oidxs_bonds(positions, o_idxs:list, conf_idxs, box, max_cutoff=1.4, min_cutoff=None, ):
+def count_Oidxs_bonds(positions, o_idxs:List[int], conf_idxs:List[int], box:List[float], 
+                      max_cutoff:float=1.2, min_cutoff:Optional[float]=None):
     
     _res = capped_distance(positions[o_idxs], 
                            positions[conf_idxs], 
@@ -53,7 +56,7 @@ class DisDeg(AnalysisBase):
                  terminal_oxygen_idxs,
                  chosen_elements=["H"],
                  cellpar=None,
-                 cutoff=1.4,
+                 cutoff=1.2,
                  min_cutoff=None,):
         
         self._ag = atomgroup

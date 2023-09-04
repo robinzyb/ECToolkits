@@ -119,9 +119,11 @@ class CNState(AnalysisBase):
     """
     Count Coordination number for a given index list in a trajectory.
     """    
+    _cnstate = None
+
     def __init__(self,
-                 atomgroup: AtomGroup,
-                 center_atom_idx: np.array,
+                 atomgroup: AtomGroup=None,
+                 center_atom_idx: np.array=None,
                  coordinated_elements: List[str]=["H"],
                  max_cutoff:float=1.2,
                  min_cutoff:float=None,
@@ -156,6 +158,7 @@ class CNState(AnalysisBase):
         Examples:
         -----------
         ```python
+        # 
         >>> O_idx_dw = [264, 267, 270, 273, 276, 279, 282, 285]
         >>> cnstate = CNState(atomgroup=u.atoms, 
         >>>          center_atom_idx=np.array(O_idx_dw), 
@@ -182,8 +185,22 @@ class CNState(AnalysisBase):
         self.min_cutoff = min_cutoff 
 
         # ----------------------- extra parameters --------------------------- #
-        self._trajectory = self._ag.universe.trajectory
-        self.cellpar = atomgroup.universe.dimensions
+        if self._ag is not None:
+            self._trajectory = self._ag.universe.trajectory
+            self.cellpar = self._ag.universe.dimensions
+        
+
+    @classmethod
+    def read_cnstate_from(cls, npyfile: str):
+        cls._cnstate = np.load(npyfile)
+        return cls(atomgroup=None, 
+                   center_atom_idx=None,
+                   coordinated_elements=None,
+                   max_cutoff=None,
+                   min_cutoff=None,)
+
+    def _prepare(self): 
+
 
         # turn a list of coordinated elements to a list of indices
         _elements = self._ag.atoms.elements
@@ -203,9 +220,6 @@ class CNState(AnalysisBase):
         assert isinstance(self.center_atom_idx, np.ndarray), \
             ("center_atom_idx should be a 1d or 2d numpy array")
         
-
-
-    def _prepare(self): 
         # check if the center atom index is a 2d array or 1d array
 
         if self.center_atom_idx.ndim == 1:
@@ -239,15 +253,13 @@ class CNState(AnalysisBase):
                                      max_cutoff=self.max_cutoff,
                                      min_cutoff=self.min_cutoff)
     
-    
     def _conclude(self):
         pass
 
     def save_cnstate(self, filename):
         np.save(filename, self._cnstate)
 
-    def read_cnstate_from(self, npyfile: str):
-        self._cnstate = np.load(npyfile)
+
 
     def get_cnstate_percentage(self, expected_cn: int):
 
@@ -256,11 +268,11 @@ class CNState(AnalysisBase):
         assert self._cnstate.ndim == 2, \
                 "cnstate shape is not 2d or not read from npy file"
         return np.count_nonzero(self._cnstate == expected_cn, axis=1)/self._cnstate.shape[1]
-
+    
     def plot_cnstate(self, cn_list=[0, 1, 2, 3]):
         fig, ax = plt.subplots(figsize=(12,3),dpi=500)
         for cn in cn_list:
-            sns.lineplot(self.get_cn_percentage(expected_cn=cn), ax=ax, label=f"CN={cn}")
+            sns.lineplot(self.get_cnstate_percentage(expected_cn=cn), ax=ax, label=f"CN={cn}")
         return fig
 
 
@@ -285,6 +297,15 @@ class DisDeg(CNState):
     def _conclude(self):
         self.get_disdeg()
 
+    @classmethod
+    def read_cnstate_from(cls, npyfile: str):
+        cls._cnstate = np.load(npyfile)
+        return cls(atomgroup=None, 
+                   center_atom_idx=None,
+                   coordinated_elements=None,
+                   max_cutoff=None,
+                   min_cutoff=None,)
+    
     def get_disdeg(self, 
                    cn_list_no_dis:List[int]=[0, 1], 
                    cn_list_dis:List[int]= [2, 3]
@@ -293,9 +314,9 @@ class DisDeg(CNState):
         self._no_disdeg = np.zeros((self._cnstate.shape[0]), dtype=float)
         self._disdeg = np.zeros((self._cnstate.shape[0]), dtype=float)
         for cn in cn_list_no_dis:
-            self._no_disdeg += self.get_cn_percentage(expected_cn=cn)
+            self._no_disdeg += self.get_cnstate_percentage(expected_cn=cn)
         for cn in cn_list_dis:
-            self._disdeg += self.get_cn_percentage(expected_cn=cn)
+            self._disdeg += self.get_cnstate_percentage(expected_cn=cn)
     
     def save_disdeg(self, filename:str):
         np.save(filename, [self._disdeg])

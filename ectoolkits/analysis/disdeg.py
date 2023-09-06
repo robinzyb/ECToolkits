@@ -307,8 +307,8 @@ class DisDeg(CNState):
                    min_cutoff=None,)
     
     def get_disdeg(self, 
-                   cn_list_no_dis:List[int]=[0, 1], 
-                   cn_list_dis:List[int]= [2, 3]
+                   cn_list_no_dis:List[int]=[2, 3], 
+                   cn_list_dis:List[int]= [0, 1]
                    ):
         
         self._no_disdeg = np.zeros((self._cnstate.shape[0]), dtype=float)

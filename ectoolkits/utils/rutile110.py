@@ -73,7 +73,7 @@ def count_cn(atoms1, atoms2, cutoff_hi, cutoff_lo=None, cell=None, **kwargs):
         results: 
             Array with shape (N,), CN of each atoms atoms1
     """
-    cell = np.array(cell).astype(np.float32)
+    #cell = np.array(cell).astype(np.float32)
 
     pairs, _ = capped_distance(reference=atoms1,
                                configuration=atoms2,

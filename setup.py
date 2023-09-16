@@ -12,6 +12,7 @@ setuptools.setup(
 #    long_description=long_description,
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(),
+    package_data={"ectoolkits":["matplotlibstyle/*.mplstyle"]},
     classifiers=[
         "Programming Language :: Python :: 3",
     ],
@@ -28,4 +29,5 @@ setuptools.setup(
         'console_scripts': [
             'tlk=toolkit.main:main']
         }
+
 )

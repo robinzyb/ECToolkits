@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ECToolKits"
+version = "0.2.4"
+authors = [
+{name = "Yongbin Zhuang", email = "robinzhuang@outlook.com"}
+]
+license = {file = "LICENSE"}
+readme = "README.md"
+description = "Small Package to Postprocessing Results"
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
+]
+requires-python = ">=3.8"
+dependencies = [
+    "numpy >= 1.19.5",
+    "matplotlib >= 3.3.2",
+    "ase >= 3.20.1",
+    "cp2kdata >= 0.2.0",
+    "pandas",
+    "MDAnalysis >= 2.1.0"
+]
+
+[tool.setuptools.packages.find]
+include = ["ectoolkits"]
+
+[tool.setuptools.package-data]
+ectoolkits = ["matplotlibstyle/*.mplstyle"]
+
+[project.entry-points.console_scripts]
+eckit = "ectoolkits.main:main"

@@ -2,6 +2,7 @@ import numpy as np
 from scipy.special import erf
 from scipy.linalg import toeplitz
 from cp2kdata.units import au2A, au2eV
+from typing import List
 
 
 
@@ -11,6 +12,10 @@ from cp2kdata.units import au2A, au2eV
 # reference: 
 # Komsa, H.-P. & Pasquarello, A. Finite-Size Supercell Correction for Charged Defects at Surfaces and Interfaces. Phys. Rev. Lett. 110, 095505 (2013).
   
+def integer3D(f, paramcell):
+    dv = np.prod(paramcell.h, dtype=float)
+    x = np.sum(f)*dv
+    return x
 
 # write cell
 class Paramcell:
@@ -111,7 +116,12 @@ class GaussCharge:
  
 
 class DielProfile:
-    def __init__(self, z_interface_list, diel_list, beta_list, paramcell):
+    def __init__(self, 
+                 z_interface_list, 
+                 diel_list: List[float], 
+                 beta_list, 
+                 paramcell,
+                 ):
         """
         The documentation of DielProfile class
         Parameters
@@ -126,12 +136,29 @@ class DielProfile:
             The cell information
         """
         self.z_interface_list = z_interface_list
-        self.diel_list = diel_list
+        
+        if isinstance(diel_list, np.ndarray):
+            self.diel_list_perp = diel_list
+            self.diel_list_para = diel_list
+            print("The gievn dielectric constant is isotropic")
+            print("The dielectric constant is {}".format(self.diel_list_perp))
+        elif isinstance(diel_list, dict):
+            self.diel_list_perp = diel_list['perp']
+            self.diel_list_para = diel_list['para']
+            print("The gievn dielectric constant is anisotropic")
+            print("The dielectric constant in the direction perpendicular to the interface is {}".format(self.diel_list_perp))
+            print("The dielectric constant in the direction parallel to the interface is {}".format(self.diel_list_para))
+        else:
+            raise ValueError("The type of dielectric constant is not supported, please give a list or dict")
+
         self.beta_list = beta_list
         self.paramcell = paramcell
-        self.dielz = self.gen_diel_profile()
+        self.dielz_perp = self.gen_diel_profile(self.diel_list_perp)
+        self.dielz_para = self.gen_diel_profile(self.diel_list_para)
 
-    def gen_diel_profile(self):
+        print("Generate dielectric profile finished")
+
+    def gen_diel_profile(self, diel_list): 
         len_z = self.paramcell.length[2]
         h = self.paramcell.h[2]
         z_gridpoints = self.paramcell.divi[2]
@@ -149,9 +176,9 @@ class DielProfile:
                     mif = m
             
             if zif > 0:
-                dielz[k] = self.ifmodel(zif, self.diel_list[mif], self.diel_list[mif+1], self.beta_list[mif])
+                dielz[k] = self.ifmodel(zif, diel_list[mif], diel_list[mif+1], self.beta_list[mif])
             else:
-                dielz[k] = self.ifmodel(zif, self.diel_list[mif], self.diel_list[mif+1], self.beta_list[mif])
+                dielz[k] = self.ifmodel(zif, diel_list[mif], diel_list[mif+1], self.beta_list[mif])
 
         return dielz                
 
@@ -199,26 +226,30 @@ class PBCPoissonSolver:
         #rhok_tmp = self.gauss_charge.rhok
         #print((rhok_tmp-rhok).max())
         
-        dielGz = np.fft.fft(self.diel_profile.dielz)
-
+        # both diel_profile.dielz_perp and diel_profile.dielz_para should be generated in DielProfile class
+        dielGz_perp = np.fft.fft(self.diel_profile.dielz_perp)
+        dielGz_para = np.fft.fft(self.diel_profile.dielz_para)
 
         LGz = len(Gz0)
 
         # Circular convolution matrix
         #TODO: need to be enhanced to anisotropic case 
-        first_row = np.concatenate(([dielGz[0]], dielGz[:0:-1]))
-        Ag1 = toeplitz(dielGz, first_row)/LGz
-        #self.Ag1 = Ag1
+        first_row = np.concatenate(([dielGz_perp[0]], dielGz_perp[:0:-1]))
+        Ag1_perp = toeplitz(dielGz_perp, first_row)/LGz
+
+        first_row = np.concatenate(([dielGz_para[0]], dielGz_para[:0:-1]))
+        Ag1_para = toeplitz(dielGz_para, first_row)/LGz
+        
         Ag2 = np.outer(Gz0, Gz0)
         #VGz = np.zeros(LGz)
         Vk = np.zeros(rhok.shape, dtype=complex)
-
+        # perp
         for k in range(len(Gx0)):
             for m in range(len(Gy0)):
 
-                Gpars = np.power(Gx0[k], 2) + np.power(Gy0[m], 2)
+                G_para = np.power(Gx0[k], 2) + np.power(Gy0[m], 2)
                 
-                Ag = np.multiply(Ag1, (Ag2 + Gpars))
+                Ag = np.multiply(Ag1_perp, Ag2) + np.multiply(Ag1_para, G_para)
                 
                 # G=0 hack!
                 if (k == 0) and (m == 0):
@@ -231,3 +262,78 @@ class PBCPoissonSolver:
         
 
 
+class UniformCharge:
+    # adapted from gono's code
+    def __init__(self, Q, interface_position, beta, paramcell):
+        """
+        The documentation of GaussCharge class
+        Parameters
+        ----------
+        Q: float
+            The charge in e
+        thickness: list or array
+            The position of the charge in bohr
+        beta: float
+            The width of the Gaussian in bohr
+        paramcell: Paramcell
+            The cell information
+        recip: bool
+            If True, the reciprocal space charge density will be generated
+        """
+
+        self.Q = Q
+        self.interface_position = interface_position
+        self.beta = beta
+        self.paramcell = paramcell
+        self.rhocc = np.zeros(paramcell.divi)
+        
+        self.rhocc = np.zeros(self.paramcell.divi)
+        cell_height = self.paramcell.length[2]
+        dz = self.paramcell.h[2]
+        n_grid_z = self.paramcell.divi[2]
+        grid_z = np.linspace(0, cell_height - dz, n_grid_z)
+        
+        charge_volume = (self.interface_position[1] - self.interface_position[0])
+        charge_volume *= self.paramcell.length[0] * self.paramcell.length[1]
+        
+        charge_densities = [0, self.Q / charge_volume, 0]
+        charge_profile = np.zeros(n_grid_z)
+        
+        for i, z in enumerate(grid_z):
+            distance_closest_interface = 1.0e6
+            index_closest_interface = 0;
+            
+            for index, z_interface in enumerate(self.interface_position):
+                distance = self.delta_z(z, z_interface, cell_height)
+                
+                if abs(distance) < abs(distance_closest_interface):
+                    distance_closest_interface = distance
+                    index_closest_interface = index
+                
+            charge_profile[i] = self.counter_charge_model(
+                    distance_closest_interface, 
+                    charge_densities[index_closest_interface],
+                    charge_densities[index_closest_interface + 1],
+                    self.beta[index_closest_interface])
+        
+        for z_index, charge_value in enumerate(charge_profile):
+            for x_index in range(paramcell.divi[0]):
+                for y_index in range(paramcell.divi[1]):
+                    self.rhocc[x_index, y_index, z_index] = charge_value
+
+        self.rhocc = self.rhocc.astype(complex)
+
+    @staticmethod
+    def counter_charge_model(z, charge_1, charge_2, width):
+        a = (charge_2 - charge_1) / 2.0
+        b = (charge_2 + charge_1) / 2.0
+        return a * erf(z / width) + b
+
+    @staticmethod
+    def delta_z(z1, z2, periodic_cell_height):
+        dz = z1 - z2
+        if dz > periodic_cell_height / 2.0:
+            dz -= periodic_cell_height
+        if dz < -periodic_cell_height / 2.0:
+            dz += periodic_cell_height
+        return dz

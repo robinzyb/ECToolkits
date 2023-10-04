@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ECToolKits"
-version = "0.2.4"
+version = "0.2.5"
 authors = [
 {name = "Yongbin Zhuang", email = "robinzhuang@outlook.com"}
 ]
@@ -27,7 +27,7 @@ dependencies = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["ectoolkits"]
+include = ["ectoolkits*"]
 
 [tool.setuptools.package-data]
 ectoolkits = ["matplotlibstyle/*.mplstyle"]

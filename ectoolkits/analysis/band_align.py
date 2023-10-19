@@ -1,6 +1,7 @@
 from sqlite3 import enable_callback_tracebacks
 from tracemalloc import Snapshot
-from cp2kdata.cube import Cp2kCube
+from cp2kdata import Cp2kCube
+from cp2kdata.units import au2A, au2eV
 import numpy as np
 import os
 import pandas as pd
@@ -199,10 +200,10 @@ class BandAlign():
             stc = cube.get_stc()
             traj.append(stc)
             print(f"process cube {idx} finished", end="\r")
-        pav_x_list = np.array(pav_x_list)
-        pav_list = np.array(pav_list)
-        mav_x_list = np.array(mav_x_list)
-        mav_list = np.array(mav_list)
+        pav_x_list = np.array(pav_x_list)*au2A
+        pav_list = np.array(pav_list)*au2eV
+        mav_x_list = np.array(mav_x_list)*au2A
+        mav_list = np.array(mav_list)*au2eV
 
         if save:
             np.savetxt(os.path.join(save_path, "pav_x_list.dat"), pav_x_list, fmt="%3.4f")

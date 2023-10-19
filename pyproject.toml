@@ -21,7 +21,7 @@ dependencies = [
     "numpy >= 1.19.5",
     "matplotlib >= 3.3.2",
     "ase >= 3.20.1",
-    "cp2kdata >= 0.2.0",
+    "cp2kdata >= 0.6.1",
     "pandas",
     "MDAnalysis >= 2.1.0"
 ]

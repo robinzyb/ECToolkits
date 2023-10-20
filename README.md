@@ -4,7 +4,7 @@
 # Introduction
 
 
-EelectoChemical Toolkit(ECToolkit), a package to process electrochemical results from atomistic simulations.
+EelectroChemical Toolkit(ECToolkit), a package to process electrochemical results from atomistic simulations.
 
 
 

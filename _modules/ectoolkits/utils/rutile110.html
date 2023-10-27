@@ -1,0 +1,773 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ectoolkits.utils.rutile110 &#8212; ECToolkits Reference</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=c5ced968eda925caa686"></script>
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/ectoolkits/utils/rutile110';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">ECToolkits Reference</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Analysis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/atom_density.html">Atom Density Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/band_align.html">Band Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/disdeg.html">Dissociation Degree Analysis</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/acidity.html">Acidity Calculation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/redox.html">Redox Potentials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../_api/modules.html">ectoolkits</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../_api/ectoolkits.html">ectoolkits package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../_api/ectoolkits.analysis.html">ectoolkits.analysis package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.acidity.html">ectoolkits.analysis.acidity module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.atom_density.html">ectoolkits.analysis.atom_density module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.band_align.html">ectoolkits.analysis.band_align module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.disdeg.html">ectoolkits.analysis.disdeg module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.rutile110.html">ectoolkits.analysis.rutile110 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.uncertainty.html">ectoolkits.analysis.uncertainty module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_api/ectoolkits.matplotlibstyle.html">ectoolkits.matplotlibstyle package</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../_api/ectoolkits.plots.html">ectoolkits.plots package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.plots.band_align.html">ectoolkits.plots.band_align module</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../_api/ectoolkits.structures.html">ectoolkits.structures package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.structures.interface.html">ectoolkits.structures.interface module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.structures.rutile110.html">ectoolkits.structures.rutile110 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.structures.slab.html">ectoolkits.structures.slab module</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../_api/ectoolkits.utils.html">ectoolkits.utils package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.utils.math.html">ectoolkits.utils.math module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.utils.rutile110.html">ectoolkits.utils.rutile110 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.utils.utils.html">ectoolkits.utils.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.utils.vasp.html">ectoolkits.utils.vasp module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_api/ectoolkits.main.html">ectoolkits.main module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/robinzyb/ectoolkits" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/robinzyb/ectoolkits/issues/new?title=Issue%20on%20page%20%2F_modules/ectoolkits/utils/rutile110.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for ectoolkits.utils.rutile110</h1><div class="highlight"><pre>
+<span></span><span class="c1"># author:  brh</span>
+<span class="c1"># summary: rutile (110)-water interface toolkit</span>
+<span class="c1"># summary: this contains the general methods for rutile-water(110)</span>
+<span class="c1"># 2021-2022</span>
+
+<span class="c1"># general modules</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">ase.geometry</span> <span class="kn">import</span> <span class="n">cellpar_to_cell</span>
+<span class="c1"># distance caculation library functions</span>
+<span class="kn">from</span> <span class="nn">MDAnalysis.lib.distances</span> <span class="kn">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="find_cn_idx"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.find_cn_idx">[docs]</a><span class="k">def</span> <span class="nf">find_cn_idx</span><span class="p">(</span><span class="n">atoms1</span><span class="p">,</span> <span class="n">atoms2</span><span class="p">,</span> <span class="n">cutoff_hi</span><span class="p">,</span> <span class="n">cutoff_lo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;count the coordination number(CN) for atoms1 (center atoms), where atoms2 are coordinate atom. </span>
+<span class="sd">    This function will calculate CN within range cutoff_lo &lt; d &lt; cutoff_lo, where d is the distance </span>
+<span class="sd">    between atoms1 and atoms2. Minimum image convention is applied if cell is not `None`</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        atoms1 (numpy.ndarray): </span>
+<span class="sd">            Array with shape (N, 3), where N is the number of center atoms. &#39;atoms1&#39; are the </span>
+<span class="sd">            position of center atoms. </span>
+<span class="sd">        atoms2 (numpy.ndarray): </span>
+<span class="sd">            Array with shape (M, 3), where M is the number of coordination atoms. &#39;atoms2&#39; are </span>
+<span class="sd">            the positions of coordination atoms.</span>
+<span class="sd">        cutoff_hi (float): </span>
+<span class="sd">            Max cutoff for calculating coordination number. </span>
+<span class="sd">        cutoff_lo (float or None, optional): </span>
+<span class="sd">            Min cutoff for calculating coordination number. This function will calculate CN within </span>
+<span class="sd">            range cutoff_lo &lt; d &lt; cutoff_lo, where d is the distance between atoms1 and atoms2. </span>
+<span class="sd">            Defaults to None.</span>
+<span class="sd">        cell (numpy.ndarray, optional): </span>
+<span class="sd">            Array with shape (6,), Array([a, b, c, alpha, beta, gamma]). Simulation cell parameters. </span>
+<span class="sd">            If it&#39;s not None, the CN calculation will use minimum image convention. Defaults to `None`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        results: </span>
+<span class="sd">            Array with shape (N,), CN of each atoms atoms1</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cell</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+    <span class="n">pairs</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">capped_distance</span><span class="p">(</span><span class="n">reference</span><span class="o">=</span><span class="n">atoms1</span><span class="p">,</span>
+                               <span class="n">configuration</span><span class="o">=</span><span class="n">atoms2</span><span class="p">,</span>
+                               <span class="n">max_cutoff</span><span class="o">=</span><span class="n">cutoff_hi</span><span class="p">,</span>
+                               <span class="n">min_cutoff</span><span class="o">=</span><span class="n">cutoff_lo</span><span class="p">,</span>
+                               <span class="n">box</span><span class="o">=</span><span class="n">cell</span><span class="p">)</span>
+    <span class="n">cn_idx</span> <span class="o">=</span> <span class="n">pairs</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">cn_idx</span></div>
+
+<div class="viewcode-block" id="count_cn"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.count_cn">[docs]</a><span class="k">def</span> <span class="nf">count_cn</span><span class="p">(</span><span class="n">atoms1</span><span class="p">,</span> <span class="n">atoms2</span><span class="p">,</span> <span class="n">cutoff_hi</span><span class="p">,</span> <span class="n">cutoff_lo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;count the coordination number(CN) for atoms1 (center atoms), where atoms2 are coordinate atom. </span>
+<span class="sd">    This function will calculate CN within range cutoff_lo &lt; d &lt; cutoff_lo, where d is the distance </span>
+<span class="sd">    between atoms1 and atoms2. Minimum image convention is applied if cell is not `None`</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        atoms1 (numpy.ndarray): </span>
+<span class="sd">            Array with shape (N, 3), where N is the number of center atoms. &#39;atoms1&#39; are the </span>
+<span class="sd">            position of center atoms. </span>
+<span class="sd">        atoms2 (numpy.ndarray): </span>
+<span class="sd">            Array with shape (M, 3), where M is the number of coordination atoms. &#39;atoms2&#39; are </span>
+<span class="sd">            the positions of coordination atoms.</span>
+<span class="sd">        cutoff_hi (float): </span>
+<span class="sd">            Max cutoff for calculating coordination number. </span>
+<span class="sd">        cutoff_lo (float or None, optional): </span>
+<span class="sd">            Min cutoff for calculating coordination number. This function will calculate CN within </span>
+<span class="sd">            range cutoff_lo &lt; d &lt; cutoff_lo, where d is the distance between atoms1 and atoms2. </span>
+<span class="sd">            Defaults to None.</span>
+<span class="sd">        cell (numpy.ndarray, optional): </span>
+<span class="sd">            Array with shape (6,), Array([a, b, c, alpha, beta, gamma]). Simulation cell parameters. </span>
+<span class="sd">            If it&#39;s not None, the CN calculation will use minimum image convention. Defaults to `None`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        results: </span>
+<span class="sd">            Array with shape (N,), CN of each atoms atoms1</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#cell = np.array(cell).astype(np.float32)</span>
+
+    <span class="n">pairs</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">capped_distance</span><span class="p">(</span><span class="n">reference</span><span class="o">=</span><span class="n">atoms1</span><span class="p">,</span>
+                               <span class="n">configuration</span><span class="o">=</span><span class="n">atoms2</span><span class="p">,</span>
+                               <span class="n">max_cutoff</span><span class="o">=</span><span class="n">cutoff_hi</span><span class="p">,</span>
+                               <span class="n">min_cutoff</span><span class="o">=</span><span class="n">cutoff_lo</span><span class="p">,</span>
+                               <span class="n">box</span><span class="o">=</span><span class="n">cell</span><span class="p">)</span>
+    <span class="n">_minlength</span> <span class="o">=</span> <span class="n">atoms1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">pairs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">minlength</span><span class="o">=</span><span class="n">_minlength</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span></div>
+
+<div class="viewcode-block" id="cellpar2volume"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.cellpar2volume">[docs]</a><span class="k">def</span> <span class="nf">cellpar2volume</span><span class="p">(</span><span class="n">cellpar</span><span class="p">):</span>
+    <span class="n">cell</span> <span class="o">=</span> <span class="n">cellpar_to_cell</span><span class="p">(</span><span class="n">cellpar</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">cell</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cell</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">cell</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span></div>
+
+
+<div class="viewcode-block" id="get_watOidx"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.get_watOidx">[docs]</a><span class="k">def</span> <span class="nf">get_watOidx</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s2">&quot;Ti&quot;</span><span class="p">,</span> <span class="n">d_OH_cutoff</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">d_MO_cutoff</span><span class="o">=</span><span class="mf">2.8</span><span class="p">,</span> <span class="n">cn_M_cutoff</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;gets all the water oxygen indicies in rutile (110)-water interface</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        atoms (ase.Atoms): </span>
+<span class="sd">            ASE atoms. One snapshot of rutile (110)-water structure.</span>
+<span class="sd">        M (str, optional): </span>
+<span class="sd">            The metal atom in rutile structrue. Defaults to &quot;Ti&quot;.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        watOidx (numpy.ndarray): 0-based indicies for water oxygen atoms.</span>
+<span class="sd">        watHidx (numpy.ndarray): 0-based indicies for water hydrogen atoms. (all the hydrogens)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">xyz</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">positions</span>
+    <span class="n">cell</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">cellpar</span><span class="p">()</span>
+    <span class="n">idx_M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">symbols</span><span class="o">==</span><span class="n">M</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">idx_O</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">symbols</span><span class="o">==</span><span class="s1">&#39;O&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">idx_H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">symbols</span><span class="o">==</span><span class="s1">&#39;H&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">cn_H</span> <span class="o">=</span> <span class="n">count_cn</span><span class="p">(</span><span class="n">xyz</span><span class="p">[</span><span class="n">idx_O</span><span class="p">,</span> <span class="p">:],</span> <span class="n">xyz</span><span class="p">[</span><span class="n">idx_H</span><span class="p">,</span> <span class="p">:],</span> <span class="n">d_OH_cutoff</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span>
+    <span class="n">cn_M</span> <span class="o">=</span> <span class="n">count_cn</span><span class="p">(</span><span class="n">xyz</span><span class="p">[</span><span class="n">idx_O</span><span class="p">,</span> <span class="p">:],</span> <span class="n">xyz</span><span class="p">[</span><span class="n">idx_M</span><span class="p">,</span> <span class="p">:],</span> <span class="n">d_MO_cutoff</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span>
+
+    <span class="n">watOidx</span> <span class="o">=</span> <span class="n">idx_O</span><span class="p">[(</span><span class="n">cn_H</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">cn_M</span> <span class="o">&lt;=</span> <span class="n">cn_M_cutoff</span><span class="p">)]</span>
+    <span class="n">watHidx</span> <span class="o">=</span> <span class="n">find_cn_idx</span><span class="p">(</span><span class="n">xyz</span><span class="p">[</span><span class="n">watOidx</span><span class="p">,</span> <span class="p">:],</span> <span class="n">xyz</span><span class="p">[</span><span class="n">idx_H</span><span class="p">,</span> <span class="p">:],</span> <span class="n">d_OH_cutoff</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">watOidx</span><span class="p">,</span> <span class="n">watHidx</span></div>
+
+<div class="viewcode-block" id="interface_2_slab"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.interface_2_slab">[docs]</a><span class="k">def</span> <span class="nf">interface_2_slab</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s2">&quot;Ti&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;transform rutile (110)-water interface model to only the slab, i.e., deleting all the </span>
+<span class="sd">    water molecules.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        atoms (ase.Atoms): </span>
+<span class="sd">            ASE atoms. One snapshot of rutile (110)-water structure.</span>
+<span class="sd">        M (str, optional): </span>
+<span class="sd">            The metal atom in rutile structrue. Defaults to &quot;Ti&quot;.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        idx_slab(numpy.ndarray): </span>
+<span class="sd">            The indicies for the slab model.</span>
+<span class="sd">        atoms_slab(ase.atoms): </span>
+<span class="sd">            Slab model atoms object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">indicies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">get_global_number_of_atoms</span><span class="p">())</span>
+    <span class="n">idx_ow</span><span class="p">,</span> <span class="n">idx_hw</span> <span class="o">=</span> <span class="n">get_watOidx</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s2">&quot;Ti&quot;</span><span class="p">)</span>
+    <span class="n">idx_wat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx_ow</span><span class="p">,</span> <span class="n">idx_hw</span><span class="p">)</span>
+    <span class="n">idx_slab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">indicies</span><span class="p">,</span> <span class="n">idx_wat</span><span class="p">)</span>
+    <span class="n">atoms_slab</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">idx_slab</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">idx_slab</span><span class="p">,</span> <span class="n">atoms_slab</span></div>
+
+<div class="viewcode-block" id="get_rotM"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.get_rotM">[docs]</a><span class="k">def</span> <span class="nf">get_rotM</span><span class="p">(</span><span class="n">vecy</span><span class="p">,</span> <span class="n">vecz</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;get the rotation matrix for rotating a rutile model. Specifically, rotating a step </span>
+<span class="sd">    edge model s.t x is parrallel to [001], y is parrallel to [1-10], and z is parallel </span>
+<span class="sd">    to \hkl&lt;110&gt;.</span>
+
+<span class="sd">    reference:</span>
+<span class="sd">      https://www.cnblogs.com/armme/p/10596697.html#:~:text=旋转坐标系的方法又有两种：%20Proper%20Euler%20angles%2C%20第一次与第三次旋转相同的坐标轴（z-x-z%2Cx-y-x%2C%20y-z-y%2Cz-y-z%2C%20x-z-x%2C,y-x-y）%E3%80%82%20Tait–Bryan%20angles%2C%20依次旋转三个不同的坐标轴（x-y-z%2Cy-z-x%2C%20z-x-y%2Cx-z-y%2C%20z-y-x%2C%20y-x-z）；</span>
+<span class="sd">      or see https://shorturl.at/pvxyE</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        vecy (numpy.ndarray): </span>
+<span class="sd">            Array with shape (3, ). This direction parallels to Obr/Ti5c direction of the </span>
+<span class="sd">            original simulation cell.</span>
+<span class="sd">        vecz (numpy.ndarray): </span>
+<span class="sd">            Array with shape (3, ). This direction parallels to the [110] of the original </span>
+<span class="sd">            simulation cell.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">e_vec</span><span class="p">(</span><span class="n">vec</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">vec</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+    <span class="n">vecx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">vecz</span><span class="p">,</span> <span class="n">vecy</span><span class="p">)</span>
+    <span class="n">vecx</span><span class="p">,</span> <span class="n">vecy</span><span class="p">,</span> <span class="n">vecz</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">e_vec</span><span class="p">,</span> <span class="p">[</span><span class="n">vecx</span><span class="p">,</span> <span class="n">vecy</span><span class="p">,</span> <span class="n">vecz</span><span class="p">]))</span>
+    <span class="n">vece1</span><span class="p">,</span> <span class="n">vece2</span><span class="p">,</span> <span class="n">vece3</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">refj</span> <span class="o">=</span> <span class="p">[</span><span class="n">vecx</span><span class="p">,</span> <span class="n">vecy</span><span class="p">,</span> <span class="n">vecz</span><span class="p">]</span>
+    <span class="n">refi</span> <span class="o">=</span> <span class="p">[</span><span class="n">vece1</span><span class="p">,</span> <span class="n">vece2</span><span class="p">,</span> <span class="n">vece3</span><span class="p">]</span>
+    <span class="n">rotM</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">rotM</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="k">def</span> <span class="nf">get_cos</span><span class="p">(</span><span class="n">vec1</span><span class="p">,</span> <span class="n">vec2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vec1</span><span class="p">,</span> <span class="n">vec2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vec1</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vec2</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+            <span class="n">rotM</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_cos</span><span class="p">(</span><span class="n">refj</span><span class="p">[</span><span class="n">ii</span><span class="p">],</span> <span class="n">refi</span><span class="p">[</span><span class="n">jj</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">rotM</span></div>
+
+<div class="viewcode-block" id="sep_upper_lower"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.sep_upper_lower">[docs]</a><span class="k">def</span> <span class="nf">sep_upper_lower</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">indicies</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;given indicies, seperate them to upper and lower. More specifically, from </span>
+<span class="sd">    [&lt;indicies&gt;] to [[&lt;idx_upper&gt;], [&lt;idx_lower&gt;]]</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        z (numpy.ndarray): </span>
+<span class="sd">            z coordinates</span>
+<span class="sd">        indicies (numpy.ndarray): </span>
+<span class="sd">            0-based indicies</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        numpy.ndarray: [[&lt;idx_upper&gt;], [&lt;idx_lower&gt;]] </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">z</span><span class="p">[</span><span class="n">indicies</span><span class="p">]</span>
+    <span class="n">zmean</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">i1</span> <span class="o">=</span> <span class="n">indicies</span><span class="p">[</span><span class="n">z</span><span class="o">&gt;</span><span class="n">zmean</span><span class="p">]</span>
+    <span class="n">i2</span> <span class="o">=</span> <span class="n">indicies</span><span class="p">[</span><span class="n">z</span><span class="o">&lt;</span><span class="n">zmean</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">i1</span><span class="p">,</span> <span class="n">i2</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="pair_M5c_n_obr"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.pair_M5c_n_obr">[docs]</a><span class="k">def</span> <span class="nf">pair_M5c_n_obr</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">idx_cn5</span><span class="p">,</span> <span class="n">idx_obrs</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s2">&quot;Ti&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This methods will find the Ti5c&#39;s neighboring Obr atoms.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        atoms (ASE.Atoms): </span>
+<span class="sd">            ase atoms of your interface model.</span>
+<span class="sd">        idx_cn5 (np.ndarray): </span>
+<span class="sd">            1-d integer array, which contains indicies for Ti5c atoms.</span>
+<span class="sd">        idx_obrs (np.ndarray): </span>
+<span class="sd">            1-d integer array, which contains indicies for all the Obr atoms.</span>
+<span class="sd">        M (str, optional): </span>
+<span class="sd">            Metal elements in the rutile structure. Defaults to &quot;Ti&quot;.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: (&lt;idx_cn5&gt;, &lt;res_obr&gt;). </span>
+<span class="sd">            Paired Ti5c and Obr indicies. Check if they are really paired before you use.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># obtain the distance matrix between Ti5c and Obr</span>
+    <span class="n">xyz1</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">idx_cn5</span><span class="p">]</span>
+    <span class="n">xyz2</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">idx_obrs</span><span class="p">]</span>
+    <span class="n">dm</span> <span class="o">=</span> <span class="n">distance_array</span><span class="p">(</span><span class="n">xyz1</span><span class="p">,</span> <span class="n">xyz2</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">atoms</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">cellpar</span><span class="p">())</span>
+    
+    <span class="c1"># Find the two nearest Obr&#39;s to cn5s, and</span>
+    <span class="c1"># they are exactly the left and right obr</span>
+    <span class="n">sort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">dm</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">res_idx</span> <span class="o">=</span> <span class="n">idx_obrs</span><span class="p">[</span><span class="n">sort</span><span class="p">]</span>
+    
+    <span class="c1"># filp the array s.t.</span>
+    <span class="c1"># the first column  -&gt; obr POSY</span>
+    <span class="c1"># the second column -&gt; obr NEGY</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">res_idx</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]]</span> <span class="o">-</span> <span class="n">atoms</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">res_idx</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">mic_v</span> <span class="o">=</span> <span class="n">minimize_vectors</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">atoms</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">cellpar</span><span class="p">())</span>      <span class="c1"># apply minimum image convention</span>
+    <span class="n">sel</span> <span class="o">=</span> <span class="n">mic_v</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span>                           <span class="c1"># selective flipping</span>
+    <span class="n">res_idx</span><span class="p">[</span><span class="n">sel</span><span class="p">]</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">res_idx</span><span class="p">[</span><span class="n">sel</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">idx_cn5</span><span class="p">,</span> <span class="n">res_idx</span></div>
+
+
+
+<span class="c1">#def group_by_row(atoms, idx, ngroup=2):</span>
+<span class="c1">#    &quot;&quot;&quot;Group the atoms by row. To be more specific, rutile (110) surface has rows of Ti5c and Obrs. This method group surface atoms. </span>
+<span class="c1">#</span>
+<span class="c1">#    Args:</span>
+<span class="c1">#        atoms (ase.Atoms): _description_</span>
+<span class="c1">#        idx (numpy.ndarray): _description_</span>
+<span class="c1">#        ngroup (int, optional): . Defaults to 2.</span>
+<span class="c1">#</span>
+<span class="c1">#    Raises:</span>
+<span class="c1">#        ValueError: This method will group the atoms by rows. Throw this error if calculated group number is not consistent with &#39;ngroup&#39;.</span>
+<span class="c1">#</span>
+<span class="c1">#    Returns:</span>
+<span class="c1">#        numpy.ndarray: [[&lt;row_1&gt;], [&lt;row_2&gt;], ..., [&lt;row_ngroup&gt;]]</span>
+<span class="c1">#    &quot;&quot;&quot;</span>
+<span class="c1">#    xyz = atoms.positions</span>
+<span class="c1">#    # group the atoms according to their distances</span>
+<span class="c1">#    dm = np.round(distance_array(xyz[idx], xyz[idx], box=atoms.cell.cellpar()))</span>
+<span class="c1">#    groups = np.unique(dm &lt; dm.min()+2, axis=0)</span>
+<span class="c1">#</span>
+<span class="c1">#    if groups.shape[0] != ngroup:</span>
+<span class="c1">#        raise ValueError(&quot;grouping result does not match &#39;ngroup&#39;. First check if the row number match &#39;ngroup&#39;. Consider move your structure&quot;)</span>
+<span class="c1">#</span>
+<span class="c1">#    rows = idx[groups[0]], idx[groups[1]]</span>
+<span class="c1">#    return rows</span>
+<span class="c1">#</span>
+<span class="c1">#def sort_by_row(atoms, idx, ngroup=2):</span>
+<span class="c1">#    &quot;&quot;&quot;Group the atoms by row. To be more specific, rutile (110) surface has rows of Ti5c and Obrs. This method group surface atoms. </span>
+<span class="c1">#</span>
+<span class="c1">#    Args:</span>
+<span class="c1">#        atoms (ase.Atoms): _description_</span>
+<span class="c1">#        idx (numpy.ndarray): _description_</span>
+<span class="c1">#        rotM (numpy.ndarray, optional): The roational matrix. Defaults to None.</span>
+<span class="c1">#        ngroup (int, optional): . Defaults to 2.</span>
+<span class="c1">#</span>
+<span class="c1">#    Raises:</span>
+<span class="c1">#        ValueError: This method will group the atoms by rows. Throw this error if calculated group number is not consistent with &#39;ngroup&#39;.</span>
+<span class="c1">#</span>
+<span class="c1">#    Returns:</span>
+<span class="c1">#        _type_: _description_</span>
+<span class="c1">#    &quot;&quot;&quot;</span>
+<span class="c1">#    xyz = atoms.positions</span>
+<span class="c1">#    # FIRST: rotate xyz</span>
+<span class="c1">#    if rotM is not None:</span>
+<span class="c1">#        xyz = np.matmul(atoms.positions, rotM)</span>
+<span class="c1">#    # THEN: group the atoms having identical x value</span>
+<span class="c1">#    #xx, yy = np.round(xyz[:, 0]), np.round(xyz[:, 1])</span>
+<span class="c1">#    dm = np.round(distance_array(xyz[idx], xyz[idx], box=atoms.cell.cellpar()))</span>
+<span class="c1">#    groups = np.unique(dm &lt; dm.min()+2, axis=0)</span>
+<span class="c1">#</span>
+<span class="c1">#    flag = False</span>
+<span class="c1">#    if groups.shape[0] != ngroup:</span>
+<span class="c1">#        dm = distance_array(yy[idx].reshape(-1, 1), yy[idx].reshape(-1, 1))</span>
+<span class="c1">#        groups = np.unique(dm &lt; 2, axis=0) </span>
+<span class="c1">#        if groups.shape[0] != ngroup: </span>
+<span class="c1">#            raise ValueError(&quot;grouping result does not match &#39;ngroup&#39;. First check if the row number match &#39;ngroup&#39;. Consider move your structure&quot;)</span>
+<span class="c1">#        else:</span>
+<span class="c1">#            flag = True</span>
+<span class="c1">#    else:</span>
+<span class="c1">#        pass</span>
+<span class="c1">#    # LAST: sort ti5c according to rows</span>
+<span class="c1">#    def sort_row(row, dat=yy):</span>
+<span class="c1">#        return row[np.argsort(dat[row])]</span>
+<span class="c1">#    rows = idx[groups[0]], idx[groups[1]]</span>
+<span class="c1">#    if flag:</span>
+<span class="c1">#        st = partial(sort_row, dat=xx)</span>
+<span class="c1">#    else:</span>
+<span class="c1">#        st = partial(sort_row, dat=yy)</span>
+<span class="c1">#    res = np.array(list(map(st, rows)))</span>
+<span class="c1">#    return res</span>
+
+
+<span class="c1"># tricks</span>
+<div class="viewcode-block" id="get_sym_edge"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.get_sym_edge">[docs]</a><span class="k">def</span> <span class="nf">get_sym_edge</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">idx_l_edge4</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Translate the rutile &lt;1-11&gt; edge-water interface model s.t. it looks</span>
+<span class="sd">    pretty and symmetric. </span>
+
+<span class="sd">    The trick is, when using experimental rutile structrue and ase &#39;surface&#39;</span>
+<span class="sd">    method generates the edge model, the lower surface 4-coordinated edge Ti has index 1</span>
+<span class="sd">    (0-based). Setting this paticular atom to [0.3, 0.3, 3.5] will get the model</span>
+<span class="sd">    look symmetric in the simulation box, thus the model becomes easier to</span>
+<span class="sd">    handle. Here symmetric and pretty mean the model looks like:</span>
+
+<span class="sd">    *****************************</span>
+<span class="sd">    *****************************</span>
+<span class="sd">    *****************************</span>
+<span class="sd">    *****************************</span>
+<span class="sd">    *****************************</span>
+<span class="sd">    *****************************</span>
+<span class="sd">    *****************************</span>
+<span class="sd">    *****************************</span>
+<span class="sd">    00***************************</span>
+<span class="sd">    000**************************</span>
+<span class="sd">    ooooooooooooooooooooooooooooo</span>
+<span class="sd">    ooooooooooooooooooooooooooooo</span>
+<span class="sd">    ooooooooooooooooooooooooooooo</span>
+<span class="sd">    ooooooooooooooooooooooooooooo</span>
+<span class="sd">    ooooooooooooooooooooooooooooo  [110]</span>
+<span class="sd">    ooooooooooooooooooooooooooooo  ^ </span>
+<span class="sd">    **************************000  |             o: TiO2 slab</span>
+<span class="sd">    ***************************00  |             0: &lt;1-11&gt;-edge</span>
+<span class="sd">    *****************************  -----&gt; [001]  *: water</span>
+
+
+<span class="sd">    Args:</span>
+<span class="sd">        atoms (ase.Atoms): </span>
+<span class="sd">            the edge model ASE atoms.</span>
+<span class="sd">        idx_l_edge4 (int, optional): </span>
+<span class="sd">            index of lower surface edge M_4c atom. </span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ase.Atoms: </span>
+<span class="sd">            symmetric &amp; pretty-looking edge model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">target_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">])</span>
+    <span class="n">trans</span> <span class="o">=</span> <span class="n">target_pos</span> <span class="o">-</span> <span class="n">atoms</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">idx_l_edge4</span><span class="p">]</span>
+    <span class="n">atoms</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">trans</span><span class="p">)</span>
+    <span class="n">atoms</span><span class="o">.</span><span class="n">wrap</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">atoms</span></div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Yong-Bin Zhuang
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,732 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>ectoolkits.utils.rutile110 module &#8212; ECToolkits Reference</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=c5ced968eda925caa686"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_api/ectoolkits.utils.rutile110';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ectoolkits.utils.utils module" href="ectoolkits.utils.utils.html" />
+    <link rel="prev" title="ectoolkits.utils.math module" href="ectoolkits.utils.math.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">ECToolkits Reference</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Analysis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../docs/analysis/atom_density.html">Atom Density Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/analysis/band_align.html">Band Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/analysis/disdeg.html">Dissociation Degree Analysis</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../docs/analysis/acidity.html">Acidity Calculation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/analysis/redox.html">Redox Potentials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="modules.html">ectoolkits</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="ectoolkits.html">ectoolkits package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="ectoolkits.analysis.html">ectoolkits.analysis package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.acidity.html">ectoolkits.analysis.acidity module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.atom_density.html">ectoolkits.analysis.atom_density module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.band_align.html">ectoolkits.analysis.band_align module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.disdeg.html">ectoolkits.analysis.disdeg module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.rutile110.html">ectoolkits.analysis.rutile110 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.uncertainty.html">ectoolkits.analysis.uncertainty module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ectoolkits.matplotlibstyle.html">ectoolkits.matplotlibstyle package</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="ectoolkits.plots.html">ectoolkits.plots package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.plots.band_align.html">ectoolkits.plots.band_align module</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="ectoolkits.structures.html">ectoolkits.structures package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.structures.interface.html">ectoolkits.structures.interface module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.structures.rutile110.html">ectoolkits.structures.rutile110 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.structures.slab.html">ectoolkits.structures.slab module</a></li>
+</ul>
+</li>
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="ectoolkits.utils.html">ectoolkits.utils package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.utils.math.html">ectoolkits.utils.math module</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">ectoolkits.utils.rutile110 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.utils.utils.html">ectoolkits.utils.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.utils.vasp.html">ectoolkits.utils.vasp module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ectoolkits.main.html">ectoolkits.main module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/robinzyb/ectoolkits" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/robinzyb/ectoolkits/issues/new?title=Issue%20on%20page%20%2F_api/ectoolkits.utils.rutile110.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/_api/ectoolkits.utils.rutile110.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>ectoolkits.utils.rutile110 module</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="module-ectoolkits.utils.rutile110">
+<span id="ectoolkits-utils-rutile110-module"></span><h1>ectoolkits.utils.rutile110 module<a class="headerlink" href="#module-ectoolkits.utils.rutile110" title="Permalink to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.utils.rutile110.cellpar2volume">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">cellpar2volume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cellpar</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#cellpar2volume"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.cellpar2volume" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.utils.rutile110.count_cn">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">count_cn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atoms2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff_hi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff_lo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#count_cn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.count_cn" title="Permalink to this definition">#</a></dt>
+<dd><p>count the coordination number(CN) for atoms1 (center atoms), where atoms2 are coordinate atom.
+This function will calculate CN within range cutoff_lo &lt; d &lt; cutoff_lo, where d is the distance
+between atoms1 and atoms2. Minimum image convention is applied if cell is not <cite>None</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>atoms1</strong> (<em>numpy.ndarray</em>) – Array with shape (N, 3), where N is the number of center atoms. ‘atoms1’ are the
+position of center atoms.</p></li>
+<li><p><strong>atoms2</strong> (<em>numpy.ndarray</em>) – Array with shape (M, 3), where M is the number of coordination atoms. ‘atoms2’ are
+the positions of coordination atoms.</p></li>
+<li><p><strong>cutoff_hi</strong> (<em>float</em>) – Max cutoff for calculating coordination number.</p></li>
+<li><p><strong>cutoff_lo</strong> (<em>float</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Min cutoff for calculating coordination number. This function will calculate CN within
+range cutoff_lo &lt; d &lt; cutoff_lo, where d is the distance between atoms1 and atoms2.
+Defaults to None.</p></li>
+<li><p><strong>cell</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – Array with shape (6,), Array([a, b, c, alpha, beta, gamma]). Simulation cell parameters.
+If it’s not None, the CN calculation will use minimum image convention. Defaults to <cite>None</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array with shape (N,), CN of each atoms atoms1</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>results</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.utils.rutile110.find_cn_idx">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">find_cn_idx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atoms2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff_hi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff_lo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#find_cn_idx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.find_cn_idx" title="Permalink to this definition">#</a></dt>
+<dd><p>count the coordination number(CN) for atoms1 (center atoms), where atoms2 are coordinate atom.
+This function will calculate CN within range cutoff_lo &lt; d &lt; cutoff_lo, where d is the distance
+between atoms1 and atoms2. Minimum image convention is applied if cell is not <cite>None</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>atoms1</strong> (<em>numpy.ndarray</em>) – Array with shape (N, 3), where N is the number of center atoms. ‘atoms1’ are the
+position of center atoms.</p></li>
+<li><p><strong>atoms2</strong> (<em>numpy.ndarray</em>) – Array with shape (M, 3), where M is the number of coordination atoms. ‘atoms2’ are
+the positions of coordination atoms.</p></li>
+<li><p><strong>cutoff_hi</strong> (<em>float</em>) – Max cutoff for calculating coordination number.</p></li>
+<li><p><strong>cutoff_lo</strong> (<em>float</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Min cutoff for calculating coordination number. This function will calculate CN within
+range cutoff_lo &lt; d &lt; cutoff_lo, where d is the distance between atoms1 and atoms2.
+Defaults to None.</p></li>
+<li><p><strong>cell</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – Array with shape (6,), Array([a, b, c, alpha, beta, gamma]). Simulation cell parameters.
+If it’s not None, the CN calculation will use minimum image convention. Defaults to <cite>None</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array with shape (N,), CN of each atoms atoms1</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>results</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.utils.rutile110.get_rotM">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">get_rotM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vecy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vecz</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#get_rotM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.get_rotM" title="Permalink to this definition">#</a></dt>
+<dd><p>get the rotation matrix for rotating a rutile model. Specifically, rotating a step
+edge model s.t x is parrallel to [001], y is parrallel to [1-10], and z is parallel
+to hkl&lt;110&gt;.</p>
+<dl class="simple">
+<dt>reference:</dt><dd><p><a class="reference external" href="https://www.cnblogs.com/armme/p/10596697.html#:~">https://www.cnblogs.com/armme/p/10596697.html#:~</a>:text=旋转坐标系的方法又有两种：%20Proper%20Euler%20angles%2C%20第一次与第三次旋转相同的坐标轴（z-x-z%2Cx-y-x%2C%20y-z-y%2Cz-y-z%2C%20x-z-x%2C,y-x-y）%E3%80%82%20Tait–Bryan%20angles%2C%20依次旋转三个不同的坐标轴（x-y-z%2Cy-z-x%2C%20z-x-y%2Cx-z-y%2C%20z-y-x%2C%20y-x-z）；
+or see <a class="reference external" href="https://shorturl.at/pvxyE">https://shorturl.at/pvxyE</a></p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vecy</strong> (<em>numpy.ndarray</em>) – Array with shape (3, ). This direction parallels to Obr/Ti5c direction of the
+original simulation cell.</p></li>
+<li><p><strong>vecz</strong> (<em>numpy.ndarray</em>) – Array with shape (3, ). This direction parallels to the [110] of the original
+simulation cell.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.utils.rutile110.get_sym_edge">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">get_sym_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_l_edge4</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#get_sym_edge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.get_sym_edge" title="Permalink to this definition">#</a></dt>
+<dd><p>Translate the rutile &lt;1-11&gt; edge-water interface model s.t. it looks
+pretty and symmetric.</p>
+<p>The trick is, when using experimental rutile structrue and ase ‘surface’
+method generates the edge model, the lower surface 4-coordinated edge Ti has index 1
+(0-based). Setting this paticular atom to [0.3, 0.3, 3.5] will get the model
+look symmetric in the simulation box, thus the model becomes easier to
+handle. Here symmetric and pretty mean the model looks like:</p>
+<p>00***************************
+000**************************
+ooooooooooooooooooooooooooooo
+ooooooooooooooooooooooooooooo
+ooooooooooooooooooooooooooooo
+ooooooooooooooooooooooooooooo
+ooooooooooooooooooooooooooooo  [110]
+ooooooooooooooooooooooooooooo  ^
+<strong>************************000  |             o: TiO2 slab
+***************************00  |             0: &lt;1-11&gt;-edge
+***************************</strong>  —–&gt; [001]  <a href="#id1"><span class="problematic" id="id2">*</span></a>: water</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>atoms</strong> (<em>ase.Atoms</em>) – the edge model ASE atoms.</p></li>
+<li><p><strong>idx_l_edge4</strong> (<em>int</em><em>, </em><em>optional</em>) – index of lower surface edge M_4c atom.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>symmetric &amp; pretty-looking edge model</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ase.Atoms</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.utils.rutile110.get_watOidx">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">get_watOidx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Ti'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_OH_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_MO_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cn_M_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#get_watOidx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.get_watOidx" title="Permalink to this definition">#</a></dt>
+<dd><p>gets all the water oxygen indicies in rutile (110)-water interface</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>atoms</strong> (<em>ase.Atoms</em>) – ASE atoms. One snapshot of rutile (110)-water structure.</p></li>
+<li><p><strong>M</strong> (<em>str</em><em>, </em><em>optional</em>) – The metal atom in rutile structrue. Defaults to “Ti”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>0-based indicies for water oxygen atoms.
+watHidx (numpy.ndarray): 0-based indicies for water hydrogen atoms. (all the hydrogens)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>watOidx (numpy.ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.utils.rutile110.interface_2_slab">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">interface_2_slab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Ti'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#interface_2_slab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.interface_2_slab" title="Permalink to this definition">#</a></dt>
+<dd><p>transform rutile (110)-water interface model to only the slab, i.e., deleting all the
+water molecules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>atoms</strong> (<em>ase.Atoms</em>) – ASE atoms. One snapshot of rutile (110)-water structure.</p></li>
+<li><p><strong>M</strong> (<em>str</em><em>, </em><em>optional</em>) – The metal atom in rutile structrue. Defaults to “Ti”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>The indicies for the slab model.
+atoms_slab(ase.atoms):</p>
+<blockquote>
+<div><p>Slab model atoms object.</p>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>idx_slab(numpy.ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.utils.rutile110.pair_M5c_n_obr">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">pair_M5c_n_obr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_cn5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_obrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Ti'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#pair_M5c_n_obr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.pair_M5c_n_obr" title="Permalink to this definition">#</a></dt>
+<dd><p>This methods will find the Ti5c’s neighboring Obr atoms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>atoms</strong> (<em>ASE.Atoms</em>) – ase atoms of your interface model.</p></li>
+<li><p><strong>idx_cn5</strong> (<em>np.ndarray</em>) – 1-d integer array, which contains indicies for Ti5c atoms.</p></li>
+<li><p><strong>idx_obrs</strong> (<em>np.ndarray</em>) – 1-d integer array, which contains indicies for all the Obr atoms.</p></li>
+<li><p><strong>M</strong> (<em>str</em><em>, </em><em>optional</em>) – Metal elements in the rutile structure. Defaults to “Ti”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>(&lt;idx_cn5&gt;, &lt;res_obr&gt;).</dt><dd><p>Paired Ti5c and Obr indicies. Check if they are really paired before you use.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.utils.rutile110.sep_upper_lower">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">sep_upper_lower</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indicies</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#sep_upper_lower"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.sep_upper_lower" title="Permalink to this definition">#</a></dt>
+<dd><p>given indicies, seperate them to upper and lower. More specifically, from
+[&lt;indicies&gt;] to [[&lt;idx_upper&gt;], [&lt;idx_lower&gt;]]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>z</strong> (<em>numpy.ndarray</em>) – z coordinates</p></li>
+<li><p><strong>indicies</strong> (<em>numpy.ndarray</em>) – 0-based indicies</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[[&lt;idx_upper&gt;], [&lt;idx_lower&gt;]]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./_api"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="ectoolkits.utils.math.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">ectoolkits.utils.math module</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="ectoolkits.utils.utils.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">ectoolkits.utils.utils module</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Yong-Bin Zhuang
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

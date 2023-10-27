@@ -1,0 +1,1068 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>ectoolkits.analysis.rutile110 module &#8212; ECToolkits Reference</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=c5ced968eda925caa686"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_api/ectoolkits.analysis.rutile110';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ectoolkits.analysis.uncertainty module" href="ectoolkits.analysis.uncertainty.html" />
+    <link rel="prev" title="ectoolkits.analysis.finite_size_correction module" href="ectoolkits.analysis.finite_size_correction.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">ECToolkits Reference</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Analysis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../docs/analysis/atom_density.html">Atom Density Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/analysis/band_align.html">Band Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/analysis/disdeg.html">Dissociation Degree Analysis</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../docs/analysis/acidity.html">Acidity Calculation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/analysis/redox.html">Redox Potentials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="modules.html">ectoolkits</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="ectoolkits.html">ectoolkits package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="ectoolkits.analysis.html">ectoolkits.analysis package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.acidity.html">ectoolkits.analysis.acidity module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.atom_density.html">ectoolkits.analysis.atom_density module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.band_align.html">ectoolkits.analysis.band_align module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.disdeg.html">ectoolkits.analysis.disdeg module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">ectoolkits.analysis.rutile110 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.uncertainty.html">ectoolkits.analysis.uncertainty module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ectoolkits.matplotlibstyle.html">ectoolkits.matplotlibstyle package</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="ectoolkits.plots.html">ectoolkits.plots package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.plots.band_align.html">ectoolkits.plots.band_align module</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="ectoolkits.structures.html">ectoolkits.structures package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.structures.interface.html">ectoolkits.structures.interface module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.structures.rutile110.html">ectoolkits.structures.rutile110 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.structures.slab.html">ectoolkits.structures.slab module</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="ectoolkits.utils.html">ectoolkits.utils package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.utils.math.html">ectoolkits.utils.math module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.utils.rutile110.html">ectoolkits.utils.rutile110 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.utils.utils.html">ectoolkits.utils.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.utils.vasp.html">ectoolkits.utils.vasp module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ectoolkits.main.html">ectoolkits.main module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/robinzyb/ectoolkits" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/robinzyb/ectoolkits/issues/new?title=Issue%20on%20page%20%2F_api/ectoolkits.analysis.rutile110.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/_api/ectoolkits.analysis.rutile110.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>ectoolkits.analysis.rutile110 module</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="module-ectoolkits.analysis.rutile110">
+<span id="ectoolkits-analysis-rutile110-module"></span><h1>ectoolkits.analysis.rutile110 module<a class="headerlink" href="#module-ectoolkits.analysis.rutile110" title="Permalink to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.FindSurfaceOadH">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.rutile110.</span></span><span class="sig-name descname"><span class="pre">FindSurfaceOadH</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atomgroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ow_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M5c_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Ti'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#FindSurfaceOadH"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.FindSurfaceOadH" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AnalysisBase</span></code></p>
+<p>_summary_
+Not applicable to Edge models
+Usage Examples:</p>
+<blockquote>
+<div><p>1) Flat model:
+<code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">atoms</span> <span class="pre">=</span> <span class="pre">read(&quot;init.cif&quot;)</span>
+<span class="pre">r110</span>&#160; <span class="pre">=</span> <span class="pre">Rutile110(atoms,</span> <span class="pre">nrow=nrow,</span> <span class="pre">bridge_along=bridge_along)</span>
+<span class="pre">Ow_idx,</span> <span class="pre">_</span> <span class="pre">=</span> <span class="pre">r110.get_wat()</span>
+<span class="pre">Ti5c_idx</span>&#160; <span class="pre">=</span> <span class="pre">r110.indicies[&quot;idx_M5c&quot;].flatten()</span>
+<span class="pre">findOH</span>&#160;&#160; <span class="pre">=</span> <span class="pre">FindSurfaceOadH(ag,</span> <span class="pre">owidx,</span> <span class="pre">cn5idx,</span> <span class="pre">nrow=r110.nrow)</span>
+<span class="pre">findOH.run()</span>
+<span class="pre">`</span></code></p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>AnalysisBase</strong> (<em>_type_</em>) – _description</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.RutileDisDeg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.rutile110.</span></span><span class="sig-name descname"><span class="pre">RutileDisDeg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atomgroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">owidx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cn5idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge4idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge5idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nrow</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Ti'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_oh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#RutileDisDeg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.RutileDisDeg" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AnalysisBase</span></code></p>
+<p>The new rutile (110)-water interface dissociation degree analysis method</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>AnalysisBase</strong> (<em>MDAnalysis</em>) – </p>
+</dd>
+</dl>
+<p>Usage examples:
+1) Rutile 110 with &lt;1-11&gt; Edge:</p>
+<blockquote>
+<div><p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>python
+from toolkit.structures.rutile110 import Rutile1p11Edge</p>
+<p>atoms = read(“init.cif”)
+r110edge = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, cutoff=2.9)
+owidx, _ = r110edge.get_wat()
+ind      = r110edge.get_indicies()
+ind[‘idx_M5c’][0] = np.flip(ind[‘idx_M5c’][0], axis=1)</p>
+<p>cn5idx = ind[‘idx_M5c’].reshape(2, -1)
+edge5idx = ind[‘idx_edge_M5c’].reshape(2, -1)
+edge4idx = ind[‘idx_edge_M4c’].reshape(2, -1)</p>
+<dl class="simple">
+<dt>disdeg   = RutileDisDeg(ag, owidx, cn5idx, nrow=r110edge.nrow,</dt><dd><p>edge4idx=edge4idx, edge5idx=edge5idx,)</p>
+</dd>
+</dl>
+<p>disdeg.run()
+<a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><dl class="simple">
+<dt>Flat model:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">atoms</span> <span class="pre">=</span> <span class="pre">read(&quot;init.cif&quot;)</span>
+<span class="pre">r110</span>&#160; <span class="pre">=</span> <span class="pre">Rutile110(atoms,</span> <span class="pre">nrow=nrow,</span> <span class="pre">bridge_along=bridge_along)</span>
+<span class="pre">owidx,</span> <span class="pre">_</span> <span class="pre">=</span> <span class="pre">r110.get_wat()</span>
+<span class="pre">cn5idx</span>&#160;&#160; <span class="pre">=</span> <span class="pre">r110.get_indicies()['idx_M5c']</span>
+<span class="pre">disdeg</span>&#160;&#160; <span class="pre">=</span> <span class="pre">RutileDisDeg(ag,</span> <span class="pre">owidx,</span> <span class="pre">cn5idx,</span> <span class="pre">nrow=r110.nrow)</span>
+<span class="pre">disdeg.run()</span>
+<span class="pre">`</span></code></p>
+</dd>
+</dl>
+</li>
+</ol>
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.RutileDisDeg.cn2disdeg">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cn2disdeg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#RutileDisDeg.cn2disdeg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.RutileDisDeg.cn2disdeg" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.RutileDisDeg.dist2cn">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dist2cn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#RutileDisDeg.dist2cn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.RutileDisDeg.dist2cn" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.RutileDisDeg.dist2histo">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dist2histo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bin_edges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nrow</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#RutileDisDeg.dist2histo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.RutileDisDeg.dist2histo" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.RutileDisDeg.get_OH_dist">
+<span class="sig-name descname"><span class="pre">get_OH_dist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx_O</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_dm</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#RutileDisDeg.get_OH_dist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.RutileDisDeg.get_OH_dist" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.RutileDisDeg.get_neighbor_oxygen">
+<span class="sig-name descname"><span class="pre">get_neighbor_oxygen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx_ti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_dm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_ow</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#RutileDisDeg.get_neighbor_oxygen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.RutileDisDeg.get_neighbor_oxygen" title="Permalink to this definition">#</a></dt>
+<dd><p>Give a group of ti atoms, find their neighboring water oxygen within cutoff rasius <cite>self.cutoff</cite>.
+Returns water oxygen indicies</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>idx_ti</strong> (<em>np.ndarray</em>) – 1-d integer array containing indicies for Ti5c atoms.</p></li>
+<li><p><strong>res_dm</strong> (<em>np.ndarray</em>) – 2-d distance array containing pair-wise distance between Ti and all water oxygen atoms.
+This array is prepared in <cite>_prepare</cite>.</p></li>
+<li><p><strong>n_ow</strong> (<em>int</em><em>, </em><em>optional</em>) – number of neighboring oxygen for input group of Ti atoms. For example, Ti5c has 1 ad-water;
+and edge Ti4c has 2 ad-water. Defaults to 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>1-d array containing adsorbed water oxygen indicies. If these is no water oxygen within the
+cutoff raidius, a masking value of ‘-1’ is provided</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.SurfTiOBondLenght">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.rutile110.</span></span><span class="sig-name descname"><span class="pre">SurfTiOBondLenght</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atomgroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_cn5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_obr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_ow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Ti'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#SurfTiOBondLenght"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.SurfTiOBondLenght" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AnalysisBase</span></code></p>
+<p>This class calculates the surface TiO bond length.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>AnalysisBase</strong> (<em>MDA</em>) – MDAnalysis AnalysisBase</p>
+</dd>
+</dl>
+<p>Usage example:
+1. for flat rutile 110 water interface:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">atoms</span> <span class="pre">=</span> <span class="pre">read(os.path.join(&quot;init.cif&quot;))</span>
+<span class="pre">r110</span>&#160; <span class="pre">=</span> <span class="pre">Rutile110(atoms,</span> <span class="pre">nrow=nrow,</span> <span class="pre">bridge_along=bridge_along)</span>
+<span class="pre">idx_owat,</span> <span class="pre">_</span> <span class="pre">=</span> <span class="pre">r110.get_wat()</span>
+<span class="pre">ind</span> <span class="pre">=</span> <span class="pre">inp.r110.get_indicies()</span>
+<span class="pre">ind['idx_M5c'][0]</span> <span class="pre">=</span> <span class="pre">np.flip(ind['idx_M5c'][0],</span> <span class="pre">axis=1)</span>
+<span class="pre">ind['idx_Obr'][0]</span> <span class="pre">=</span> <span class="pre">np.flip(ind['idx_M5c'][0],</span> <span class="pre">axis=1)</span>
+<span class="pre">idx_cn5</span>&#160; <span class="pre">=</span> <span class="pre">ind['idx_M5c'].reshape(2,</span> <span class="pre">-1)</span>
+<span class="pre">idx_obr</span>&#160; <span class="pre">=</span> <span class="pre">ind['idx_Obr'].reshape(2,</span> <span class="pre">-1)</span>
+<span class="pre">sbl</span> <span class="pre">=</span> <span class="pre">SurfTiOBondLenght(ag,</span> <span class="pre">idx_cn5,</span> <span class="pre">idx_obr,</span> <span class="pre">idx_owat)</span>
+<span class="pre">sbl.run()</span>
+<span class="pre">`</span></code></p>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.SurfTiOBondLenght.get_dTiOad">
+<span class="sig-name descname"><span class="pre">get_dTiOad</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#SurfTiOBondLenght.get_dTiOad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.SurfTiOBondLenght.get_dTiOad" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.SurfTiOBondLenght.get_dTiObr">
+<span class="sig-name descname"><span class="pre">get_dTiObr</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#SurfTiOBondLenght.get_dTiObr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.SurfTiOBondLenght.get_dTiObr" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.SurfTiOBondLenght.pair_TiObr">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pair_TiObr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_obr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_ti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">box</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#SurfTiOBondLenght.pair_TiObr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.SurfTiOBondLenght.pair_TiObr" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.WatDensity">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.rutile110.</span></span><span class="sig-name descname"><span class="pre">WatDensity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atomgroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Ti'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotM</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dz_bin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.8</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#WatDensity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.WatDensity" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AnalysisBase</span></code></p>
+<dl class="simple">
+<dt>MDAnalysis class calculating z-axis averaged water densities</dt><dd><p>for slab-water interface model. Outputs number densities for both
+hydrogens and water.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>AnalysisBase</strong> (<em>object</em>) – MDAnalysis Analysis class base</p>
+</dd>
+</dl>
+<p>Usage example:
+(1) Rutile (110)-water interface with &lt;1-11&gt; edge</p>
+<blockquote>
+<div><p><a href="#id9"><span class="problematic" id="id10">``</span></a><a href="#id11"><span class="problematic" id="id12">`</span></a>python
+from toolkit.utils.rutile110 import get_rotM</p>
+<p>vecy = np.array([26.34844236,  1.8642182,  -2.0615678])
+vecz = np.array([0.49339,  -0.070221,  9.201458])
+rotM = get_rotM(vecy, vecz)</p>
+<p>wd = WatDensity(ag, rotM=rotM)
+wd.run()
+<a href="#id13"><span class="problematic" id="id14">``</span></a><a href="#id15"><span class="problematic" id="id16">`</span></a></p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Flat rutile
+<code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">wd</span> <span class="pre">=</span> <span class="pre">WatDensity(ag,</span> <span class="pre">rotM=None)</span>
+<span class="pre">wd.run()</span>
+<span class="pre">`</span></code></p></li>
+</ol>
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.WatDensity.get_watOidx">
+<span class="sig-name descname"><span class="pre">get_watOidx</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#WatDensity.get_watOidx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.WatDensity.get_watOidx" title="Permalink to this definition">#</a></dt>
+<dd><p>This methods would select all water oxygen index</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(&lt;water oxygen index&gt;, &lt;all Hydrogen index&gt;). Note, for rutile-hkl(110)
+water interface, all hydrogen comes from water.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.WatDensity.get_wat_thickness">
+<span class="sig-name descname"><span class="pre">get_wat_thickness</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#WatDensity.get_wat_thickness"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.WatDensity.get_wat_thickness" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.WatDensity.get_z_density">
+<span class="sig-name descname"><span class="pre">get_z_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#WatDensity.get_z_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.WatDensity.get_z_density" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.WatDensity.number_density2watdensity">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">number_density2watdensity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dV</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#WatDensity.number_density2watdensity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.WatDensity.number_density2watdensity" title="Permalink to this definition">#</a></dt>
+<dd><p>dV is the bin volume. Will return a constant converting number density to water mass density.
+The unit is g cm^{-3}</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.WatDensity.plot_density_z">
+<span class="sig-name descname"><span class="pre">plot_density_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oxygen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hydrogen</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#WatDensity.plot_density_z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.WatDensity.plot_density_z" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.WatDensity.update_pos">
+<span class="sig-name descname"><span class="pre">update_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#WatDensity.update_pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.WatDensity.update_pos" title="Permalink to this definition">#</a></dt>
+<dd><p>To avoding collective slab drifting during the simulation. Move atom with index ‘self._idxanchor’
+to the same position each frame. Defaults to 1 (One of the slab atom if you are using ase for modle
+generation).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.dAdBridge">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.rutile110.</span></span><span class="sig-name descname"><span class="pre">dAdBridge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atomgroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_cn5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_obr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_owat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_adO</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_vec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Ti'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.8</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#dAdBridge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.dAdBridge" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AnalysisBase</span></code></p>
+<p>MDAnalysis class calculating distances between adsobed water oxygen atoms and two neighboring bridge
+oxygen atoms. The oxygen water oxygen adsorb on terrace Ti5c atoms.
+:param AnalysisBase: MDAnalysis Analysis class base
+:type AnalysisBase: object</p>
+<p>Usage example:
+1. for flat rutile 110 water interface</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">atoms</span> <span class="pre">=</span> <span class="pre">read(os.path.join(&quot;init.cif&quot;))</span>
+<span class="pre">r110</span>&#160; <span class="pre">=</span> <span class="pre">Rutile110(atoms,</span> <span class="pre">nrow=nrow,</span> <span class="pre">bridge_along=bridge_along)</span>
+<span class="pre">idx_owat,</span> <span class="pre">_</span> <span class="pre">=</span> <span class="pre">r110.get_wat()</span>
+<span class="pre">ind</span> <span class="pre">=</span> <span class="pre">edge_water.get_indicies()</span>
+<span class="pre">#</span> <span class="pre">split</span> <span class="pre">cn5idx</span> <span class="pre">and</span> <span class="pre">obr_idx</span> <span class="pre">to</span> <span class="pre">[&lt;upper</span> <span class="pre">idx&gt;,</span> <span class="pre">&lt;lower</span> <span class="pre">idx&gt;]</span>
+<span class="pre">idx_cn5</span>&#160;&#160;&#160;&#160; <span class="pre">=</span> <span class="pre">ind['idx_M5c'].reshape(2,</span> <span class="pre">-1)</span>
+<span class="pre">idx_obr</span>&#160;&#160;&#160;&#160; <span class="pre">=</span> <span class="pre">ind['idx_Obr'].reshape(2,</span> <span class="pre">-1)</span>
+<span class="pre">_,</span> <span class="pre">upper_obr</span> <span class="pre">=</span> <span class="pre">pair_M5c_n_obr(atoms,</span> <span class="pre">idx_cn5[0],</span> <span class="pre">idx_obr[0])</span>
+<span class="pre">_,</span> <span class="pre">lower_obr</span> <span class="pre">=</span> <span class="pre">pair_M5c_n_obr(atoms,</span> <span class="pre">idx_cn5[1],</span> <span class="pre">idx_obr[1])</span>
+<span class="pre">idx_obr</span> <span class="pre">=</span> <span class="pre">np.array([upper_obr,</span> <span class="pre">lower_obr])</span>
+<span class="pre">dab</span> <span class="pre">=</span> <span class="pre">dAdBridge(ag,</span> <span class="pre">idx_cn5,</span> <span class="pre">idx_obr,</span> <span class="pre">idx_owat,</span> <span class="pre">idx_adO=None)</span>
+<span class="pre">dab.run()</span>
+<span class="pre">`</span></code></p>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><dl>
+<dt>for rutile 110 water interface with edge along &lt;1-11&gt;</dt><dd><p><a href="#id17"><span class="problematic" id="id18">``</span></a><a href="#id19"><span class="problematic" id="id20">`</span></a>python
+atoms = read(os.path.join(“init.cif”))
+vecy = np.array([26.34844236,  1.8642182,  -2.0615678])
+vecz = np.array([0.49339,  -0.070221,  9.201458])
+r110edge = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, M=”Ti”, nrow=2)
+ind = r110edge.get_indicies()
+ind[‘idx_M5c’][0] = np.flip(ind[‘idx_M5c’][0], axis=1)
+idx_cn5 = ind[‘idx_M5c’].reshape(2, -1)
+idx_obr = np.concatenate([ind[‘idx_Obr’].reshape(2, -1),</p>
+<blockquote>
+<div><p>ind[‘idx_hObr_upper’].reshape(2, -1)], axis=1)</p>
+</div></blockquote>
+<p>_, upper_obr = pair_M5c_n_obr(atoms, idx_cn5[0], idx_obr[0])
+_, lower_obr = pair_M5c_n_obr(atoms, idx_cn5[1], idx_obr[1])
+idx_obr = np.array([upper_obr, lower_obr])
+dab = dAdBridge(ag, cn5idx, idx_obr)
+dab.run()
+<a href="#id21"><span class="problematic" id="id22">``</span></a><a href="#id23"><span class="problematic" id="id24">`</span></a></p>
+</dd>
+</dl>
+</li>
+</ol>
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.dAdBridge.get_dab">
+<span class="sig-name descname"><span class="pre">get_dab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx_adO</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_obr1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_obr2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#dAdBridge.get_dab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.dAdBridge.get_dab" title="Permalink to this definition">#</a></dt>
+<dd><p>get distances between Adsorption water oxygen and Bridge oxygen, aka, dAB.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>idx_adO</strong> (<em>np.ndarray</em>) – indicies of ad water oxygen atoms. Use -1 as masking marker, meaning didn’t found Obr
+whthin cutoff. (see analysis class <cite>RutileDisDeg</cite>)</p></li>
+<li><p><strong>idx_obr1</strong> (<em>np.ndarray</em>) – indicies of row#1 of bridge oxygen atoms.</p></li>
+<li><p><strong>idx_obr2</strong> (<em>np.ndarray</em>) – indicies of row#2 of bridge oxygen atoms.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(&lt;result distances: Oad-Obr#1&gt;, &lt;result distances: Oad-Obr#2&gt;)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple (np.ndarray, np.ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.dAdBridge.get_neighbor_oxygen">
+<span class="sig-name descname"><span class="pre">get_neighbor_oxygen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx_ti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_dm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_ow</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#dAdBridge.get_neighbor_oxygen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.dAdBridge.get_neighbor_oxygen" title="Permalink to this definition">#</a></dt>
+<dd><p>Give a group of ti atoms, find their neighboring water oxygen within cutoff rasius <cite>self.cutoff</cite>.
+Returns water oxygen indicies</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>idx_ti</strong> (<em>np.ndarray</em>) – 1-d integer array containing indicies for Ti5c atoms.</p></li>
+<li><p><strong>res_dm</strong> (<em>np.ndarray</em>) – 2-d distance array containing pair-wise distance between Ti and all water oxygen atoms.
+This array is prepared in <cite>_prepare</cite>.</p></li>
+<li><p><strong>n_ow</strong> (<em>int</em><em>, </em><em>optional</em>) – number of neighboring oxygen for input group of Ti atoms. For example, Ti5c has 1 ad-water;
+and edge Ti4c has 2 ad-water. Defaults to 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>1-d array containing adsorbed water oxygen indicies. If these is no water oxygen within the
+cutoff raidius, a masking value of ‘-1’ is provided</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.dAdBridge.get_ref">
+<span class="sig-name descname"><span class="pre">get_ref</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#dAdBridge.get_ref"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.dAdBridge.get_ref" title="Permalink to this definition">#</a></dt>
+<dd><p>use minimum image vector between two rows of obr as reference vectors</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.dInterLayer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.rutile110.</span></span><span class="sig-name descname"><span class="pre">dInterLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atomgroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_ti5c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dz</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.005</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#dInterLayer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.dInterLayer" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AnalysisBase</span></code></p>
+<p>MDAnalysis class for interlayer distances calculation. Note that this utility is only good
+for flat TiO2 (110)-water interface
+Notice: Because the rotation matrix ‘get_rotM’ method is not very robust, this interlayer distances
+method is only for flat rutile 110 water interface currently.</p>
+<p>Usage example:
+1. for flat rutile 110 water interface:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">atoms</span>&#160; <span class="pre">=</span> <span class="pre">read(os.path.join(&quot;init.cif&quot;))</span>
+<span class="pre">r110</span>&#160;&#160; <span class="pre">=</span> <span class="pre">Rutile110(atoms,</span> <span class="pre">nrow=nrow,</span> <span class="pre">bridge_along=bridge_along)</span>
+<span class="pre">n_ti5c</span> <span class="pre">=</span> <span class="pre">r110.get_indicies()['idx_M5c'].flatten().shape[0]//2</span>
+<span class="pre">dil</span>&#160;&#160;&#160; <span class="pre">=</span> <span class="pre">dInterLayer(ag,</span> <span class="pre">n_ti5c)</span>
+<span class="pre">dil.run()</span>
+<span class="pre">`</span></code></p>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.dInterLayer.get_n_trilayers">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_n_trilayers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_Ti</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#dInterLayer.get_n_trilayers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.dInterLayer.get_n_trilayers" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.dInterLayer.get_z_histo">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_z_histo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zmean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bin_edges</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#dInterLayer.get_z_histo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.dInterLayer.get_z_histo" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.dInterLayer.update_pos">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anchor_pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anchor_idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#dInterLayer.update_pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.dInterLayer.update_pos" title="Permalink to this definition">#</a></dt>
+<dd><p>To avoding collective slab drifting during the simulation. Move atom with index ‘self._idxanchor’
+to the same position each frame. Defaults to 1 (One of the slab atom if you are using ase for modle
+generation).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.dObr_NearH">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.rutile110.</span></span><span class="sig-name descname"><span class="pre">dObr_NearH</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atomgroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_obr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nrow</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_hobr1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_hobr2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_eobr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Ti'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_oh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#dObr_NearH"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.dObr_NearH" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AnalysisBase</span></code></p>
+<p>Distance between Obr and it’s near n_oh proton.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>AnalysisBase</strong> (<em>MDAnalysis</em>) – MDAnalysis analysis base</p>
+</dd>
+</dl>
+<p>Usage example:
+(1) (110)-water interface with &lt;1-11&gt; edge</p>
+<blockquote>
+<div><p><a href="#id25"><span class="problematic" id="id26">``</span></a><a href="#id27"><span class="problematic" id="id28">`</span></a>python
+from toolkit.structures.rutile110 import Rutile1p11Edge</p>
+<p>atoms = read(“init.cif”)
+r110edge = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, cutoff=2.9)
+idx_owat, _ = r110edge.get_wat()
+ind         = r110edge.get_indicies()
+ind[‘idx_Obr’][0] = np.flip(ind[‘idx_Obr’][0], axis=1)
+idx_obr  = ind[‘idx_Obr’].reshape(2, -1)
+idx_hobr1 = ind[‘idx_hObr_mid’].reshape(2, -1)
+idx_hobr2 = ind[‘idx_hObr_upper’].reshape(2, -1)
+idx_eobr  = ind[‘idx_edge_O2’].reshape(2, -1)
+doh = dObr_NearestH(ag, idx_obr, nrow=r110edge.nrow, idx_hobr1=idx_hobr1,</p>
+<blockquote>
+<div><p>idx_hobr2=idx_hobr2, idx_eobr=idx_eobr)</p>
+</div></blockquote>
+<p>doh.run()
+<a href="#id29"><span class="problematic" id="id30">``</span></a><a href="#id31"><span class="problematic" id="id32">`</span></a></p>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><p>Flat (110)-water interface
+<a href="#id33"><span class="problematic" id="id34">``</span></a><a href="#id35"><span class="problematic" id="id36">`</span></a>python
+from toolkit.structures.rutile110 import Rutile110</p>
+<p>atoms    = read(“init.cif”)
+r110     = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)
+idx_owat, _ = r110.get_wat()
+ind = inp.r110.get_indicies()
+ind[‘idx_Obr’][0] = np.flip(ind[‘idx_Obr’][0], axis=1)
+idx_obr  = ind[‘idx_Obr’].reshape(2, -1)
+doh = dObr_NearestH(ag, idx_obr, nrow=r110.nrow, idx_hobr1=None, idx_hobr2=None, idx_eobr=None)
+doh.run()
+<a href="#id37"><span class="problematic" id="id38">``</span></a><a href="#id39"><span class="problematic" id="id40">`</span></a></p>
+</li>
+</ol>
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.dObr_NearH.dist2histo">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dist2histo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bin_edges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nrow</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#dObr_NearH.dist2histo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.dObr_NearH.dist2histo" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.dObr_NearH.get_OH_dist">
+<span class="sig-name descname"><span class="pre">get_OH_dist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obr_indicies</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#dObr_NearH.get_OH_dist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.dObr_NearH.get_OH_dist" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.dObr_NearestH">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.rutile110.</span></span><span class="sig-name descname"><span class="pre">dObr_NearestH</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atomgroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_obr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nrow</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_hobr1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_hobr2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_eobr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Ti'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#dObr_NearestH"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.dObr_NearestH" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AnalysisBase</span></code></p>
+<p>Distance between Obr and it’s nearest proton.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>AnalysisBase</strong> (<em>MDAnalysis</em>) – MDAnalysis analysis base</p>
+</dd>
+</dl>
+<p>Usage example:
+(1) (110)-water interface with &lt;1-11&gt; edge</p>
+<blockquote>
+<div><p><a href="#id41"><span class="problematic" id="id42">``</span></a><a href="#id43"><span class="problematic" id="id44">`</span></a>python
+from toolkit.structures.rutile110 import Rutile1p11Edge</p>
+<p>atoms = read(“init.cif”)
+r110edge = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, cutoff=2.9)
+idx_owat, _ = r110edge.get_wat()
+ind         = r110edge.get_indicies()
+ind[‘idx_Obr’][0] = np.flip(ind[‘idx_Obr’][0], axis=1)
+idx_obr  = ind[‘idx_Obr’].reshape(2, -1)
+idx_hobr1 = ind[‘idx_hObr_mid’].reshape(2, -1)
+idx_hobr2 = ind[‘idx_hObr_upper’].reshape(2, -1)
+idx_eobr  = ind[‘idx_edge_O2’].reshape(2, -1)
+doh = dObr_NearestH(ag, idx_obr, nrow=r110edge.nrow, idx_hobr1=idx_hobr1,</p>
+<blockquote>
+<div><p>idx_hobr2=idx_hobr2, idx_eobr=idx_eobr)</p>
+</div></blockquote>
+<p>doh.run()
+<a href="#id45"><span class="problematic" id="id46">``</span></a><a href="#id47"><span class="problematic" id="id48">`</span></a></p>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><p>Flat (110)-water interface
+<a href="#id49"><span class="problematic" id="id50">``</span></a><a href="#id51"><span class="problematic" id="id52">`</span></a>python
+from toolkit.structures.rutile110 import Rutile110</p>
+<p>atoms    = read(“init.cif”)
+r110     = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)
+idx_owat, _ = r110.get_wat()
+ind = inp.r110.get_indicies()
+ind[‘idx_Obr’][0] = np.flip(ind[‘idx_Obr’][0], axis=1)
+idx_obr  = ind[‘idx_Obr’].reshape(2, -1)
+doh = dObr_NearestH(ag, idx_obr, nrow=r110.nrow, idx_hobr1=None, idx_hobr2=None, idx_eobr=None)
+doh.run()
+<a href="#id53"><span class="problematic" id="id54">``</span></a><a href="#id55"><span class="problematic" id="id56">`</span></a></p>
+</li>
+</ol>
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.dObr_NearestH.dist2histo">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dist2histo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bin_edges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nrow</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#dObr_NearestH.dist2histo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.dObr_NearestH.dist2histo" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.dObr_NearestH.get_min_OH">
+<span class="sig-name descname"><span class="pre">get_min_OH</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obr_indicies</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#dObr_NearestH.get_min_OH"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.dObr_NearestH.get_min_OH" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.staleRutileDisDeg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.rutile110.</span></span><span class="sig-name descname"><span class="pre">staleRutileDisDeg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atomgroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">owidx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cn5idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge4idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge5idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Ti'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.8</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#staleRutileDisDeg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.staleRutileDisDeg" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AnalysisBase</span></code></p>
+<p>MDAnalysis class calculating surface water dissociation degree for rutile hkl(110)-water interface.
+Besides dissociation, this method will also output surface adsorption water oxygen index, which is useful for
+TiO2-water interface, because adsorbed water in this system sometimes exchange with sub-interface water.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>AnalysisBase</strong> (<em>object</em>) – MDAnalysis Analysis class base</p>
+</dd>
+</dl>
+<p>Usage example:
+1. for rutile 110 (water) interface with &lt;1-11&gt; edge</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">vecy</span> <span class="pre">=</span> <span class="pre">np.array([26.34844236,</span>&#160; <span class="pre">1.8642182,</span>&#160; <span class="pre">-2.0615678])</span>
+<span class="pre">vecz</span> <span class="pre">=</span> <span class="pre">np.array([0.49339,</span>&#160; <span class="pre">-0.070221,</span>&#160; <span class="pre">9.201458])</span>
+<span class="pre">r110edge</span> <span class="pre">=</span> <span class="pre">Rutile1p11Edge(atoms,</span> <span class="pre">vecy=vecy,</span> <span class="pre">vecz=vecz,</span> <span class="pre">M=&quot;Ti&quot;,</span> <span class="pre">nrow=2)</span>
+<span class="pre">ind</span> <span class="pre">=</span> <span class="pre">r110edge.get_indicies()</span>
+<span class="pre">idx_ow,</span> <span class="pre">_</span> <span class="pre">=</span> <span class="pre">r110edge.get_wat()</span>
+<span class="pre">ind['idx_M5c'][0]</span> <span class="pre">=</span> <span class="pre">np.flip(ind['idx_M5c'][0],</span> <span class="pre">axis=1)</span>
+<span class="pre">cn5idx</span> <span class="pre">=</span> <span class="pre">ind['idx_M5c'].reshape(2,</span> <span class="pre">-1)</span>
+<span class="pre">edge5idx</span> <span class="pre">=</span> <span class="pre">ind['idx_edge_M5c'].reshape(2,</span> <span class="pre">-1)</span>
+<span class="pre">edge4idx</span> <span class="pre">=</span> <span class="pre">ind['idx_edge_M4c'].reshape(2,</span> <span class="pre">-1)</span>
+<span class="pre">rdd</span> <span class="pre">=</span> <span class="pre">RutileDisDeg(ag,</span> <span class="pre">idx_ow,</span> <span class="pre">cn5idx,</span> <span class="pre">edge4idx=edge4idx,</span> <span class="pre">edge5idx=edge5idx)</span>
+<span class="pre">rdd.run()</span>
+<span class="pre">`</span></code></p>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.staleRutileDisDeg.get_neighbor_oxygen">
+<span class="sig-name descname"><span class="pre">get_neighbor_oxygen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx_ti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_dm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_ow</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#staleRutileDisDeg.get_neighbor_oxygen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.staleRutileDisDeg.get_neighbor_oxygen" title="Permalink to this definition">#</a></dt>
+<dd><p>Give a group of ti atoms, find their neighboring water oxygen within cutoff rasius <cite>self.cutoff</cite>.
+Returns water oxygen indicies</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>idx_ti</strong> (<em>np.ndarray</em>) – 1-d integer array containing indicies for Ti5c atoms.</p></li>
+<li><p><strong>res_dm</strong> (<em>np.ndarray</em>) – 2-d distance array containing pair-wise distance between Ti and all water oxygen atoms.
+This array is prepared in <cite>_prepare</cite>.</p></li>
+<li><p><strong>n_ow</strong> (<em>int</em><em>, </em><em>optional</em>) – number of neighboring oxygen for input group of Ti atoms. For example, Ti5c has 1 ad-water;
+and edge Ti4c has 2 ad-water. Defaults to 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>1-d array containing adsorbed water oxygen indicies. If these is no water oxygen within the
+cutoff raidius, a masking value of ‘-1’ is provided</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./_api"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="ectoolkits.analysis.finite_size_correction.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">ectoolkits.analysis.finite_size_correction module</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="ectoolkits.analysis.uncertainty.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">ectoolkits.analysis.uncertainty module</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Yong-Bin Zhuang
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

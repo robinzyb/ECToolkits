@@ -1,0 +1,728 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ectoolkits.analysis.atom_density &#8212; ECToolkits Reference</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=c5ced968eda925caa686"></script>
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/ectoolkits/analysis/atom_density';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">ECToolkits Reference</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Analysis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/atom_density.html">Atom Density Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/band_align.html">Band Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/disdeg.html">Dissociation Degree Analysis</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/acidity.html">Acidity Calculation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/redox.html">Redox Potentials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../_api/modules.html">ectoolkits</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../_api/ectoolkits.html">ectoolkits package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../_api/ectoolkits.analysis.html">ectoolkits.analysis package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.acidity.html">ectoolkits.analysis.acidity module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.atom_density.html">ectoolkits.analysis.atom_density module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.band_align.html">ectoolkits.analysis.band_align module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.disdeg.html">ectoolkits.analysis.disdeg module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.rutile110.html">ectoolkits.analysis.rutile110 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.uncertainty.html">ectoolkits.analysis.uncertainty module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_api/ectoolkits.matplotlibstyle.html">ectoolkits.matplotlibstyle package</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../_api/ectoolkits.plots.html">ectoolkits.plots package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.plots.band_align.html">ectoolkits.plots.band_align module</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../_api/ectoolkits.structures.html">ectoolkits.structures package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.structures.interface.html">ectoolkits.structures.interface module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.structures.rutile110.html">ectoolkits.structures.rutile110 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.structures.slab.html">ectoolkits.structures.slab module</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../_api/ectoolkits.utils.html">ectoolkits.utils package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.utils.math.html">ectoolkits.utils.math module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.utils.rutile110.html">ectoolkits.utils.rutile110 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.utils.utils.html">ectoolkits.utils.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.utils.vasp.html">ectoolkits.utils.vasp module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_api/ectoolkits.main.html">ectoolkits.main module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/robinzyb/ectoolkits" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/robinzyb/ectoolkits/issues/new?title=Issue%20on%20page%20%2F_modules/ectoolkits/analysis/atom_density.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for ectoolkits.analysis.atom_density</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">ase.io</span> <span class="kn">import</span> <span class="n">read</span><span class="p">,</span> <span class="n">write</span>
+<span class="kn">from</span> <span class="nn">ase.neighborlist</span> <span class="kn">import</span> <span class="n">neighbor_list</span>
+
+<span class="kn">from</span> <span class="nn">..utils.utils</span> <span class="kn">import</span> <span class="n">fancy_print</span>
+<span class="kn">from</span> <span class="nn">..structures.slab</span> <span class="kn">import</span> <span class="n">Slab</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+
+<div class="viewcode-block" id="analysis_run"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.analysis_run">[docs]</a><span class="k">def</span> <span class="nf">analysis_run</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">CONFIG</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">json</span>
+        <span class="n">fancy_print</span><span class="p">(</span><span class="s2">&quot;Analysis Start!&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">CONFIG</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">inp</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">system</span> <span class="o">=</span> <span class="n">AtomDensity</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+        <span class="n">system</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+        <span class="n">fancy_print</span><span class="p">(</span><span class="s2">&quot;FINISHED&quot;</span><span class="p">)</span></div>
+
+
+
+
+<div class="viewcode-block" id="AtomDensity"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity">[docs]</a><span class="k">class</span> <span class="nc">AtomDensity</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inp</span><span class="p">):</span>
+        <span class="n">fancy_print</span><span class="p">(</span><span class="s2">&quot;Perform Atom Density Analysis&quot;</span><span class="p">)</span>
+        <span class="c1"># print file name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xyz_file</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;xyz_file&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz_file</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span>
+
+        <span class="n">fancy_print</span><span class="p">(</span><span class="s2">&quot;Read Structure File: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inp</span><span class="p">[</span><span class="s2">&quot;xyz_file&quot;</span><span class="p">]))</span>
+        <span class="c1"># print the cell</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">inp</span><span class="p">[</span><span class="s2">&quot;cell&quot;</span><span class="p">]</span>
+        <span class="n">fancy_print</span><span class="p">(</span><span class="s2">&quot;Read the Cell Info: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inp</span><span class="p">[</span><span class="s2">&quot;cell&quot;</span><span class="p">]))</span>
+        <span class="c1"># print surface 1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surf1</span> <span class="o">=</span> <span class="n">inp</span><span class="p">[</span><span class="s2">&quot;surf1&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surf1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surf1</span><span class="p">)</span>
+        <span class="n">fancy_print</span><span class="p">(</span><span class="s2">&quot;Read Surface 1 Atoms Index: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inp</span><span class="p">[</span><span class="s2">&quot;surf1&quot;</span><span class="p">]))</span>
+        <span class="c1"># print surface 2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surf2</span> <span class="o">=</span> <span class="n">inp</span><span class="p">[</span><span class="s2">&quot;surf2&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surf2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surf2</span><span class="p">)</span>
+        <span class="n">fancy_print</span><span class="p">(</span><span class="s2">&quot;Read Surface 2 Atoms Index: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inp</span><span class="p">[</span><span class="s2">&quot;surf2&quot;</span><span class="p">]))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">atom_density</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atom_density_z</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="c1">#        self.shift_center = inp[&quot;shift_center&quot;]</span>
+<span class="c1">#        fancy_print(&quot;Density will shift center to water center: {0}&quot;.format(self.shift_center))</span>
+
+        <span class="c1"># slice for stucture</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;nframe&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">density_type</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;density_type&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Start reading structure</span>
+        <span class="n">fancy_print</span><span class="p">(</span><span class="s2">&quot;Now Start Reading Structures&quot;</span><span class="p">)</span>
+        <span class="n">fancy_print</span><span class="p">(</span><span class="s2">&quot;----------------------------&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">poses</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz_file</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">Slab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">:</span>
+            <span class="c1"># wrap the cell</span>
+            <span class="n">pos</span><span class="o">.</span><span class="n">set_cell</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">)</span>
+            <span class="n">pos</span><span class="o">.</span><span class="n">set_pbc</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">pos</span><span class="o">.</span><span class="n">wrap</span><span class="p">()</span>
+        <span class="n">fancy_print</span><span class="p">(</span><span class="s2">&quot;Reading Structures is Finished&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nframe</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">)</span>
+        <span class="n">fancy_print</span><span class="p">(</span><span class="s2">&quot;Read Frame Number: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nframe</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">natom</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">fancy_print</span><span class="p">(</span><span class="s2">&quot;Read Atom Number: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">natom</span><span class="p">))</span>
+
+
+
+<div class="viewcode-block" id="AtomDensity.run"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># read all structure and corresponding z</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_z</span><span class="p">()</span>
+
+        <span class="c1"># cell info</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_volume</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_volume</span><span class="p">()</span>
+        <span class="n">_cell</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_cell</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xy_area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_volume</span><span class="o">/</span><span class="n">_cell</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="c1"># surface 1 and 2 position along the trajectory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surf1_z_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_surf1_z_list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surf2_z_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_surf2_z_list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surf1_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf1_z_list</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surf2_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf2_z_list</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+        <span class="c1"># find the water center along the trajectory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">water_cent_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_water_cent_list</span><span class="p">()</span>
+        
+
+        <span class="c1"># water center relative to fisrt frame</span>
+        <span class="c1">#self.water_cent_rel_s = self.water_cent_s - self.water_cent_s[0]</span>
+
+        <span class="c1">#fancy_print(&quot;Calculated Origin Water Center Position: {0} A&quot;.format(self.water_cent))</span>
+        <span class="c1">#fancy_print(&quot;Water Center will shift to Cell Center: {0} A&quot;.format(self.cell[2]/2))</span>
+
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">density_type</span><span class="p">:</span>
+            <span class="n">idx_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx_list</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_atom_density</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">idx_list</span><span class="o">=</span><span class="n">idx_list</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">atom_density</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atom_density</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atom_density_z</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atom_density_z</span><span class="p">)</span></div>
+        <span class="c1">#self.get_o_density()</span>
+        <span class="c1">#self.dump_o_density()</span>
+
+<div class="viewcode-block" id="AtomDensity.get_all_z"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_all_z">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_z</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;get the z coordinates of atoms along trajectory</span>
+
+<span class="sd">        _extended_summary_</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            np.array: the z coordinates of atoms</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        
+        <span class="n">all_z</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">:</span>
+            <span class="c1">#z</span>
+            <span class="n">all_z</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">get_positions</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">all_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">all_z</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">all_z</span></div>
+
+
+<div class="viewcode-block" id="AtomDensity.get_surf1_z_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_surf1_z_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_surf1_z_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;calculate the surface 1 average position</span>
+
+<span class="sd">        _extended_summary_</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            np.array: axis 0: traj</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+
+        <span class="n">surf1_z_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_z</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">surf1</span><span class="p">]</span>
+        <span class="n">surf1_z_list</span> <span class="o">=</span> <span class="n">surf1_z_list</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">surf1_z_list</span> <span class="o">=</span> <span class="n">surf1_z_list</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">surf1_z_list</span></div>
+
+<div class="viewcode-block" id="AtomDensity.get_surf2_z_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_surf2_z_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_surf2_z_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;calculate the surface 2 average position</span>
+
+<span class="sd">        _extended_summary_</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            np.array: axis 0: traj</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+
+        <span class="n">surf2_z_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_z</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">surf2</span><span class="p">]</span>
+        <span class="n">surf2_z_list</span> <span class="o">=</span> <span class="n">surf2_z_list</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">surf2_z_list</span> <span class="o">=</span> <span class="n">surf2_z_list</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">surf2_z_list</span></div>
+
+<div class="viewcode-block" id="AtomDensity.get_water_cent_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_water_cent_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_water_cent_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="n">water_cent_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">surf1_z</span><span class="p">,</span> <span class="n">surf2_z</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surf1_z_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf2_z_list</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">surf2_z</span> <span class="o">&lt;</span> <span class="n">surf1_z</span><span class="p">:</span>
+                <span class="n">surf2_z</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">water_cent</span> <span class="o">=</span> <span class="p">(</span><span class="n">surf1_z</span> <span class="o">+</span> <span class="n">surf2_z</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+            <span class="n">water_cent_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">water_cent</span><span class="p">)</span>
+        <span class="n">water_cent_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">water_cent_list</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">water_cent_list</span></div>
+
+<div class="viewcode-block" id="AtomDensity.water_O_idx"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.water_O_idx">[docs]</a>    <span class="k">def</span> <span class="nf">water_O_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># guess the o index of water</span>
+        <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="o">=</span> <span class="n">neighbor_list</span><span class="p">(</span><span class="s1">&#39;ij&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">{(</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">):</span> <span class="mf">1.3</span><span class="p">})</span>
+        <span class="n">cn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="n">H2O_pair_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">Ow_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cn</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz_file</span><span class="p">),</span> <span class="s2">&quot;Ow_idx.dat&quot;</span><span class="p">),</span> <span class="n">Ow_idx</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Ow_idx</span></div>
+
+<div class="viewcode-block" id="AtomDensity.get_idx_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_idx_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_idx_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+        <span class="c1"># get the idx from external input</span>
+
+        <span class="n">idx_method</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;idx_method&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">idx_method</span> <span class="o">==</span> <span class="s2">&quot;manual&quot;</span><span class="p">:</span>
+            <span class="n">idx_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx_list_manual</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">idx_method</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+            <span class="n">idx_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx_list_all</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fancy_print</span><span class="p">(</span><span class="s2">&quot;Not implement&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span>
+        <span class="k">return</span> <span class="n">idx_list</span></div>
+
+<div class="viewcode-block" id="AtomDensity.get_idx_list_manual"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_idx_list_manual">[docs]</a>    <span class="k">def</span> <span class="nf">get_idx_list_manual</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+        <span class="n">idx_list</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;idx_list&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">idx_list</span></div>
+
+<div class="viewcode-block" id="AtomDensity.get_idx_list_all"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_idx_list_all">[docs]</a>    <span class="k">def</span> <span class="nf">get_idx_list_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+        <span class="n">element</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;element&quot;</span><span class="p">)</span>
+        <span class="n">idx_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">find_element_idx_list</span><span class="p">(</span><span class="n">element</span><span class="o">=</span><span class="n">element</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">idx_list</span></div>
+
+<div class="viewcode-block" id="AtomDensity.get_atom_density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_atom_density">[docs]</a>    <span class="k">def</span> <span class="nf">get_atom_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">idx_list</span><span class="p">):</span>
+        <span class="n">fancy_print</span><span class="p">(</span><span class="s2">&quot;START GETTING ATOM DENSITY&quot;</span><span class="p">)</span>
+        <span class="n">fancy_print</span><span class="p">(</span><span class="s2">&quot;----------------------------&quot;</span><span class="p">)</span>
+
+        <span class="n">dz</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dz&quot;</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>
+
+        <span class="n">atom_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_z</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">idx_list</span><span class="p">]</span>
+
+        <span class="n">atom_z</span> <span class="o">=</span> <span class="n">atom_z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf1_z_list</span>
+
+        <span class="c1"># this might cause the num exceed cell boundary, need wrap the number</span>
+        <span class="n">atom_z_new</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">cell_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_cell</span><span class="p">()[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">atom_z</span><span class="o">.</span><span class="n">flatten</span><span class="p">():</span>
+            <span class="n">atom_z_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="o">%</span><span class="n">cell_z</span><span class="p">)</span>
+        <span class="n">atom_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">atom_z_new</span><span class="p">)</span>
+
+        
+        <span class="c1"># find the length between two surface</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf1_z</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf2_z</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">surf_space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf2_z</span> <span class="o">+</span> <span class="n">cell_z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf1_z</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">surf_space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf2_z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf1_z</span>
+
+        <span class="n">bins</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surf_space</span><span class="o">/</span><span class="n">dz</span><span class="p">)</span>
+
+        <span class="n">density</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">atom_z</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf_space</span><span class="p">))</span>
+
+        <span class="c1"># throw the last one and move the number half bin</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">z</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">dz</span><span class="o">/</span><span class="mi">2</span>
+        <span class="c1">#z = z[:-1]</span>
+
+
+        
+        <span class="n">unit_conversion</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_unit_conversion</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">dz</span><span class="p">)</span>
+
+        <span class="c1"># normalized wrt density of bulk water</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="n">density</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">nframe</span> <span class="o">*</span> <span class="n">unit_conversion</span>
+
+        <span class="n">element</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;element&quot;</span><span class="p">)</span>
+        <span class="n">output_file</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">element</span><span class="si">}</span><span class="s2">_output&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">atom_density_z</span><span class="p">[</span><span class="n">output_file</span><span class="p">]</span> <span class="o">=</span> <span class="n">z</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atom_density</span><span class="p">[</span><span class="n">output_file</span><span class="p">]</span> <span class="o">=</span> <span class="n">density</span>
+
+
+        <span class="n">output_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s2">.dat&quot;</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span>
+                <span class="n">output_file</span><span class="p">,</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">z</span><span class="p">,</span> <span class="n">density</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+                <span class="n">header</span><span class="o">=</span><span class="s2">&quot;FIELD: z[A], atom_density&quot;</span>
+        <span class="p">)</span>
+        <span class="n">fancy_print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Density Profile Data Save to </span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AtomDensity.get_unit_conversion"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_unit_conversion">[docs]</a>    <span class="k">def</span> <span class="nf">get_unit_conversion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">dz</span><span class="p">):</span>
+        <span class="n">density_unit</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;density_unit&quot;</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">density_unit</span> <span class="o">==</span> <span class="s2">&quot;water&quot;</span><span class="p">:</span>
+            <span class="n">bulk_density</span> <span class="o">=</span> <span class="mi">32</span><span class="o">/</span><span class="mf">9.86</span><span class="o">**</span><span class="mi">3</span>
+            <span class="n">unit_conversion</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xy_area</span><span class="o">*</span><span class="n">dz</span><span class="o">*</span><span class="n">bulk_density</span>
+            <span class="n">unit_conversion</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">unit_conversion</span>
+        <span class="k">elif</span> <span class="n">density_unit</span> <span class="o">==</span> <span class="s2">&quot;number&quot;</span><span class="p">:</span>
+            <span class="n">unit_conversion</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+        <span class="k">return</span> <span class="n">unit_conversion</span></div>
+
+<div class="viewcode-block" id="AtomDensity.get_ave_density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_ave_density">[docs]</a>    <span class="k">def</span> <span class="nf">get_ave_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width_list</span><span class="p">):</span>
+        <span class="n">all_cent_density</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">all_cent_density</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;width&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">width_list</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">density</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">atom_density</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atom_density_z</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="n">cent</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span>
+            <span class="n">cent_density_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">width</span> <span class="ow">in</span> <span class="n">width_list</span><span class="p">:</span>
+                <span class="n">left_bound</span> <span class="o">=</span> <span class="n">cent</span> <span class="o">-</span> <span class="n">width</span><span class="o">/</span><span class="mi">2</span>
+                <span class="n">right_bound</span> <span class="o">=</span> <span class="n">cent</span> <span class="o">+</span> <span class="n">width</span><span class="o">/</span><span class="mi">2</span>
+                <span class="n">part_density</span> <span class="o">=</span> <span class="n">density</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">((</span><span class="n">z</span><span class="o">&gt;=</span><span class="n">left_bound</span><span class="p">),</span> <span class="p">(</span><span class="n">z</span><span class="o">&lt;=</span><span class="n">right_bound</span><span class="p">))]</span>
+                <span class="n">cent_density</span> <span class="o">=</span> <span class="n">part_density</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+                <span class="n">cent_density_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cent_density</span><span class="p">)</span>
+            
+            <span class="n">all_cent_density</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cent_density_list</span>
+        
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">all_cent_density</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="AtomDensity.plot_density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.plot_density">[docs]</a>    <span class="k">def</span> <span class="nf">plot_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;font&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span> <span class="c1">#controls default text size</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">titlesize</span><span class="o">=</span><span class="mi">23</span><span class="p">)</span> <span class="c1">#fontsize of the title</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span> <span class="c1">#fontsize of the x and y labels</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;xtick&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span> <span class="c1">#fontsize of the x tick labels</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;ytick&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span> <span class="c1">#fontsize of the y tick labels</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;legend&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span> <span class="c1">#fontsize of the legend</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="c1">#controls default text size</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;xtick.major&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;ytick.major&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">9</span><span class="p">))</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">density</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">atom_density</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atom_density_z</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="n">density</span> <span class="o">=</span> <span class="n">density</span><span class="o">.</span><span class="n">values</span>
+            <span class="k">if</span> <span class="n">sym</span><span class="p">:</span>
+                <span class="n">density</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">density</span><span class="p">)</span> <span class="o">+</span> <span class="n">density</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Density&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;z [A]&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fig</span></div></div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Yong-Bin Zhuang
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,914 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ectoolkits.structures.rutile110 &#8212; ECToolkits Reference</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=c5ced968eda925caa686"></script>
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/ectoolkits/structures/rutile110';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">ECToolkits Reference</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Analysis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/atom_density.html">Atom Density Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/band_align.html">Band Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/disdeg.html">Dissociation Degree Analysis</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/acidity.html">Acidity Calculation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/redox.html">Redox Potentials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../_api/modules.html">ectoolkits</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../_api/ectoolkits.html">ectoolkits package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../_api/ectoolkits.analysis.html">ectoolkits.analysis package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.acidity.html">ectoolkits.analysis.acidity module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.atom_density.html">ectoolkits.analysis.atom_density module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.band_align.html">ectoolkits.analysis.band_align module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.disdeg.html">ectoolkits.analysis.disdeg module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.rutile110.html">ectoolkits.analysis.rutile110 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.uncertainty.html">ectoolkits.analysis.uncertainty module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_api/ectoolkits.matplotlibstyle.html">ectoolkits.matplotlibstyle package</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../_api/ectoolkits.plots.html">ectoolkits.plots package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.plots.band_align.html">ectoolkits.plots.band_align module</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../_api/ectoolkits.structures.html">ectoolkits.structures package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.structures.interface.html">ectoolkits.structures.interface module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.structures.rutile110.html">ectoolkits.structures.rutile110 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.structures.slab.html">ectoolkits.structures.slab module</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../_api/ectoolkits.utils.html">ectoolkits.utils package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.utils.math.html">ectoolkits.utils.math module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.utils.rutile110.html">ectoolkits.utils.rutile110 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.utils.utils.html">ectoolkits.utils.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.utils.vasp.html">ectoolkits.utils.vasp module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_api/ectoolkits.main.html">ectoolkits.main module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/robinzyb/ectoolkits" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/robinzyb/ectoolkits/issues/new?title=Issue%20on%20page%20%2F_modules/ectoolkits/structures/rutile110.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for ectoolkits.structures.rutile110</h1><div class="highlight"><pre>
+<span></span><span class="c1"># author:  brh</span>
+<span class="c1"># summary: rutile (110)-water slab and interface methods</span>
+<span class="c1"># 2021-2022</span>
+
+<span class="c1"># Fater classes </span>
+<span class="kn">from</span> <span class="nn">cgi</span> <span class="kn">import</span> <span class="n">test</span>
+<span class="kn">from</span> <span class="nn">.slab</span> <span class="kn">import</span> <span class="n">Slab</span>
+<span class="kn">from</span> <span class="nn">.interface</span> <span class="kn">import</span> <span class="n">Interface</span>
+
+<span class="c1"># general modules</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="kn">import</span> <span class="n">distance_matrix</span>
+
+<span class="c1"># distance caculation library functions and utilities</span>
+<span class="kn">from</span> <span class="nn">MDAnalysis.lib.distances</span> <span class="kn">import</span> <span class="p">(</span><span class="n">capped_distance</span><span class="p">,</span>
+                                      <span class="n">minimize_vectors</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..utils.rutile110</span> <span class="kn">import</span> <span class="p">(</span><span class="n">get_rotM</span><span class="p">,</span>
+                               <span class="n">get_sym_edge</span><span class="p">,</span>
+                               <span class="n">get_watOidx</span><span class="p">,</span>
+                               <span class="n">count_cn</span><span class="p">,</span>
+                               <span class="n">sep_upper_lower</span><span class="p">,</span>
+                               <span class="n">interface_2_slab</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..utils.math</span> <span class="kn">import</span> <span class="p">(</span><span class="n">fit_plane_normal</span><span class="p">,</span> 
+                          <span class="n">fit_line_vec</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SlabRutile110"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.SlabRutile110">[docs]</a><span class="k">class</span> <span class="nc">SlabRutile110</span><span class="p">(</span><span class="n">Slab</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Slab object for rutile 110 slabs</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Slab (Slab): Child class of ASE Atoms class. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slab</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s2">&quot;Ti&quot;</span><span class="p">,</span> <span class="n">nrow</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">2.8</span><span class="p">,</span> <span class="n">bridge_along</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Init rutile 110 slab</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            slab (ASE atoms): </span>
+<span class="sd">                ASE atoms object for a rutile (110) slab model</span>
+<span class="sd">            M (str, optional): </span>
+<span class="sd">                The metal element in the model. Defaults to &quot;Ti&quot;.</span>
+<span class="sd">            nrow (int, optional): </span>
+<span class="sd">                Nuber of Obr rows in the slab model. Defaults to 2.</span>
+<span class="sd">            cutoff (float, optional): </span>
+<span class="sd">                Cutoff distances for Ti-O bond. Used for coordination number calculation. Defaults to 2.8.</span>
+<span class="sd">            bridge_along (str, optional): </span>
+<span class="sd">                &quot;x&quot; or &quot;y&quot;. The direction of Obr rows (i.e. [001] direction). Defaults to &quot;y&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">slab</span> <span class="o">=</span> <span class="n">slab</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">slab</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span> <span class="o">=</span> <span class="n">slab</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">cellpar</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">M</span> <span class="o">=</span> <span class="n">M</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nrow</span> <span class="o">=</span> <span class="n">nrow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span> <span class="o">=</span> <span class="n">cutoff</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">bridge_along</span> <span class="o">=</span> <span class="n">bridge_along</span>
+        <span class="c1"># positions and indicies</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xyz</span>    <span class="o">=</span> <span class="n">slab</span><span class="o">.</span><span class="n">positions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx_H</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">slab</span><span class="o">.</span><span class="n">symbols</span><span class="o">==</span><span class="s2">&quot;H&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx_O</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">slab</span><span class="o">.</span><span class="n">symbols</span><span class="o">==</span><span class="s2">&quot;O&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx_M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">slab</span><span class="o">.</span><span class="n">symbols</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># result dictionary: </span>
+        <span class="c1"># the keys are the names of the special atoms</span>
+        <span class="c1"># the values are the corresponding indicies</span>
+        <span class="c1"># the indicies array looks like [[&lt;idx_upper&gt;], [idx_lower]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;idx_M5c&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;idx_Obr&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_surface_indicies</span><span class="p">()</span>
+            
+<div class="viewcode-block" id="SlabRutile110.get_surf_ti"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.SlabRutile110.get_surf_ti">[docs]</a>    <span class="k">def</span> <span class="nf">get_surf_ti</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cn</span> <span class="o">=</span> <span class="n">count_cn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idx_M</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idx_O</span><span class="p">],</span> 
+            <span class="n">cutoff_hi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">,</span> <span class="n">cutoff_lo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span><span class="p">)</span>
+        <span class="n">idx_M5c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx_M</span><span class="p">[</span><span class="n">cn</span><span class="o">==</span><span class="mi">5</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">idx_M5c</span></div>
+
+<div class="viewcode-block" id="SlabRutile110.get_surf_o"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.SlabRutile110.get_surf_o">[docs]</a>    <span class="k">def</span> <span class="nf">get_surf_o</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cn</span> <span class="o">=</span> <span class="n">count_cn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idx_O</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idx_M</span><span class="p">],</span> 
+            <span class="n">cutoff_hi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">,</span> <span class="n">cutoff_lo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span><span class="p">)</span>
+        <span class="n">idx_Obr2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx_O</span><span class="p">[</span><span class="n">cn</span><span class="o">==</span><span class="mi">2</span><span class="p">]</span> 
+        <span class="k">return</span> <span class="n">idx_Obr2</span></div>
+    
+<div class="viewcode-block" id="SlabRutile110.get_surface_indicies"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.SlabRutile110.get_surface_indicies">[docs]</a>    <span class="k">def</span> <span class="nf">get_surface_indicies</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> 
+        <span class="n">idx_M5c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_surf_ti</span><span class="p">()</span>
+        <span class="n">idx_Obr2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_surf_o</span><span class="p">()</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">idx_M5c</span><span class="p">,</span> 
+               <span class="n">idx_Obr2</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">ii</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indicies</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span></div>
+
+<div class="viewcode-block" id="SlabRutile110.sep_upper_lower"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.SlabRutile110.sep_upper_lower">[docs]</a>    <span class="k">def</span> <span class="nf">sep_upper_lower</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">sep_upper_lower</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ngroup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span><span class="p">[</span><span class="s1">&#39;idx_M5c&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="bp">self</span><span class="o">.</span><span class="n">nrow</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span></div>
+
+<div class="viewcode-block" id="SlabRutile110.sort_idx"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.SlabRutile110.sort_idx">[docs]</a>    <span class="k">def</span> <span class="nf">sort_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+                <span class="n">idx_sorted</span> <span class="o">=</span> <span class="n">sort_by_rows</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">slab</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">ii</span><span class="p">],</span>
+                        <span class="n">rotM</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_row</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nrow</span><span class="p">,</span>
+                        <span class="n">bridge_along</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bridge_along</span><span class="p">)</span>
+                <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx_sorted</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span></div></div>
+
+<div class="viewcode-block" id="Rutile110"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.Rutile110">[docs]</a><span class="k">class</span> <span class="nc">Rutile110</span><span class="p">(</span><span class="n">Interface</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class for rutile (110)-water interface model</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Interface (Interface): A child class for ASE Atoms. Representing solid-water interface.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s2">&quot;Ti&quot;</span><span class="p">,</span> <span class="n">nrow</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">2.8</span><span class="p">,</span> <span class="n">bridge_along</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize rutile110</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            slab (ASE atoms): </span>
+<span class="sd">                ASE atoms object for a rutile (110) slab model</span>
+<span class="sd">            M (str, optional): </span>
+<span class="sd">                The metal element in the model. Defaults to &quot;Ti&quot;.</span>
+<span class="sd">            nrow (int, optional): </span>
+<span class="sd">                Nuber of Obr rows in the slab model. Defaults to 2.</span>
+<span class="sd">            cutoff (float, optional): </span>
+<span class="sd">                Cutoff distances for Ti-O bond. Used for coordination number calculation. Defaults to 2.8.</span>
+<span class="sd">            bridge_along (str, optional): </span>
+<span class="sd">                &quot;x&quot; or &quot;y&quot;. The direction of Obr rows (i.e. [001] direction). Defaults to &quot;y&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span> <span class="o">=</span> <span class="n">atoms</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">cellpar</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">M</span> <span class="o">=</span> <span class="n">M</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nrow</span> <span class="o">=</span> <span class="n">nrow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span> <span class="o">=</span> <span class="n">cutoff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bridge_along</span> <span class="o">=</span> <span class="n">bridge_along</span>
+        <span class="c1"># positions and indicies</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xyz</span>    <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">positions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx_H</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">symbols</span><span class="o">==</span><span class="s2">&quot;H&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx_O</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">symbols</span><span class="o">==</span><span class="s2">&quot;O&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx_M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">symbols</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx_Ow</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_wat</span><span class="p">()</span>
+
+        <span class="c1"># get corresponding slab model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx_slab</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">slab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_slab_obj</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">slab</span><span class="o">.</span><span class="n">sep_upper_lower</span><span class="p">()</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">slab</span><span class="o">.</span><span class="n">sort_idx</span><span class="p">()</span>
+
+        <span class="c1"># convert slab indicies to indicies edge model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_indicies</span><span class="p">()</span>
+    
+<div class="viewcode-block" id="Rutile110.get_slab_obj"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.Rutile110.get_slab_obj">[docs]</a>    <span class="k">def</span> <span class="nf">get_slab_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">idx_slab</span><span class="p">,</span> <span class="n">slab</span> <span class="o">=</span> <span class="n">interface_2_slab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">SlabRutile110</span><span class="p">(</span><span class="n">slab</span><span class="p">,</span> 
+                <span class="n">M</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">,</span> 
+                <span class="n">nrow</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nrow</span><span class="p">,</span>
+                <span class="n">cutoff</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">,</span>
+                <span class="n">bridge_along</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bridge_along</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">idx_slab</span><span class="p">,</span> <span class="n">obj</span></div>
+
+<div class="viewcode-block" id="Rutile110.get_wat"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.Rutile110.get_wat">[docs]</a>    <span class="k">def</span> <span class="nf">get_wat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">idx_Ow</span><span class="p">,</span> <span class="n">idx_H</span> <span class="o">=</span> <span class="n">get_watOidx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">idx_Ow</span><span class="p">,</span> <span class="n">idx_H</span></div>
+
+<div class="viewcode-block" id="Rutile110.get_indicies"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.Rutile110.get_indicies">[docs]</a>    <span class="k">def</span> <span class="nf">get_indicies</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">indicies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">slab</span><span class="o">.</span><span class="n">indicies</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">indicies</span><span class="p">:</span>
+            <span class="n">indicies</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">idxslab2idxatoms</span><span class="p">(</span><span class="n">indicies</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx_slab</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">indicies</span></div>
+
+<div class="viewcode-block" id="Rutile110.idxslab2idxatoms"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.Rutile110.idxslab2idxatoms">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">idxslab2idxatoms</span><span class="p">(</span><span class="n">idx_target</span><span class="p">,</span> <span class="n">idx_slab</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">idx_slab</span><span class="p">[</span><span class="n">idx_target</span><span class="p">]</span></div></div>
+
+<div class="viewcode-block" id="SlabRutile1p11Edge"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.SlabRutile1p11Edge">[docs]</a><span class="k">class</span> <span class="nc">SlabRutile1p11Edge</span><span class="p">(</span><span class="n">Slab</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Slab object for rutile (110) slab with &lt;1 -1 1&gt; step edge</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Slab (Slab): A child class of ASE Atoms. Representing slab model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slab</span><span class="p">,</span> <span class="n">rotM</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s2">&quot;Ti&quot;</span><span class="p">,</span> <span class="n">nrow</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">2.8</span><span class="p">,</span> <span class="n">bridge_along</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;intitialize &#39;Slab&#39; object for rutile (110) slab with &lt;1 -1 1&gt; step edge</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            slab (ASE atoms): </span>
+<span class="sd">                ASE atoms object for a rutile (110) slab model</span>
+<span class="sd">            rotM (numpy.ndarray): </span>
+<span class="sd">                3x3 numpy array. A rotation matrix for triclicnic simulation box. </span>
+<span class="sd">                To get positions after rotation, use &#39;np.matmul(slab.positions, rotM)&#39;.</span>
+<span class="sd">                The results should be z-Axis of the triclicnic simulation box parallel to [1 1 0].</span>
+<span class="sd">            M (str, optional): </span>
+<span class="sd">                The metal element in the model. Defaults to &quot;Ti&quot;.</span>
+<span class="sd">            nrow (int, optional): </span>
+<span class="sd">                Nuber of Obr rows in the slab model. Defaults to 2.</span>
+<span class="sd">            cutoff (float, optional): </span>
+<span class="sd">                Cutoff distances for Ti-O bond. Used for coordination number calculation. Defaults to 2.8.</span>
+<span class="sd">            bridge_along (str, optional): </span>
+<span class="sd">                &quot;x&quot; or &quot;y&quot;. The direction of Obr rows (i.e. [001] direction). Defaults to &quot;y&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">slab</span> <span class="o">=</span> <span class="n">slab</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">slab</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rotM</span> <span class="o">=</span> <span class="n">rotM</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span> <span class="o">=</span> <span class="n">slab</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">cellpar</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">M</span> <span class="o">=</span> <span class="n">M</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nrow</span> <span class="o">=</span> <span class="n">nrow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="o">=</span><span class="n">cutoff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bridge_along</span> <span class="o">=</span> <span class="n">bridge_along</span>
+        <span class="c1"># positions and indicies</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xyz</span>    <span class="o">=</span> <span class="n">slab</span><span class="o">.</span><span class="n">positions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx_H</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">slab</span><span class="o">.</span><span class="n">symbols</span><span class="o">==</span><span class="s2">&quot;H&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx_O</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">slab</span><span class="o">.</span><span class="n">symbols</span><span class="o">==</span><span class="s2">&quot;O&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx_M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">slab</span><span class="o">.</span><span class="n">symbols</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># result dictionary: </span>
+        <span class="c1"># the keys are the names of the special atoms</span>
+        <span class="c1"># the values are the corresponding indicies</span>
+        <span class="c1"># the indicies array looks like [[&lt;idx_upper&gt;], [idx_lower]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;idx_M5c&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;idx_edge_M5c&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;idx_edge_M4c&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;idx_Obr&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;idx_hObr_mid&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;idx_hObr_upper&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;idx_edge_O2&quot;</span><span class="p">:</span> <span class="kc">None</span>
+            <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_surface_indicies</span><span class="p">()</span>
+            
+<div class="viewcode-block" id="SlabRutile1p11Edge.get_surf_ti"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.SlabRutile1p11Edge.get_surf_ti">[docs]</a>    <span class="k">def</span> <span class="nf">get_surf_ti</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cn</span> <span class="o">=</span> <span class="n">count_cn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idx_M</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idx_O</span><span class="p">],</span> 
+            <span class="n">cutoff_hi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">,</span> <span class="n">cutoff_lo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span><span class="p">)</span>
+        <span class="n">idx_edge4</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx_M</span><span class="p">[</span><span class="n">cn</span><span class="o">==</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">idx_edge5</span><span class="p">,</span> <span class="n">idx_surf5</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sep_ticn5</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">slab</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx_O</span><span class="p">,</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">idx_M</span><span class="p">,</span> <span class="n">cn</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">idx_edge4</span><span class="p">,</span> <span class="n">idx_edge5</span><span class="p">,</span> <span class="n">idx_surf5</span></div>
+
+<div class="viewcode-block" id="SlabRutile1p11Edge.get_surf_o"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.SlabRutile1p11Edge.get_surf_o">[docs]</a>    <span class="k">def</span> <span class="nf">get_surf_o</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cn</span> <span class="o">=</span> <span class="n">count_cn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idx_O</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idx_M</span><span class="p">],</span> 
+            <span class="n">cutoff_hi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">,</span> <span class="n">cutoff_lo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span><span class="p">)</span>
+        <span class="n">idx_edge2</span><span class="p">,</span> <span class="n">idx_hobr</span><span class="p">,</span> <span class="n">idx_obr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sep_ocn2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">slab</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="p">,</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">idx_O</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx_M</span><span class="p">,</span> <span class="n">cn</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">idx_edge2</span><span class="p">,</span> <span class="n">idx_hobr</span><span class="p">,</span> <span class="n">idx_obr</span></div>
+    
+<div class="viewcode-block" id="SlabRutile1p11Edge.get_surface_indicies"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.SlabRutile1p11Edge.get_surface_indicies">[docs]</a>    <span class="k">def</span> <span class="nf">get_surface_indicies</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> 
+        <span class="n">idx_edge4</span><span class="p">,</span> <span class="n">idx_edge5</span><span class="p">,</span> <span class="n">idx_surf5</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_surf_ti</span><span class="p">()</span>
+        <span class="n">idx_edge2</span><span class="p">,</span> <span class="n">idx_hobr</span><span class="p">,</span> <span class="n">idx_obr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_surf_o</span><span class="p">()</span> 
+        <span class="n">idx_hobr1</span><span class="p">,</span> <span class="n">idx_hobr2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sep_hobr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">slab</span><span class="p">,</span> <span class="n">idx_hobr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">idx_surf5</span><span class="p">,</span> <span class="n">idx_edge5</span><span class="p">,</span> <span class="n">idx_edge4</span><span class="p">,</span> 
+               <span class="n">idx_obr</span><span class="p">,</span> <span class="n">idx_hobr1</span><span class="p">,</span> <span class="n">idx_hobr2</span><span class="p">,</span> <span class="n">idx_edge2</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">ii</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indicies</span><span class="p">):</span>
+            <span class="c1">#res[ii] = sep_upper_lower(self.xyz[:,-1], res[ii])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span></div>
+
+<div class="viewcode-block" id="SlabRutile1p11Edge.sep_upper_lower"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.SlabRutile1p11Edge.sep_upper_lower">[docs]</a>    <span class="k">def</span> <span class="nf">sep_upper_lower</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">sep_upper_lower</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ngroup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span><span class="p">[</span><span class="s1">&#39;idx_M5c&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="bp">self</span><span class="o">.</span><span class="n">nrow</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span></div>
+    
+<div class="viewcode-block" id="SlabRutile1p11Edge.sort_idx"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.SlabRutile1p11Edge.sort_idx">[docs]</a>    <span class="k">def</span> <span class="nf">sort_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+                <span class="n">idx_sorted</span> <span class="o">=</span> <span class="n">sort_by_rows</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">slab</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">ii</span><span class="p">],</span> 
+                                          <span class="n">rotM</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rotM</span><span class="p">,</span> <span class="n">n_row</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nrow</span><span class="p">,</span>
+                                          <span class="n">bridge_along</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bridge_along</span><span class="p">)</span>
+                <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx_sorted</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span></div>
+
+<div class="viewcode-block" id="SlabRutile1p11Edge.sep_ticn5"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.SlabRutile1p11Edge.sep_ticn5">[docs]</a>    <span class="k">def</span> <span class="nf">sep_ticn5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slab</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">idx_O</span><span class="p">,</span> <span class="n">idx_M</span><span class="p">,</span> <span class="n">cn</span><span class="p">):</span>
+        <span class="n">pairs</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">capped_distance</span><span class="p">(</span><span class="n">xyz</span><span class="p">[</span><span class="n">idx_M</span><span class="p">],</span> <span class="n">xyz</span><span class="p">[</span><span class="n">idx_O</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                                           <span class="n">box</span><span class="o">=</span><span class="n">slab</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">cellpar</span><span class="p">())</span>
+        <span class="n">idx_cn5</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cn</span><span class="o">==</span><span class="mi">5</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">pairs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">cn5</span> <span class="ow">in</span> <span class="n">idx_cn5</span><span class="p">:</span>
+            <span class="n">sel</span> <span class="o">+=</span> <span class="p">(</span><span class="n">pairs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="n">cn5</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">cn5_pairs</span> <span class="o">=</span> <span class="n">pairs</span><span class="p">[:][</span><span class="n">sel</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)]</span>
+        <span class="n">cno</span> <span class="o">=</span> <span class="n">count_cn</span><span class="p">(</span><span class="n">xyz</span><span class="p">[</span><span class="n">idx_O</span><span class="p">[</span><span class="n">cn5_pairs</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]],</span> <span class="n">xyz</span><span class="p">[</span><span class="n">idx_M</span><span class="p">],</span> <span class="n">cutoff_hi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">,</span>
+                       <span class="n">cutoff_lo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="n">slab</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">cellpar</span><span class="p">())</span>
+        <span class="n">cno_sum</span> <span class="o">=</span> <span class="n">cno</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">idx_edge5</span> <span class="o">=</span> <span class="n">idx_M</span><span class="p">[</span><span class="n">idx_cn5</span><span class="p">[</span><span class="n">cno_sum</span><span class="o">==</span><span class="mi">12</span><span class="p">]]</span>
+        <span class="n">idx_surf5</span> <span class="o">=</span> <span class="n">idx_M</span><span class="p">[</span><span class="n">idx_cn5</span><span class="p">[</span><span class="n">cno_sum</span><span class="o">==</span><span class="mi">15</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="n">idx_edge5</span><span class="p">,</span> <span class="n">idx_surf5</span></div>
+
+<div class="viewcode-block" id="SlabRutile1p11Edge.sep_ocn2"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.SlabRutile1p11Edge.sep_ocn2">[docs]</a>    <span class="k">def</span> <span class="nf">sep_ocn2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slab</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">idx_O</span><span class="p">,</span> <span class="n">idx_M</span><span class="p">,</span> <span class="n">cn</span><span class="p">):</span>
+        <span class="n">pairs</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">capped_distance</span><span class="p">(</span><span class="n">xyz</span><span class="p">[</span><span class="n">idx_O</span><span class="p">],</span> <span class="n">xyz</span><span class="p">[</span><span class="n">idx_M</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                                           <span class="n">box</span><span class="o">=</span><span class="n">slab</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">cellpar</span><span class="p">())</span>
+        <span class="n">idx_cn2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cn</span><span class="o">==</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">pairs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">cn2</span> <span class="ow">in</span> <span class="n">idx_cn2</span><span class="p">:</span>
+            <span class="n">sel</span> <span class="o">+=</span> <span class="p">(</span><span class="n">pairs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="n">cn2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">cn2_pairs</span> <span class="o">=</span> <span class="n">pairs</span><span class="p">[:][</span><span class="n">sel</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)]</span>
+        <span class="n">cnti</span> <span class="o">=</span> <span class="n">count_cn</span><span class="p">(</span><span class="n">xyz</span><span class="p">[</span><span class="n">idx_M</span><span class="p">[</span><span class="n">cn2_pairs</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]],</span> <span class="n">xyz</span><span class="p">[</span><span class="n">idx_O</span><span class="p">],</span> <span class="n">cutoff_hi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">,</span>
+                       <span class="n">cutoff_lo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="n">slab</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">cellpar</span><span class="p">())</span>
+        <span class="n">cnti_sum</span> <span class="o">=</span> <span class="n">cnti</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">idx_edge2</span> <span class="o">=</span> <span class="n">idx_O</span><span class="p">[</span><span class="n">idx_cn2</span><span class="p">[</span><span class="n">cnti_sum</span><span class="o">==</span><span class="mi">9</span><span class="p">]]</span>
+        <span class="n">idx_hobr</span> <span class="o">=</span> <span class="n">idx_O</span><span class="p">[</span><span class="n">idx_cn2</span><span class="p">[</span><span class="n">cnti_sum</span><span class="o">==</span><span class="mi">11</span><span class="p">]]</span>
+        <span class="n">idx_obr</span> <span class="o">=</span> <span class="n">idx_O</span><span class="p">[</span><span class="n">idx_cn2</span><span class="p">[</span><span class="n">cnti_sum</span><span class="o">==</span><span class="mi">12</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="n">idx_edge2</span><span class="p">,</span> <span class="n">idx_hobr</span><span class="p">,</span> <span class="n">idx_obr</span></div>
+        
+<div class="viewcode-block" id="SlabRutile1p11Edge.sep_hobr"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.SlabRutile1p11Edge.sep_hobr">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">sep_hobr</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">idx_hobr</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s2">&quot;Ti&quot;</span><span class="p">):</span>
+        <span class="n">trig</span> <span class="o">=</span> <span class="n">get_triangle</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">idx_hobr</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span>
+        <span class="n">vec</span> <span class="o">=</span> <span class="n">trig_vec</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">trig</span><span class="p">)</span>
+        <span class="n">hobr1</span> <span class="o">=</span> <span class="n">idx_hobr</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="n">hobr2</span> <span class="o">=</span> <span class="n">idx_hobr</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">hobr1</span><span class="p">,</span> <span class="n">hobr2</span> </div></div>
+
+
+<div class="viewcode-block" id="Rutile1p11Edge"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.Rutile1p11Edge">[docs]</a><span class="k">class</span> <span class="nc">Rutile1p11Edge</span><span class="p">(</span><span class="n">Interface</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Interface object for rutile (110) with &lt;1 -1 1&gt; edge-water interface model.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Interface (ASE Atoms): A child class of ASE atoms</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="p">,</span> <span class="n">vecy</span><span class="p">,</span> <span class="n">vecz</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s2">&quot;Ti&quot;</span><span class="p">,</span> <span class="n">nrow</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">2.8</span><span class="p">,</span> <span class="n">bridge_along</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize `Interface` object for rutile (110) with &lt;1 -1 1&gt; edge-water interface</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            slab (ASE atoms): </span>
+<span class="sd">                ASE atoms object for a rutile (110) slab model</span>
+<span class="sd">            vecy (numpy.ndarray): </span>
+<span class="sd">                (3, )-shaped numpy array. Could be any vector parallel to Obr rows ([001] direction).</span>
+<span class="sd">            vecz (numpy.ndarray): </span>
+<span class="sd">                (3, )-shaped numpy array. Could be any vector parallel to [110] direction.</span>
+<span class="sd">            M (str, optional): </span>
+<span class="sd">                The metal element in the model. Defaults to &quot;Ti&quot;.</span>
+<span class="sd">            nrow (int, optional): </span>
+<span class="sd">                Nuber of Obr rows in the slab model. Defaults to 2.</span>
+<span class="sd">            cutoff (float, optional): </span>
+<span class="sd">                Cutoff distances for Ti-O bond. Used for coordination number calculation. Defaults to 2.8.</span>
+<span class="sd">            bridge_along (str, optional): </span>
+<span class="sd">                &quot;x&quot; or &quot;y&quot;. The direction of Obr rows (i.e. [001] direction). Defaults to &quot;y&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span> <span class="o">=</span> <span class="n">atoms</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">cellpar</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">M</span> <span class="o">=</span> <span class="n">M</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nrow</span> <span class="o">=</span> <span class="n">nrow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span> <span class="o">=</span> <span class="n">cutoff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bridge_along</span> <span class="o">=</span> <span class="n">bridge_along</span>
+        <span class="c1"># tanslate the cell first</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span> <span class="o">=</span> <span class="n">get_sym_edge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="p">)</span>
+        <span class="c1"># positions and indicies</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xyz</span>    <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">positions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx_H</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">symbols</span><span class="o">==</span><span class="s2">&quot;H&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx_O</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">symbols</span><span class="o">==</span><span class="s2">&quot;O&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx_M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">symbols</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx_Ow</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_wat</span><span class="p">()</span>
+
+        <span class="c1"># get_rotation matrix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rotM</span> <span class="o">=</span> <span class="n">get_rotM</span><span class="p">(</span><span class="n">vecy</span><span class="p">,</span> <span class="n">vecz</span><span class="p">)</span> 
+        <span class="c1"># get corresponding slab model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx_slab</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">slab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_slab_obj</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">slab</span><span class="o">.</span><span class="n">sep_upper_lower</span><span class="p">()</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">slab</span><span class="o">.</span><span class="n">sort_idx</span><span class="p">()</span>
+
+        <span class="c1"># convert slab indicies to indicies edge model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_indicies</span><span class="p">()</span>
+    
+<div class="viewcode-block" id="Rutile1p11Edge.get_slab_obj"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.Rutile1p11Edge.get_slab_obj">[docs]</a>    <span class="k">def</span> <span class="nf">get_slab_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">idx_slab</span><span class="p">,</span> <span class="n">slab</span> <span class="o">=</span> <span class="n">interface_2_slab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">SlabRutile1p11Edge</span><span class="p">(</span><span class="n">slab</span><span class="p">,</span> 
+                <span class="n">rotM</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rotM</span><span class="p">,</span>
+                <span class="n">M</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">,</span> 
+                <span class="n">nrow</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nrow</span><span class="p">,</span>
+                <span class="n">cutoff</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">,</span>
+                <span class="n">bridge_along</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bridge_along</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">idx_slab</span><span class="p">,</span> <span class="n">obj</span></div>
+
+<div class="viewcode-block" id="Rutile1p11Edge.get_wat"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.Rutile1p11Edge.get_wat">[docs]</a>    <span class="k">def</span> <span class="nf">get_wat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">idx_Ow</span><span class="p">,</span> <span class="n">idx_H</span> <span class="o">=</span> <span class="n">get_watOidx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">idx_Ow</span><span class="p">,</span> <span class="n">idx_H</span></div>
+
+<div class="viewcode-block" id="Rutile1p11Edge.get_indicies"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.Rutile1p11Edge.get_indicies">[docs]</a>    <span class="k">def</span> <span class="nf">get_indicies</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">indicies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">slab</span><span class="o">.</span><span class="n">indicies</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">indicies</span><span class="p">:</span>
+            <span class="n">indicies</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">idxslab2idxatoms</span><span class="p">(</span><span class="n">indicies</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx_slab</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">indicies</span></div>
+
+<div class="viewcode-block" id="Rutile1p11Edge.refine_rotM"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.Rutile1p11Edge.refine_rotM">[docs]</a>    <span class="k">def</span> <span class="nf">refine_rotM</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">_vecy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_refine_vecy</span><span class="p">()</span>
+        <span class="n">_vecz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_refine_vecz</span><span class="p">()</span>
+        <span class="n">testy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">_vecy</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">testz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">_vecz</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">testy</span><span class="o">+</span><span class="n">testz</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;warning! couldn&#39;t refine rotM for some reason. Return the original rotM instead&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotM</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">get_rotM</span><span class="p">(</span><span class="n">_vecy</span><span class="p">,</span> <span class="n">_vecz</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_refine_vecz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_indicies</span><span class="p">()</span>
+        <span class="n">xyz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span>
+        <span class="n">nTi_per_row</span>  <span class="o">=</span> <span class="n">ind</span><span class="p">[</span><span class="s1">&#39;idx_M5c&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">idx_upperM5c</span><span class="p">,</span> <span class="n">idx_lowerM5c</span> <span class="o">=</span> <span class="n">ind</span><span class="p">[</span><span class="s1">&#39;idx_M5c&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nrow</span><span class="o">*</span><span class="n">nTi_per_row</span><span class="p">)</span>
+        <span class="n">nObr_per_row</span> <span class="o">=</span> <span class="n">ind</span><span class="p">[</span><span class="s1">&#39;idx_Obr&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">idx_upperObr</span><span class="p">,</span> <span class="n">idx_lowerObr</span> <span class="o">=</span> <span class="n">ind</span><span class="p">[</span><span class="s1">&#39;idx_Obr&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nrow</span><span class="o">*</span><span class="n">nObr_per_row</span><span class="p">)</span>
+        <span class="n">plane_list</span> <span class="o">=</span> <span class="p">(</span><span class="n">idx_upperM5c</span><span class="p">,</span> <span class="n">idx_lowerM5c</span><span class="p">,</span> <span class="n">idx_upperObr</span><span class="p">,</span> <span class="n">idx_lowerObr</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">plane_list</span><span class="p">),</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">ii</span><span class="p">,</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">plane_list</span><span class="p">):</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit_plane_normal</span><span class="p">(</span><span class="n">xyz</span><span class="p">[</span><span class="n">ind</span><span class="p">])</span>
+        <span class="n">res</span>   <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">_vecz</span> <span class="o">=</span> <span class="n">res</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_vecz</span>
+
+    <span class="k">def</span> <span class="nf">_refine_vecy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_indicies</span><span class="p">()</span>
+        <span class="n">xyz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span>
+        <span class="n">nTi_per_row</span>  <span class="o">=</span> <span class="n">ind</span><span class="p">[</span><span class="s1">&#39;idx_M5c&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">idx_M5c</span>      <span class="o">=</span> <span class="n">ind</span><span class="p">[</span><span class="s1">&#39;idx_M5c&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">nTi_per_row</span><span class="p">)</span>
+        <span class="n">nObr_per_row</span> <span class="o">=</span> <span class="n">ind</span><span class="p">[</span><span class="s1">&#39;idx_Obr&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">idx_Obr</span>      <span class="o">=</span> <span class="n">ind</span><span class="p">[</span><span class="s1">&#39;idx_Obr&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">nObr_per_row</span><span class="p">)</span>
+        <span class="n">line_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">idx_M5c</span><span class="p">,</span> <span class="n">idx_Obr</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">line_list</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">ii</span><span class="p">,</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">line_list</span><span class="p">):</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">fit_line_vec</span><span class="p">(</span><span class="n">xyz</span><span class="p">[</span><span class="n">ind</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="n">tmp</span>
+            <span class="k">if</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.98</span><span class="p">:</span>
+                <span class="n">res</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">res</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span>
+        <span class="n">res</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">_vecy</span> <span class="o">=</span> <span class="n">res</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_vecy</span>
+
+<div class="viewcode-block" id="Rutile1p11Edge.idxslab2idxatoms"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.Rutile1p11Edge.idxslab2idxatoms">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">idxslab2idxatoms</span><span class="p">(</span><span class="n">idx_target</span><span class="p">,</span> <span class="n">idx_slab</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">idx_slab</span><span class="p">[</span><span class="n">idx_target</span><span class="p">]</span></div></div>
+
+<span class="c1"># non-universal utilities</span>
+<div class="viewcode-block" id="sort_by_rows"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.sort_by_rows">[docs]</a><span class="k">def</span> <span class="nf">sort_by_rows</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">rotM</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bridge_along</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Non-robust temporary method for sorting surface atoms by their</span>
+<span class="sd">       &#39;x&#39; and &#39;y&#39; coordinates.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">xyz</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">positions</span>
+    <span class="n">n_group</span> <span class="o">=</span> <span class="n">idx</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="n">n_row</span>
+    <span class="c1"># FIRST: rotate xyz and cell param</span>
+    <span class="k">if</span> <span class="n">rotM</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">xyz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">positions</span><span class="p">,</span> <span class="n">rotM</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">xyz</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">positions</span>
+    <span class="c1"># THEN: group ti5c by X-axis (AFTER ROTATE)</span>
+    <span class="k">if</span> <span class="n">bridge_along</span><span class="o">==</span><span class="s2">&quot;x&quot;</span><span class="p">:</span>
+        <span class="n">yy</span><span class="p">,</span> <span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">xyz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">xyz</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="n">bridge_along</span><span class="o">==</span><span class="s2">&quot;y&quot;</span><span class="p">:</span>
+        <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">xyz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">xyz</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">dm</span> <span class="o">=</span> <span class="n">distance_matrix</span><span class="p">(</span><span class="n">xx</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">xx</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">groups</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">dm</span><span class="o">&lt;=</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">groups</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">n_row</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sel</span> <span class="o">=</span> <span class="p">(</span><span class="n">groups</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">&lt;</span><span class="n">n_group</span><span class="p">)</span>
+        <span class="n">merge</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">groups</span><span class="p">[</span><span class="n">sel</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">groups</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">groups</span><span class="p">[</span><span class="o">~</span><span class="n">sel</span><span class="p">],</span> <span class="n">merge</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># LAST: sort ti5c according to Y-axis</span>
+    <span class="k">def</span> <span class="nf">sort_row</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">yy</span><span class="o">=</span><span class="n">yy</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">row</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">yy</span><span class="p">[</span><span class="n">row</span><span class="p">])]</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="n">groups</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="p">:]]</span> <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_row</span><span class="p">)]</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">sort_row</span><span class="p">,</span> <span class="n">rows</span><span class="p">)))</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">cols</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">xx</span><span class="p">[</span><span class="n">cols</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]])]</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="get_triangle"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.get_triangle">[docs]</a><span class="k">def</span> <span class="nf">get_triangle</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">idx_obr</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s2">&quot;Ti&quot;</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">2.8</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;What the heck is this?</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">idx_M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">symbols</span><span class="o">==</span><span class="n">M</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">xyz</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">positions</span>
+    <span class="n">pairs</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">capped_distance</span><span class="p">(</span><span class="n">xyz</span><span class="p">[</span><span class="n">idx_obr</span><span class="p">],</span> <span class="n">xyz</span><span class="p">[</span><span class="n">idx_M</span><span class="p">],</span> <span class="n">max_cutoff</span><span class="o">=</span><span class="n">cutoff</span><span class="p">,</span>
+                                       <span class="n">min_cutoff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">atoms</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">cellpar</span><span class="p">())</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">pairs</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">idx_obr</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">idx_M</span><span class="p">[</span><span class="n">res</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="trig_vec"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.trig_vec">[docs]</a><span class="k">def</span> <span class="nf">trig_vec</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">trig</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;What the heck is this?</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">xyz</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">positions</span>
+    <span class="n">idx_O</span> <span class="o">=</span> <span class="n">trig</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">idx_M1</span> <span class="o">=</span> <span class="n">trig</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">idx_M2</span> <span class="o">=</span> <span class="n">trig</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">v1</span> <span class="o">=</span> <span class="n">minimize_vectors</span><span class="p">(</span><span class="n">xyz</span><span class="p">[</span><span class="n">idx_M1</span><span class="p">]</span> <span class="o">-</span> <span class="n">xyz</span><span class="p">[</span><span class="n">idx_O</span><span class="p">],</span> <span class="n">box</span><span class="o">=</span><span class="n">atoms</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">cellpar</span><span class="p">())</span>
+    <span class="n">v2</span> <span class="o">=</span> <span class="n">minimize_vectors</span><span class="p">(</span><span class="n">xyz</span><span class="p">[</span><span class="n">idx_M2</span><span class="p">]</span> <span class="o">-</span> <span class="n">xyz</span><span class="p">[</span><span class="n">idx_O</span><span class="p">],</span> <span class="n">box</span><span class="o">=</span><span class="n">atoms</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">cellpar</span><span class="p">())</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">v1</span><span class="o">+</span><span class="n">v2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">v</span></div>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Yong-Bin Zhuang
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

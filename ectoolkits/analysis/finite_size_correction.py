@@ -112,6 +112,8 @@ class GaussCharge:
 
             self.rhok = rhok
             self.rhocc = np.fft.ifftn(np.fft.ifftshift(rhok))/dv
+
+            self.rhocc = self.rhocc.real
             #print(rhocc.max())
  
 
@@ -205,7 +207,7 @@ class PBCPoissonSolver:
         self.paramcell = paramcell
 
         # neutralize the cell
-        self.rho = self.gauss_charge.rhocc.real - self.gauss_charge.Q/self.paramcell.volume
+        self.rho = self.gauss_charge.rhocc - self.gauss_charge.Q/self.paramcell.volume
 
 
         length = paramcell.length
@@ -321,7 +323,7 @@ class UniformCharge:
                 for y_index in range(paramcell.divi[1]):
                     self.rhocc[x_index, y_index, z_index] = charge_value
 
-        self.rhocc = self.rhocc.astype(complex)
+        #self.rhocc = self.rhocc.astype(complex)
 
     @staticmethod
     def counter_charge_model(z, charge_1, charge_2, width):

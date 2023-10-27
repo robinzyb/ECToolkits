@@ -1,6 +1,3 @@
-- [Introduction](#introduction)
-- [Analysis](#analysis)
-  
 # Introduction
 
 

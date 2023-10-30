@@ -163,17 +163,19 @@ def calc_diel(input_file: str,
                                                  output_dir=output_dir,
                                                  extra_forward_files=extra_forward_files,
                                                  )
+    print(task_work_path_list)
     # gen task
     task_list = gen_task_list(command, task_work_path_list, extra_forward_files)
     # submission
     machine = Machine.load_from_dict(machine_dict)
     resources = Resources.load_from_dict(resources_dict)
     # to absolute path
-    forward_common_files = [
-        str(Path(file).absolute()) for file in extra_forward_common_files
-                            ]
-    submission = Submission(work_base=output_dir,
-                            machine=machine, 
+    #TODO: bug here the common files cannot be uploaded using LazyLocalContext.
+    forward_common_files = extra_forward_common_files
+    # workbase will be transfer to absolute path
+    # workbase/taskpath is the full path for upload files 
+    submission = Submission(work_base=".",
+                            machine=machine,
                             resources=resources, 
                             task_list=task_list, 
                             forward_common_files=forward_common_files,

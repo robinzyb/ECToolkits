@@ -181,6 +181,10 @@ class BandAlign():
         return pav_x_list, pav_list, mav_x_list, mav_list, traj
 
     def get_pav_mav_traj_list_from_cube(self, prefix, index, l1, l2=0, ncov=2, save=True, axis='z', save_path="."):
+        # the input l1 l2 is in bohr
+        l1 = l1/au2A
+        l2 = l2/au2A
+
         pav_x_list = []
         pav_list = []
         mav_x_list = []
@@ -200,6 +204,7 @@ class BandAlign():
             stc = cube.get_stc()
             traj.append(stc)
             print(f"process cube {idx} finished", end="\r")
+            
         pav_x_list = np.array(pav_x_list)*au2A
         pav_list = np.array(pav_list)*au2eV
         mav_x_list = np.array(mav_x_list)*au2A

@@ -68,6 +68,9 @@ def add_print_moments(input_dict: Dict,
     # Add the print moments input to the input dictionary
     assert len(input_dict['+force_eval']) == 1, \
         "Only one FORCE_EVAL is supported for now"
+    input_dict['+force_eval'][0]['+dft']['+print'] = {
+        '+moments': {}
+    }
     input_dict['+force_eval'][0]['+dft']['+print']['+moments']['periodic'] = periodic
     input_dict['+force_eval'][0]['+dft']['+print']['+moments']['filename'] = filename
     return input_dict
@@ -194,7 +197,7 @@ def calc_diel(input_file: str,
     # copy to the work base directory so that it can be uploaded
     copy_file_list(forward_common_files, output_dir)
     # workbase will be transfer to absolute path
-    # workbase/taskpath is the full path for upload files 
+    # local_root/taskpath is the full path for upload files 
     submission = Submission(work_base=output_dir,
                             machine=machine,
                             resources=resources, 

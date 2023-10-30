@@ -195,7 +195,9 @@ def calc_diel(input_file: str,
     resources = Resources.load_from_dict(resources_dict)
     # to absolute path
     #TODO: bug here the common files cannot be uploaded using LazyLocalContext.
-    forward_common_files = extra_forward_common_files + [restart_wfn]
+    forward_common_files = extra_forward_common_files
+    if restart_wfn:
+        forward_common_files.append(restart_wfn)
     # copy to the work base directory so that it can be uploaded
     copy_file_list(forward_common_files, output_dir)
     # workbase will be transfer to absolute path

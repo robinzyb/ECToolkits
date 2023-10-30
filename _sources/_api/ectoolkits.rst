@@ -13,14 +13,6 @@ Subpackages
    ectoolkits.structures
    ectoolkits.utils
 
-Submodules
-----------
-
-.. toctree::
-   :maxdepth: 4
-
-   ectoolkits.main
-
 Module contents
 ---------------
 

@@ -200,7 +200,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.utils.vasp.html">ectoolkits.utils.vasp module</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../../../_api/ectoolkits.main.html">ectoolkits.main module</a></li>
 </ul>
 </li>
 </ul>
@@ -536,6 +535,10 @@ document.write(`
         <span class="k">return</span> <span class="n">pav_x_list</span><span class="p">,</span> <span class="n">pav_list</span><span class="p">,</span> <span class="n">mav_x_list</span><span class="p">,</span> <span class="n">mav_list</span><span class="p">,</span> <span class="n">traj</span></div>
 
 <div class="viewcode-block" id="BandAlign.get_pav_mav_traj_list_from_cube"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.BandAlign.get_pav_mav_traj_list_from_cube">[docs]</a>    <span class="k">def</span> <span class="nf">get_pav_mav_traj_list_from_cube</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">l1</span><span class="p">,</span> <span class="n">l2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ncov</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+        <span class="c1"># the input l1 l2 is in bohr</span>
+        <span class="n">l1</span> <span class="o">=</span> <span class="n">l1</span><span class="o">/</span><span class="n">au2A</span>
+        <span class="n">l2</span> <span class="o">=</span> <span class="n">l2</span><span class="o">/</span><span class="n">au2A</span>
+
         <span class="n">pav_x_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">pav_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">mav_x_list</span> <span class="o">=</span> <span class="p">[]</span>
@@ -555,6 +558,7 @@ document.write(`
             <span class="n">stc</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">get_stc</span><span class="p">()</span>
             <span class="n">traj</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stc</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;process cube </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2"> finished&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">)</span>
+            
         <span class="n">pav_x_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pav_x_list</span><span class="p">)</span><span class="o">*</span><span class="n">au2A</span>
         <span class="n">pav_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pav_list</span><span class="p">)</span><span class="o">*</span><span class="n">au2eV</span>
         <span class="n">mav_x_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mav_x_list</span><span class="p">)</span><span class="o">*</span><span class="n">au2A</span>

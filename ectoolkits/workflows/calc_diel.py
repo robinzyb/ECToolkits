@@ -168,7 +168,10 @@ def calc_diel(input_file: str,
     # submission
     machine = Machine.load_from_dict(machine_dict)
     resources = Resources.load_from_dict(resources_dict)
-    forward_common_files = extra_forward_common_files
+    # to absolute path
+    forward_common_files = [
+        str(Path(file).absolute()) for file in extra_forward_common_files
+                            ]
     submission = Submission(work_base=output_dir,
                             machine=machine, 
                             resources=resources, 

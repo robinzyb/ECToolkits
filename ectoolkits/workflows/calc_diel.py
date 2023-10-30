@@ -169,7 +169,8 @@ def calc_diel(input_file: str,
     machine = Machine.load_from_dict(machine_dict)
     resources = Resources.load_from_dict(resources_dict)
     forward_common_files = extra_forward_common_files
-    submission = Submission(machine=machine, 
+    submission = Submission(work_base=output_dir,
+                            machine=machine, 
                             resources=resources, 
                             task_list=task_list, 
                             forward_common_files=forward_common_files,

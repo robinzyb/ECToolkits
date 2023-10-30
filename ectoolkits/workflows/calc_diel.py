@@ -8,6 +8,7 @@ from dpdispatcher import Machine, Resources, Task, Submission
 from cp2k_input_tools.parser import CP2KInputParser, CP2KInputParserSimplified
 from cp2k_input_tools.generator import CP2KInputGenerator
 
+DIPOLE_MOMENT_FILE = "moments.dat"
 def copy_file_list(file_list, target_dir):
     target_dir = Path(target_dir)
     for file in file_list:
@@ -144,9 +145,10 @@ def gen_series_calc_efield(input_dict: Dict,
 def gen_task_list(command, task_work_path_list, extra_forward_files):
     # generate task list
     task_list = []
-    forward_files = extra_forward_files + ["input.inp"]
-    backward_files = ["*"]
+
     outlog = "cp2k.log"
+    forward_files = extra_forward_files + ["input.inp"]
+    backward_files = [DIPOLE_MOMENT_FILE, outlog]
     for task_work_path in task_work_path_list:
         task = Task(command=command, 
                     task_work_path=task_work_path,
@@ -180,7 +182,7 @@ def calc_diel(input_file: str,
                                                  d_filter, 
                                                  periodic=True, 
                                                  eps_type=eps_type,
-                                                 filename="=moments.dat", 
+                                                 filename="="+DIPOLE_MOMENT_FILE, 
                                                  output_dir=output_dir,
                                                  extra_forward_files=extra_forward_files,
                                                  restart_wfn=restart_wfn

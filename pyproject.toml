@@ -24,7 +24,9 @@ dependencies = [
     "cp2kdata >= 0.6.1",
     "pandas",
     "MDAnalysis >= 2.1.0",
-    "dipdispatcher"
+    "dpdispatcher",
+    "cp2k-input-tools",
+    "pyyaml"
 ]
 
 [tool.setuptools.packages.find]

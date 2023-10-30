@@ -81,6 +81,18 @@ def add_run_type(input_dict: Dict,
     input_dict['+global']['run_type'] = run_type
     return input_dict
 
+def add_restart_wfn(input_dict: Dict,
+                    restart_wfn: str,
+                    ):
+    # Add the restart wfn path to the input dictionary
+    assert len(input_dict['+force_eval']) == 1, \
+        "Only one FORCE_EVAL is supported for now"
+    restart_wfn = Path(restart_wfn)
+    # always make sure the wfn is only one level higher than the input file
+    input_dict['+force_eval'][0]['+dft']['wfn_restart_file_name'] = \
+        f"../{restart_wfn.name}"
+    return input_dict
+
 def gen_series_calc_efield(input_dict: Dict,
                            intensity_array: npt.NDArray[np.float64],
                            displacement: bool,
@@ -91,6 +103,7 @@ def gen_series_calc_efield(input_dict: Dict,
                            filename: str,
                            output_dir: str,
                            extra_forward_files: List[str],
+                           restart_wfn: str=None,
                            ):
     
     # store the path for each calculation
@@ -105,6 +118,9 @@ def gen_series_calc_efield(input_dict: Dict,
     elif eps_type == "static":
         input_dict = add_run_type(input_dict, "GEO_OPT")
 
+
+    if restart_wfn is not None:
+        input_dict = add_restart_wfn(input_dict, restart_wfn)
     # Add the efield input to the input dictionary
     for intensity in intensity_array:
         input_dict = add_efield_input(input_dict, intensity, displacement, polarisation, d_filter)
@@ -112,7 +128,8 @@ def gen_series_calc_efield(input_dict: Dict,
         # Write the input dictionary to a file
         single_calc_dir = output_dir/f"efield_{intensity:7.6f}"
         single_calc_dir.mkdir(parents=True, exist_ok=True)
-        task_work_path_list.append(str(single_calc_dir))
+        # task_work_path should be relative to the work_base
+        task_work_path_list.append(single_calc_dir.name)
 
         output_file = single_calc_dir/"input.inp"
         write_cp2k_input(input_dict, output_file)
@@ -148,6 +165,7 @@ def calc_diel(input_file: str,
               command: str,
               extra_forward_files: List[str]=[],
               extra_forward_common_files: List[str]=[],
+              restart_wfn: str=None,
               ):
     # gen input dict
     template_input_dict = gen_cp2k_input_dict(input_file, canonical=True)
@@ -162,6 +180,7 @@ def calc_diel(input_file: str,
                                                  filename="=moments.dat", 
                                                  output_dir=output_dir,
                                                  extra_forward_files=extra_forward_files,
+                                                 restart_wfn=restart_wfn
                                                  )
     print(task_work_path_list)
     # gen task
@@ -171,10 +190,12 @@ def calc_diel(input_file: str,
     resources = Resources.load_from_dict(resources_dict)
     # to absolute path
     #TODO: bug here the common files cannot be uploaded using LazyLocalContext.
-    forward_common_files = extra_forward_common_files
+    forward_common_files = extra_forward_common_files + [restart_wfn]
+    # copy to the work base directory so that it can be uploaded
+    copy_file_list(forward_common_files, output_dir)
     # workbase will be transfer to absolute path
     # workbase/taskpath is the full path for upload files 
-    submission = Submission(work_base=".",
+    submission = Submission(work_base=output_dir,
                             machine=machine,
                             resources=resources, 
                             task_list=task_list, 

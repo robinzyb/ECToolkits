@@ -147,7 +147,7 @@ def calc_diel(input_file: str,
               resources_dict: Dict,
               command: str,
               extra_forward_files: List[str]=[],
-              extra_common_forward_files: List[str]=[],
+              extra_forward_common_files: List[str]=[],
               ):
     # gen input dict
     template_input_dict = gen_cp2k_input_dict(input_file, canonical=True)
@@ -168,11 +168,11 @@ def calc_diel(input_file: str,
     # submission
     machine = Machine.load_from_dict(machine_dict)
     resources = Resources.load_from_dict(resources_dict)
-    common_forward_files = extra_common_forward_files
+    forward_common_files = extra_forward_common_files
     submission = Submission(machine=machine, 
                             resources=resources, 
                             task_list=task_list, 
-                            common_forward_files=common_forward_files,
+                            forward_common_files=forward_common_files,
                             backward_common_files=[],
                             )
     submission.run_submission()

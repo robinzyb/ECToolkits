@@ -41,14 +41,17 @@ def wkflow():
               type=click.Path(exists=True), help='Machine to run the workflow on')
 @click.option('--resources', '-r',
               type=click.Path(exists=True), help='Resources to use for the workflow')
-def calc_diel_cli(input, machine, resources):
+@click.option('--dry_run',
+              type=bool, default=False, help='Dry run the workflow to debug')
+def calc_diel_cli(input, machine, resources, dry_run):
     input_dict, machine_dict, resources_dict = \
         batch_yaml_to_dict(input, machine, resources)
     scale = input_dict.pop("scale")
     if scale == 'global':
         calc_diel(**input_dict, 
                 machine_dict=machine_dict, 
-                resources_dict=resources_dict)
+                resources_dict=resources_dict,
+                dry_run=dry_run)
     elif scale == 'atomic':
         pass
     else:

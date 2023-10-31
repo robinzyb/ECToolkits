@@ -12,6 +12,9 @@ parts:
       - file: docs/analysis/acidity
       - file: docs/analysis/finite_size_correction
       - file: docs/analysis/redox
+  - caption: Workflows
+    chapters:
+      - file: docs/workflows/calc_diel
   - caption: API Reference
     maxdepth: 1
     chapters:

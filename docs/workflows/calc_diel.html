@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Redox Potentials &#8212; ECToolkits Reference</title>
+    <title>Workflow: Calculation of Dielectric Constant &#8212; ECToolkits Reference</title>
   
   
   
@@ -62,11 +62,13 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../../_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'docs/analysis/redox';</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'docs/workflows/calc_diel';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Workflow: Calculation of Dielectric Constant" href="../workflows/calc_diel.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="finite_size_correction.html" />
+    <link rel="next" title="ectoolkits" href="../../_api/modules.html" />
+    <link rel="prev" title="Redox Potentials" href="../analysis/redox.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -162,18 +164,18 @@ const thebe_selector_output = ".output, .cell_output"
             </li>
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Analysis</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="atom_density.html">Atom Density Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="band_align.html">Band Alignment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="disdeg.html">Dissociation Degree Analysis</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../analysis/atom_density.html">Atom Density Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../analysis/band_align.html">Band Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../analysis/disdeg.html">Dissociation Degree Analysis</a></li>
 
 
-<li class="toctree-l1"><a class="reference internal" href="acidity.html">Acidity Calculation</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Redox Potentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../analysis/acidity.html">Acidity Calculation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../analysis/redox.html">Redox Potentials</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Workflows</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../workflows/calc_diel.html">Workflow: Calculation of Dielectric Constant</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Workflow: Calculation of Dielectric Constant</a></li>
 
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
@@ -283,7 +285,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/robinzyb/ectoolkits/issues/new?title=Issue%20on%20page%20%2Fdocs/analysis/redox.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/robinzyb/ectoolkits/issues/new?title=Issue%20on%20page%20%2Fdocs/workflows/calc_diel.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -313,7 +315,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="../../_sources/docs/analysis/redox.md" target="_blank"
+      <li><a href="../../_sources/docs/workflows/calc_diel.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -382,7 +384,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -393,11 +397,25 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Redox Potentials</h1>
+    <h1>Workflow: Calculation of Dielectric Constant</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Workflow: Calculation of Dielectric Constant</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#principle">Principle</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#bibliography">Bibliography</a></li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -407,9 +425,88 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="redox-potentials">
-<h1>Redox Potentials<a class="headerlink" href="#redox-potentials" title="Permalink to this heading">#</a></h1>
-<p>Under Construction</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="workflow-calculation-of-dielectric-constant">
+<h1>Workflow: Calculation of Dielectric Constant<a class="headerlink" href="#workflow-calculation-of-dielectric-constant" title="Permalink to this heading">#</a></h1>
+<p><strong>This workflow is under testing and not yet to be used</strong></p>
+<p><strong>This workflow is powered by dpdispatcher</strong></p>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>eckits<span class="w"> </span>wkflow<span class="w"> </span>calc_diel<span class="w"> </span>-i<span class="w"> </span>input.yaml<span class="w"> </span>-m<span class="w"> </span>machine.yaml<span class="w"> </span>-r<span class="w"> </span>resources.yaml
+</pre></div>
+</div>
+<p>Example: <code class="docutils literal notranslate"><span class="pre">input.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">input_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;template.inp&quot;</span><span class="w">                                                      </span>
+<span class="nt">eps_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;optical&quot;</span><span class="w">                                                             </span>
+<span class="nt">scale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;global&quot;</span><span class="w">                                                                 </span>
+<span class="nt">intensity_array</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.0000</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0001</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0002</span><span class="p p-Indicator">]</span><span class="w">                                       </span>
+<span class="nt">displacement_field</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">                                                       </span>
+<span class="nt">polarisation</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">]</span><span class="w">                                                   </span>
+<span class="nt">d_filter</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">]</span><span class="w">                                                       </span>
+<span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./output&quot;</span><span class="w">                                                          </span>
+<span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;srun</span><span class="nv"> </span><span class="s">cp2k.psmp</span><span class="nv"> </span><span class="s">-i</span><span class="nv"> </span><span class="s">input.inp&quot;</span><span class="w">                                          </span>
+<span class="nt">extra_forward_files</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w">                                                          </span>
+<span class="w">  </span><span class="s">&quot;anatase_bulk_relaxed.xyz&quot;</span><span class="w">                                                    </span>
+<span class="p p-Indicator">]</span><span class="w">                                                                               </span>
+<span class="nt">extra_forward_common_files</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w">                                                   </span>
+<span class="p p-Indicator">]</span><span class="w">                                                                               </span>
+<span class="nt">restart_wfn</span><span class="p">:</span><span class="w">   </span><span class="s">&quot;anatase-RESTART.wfn&quot;</span>
+</pre></div>
+</div>
+<p>Example: <code class="docutils literal notranslate"><span class="pre">machine.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">batch_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Slurm&quot;</span><span class="w">                                                             </span>
+<span class="nt">context_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;LocalContext&quot;</span><span class="w">                                                    </span>
+<span class="nt">local_root</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./&quot;</span><span class="w">                                                                </span>
+<span class="nt">remote_root</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./work_dir&quot;</span>
+</pre></div>
+</div>
+<p>Example: <code class="docutils literal notranslate"><span class="pre">resources.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">cpu_per_node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">12</span>
+<span class="nt">gpu_per_node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="nt">number_node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w">                                                                  </span>
+<span class="nt">exclude_list</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w">                                                                </span>
+<span class="nt">custom_flags</span><span class="p">:</span><span class="w">                                                                   </span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;#SBATCH</span><span class="nv"> </span><span class="s">--job-name=&#39;miniwkflow&#39;&quot;</span><span class="w">                                           </span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;#SBATCH</span><span class="nv"> </span><span class="s">--account=&#39;blabla&#39;&quot;</span><span class="w">                                                 </span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;#SBATCH</span><span class="nv"> </span><span class="s">--mail-type=ALL&quot;</span><span class="w">                                                   </span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;#SBATCH</span><span class="nv"> </span><span class="s">--mail-user=blabla&quot;</span><span class="w">                                </span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;#SBATCH</span><span class="nv"> </span><span class="s">--constraint=gpu&quot;</span><span class="w">                                                  </span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;#SBATCH</span><span class="nv"> </span><span class="s">--cpus-per-task=1&quot;</span><span class="w">                                                 </span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;#SBATCH</span><span class="nv"> </span><span class="s">--time=24:00:00&quot;</span><span class="w">                                                   </span>
+<span class="nt">source_list</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w">                                                                 </span>
+<span class="nt">module_list</span><span class="p">:</span><span class="w">                                                                    </span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;daint-gpu&quot;</span><span class="w">                                                                 </span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;CP2K&quot;</span><span class="w">                                                                      </span>
+<span class="nt">envs</span><span class="p">:</span><span class="w">                                                                           </span>
+<span class="w">  </span><span class="nt">OMP_NUM_THREADS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;$SLURM_CPUS_PER_TASK&quot;</span><span class="w">                                       </span>
+<span class="w">  </span><span class="nt">CRAY_CUDA_MPS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w">                                                            </span>
+<span class="nt">prepend_script</span><span class="p">:</span><span class="w">                                                                 </span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;ulimit</span><span class="nv"> </span><span class="s">-s</span><span class="nv"> </span><span class="s">unlimited&quot;</span><span class="w">                                                       </span>
+<span class="nt">time_limit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;24:00:00&quot;</span><span class="w">                                                          </span>
+<span class="nt">queue_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;normal&quot;</span><span class="w">                                                            </span>
+<span class="nt">group_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w">       </span>
+</pre></div>
+</div>
+</section>
+<section id="principle">
+<h2>Principle<a class="headerlink" href="#principle" title="Permalink to this heading">#</a></h2>
+<p>ECToolkits provides the workflow for calculating ab initio dielectric constant using CP2K.</p>
+<p>For detail description, users are referred to this paper <span id="id1">[<a class="reference internal" href="#id3" title="P. Umari and Alfredo Pasquarello. Ab initio Molecular Dynamics in a Finite Homogeneous Electric Field. Physical Review Letters, 89(15):157602, 2002. doi:10.1103/physrevlett.89.157602.">Umari and Pasquarello, 2002</a>]</span>.</p>
+<p>Basically, we need to calculate dipole moments with varying electric fields. Then, fit the data to the following equation:</p>
+<div class="math notranslate nohighlight">
+\[
+\varepsilon = 4\pi\frac{M}{\Omega E} + 1 
+\]</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="bibliography">
+<h1>Bibliography<a class="headerlink" href="#bibliography" title="Permalink to this heading">#</a></h1>
+<div class="docutils container" id="id2">
+<div class="citation" id="id3" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">UP02</a><span class="fn-bracket">]</span></span>
+<p>P. Umari and Alfredo Pasquarello. Ab initio Molecular Dynamics in a Finite Homogeneous Electric Field. <em>Physical Review Letters</em>, 89(15):157602, 2002. <a class="reference external" href="https://doi.org/10.1103/physrevlett.89.157602">doi:10.1103/physrevlett.89.157602</a>.</p>
+</div>
+</div>
+</div>
 </section>
 
     <script type="text/x-thebe-config">
@@ -425,7 +522,7 @@ document.write(`
         },
         kernelOptions: {
             name: "python3",
-            path: "./docs/analysis"
+            path: "./docs/workflows"
         },
         predefinedOutput: true
     }
@@ -443,20 +540,20 @@ document.write(`
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="finite_size_correction.html"
+       href="../analysis/redox.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">&lt;no title&gt;</p>
+        <p class="prev-next-title">Redox Potentials</p>
       </div>
     </a>
     <a class="right-next"
-       href="../workflows/calc_diel.html"
+       href="../../_api/modules.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Workflow: Calculation of Dielectric Constant</p>
+        <p class="prev-next-title">ectoolkits</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -466,6 +563,26 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Workflow: Calculation of Dielectric Constant</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#principle">Principle</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#bibliography">Bibliography</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
               
             
           </div>

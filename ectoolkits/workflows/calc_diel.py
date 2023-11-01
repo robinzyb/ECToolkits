@@ -138,9 +138,64 @@ def add_restart_wfn(input_dict: Dict,
         f"../{restart_wfn.name}"
     return input_dict
 
+def gen_calc_opposite_efield(input_dict: Dict,
+                             intensity: npt.NDArray[np.float64],
+                             displacement_field: bool,
+                             axis: str,
+                             periodic: bool,
+                             eps_type: str,
+                             filename: str,
+                             output_dir: str,
+                             extra_forward_files: List[str],
+                             restart_wfn: str=None,
+                             ):
+    # for the atomic dielectric constant calculation
+    direction_vector = {
+        'x': np.array([1, 0, 0]),
+        'y': np.array([0, 1, 0]),
+        'z': np.array([0, 0, 1]),
+    }
+    # store the path for each calculation
+    task_work_path_list = []
+    # produce input files for each calculation
+    output_dir = Path(output_dir)
+
+    # Add the print moments input to the input dictionary
+    input_dict = add_print_moments(input_dict, periodic, filename)
+    if eps_type == "optical":
+        input_dict = add_run_type(input_dict, "ENERGY_FORCE")
+    elif eps_type == "static":
+        input_dict = add_run_type(input_dict, "GEO_OPT")
+
+
+    if restart_wfn is not None:
+        input_dict = add_restart_wfn(input_dict, restart_wfn)
+    
+    # Add the efield input to the input dictionary
+    
+    for sign in [-1, 1]:
+        input_dict = add_efield_input(input_dict=input_dict, 
+                                      intensity=intensity, 
+                                      displacement_field=displacement_field, 
+                                      polarisation=list(sign*direction_vector[axis]), 
+                                      d_filter=list(direction_vector[axis]))
+
+        # Write the input dictionary to a file
+        single_calc_dir = output_dir/f"efield_{(sign*intensity):7.6f}"
+        single_calc_dir.mkdir(parents=True, exist_ok=True)
+        # task_work_path should be relative to the work_base, i.e. output_dir
+        task_work_path_list.append(single_calc_dir.name)
+
+        output_file = single_calc_dir/"input.inp"
+        write_cp2k_input(input_dict, output_file)
+        print(f"Input file for efield {intensity:7.6f} written to {output_file}")
+        copy_file_list(extra_forward_files, single_calc_dir)
+
+    return task_work_path_list
+
 def gen_series_calc_efield(input_dict: Dict,
                            intensity_array: npt.NDArray[np.float64],
-                           displacement: bool,
+                           displacement_field: bool,
                            polarisation: npt.NDArray[np.float64],
                            d_filter: npt.NDArray[np.float64],
                            periodic: bool,
@@ -150,7 +205,7 @@ def gen_series_calc_efield(input_dict: Dict,
                            extra_forward_files: List[str],
                            restart_wfn: str=None,
                            ):
-    
+    # for the global dielectric constant calculation
     # store the path for each calculation
     task_work_path_list = []
     # produce input files for each calculation
@@ -168,7 +223,7 @@ def gen_series_calc_efield(input_dict: Dict,
         input_dict = add_restart_wfn(input_dict, restart_wfn)
     # Add the efield input to the input dictionary
     for intensity in intensity_array:
-        input_dict = add_efield_input(input_dict, intensity, displacement, polarisation, d_filter)
+        input_dict = add_efield_input(input_dict, intensity, displacement_field, polarisation, d_filter)
 
         # Write the input dictionary to a file
         single_calc_dir = output_dir/f"efield_{intensity:7.6f}"
@@ -199,36 +254,37 @@ def gen_task_list(command, task_work_path_list, extra_forward_files):
         task_list.append(task)
     return task_list
 
-def calc_diel(input_file: str,
-              intensity_array: npt.NDArray[np.float64],
-              displacement_field: bool,
-              polarisation: npt.NDArray[np.float64],
-              d_filter: npt.NDArray[np.float64],
-              eps_type: str,
-              output_dir: str,
-              machine_dict: Dict,
-              resources_dict: Dict,
-              command: str,
-              extra_forward_files: List[str]=[],
-              extra_forward_common_files: List[str]=[],
-              restart_wfn: str=None,
-              dry_run: bool=False,
-              ):
+def calc_diel_global(input_file: str,
+                     intensity_array: npt.NDArray[np.float64],
+                     polarisation: npt.NDArray[np.float64],
+                     d_filter: npt.NDArray[np.float64],
+                     eps_type: str,
+                     output_dir: str,
+                     machine_dict: Dict,
+                     resources_dict: Dict,
+                     command: str,
+                     extra_forward_files: List[str]=[],
+                     extra_forward_common_files: List[str]=[],
+                     restart_wfn: str=None,
+                     dry_run: bool=False,
+                     ):
     # gen input dict
     template_input_dict = gen_cp2k_input_dict(input_file, canonical=True)
     # gen task work path list
-    task_work_path_list = gen_series_calc_efield(template_input_dict, 
-                                                 intensity_array, 
-                                                 displacement_field, 
-                                                 polarisation, 
-                                                 d_filter, 
-                                                 periodic=True, 
-                                                 eps_type=eps_type,
-                                                 filename="="+DIPOLE_MOMENT_FILE, 
-                                                 output_dir=output_dir,
-                                                 extra_forward_files=extra_forward_files,
-                                                 restart_wfn=restart_wfn
-                                                 )
+    
+    task_work_path_list = \
+        gen_series_calc_efield(input_dict=template_input_dict, 
+                               intensity_array=intensity_array, 
+                               displacement_field=False, 
+                               polarisation=polarisation, 
+                               d_filter=d_filter, 
+                               periodic=True, 
+                               eps_type=eps_type,
+                               filename="="+DIPOLE_MOMENT_FILE, 
+                               output_dir=output_dir,
+                               extra_forward_files=extra_forward_files,
+                               restart_wfn=restart_wfn
+                               )
     # gen task
     task_list = gen_task_list(command, task_work_path_list, extra_forward_files)
     # submission
@@ -262,9 +318,88 @@ def calc_diel(input_file: str,
                                                   intensity_array, 
                                                   volume_array)
     #
-    np.savetxt("dipole_moment_array.dat", dipole_moment_array)
-    np.savetxt("intensity_array.dat", intensity_array)
-    np.savetxt("volume_array.dat", volume_array)
+    output_dir = Path(output_dir)
+    np.savetxt(output_dir/"dipole_moment_array.dat", dipole_moment_array)
+    np.savetxt(output_dir/"intensity_array.dat", intensity_array)
+    np.savetxt(output_dir/"volume_array.dat", volume_array)
 
     print(f"The Dielectric Constant is {dielectric_constant:10.6f}")
     print("Workflow for Calculation of Dielectric Constant Complete!")
+
+
+def calc_diel_atomic(input_file: str,
+                     intensity: npt.NDArray[np.float64],
+                     axis: str,
+                     eps_type: str,
+                     output_dir: str,
+                     machine_dict: Dict,
+                     resources_dict: Dict,
+                     command: str,
+                     extra_forward_files: List[str]=[],
+                     extra_forward_common_files: List[str]=[],
+                     restart_wfn: str=None,
+                     dry_run: bool=False,
+                     ):
+    # gen input dict
+    template_input_dict = gen_cp2k_input_dict(input_file, canonical=True)
+    # gen task work path list
+    task_work_path_list = \
+        gen_calc_opposite_efield(input_dict=template_input_dict, 
+                                 intensity=intensity, 
+                                 displacement_field=False,
+                                 axis=axis, 
+                                 periodic=True, 
+                                 eps_type=eps_type,
+                                 filename="="+DIPOLE_MOMENT_FILE, 
+                                 output_dir=output_dir,
+                                 extra_forward_files=extra_forward_files,
+                                 restart_wfn=restart_wfn
+                                 )
+
+    # gen task
+    task_list = gen_task_list(command, task_work_path_list, extra_forward_files)
+    # submission
+    machine = Machine.load_from_dict(machine_dict)
+    resources = Resources.load_from_dict(resources_dict)
+    # to absolute path
+    #TODO: bug here the common files cannot be uploaded using LazyLocalContext.
+    forward_common_files = extra_forward_common_files
+    if restart_wfn:
+        forward_common_files.append(restart_wfn)
+    # copy to the work base directory so that it can be uploaded
+    copy_file_list(forward_common_files, output_dir)
+    # workbase will be transfer to absolute path
+    # local_root/taskpath is the full path for upload files 
+    submission = Submission(work_base=output_dir,
+                            machine=machine,
+                            resources=resources, 
+                            task_list=task_list, 
+                            forward_common_files=forward_common_files,
+                            backward_common_files=[],
+                            )
+    if dry_run:
+        # dry_run has been already true
+        exit_on_submit = True              
+    submission.run_submission(dry_run=dry_run, exit_on_submit=exit_on_submit)
+    print("Workflow for Calculation of Dielectric Constant Complete!")
+
+def calc_diel(input_dict: Dict, 
+              machine_dict: Dict, 
+              resources_dict: Dict, 
+              dry_run: bool=False,
+              ):
+    # the wrap function for different types of dielectric constant calculation
+
+    scale = input_dict.pop('scale', 'global')
+    if scale == 'global':
+        calc_diel_global(**input_dict, 
+                         machine_dict=machine_dict, 
+                         resources_dict=resources_dict,
+                         dry_run=dry_run)
+    elif scale == 'atomic':
+        calc_diel_atomic(**input_dict, 
+                         machine_dict=machine_dict, 
+                         resources_dict=resources_dict,
+                         dry_run=dry_run)
+    else:
+        print(f"The scale {scale} is not supported!")

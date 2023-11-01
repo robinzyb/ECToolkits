@@ -275,7 +275,6 @@ def gen_task_list(command: str,
 
     outlog = CP2K_LOG_FILE 
     forward_files = extra_forward_files + ["input.inp"]
-    backward_files = [DIPOLE_MOMENT_FILE, outlog]
     for task_work_path in task_work_path_list:
         task = Task(command=command, 
                     task_work_path=task_work_path,

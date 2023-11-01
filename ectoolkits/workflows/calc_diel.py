@@ -309,6 +309,8 @@ def calc_diel_global(input_file: str,
     if dry_run:
         # dry_run has been already true
         exit_on_submit = True
+    else:
+        exit_on_submit = False         
     submission.run_submission(dry_run=dry_run, exit_on_submit=exit_on_submit)
 
     dipole_moment_array = get_dipole_moment_array(task_work_path_list, output_dir)
@@ -379,7 +381,9 @@ def calc_diel_atomic(input_file: str,
                             )
     if dry_run:
         # dry_run has been already true
-        exit_on_submit = True              
+        exit_on_submit = True
+    else:
+        exit_on_submit = False              
     submission.run_submission(dry_run=dry_run, exit_on_submit=exit_on_submit)
     print("Workflow for Calculation of Dielectric Constant Complete!")
 

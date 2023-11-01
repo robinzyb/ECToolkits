@@ -13,6 +13,7 @@ from cp2kdata import Cp2kOutput
 from cp2kdata.units import au2A
 
 DIPOLE_MOMENT_FILE = "moments.dat"
+DENSITY_FILE = "*-ELECTRON_DENSITY*.cube"
 CP2K_LOG_FILE = "cp2k.log"
 debey2au=4.26133088E-01/1.08312217E+00
 
@@ -110,11 +111,37 @@ def add_print_moments(input_dict: Dict,
     # Add the print moments input to the input dictionary
     assert len(input_dict['+force_eval']) == 1, \
         "Only one FORCE_EVAL is supported for now"
-    input_dict['+force_eval'][0]['+dft']['+print'] = {
-        '+moments': {}
+    
+    if '+print' not in input_dict['+force_eval'][0]['+dft']:
+        input_dict['+force_eval'][0]['+dft']['+print'] = {}
+    
+    moment_dict = {
+        '+moments': {
+            'periodic': periodic,
+            'filename': filename,
+        }
     }
-    input_dict['+force_eval'][0]['+dft']['+print']['+moments']['periodic'] = periodic
-    input_dict['+force_eval'][0]['+dft']['+print']['+moments']['filename'] = filename
+    input_dict['+force_eval'][0]['+dft']['+print'].update(moment_dict)
+    return input_dict
+
+def add_print_density(input_dict: Dict,
+                        ):
+    # Add the print moments input to the input dictionary
+    assert len(input_dict['+force_eval']) == 1, \
+        "Only one FORCE_EVAL is supported for now"
+    
+    if '+print' not in input_dict['+force_eval'][0]['+dft']:
+        input_dict['+force_eval'][0]['+dft']['+print'] = {}
+    
+    density_dict = {
+        '+e_density_cube': {
+            'stride': '1 1 1',
+            '+each':{
+                'geo_opt': '0'
+            }
+        }
+    }
+    input_dict['+force_eval'][0]['+dft']['+print'].update(density_dict)
     return input_dict
 
 def add_run_type(input_dict: Dict,
@@ -162,6 +189,7 @@ def gen_calc_opposite_efield(input_dict: Dict,
 
     # Add the print moments input to the input dictionary
     input_dict = add_print_moments(input_dict, periodic, filename)
+    input_dict = add_print_density(input_dict)
     if eps_type == "optical":
         input_dict = add_run_type(input_dict, "ENERGY_FORCE")
     elif eps_type == "static":
@@ -238,7 +266,10 @@ def gen_series_calc_efield(input_dict: Dict,
 
     return task_work_path_list
 
-def gen_task_list(command, task_work_path_list, extra_forward_files):
+def gen_task_list(command: str, 
+                  task_work_path_list: List[str], 
+                  extra_forward_files: List[str], 
+                  backward_files: List[str]):
     # generate task list
     task_list = []
 
@@ -286,7 +317,11 @@ def calc_diel_global(input_file: str,
                                restart_wfn=restart_wfn
                                )
     # gen task
-    task_list = gen_task_list(command, task_work_path_list, extra_forward_files)
+    task_list = gen_task_list(command=command, 
+                              task_work_path_list=task_work_path_list, 
+                              extra_forward_files=extra_forward_files,
+                              backward_files=[DIPOLE_MOMENT_FILE, CP2K_LOG_FILE]
+                              )
     # submission
     machine = Machine.load_from_dict(machine_dict)
     resources = Resources.load_from_dict(resources_dict)
@@ -359,7 +394,11 @@ def calc_diel_atomic(input_file: str,
                                  )
 
     # gen task
-    task_list = gen_task_list(command, task_work_path_list, extra_forward_files)
+    task_list = gen_task_list(command=command, 
+                              task_work_path_list=task_work_path_list, 
+                              extra_forward_files=extra_forward_files,
+                              backward_files=[DIPOLE_MOMENT_FILE, CP2K_LOG_FILE, DENSITY_FILE]
+                              )
     # submission
     machine = Machine.load_from_dict(machine_dict)
     resources = Resources.load_from_dict(resources_dict)

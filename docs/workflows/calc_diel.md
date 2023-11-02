@@ -12,6 +12,7 @@
 eckits wkflow calc_diel -i input.yaml -m machine.yaml -r resources.yaml
 ```
 
+
 Example: `input.yaml` for the calculation of global dielectric constant:
 ```yaml
 input_file: "template.inp" # the template file of cp2k input.
@@ -44,6 +45,7 @@ extra_forward_files: [
 extra_forward_common_files: [
 ]
 restart_wfn:   "restart.wfn"
+
 ```
 
 Example: `machine.yaml`:
@@ -101,14 +103,12 @@ ECToolkits provides the workflow for calculating ab initio dielectric constant u
 For detail description, users are referred to this paper {cite}`Umari.2002.10.1103/physrevlett.89.157602` for the calculation of global dielectric constant,
 and this paper {cite}`10.1103/physrevb.71.144104` for the calculation of atomic dielectric constant
 
+
 Basically, we need to calculate dipole moments with varying electric fields. Then, fit the data to the following equation:
 
 $$
 \varepsilon = 4\pi\frac{M}{\Omega E} + 1 
 $$
-
-
-
 
 
 # Bibliography

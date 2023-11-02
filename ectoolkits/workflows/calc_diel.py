@@ -42,6 +42,7 @@ def file_to_list(fname: str):
     return output_file
 
 def get_dipole_moment_array(task_work_path_list: List[str],
+
                            output_dir: str,
                            axis: str):
     index_dict = {
@@ -49,12 +50,14 @@ def get_dipole_moment_array(task_work_path_list: List[str],
         'y': 1,
         'z': 2,
     }
+
     dipole_moment_array = []
     for task_work_path in task_work_path_list:
         output_dir = Path(output_dir)
         output_file = file_to_list(output_dir/task_work_path/DIPOLE_MOMENT_FILE)
         dipole_moment_array.append(parse_dipole_list(output_file)[0][index_dict[axis]])
     return np.array(dipole_moment_array)*debye2au
+
 
 def get_volume_array(task_work_path_list: List[str],
                      output_dir: str,): 
@@ -75,6 +78,7 @@ def get_dielectric_constant(dipole_moment_array: npt.NDArray[np.float64],
     slope, intercept, r, p, se = linregress(intensity_array, polarization_array)
     dielectric_constant = slope * 4 * np.pi + 1
     return dielectric_constant
+
 
 def plot_dielectric_fitting(intensity_array: npt.NDArray[np.float64],
                             dipole_moment_array: npt.NDArray[np.float64],
@@ -131,6 +135,7 @@ def get_dielectic_constant_atomic(task_work_path_list: List[str],
     return z, dielectric_constant
                 
     
+
 def gen_cp2k_input_dict(input_file: str, 
                         canonical: bool
                         ):
@@ -206,6 +211,7 @@ def add_print_density(input_dict: Dict,
         }
     }
     input_dict['+force_eval'][0]['+dft']['+print'].update(density_dict)
+
     return input_dict
 
 def add_run_type(input_dict: Dict,
@@ -367,6 +373,7 @@ def gen_task_list(command: str,
 
     outlog = CP2K_LOG_FILE 
     forward_files = extra_forward_files + ["input.inp"]
+
     for task_work_path in task_work_path_list:
         task = Task(command=command, 
                     task_work_path=task_work_path,
@@ -375,6 +382,7 @@ def gen_task_list(command: str,
                     outlog=outlog)
         task_list.append(task)
     return task_list
+
 
 def calc_diel_global(input_file: str,
                      intensity_array: npt.NDArray[np.float64],

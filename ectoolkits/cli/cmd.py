@@ -46,14 +46,9 @@ def wkflow():
 def calc_diel_cli(input, machine, resources, dry_run):
     input_dict, machine_dict, resources_dict = \
         batch_yaml_to_dict(input, machine, resources)
-    scale = input_dict.pop("scale")
-    if scale == 'global':
-        calc_diel(**input_dict, 
-                machine_dict=machine_dict, 
-                resources_dict=resources_dict,
-                dry_run=dry_run)
-    elif scale == 'atomic':
-        pass
-    else:
-        print(f"The scale {scale} is not supported!")
+    calc_diel(input_dict=input_dict, 
+              machine_dict=machine_dict, 
+              resources_dict=resources_dict, 
+              dry_run=dry_run)
+
 # change the calc_diel function

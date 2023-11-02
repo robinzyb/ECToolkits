@@ -62,11 +62,9 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../../_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'docs/analysis/finite_size_correction';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'docs/analysis/dielectric_constant';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Redox Potentials" href="redox.html" />
-    <link rel="prev" title="Acidity Calculation" href="acidity.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -284,7 +282,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/robinzyb/ectoolkits/issues/new?title=Issue%20on%20page%20%2Fdocs/analysis/finite_size_correction.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/robinzyb/ectoolkits/issues/new?title=Issue%20on%20page%20%2Fdocs/analysis/dielectric_constant.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -314,7 +312,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="../../_sources/docs/analysis/finite_size_correction.md" target="_blank"
+      <li><a href="../../_sources/docs/analysis/dielectric_constant.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -418,26 +416,7 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Usage exmaple</span>
-<span class="n">cell</span> <span class="o">=</span> <span class="n">Paramcell</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="p">[</span><span class="mf">19.63424</span><span class="p">,</span> <span class="mf">19.237425</span><span class="p">,</span> <span class="mf">68.35131</span><span class="p">],</span> <span class="n">divi</span><span class="o">=</span><span class="p">[</span><span class="mi">80</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">270</span><span class="p">],</span> <span class="n">h</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-<span class="c1"># the position of a defect</span>
-<span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">22.75066772733162423</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">*</span><span class="mf">1.88972613288564</span>
-<span class="n">Q</span> <span class="o">=</span> <span class="mf">1.0</span>
-<span class="n">width</span><span class="o">=</span> <span class="mf">1.0</span>
-<span class="n">recip</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">rho</span> <span class="o">=</span> <span class="n">GaussCharge</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">recip</span><span class="o">=</span><span class="n">recip</span><span class="p">)</span>
-
-
-<span class="n">z_interface_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">13.303917</span><span class="o">-</span><span class="mf">1.8</span><span class="p">,</span> <span class="mf">43.534849</span><span class="o">+</span><span class="mf">1.8</span><span class="p">])</span>
-<span class="n">diel_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.78</span><span class="p">,</span> <span class="mf">4.75</span><span class="p">,</span> <span class="mf">1.78</span><span class="p">])</span>
-<span class="n">beta_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
-<span class="n">diel_profile</span> <span class="o">=</span> <span class="n">DielProfile</span><span class="p">(</span><span class="n">z_interface_list</span><span class="p">,</span> <span class="n">diel_list</span><span class="p">,</span> <span class="n">beta_list</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span>
-
-<span class="n">pbc</span> <span class="o">=</span>  <span class="n">PBCPoissonSolver</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">diel_profile</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span>
-</pre></div>
-</div>
-
+  
     <script type="text/x-thebe-config">
     {
         requestKernel: true,
@@ -468,24 +447,6 @@ document.write(`
                 <footer class="prev-next-footer">
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="acidity.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Acidity Calculation</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="redox.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Redox Potentials</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               

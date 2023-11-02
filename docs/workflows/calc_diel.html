@@ -186,6 +186,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.acidity.html">ectoolkits.analysis.acidity module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.atom_density.html">ectoolkits.analysis.atom_density module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.band_align.html">ectoolkits.analysis.band_align module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.dielectric_constant.html">ectoolkits.analysis.dielectric_constant module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.disdeg.html">ectoolkits.analysis.disdeg module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.rutile110.html">ectoolkits.analysis.rutile110 module</a></li>
@@ -409,6 +410,11 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Workflow: Calculation of Dielectric Constant</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results">Results</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#global-dielectric-constant">Global Dielectric Constant</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#atomic-dielectric-constant">Atomic Dielectric Constant</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#principle">Principle</a></li>
 </ul>
 </li>
@@ -429,27 +435,42 @@ document.write(`
 <h1>Workflow: Calculation of Dielectric Constant<a class="headerlink" href="#workflow-calculation-of-dielectric-constant" title="Permalink to this heading">#</a></h1>
 <p><strong>This workflow is under testing and not yet to be used</strong></p>
 <p><strong>This workflow is powered by dpdispatcher</strong></p>
+<p><strong>This workflow only uses CP2K</strong></p>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>eckits<span class="w"> </span>wkflow<span class="w"> </span>calc_diel<span class="w"> </span>-i<span class="w"> </span>input.yaml<span class="w"> </span>-m<span class="w"> </span>machine.yaml<span class="w"> </span>-r<span class="w"> </span>resources.yaml
 </pre></div>
 </div>
-<p>Example: <code class="docutils literal notranslate"><span class="pre">input.yaml</span></code>:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">input_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;template.inp&quot;</span><span class="w">                                                      </span>
-<span class="nt">eps_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;optical&quot;</span><span class="w">                                                             </span>
-<span class="nt">scale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;global&quot;</span><span class="w">                                                                 </span>
-<span class="nt">intensity_array</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.0000</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0001</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0002</span><span class="p p-Indicator">]</span><span class="w">                                       </span>
-<span class="nt">displacement_field</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">                                                       </span>
-<span class="nt">polarisation</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">]</span><span class="w">                                                   </span>
-<span class="nt">d_filter</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">]</span><span class="w">                                                       </span>
-<span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./output&quot;</span><span class="w">                                                          </span>
-<span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;srun</span><span class="nv"> </span><span class="s">cp2k.psmp</span><span class="nv"> </span><span class="s">-i</span><span class="nv"> </span><span class="s">input.inp&quot;</span><span class="w">                                          </span>
-<span class="nt">extra_forward_files</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w">                                                          </span>
-<span class="w">  </span><span class="s">&quot;anatase_bulk_relaxed.xyz&quot;</span><span class="w">                                                    </span>
-<span class="p p-Indicator">]</span><span class="w">                                                                               </span>
-<span class="nt">extra_forward_common_files</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w">                                                   </span>
-<span class="p p-Indicator">]</span><span class="w">                                                                               </span>
-<span class="nt">restart_wfn</span><span class="p">:</span><span class="w">   </span><span class="s">&quot;anatase-RESTART.wfn&quot;</span>
+<p>Example: <code class="docutils literal notranslate"><span class="pre">input.yaml</span></code> for the calculation of global dielectric constant:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">input_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;template.inp&quot;</span><span class="w"> </span><span class="c1"># the template file of cp2k input.</span>
+<span class="nt">eps_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;optical&quot;</span><span class="w"> </span><span class="c1"># optical or static</span>
+<span class="nt">scale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;global&quot;</span><span class="w">   </span><span class="c1"># global or atomic</span>
+<span class="nt">intensity_array</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.0000</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0001</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0002</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># List for global or Value for atomic </span>
+<span class="nt">axis</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;z&quot;</span><span class="w"> </span><span class="c1"># the direction in which the electric field is applied</span>
+<span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./output&quot;</span><span class="w">  </span><span class="c1"># the directory/folder that saves the calculations and resutls</span>
+<span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;srun</span><span class="nv"> </span><span class="s">cp2k.psmp</span><span class="nv"> </span><span class="s">-i</span><span class="nv"> </span><span class="s">input.inp&quot;</span><span class="w"> </span><span class="c1"># command to run cp2k in</span>
+<span class="nt">extra_forward_files</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
+<span class="w">  </span><span class="s">&quot;anatase_bulk_relaxed.xyz&quot;</span><span class="w"> </span><span class="c1"># extra files that are copied to calculation </span>
+<span class="p p-Indicator">]</span>
+<span class="nt">extra_forward_common_files</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="c1"># extra common files that are copied to calculation</span>
+<span class="p p-Indicator">]</span>
+<span class="nt">restart_wfn</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;restart.wfn&quot;</span><span class="w"> </span><span class="c1"># the path of restart wavefunction for calculation</span>
+</pre></div>
+</div>
+<p>Example: <code class="docutils literal notranslate"><span class="pre">input.yaml</span></code> for the calculation of atomic dielectric constant:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">input_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;template.inp&quot;</span>
+<span class="nt">eps_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;optical&quot;</span>
+<span class="nt">scale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;atomic&quot;</span>
+<span class="nt">intensity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0001</span>
+<span class="nt">axis</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;z&quot;</span>
+<span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./output&quot;</span><span class="w">  </span>
+<span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;srun</span><span class="nv"> </span><span class="s">cp2k.psmp</span><span class="nv"> </span><span class="s">-i</span><span class="nv"> </span><span class="s">input.inp&quot;</span>
+<span class="nt">extra_forward_files</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
+<span class="w">  </span><span class="s">&quot;rutile_pristine_relaxed.xyz&quot;</span>
+<span class="p p-Indicator">]</span>
+<span class="nt">extra_forward_common_files</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
+<span class="p p-Indicator">]</span>
+<span class="nt">restart_wfn</span><span class="p">:</span><span class="w">   </span><span class="s">&quot;restart.wfn&quot;</span>
 </pre></div>
 </div>
 <p>Example: <code class="docutils literal notranslate"><span class="pre">machine.yaml</span></code>:</p>
@@ -487,10 +508,24 @@ document.write(`
 </pre></div>
 </div>
 </section>
+<section id="results">
+<h2>Results<a class="headerlink" href="#results" title="Permalink to this heading">#</a></h2>
+<section id="global-dielectric-constant">
+<h3>Global Dielectric Constant<a class="headerlink" href="#global-dielectric-constant" title="Permalink to this heading">#</a></h3>
+<p>The reuslted figure would be saved in output_dir/”dielectric_fitting.png”
+<img alt="GloabalDielectic" src="../../_images/dielectric_fitting.png" /></p>
+</section>
+<section id="atomic-dielectric-constant">
+<h3>Atomic Dielectric Constant<a class="headerlink" href="#atomic-dielectric-constant" title="Permalink to this heading">#</a></h3>
+<p>The reuslted figure would be saved in output_dir/”dielectric_profile.png”
+<img alt="AtomicDielectic" src="../../_images/dielectric_profile.png" /></p>
+</section>
+</section>
 <section id="principle">
 <h2>Principle<a class="headerlink" href="#principle" title="Permalink to this heading">#</a></h2>
 <p>ECToolkits provides the workflow for calculating ab initio dielectric constant using CP2K.</p>
-<p>For detail description, users are referred to this paper <span id="id1">[<a class="reference internal" href="#id3" title="P. Umari and Alfredo Pasquarello. Ab initio Molecular Dynamics in a Finite Homogeneous Electric Field. Physical Review Letters, 89(15):157602, 2002. doi:10.1103/physrevlett.89.157602.">Umari and Pasquarello, 2002</a>]</span>.</p>
+<p>For detail description, users are referred to this paper <span id="id1">[<a class="reference internal" href="#id4" title="P. Umari and Alfredo Pasquarello. Ab initio Molecular Dynamics in a Finite Homogeneous Electric Field. Physical Review Letters, 89(15):157602, 2002. doi:10.1103/physrevlett.89.157602.">Umari and Pasquarello, 2002</a>]</span> for the calculation of global dielectric constant,
+and this paper <span id="id2">[<a class="reference internal" href="#id5" title="Feliciano Giustino and Alfredo Pasquarello. Theory of atomic-scale dielectric permittivity at insulator interfaces. Physical Review B, 71(14):144104, 2005. doi:10.1103/physrevb.71.144104.">Giustino and Pasquarello, 2005</a>]</span> for the calculation of atomic dielectric constant</p>
 <p>Basically, we need to calculate dipole moments with varying electric fields. Then, fit the data to the following equation:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -500,8 +535,12 @@ document.write(`
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="bibliography">
 <h1>Bibliography<a class="headerlink" href="#bibliography" title="Permalink to this heading">#</a></h1>
-<div class="docutils container" id="id2">
-<div class="citation" id="id3" role="doc-biblioentry">
+<div class="docutils container" id="id3">
+<div class="citation" id="id5" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">GP05</a><span class="fn-bracket">]</span></span>
+<p>Feliciano Giustino and Alfredo Pasquarello. Theory of atomic-scale dielectric permittivity at insulator interfaces. <em>Physical Review B</em>, 71(14):144104, 2005. <a class="reference external" href="https://doi.org/10.1103/physrevb.71.144104">doi:10.1103/physrevb.71.144104</a>.</p>
+</div>
+<div class="citation" id="id4" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">UP02</a><span class="fn-bracket">]</span></span>
 <p>P. Umari and Alfredo Pasquarello. Ab initio Molecular Dynamics in a Finite Homogeneous Electric Field. <em>Physical Review Letters</em>, 89(15):157602, 2002. <a class="reference external" href="https://doi.org/10.1103/physrevlett.89.157602">doi:10.1103/physrevlett.89.157602</a>.</p>
 </div>
@@ -574,6 +613,11 @@ document.write(`
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Workflow: Calculation of Dielectric Constant</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results">Results</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#global-dielectric-constant">Global Dielectric Constant</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#atomic-dielectric-constant">Atomic Dielectric Constant</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#principle">Principle</a></li>
 </ul>
 </li>

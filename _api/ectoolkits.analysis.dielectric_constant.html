@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>ectoolkits.structures.interface module &#8212; ECToolkits Reference</title>
+    <title>ectoolkits.analysis.dielectric_constant module &#8212; ECToolkits Reference</title>
   
   
   
@@ -62,11 +62,11 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '_api/ectoolkits.structures.interface';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_api/ectoolkits.analysis.dielectric_constant';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="ectoolkits.structures.rutile110 module" href="ectoolkits.structures.rutile110.html" />
-    <link rel="prev" title="ectoolkits.structures package" href="ectoolkits.structures.html" />
+    <link rel="next" title="ectoolkits.analysis.disdeg module" href="ectoolkits.analysis.disdeg.html" />
+    <link rel="prev" title="ectoolkits.analysis.band_align module" href="ectoolkits.analysis.band_align.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -180,11 +180,11 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="modules.html">ectoolkits</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="ectoolkits.html">ectoolkits package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l3 has-children"><a class="reference internal" href="ectoolkits.analysis.html">ectoolkits.analysis package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="ectoolkits.analysis.html">ectoolkits.analysis package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.acidity.html">ectoolkits.analysis.acidity module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.atom_density.html">ectoolkits.analysis.atom_density module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.band_align.html">ectoolkits.analysis.band_align module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.dielectric_constant.html">ectoolkits.analysis.dielectric_constant module</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">ectoolkits.analysis.dielectric_constant module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.disdeg.html">ectoolkits.analysis.disdeg module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.rutile110.html">ectoolkits.analysis.rutile110 module</a></li>
@@ -196,8 +196,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="ectoolkits.plots.band_align.html">ectoolkits.plots.band_align module</a></li>
 </ul>
 </li>
-<li class="toctree-l3 current active has-children"><a class="reference internal" href="ectoolkits.structures.html">ectoolkits.structures package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l4 current active"><a class="current reference internal" href="#">ectoolkits.structures.interface module</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="ectoolkits.structures.html">ectoolkits.structures package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.structures.interface.html">ectoolkits.structures.interface module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="ectoolkits.structures.rutile110.html">ectoolkits.structures.rutile110 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="ectoolkits.structures.slab.html">ectoolkits.structures.slab module</a></li>
 </ul>
@@ -284,7 +284,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/robinzyb/ectoolkits/issues/new?title=Issue%20on%20page%20%2F_api/ectoolkits.structures.interface.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/robinzyb/ectoolkits/issues/new?title=Issue%20on%20page%20%2F_api/ectoolkits.analysis.dielectric_constant.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -314,7 +314,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="../_sources/_api/ectoolkits.structures.interface.rst" target="_blank"
+      <li><a href="../_sources/_api/ectoolkits.analysis.dielectric_constant.rst" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -394,7 +394,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>ectoolkits.structures.interface module</h1>
+    <h1>ectoolkits.analysis.dielectric_constant module</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -408,12 +408,46 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="module-ectoolkits.structures.interface">
-<span id="ectoolkits-structures-interface-module"></span><h1>ectoolkits.structures.interface module<a class="headerlink" href="#module-ectoolkits.structures.interface" title="Permalink to this heading">#</a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="ectoolkits.structures.interface.Interface">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ectoolkits.structures.interface.</span></span><span class="sig-name descname"><span class="pre">Interface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/structures/interface.html#Interface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.structures.interface.Interface" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="ectoolkits.structures.slab.html#ectoolkits.structures.slab.Slab" title="ectoolkits.structures.slab.Slab"><code class="xref py py-class docutils literal notranslate"><span class="pre">Slab</span></code></a></p>
+  <section id="module-ectoolkits.analysis.dielectric_constant">
+<span id="ectoolkits-analysis-dielectric-constant-module"></span><h1>ectoolkits.analysis.dielectric_constant module<a class="headerlink" href="#module-ectoolkits.analysis.dielectric_constant" title="Permalink to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.analysis.dielectric_constant.get_dielectric_constant">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.dielectric_constant.</span></span><span class="sig-name descname"><span class="pre">get_dielectric_constant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dielectric_susceptibility</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/dielectric_constant.html#get_dielectric_constant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.dielectric_constant.get_dielectric_constant" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.analysis.dielectric_constant.get_dielectric_constant_profile">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.dielectric_constant.</span></span><span class="sig-name descname"><span class="pre">get_dielectric_constant_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Delta_macro_Efield</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Delta_macro_polarization</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/dielectric_constant.html#get_dielectric_constant_profile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.dielectric_constant.get_dielectric_constant_profile" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.analysis.dielectric_constant.get_dielectric_susceptibility">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.dielectric_constant.</span></span><span class="sig-name descname"><span class="pre">get_dielectric_susceptibility</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">micro_polarization</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">micro_electric_field</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/dielectric_constant.html#get_dielectric_susceptibility"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.dielectric_constant.get_dielectric_susceptibility" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.analysis.dielectric_constant.get_induced_charge">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.dielectric_constant.</span></span><span class="sig-name descname"><span class="pre">get_induced_charge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho_cube_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho_cube_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'z'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/dielectric_constant.html#get_induced_charge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.dielectric_constant.get_induced_charge" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.analysis.dielectric_constant.get_integrated_array">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.dielectric_constant.</span></span><span class="sig-name descname"><span class="pre">get_integrated_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/dielectric_constant.html#get_integrated_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.dielectric_constant.get_integrated_array" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.analysis.dielectric_constant.get_micro_electric_field">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.dielectric_constant.</span></span><span class="sig-name descname"><span class="pre">get_micro_electric_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Delta_macro_Efield</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/dielectric_constant.html#get_micro_electric_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.dielectric_constant.get_micro_electric_field" title="Permalink to this definition">#</a></dt>
+<dd><p>in atomic units (au)
+Delta_macro_Efield is the macroscopic electric field difference between two systems
+Delat_macro_Efield (au)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.analysis.dielectric_constant.get_micro_polarization">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.dielectric_constant.</span></span><span class="sig-name descname"><span class="pre">get_micro_polarization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Delta_macro_polarization</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/dielectric_constant.html#get_micro_polarization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.dielectric_constant.get_micro_polarization" title="Permalink to this definition">#</a></dt>
+<dd><p>rho: induced charge density in atomic units (au)</p>
+<p>Delta_macro_polarization is the macroscopic polarization difference between two systems</p>
 </dd></dl>
 
 </section>
@@ -449,20 +483,20 @@ document.write(`
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="ectoolkits.structures.html"
+       href="ectoolkits.analysis.band_align.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">ectoolkits.structures package</p>
+        <p class="prev-next-title">ectoolkits.analysis.band_align module</p>
       </div>
     </a>
     <a class="right-next"
-       href="ectoolkits.structures.rutile110.html"
+       href="ectoolkits.analysis.disdeg.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">ectoolkits.structures.rutile110 module</p>
+        <p class="prev-next-title">ectoolkits.analysis.disdeg module</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

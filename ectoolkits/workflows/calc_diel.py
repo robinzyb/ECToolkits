@@ -1,5 +1,6 @@
 import numpy.typing as npt
 import numpy as np
+import matplotlib.pyplot as plt
 from scipy.stats import linregress
 from typing import Dict
 from typing import List
@@ -10,12 +11,14 @@ from cp2k_input_tools.parser import CP2KInputParser, CP2KInputParserSimplified
 from cp2k_input_tools.generator import CP2KInputGenerator
 from cp2kdata.block_parser.dipole import parse_dipole_list
 from cp2kdata import Cp2kOutput
+from cp2kdata import Cp2kCube
 from cp2kdata.units import au2A
+from ectoolkits.analysis.dielectric_constant import get_dielectric_constant_profile
 
 DIPOLE_MOMENT_FILE = "moments.dat"
 DENSITY_FILE = "*-ELECTRON_DENSITY*.cube"
 CP2K_LOG_FILE = "cp2k.log"
-debey2au=4.26133088E-01/1.08312217E+00
+debye2au=4.26133088E-01/1.08312217E+00
 
 def copy_file_list(file_list, target_dir):
     target_dir = Path(target_dir)
@@ -39,13 +42,19 @@ def file_to_list(fname: str):
     return output_file
 
 def get_dipole_moment_array(task_work_path_list: List[str],
-                           output_dir: str,):
+                           output_dir: str,
+                           axis: str):
+    index_dict = {
+        'x': 0,
+        'y': 1,
+        'z': 2,
+    }
     dipole_moment_array = []
     for task_work_path in task_work_path_list:
         output_dir = Path(output_dir)
         output_file = file_to_list(output_dir/task_work_path/DIPOLE_MOMENT_FILE)
-        dipole_moment_array.append(parse_dipole_list(output_file)[0][3])
-    return np.array(dipole_moment_array)
+        dipole_moment_array.append(parse_dipole_list(output_file)[0][index_dict[axis]])
+    return np.array(dipole_moment_array)*debye2au
 
 def get_volume_array(task_work_path_list: List[str],
                      output_dir: str,): 
@@ -67,6 +76,30 @@ def get_dielectric_constant(dipole_moment_array: npt.NDArray[np.float64],
     dielectric_constant = slope * 4 * np.pi + 1
     return dielectric_constant
 
+def get_dielectic_constant_atomic(task_work_path_list: List[str],
+                                  output_dir: str,
+                                  intensity: npt.NDArray[np.float64],
+                                  axis: str,
+                                  ):
+    output_dir = Path(output_dir)
+    den_file_1 = list((output_dir/task_work_path_list[0]).glob(DENSITY_FILE))[0]
+    den_file_2 = list((output_dir/task_work_path_list[1]).glob(DENSITY_FILE))[0]
+    rho_cube_1 = Cp2kCube(den_file_1)
+    rho_cube_2 = Cp2kCube(den_file_2)
+
+    dipole_moment_array = get_dipole_moment_array(task_work_path_list, output_dir, axis)
+    volume_array = get_volume_array(task_work_path_list, output_dir)
+    polarization_array = dipole_moment_array/volume_array
+    Delta_macro_polarization = polarization_array[1]-polarization_array[0]
+    print(polarization_array)
+    z, dielectric_constant = get_dielectric_constant_profile(rho_1=rho_cube_1, 
+                                                             rho_2=rho_cube_2, 
+                                                             Delta_macro_Efield=2.0*intensity, 
+                                                             Delta_macro_polarization=Delta_macro_polarization,
+                                                             axis=axis)
+    return z, dielectric_constant
+                
+    
 def gen_cp2k_input_dict(input_file: str, 
                         canonical: bool
                         ):
@@ -165,6 +198,25 @@ def add_restart_wfn(input_dict: Dict,
         f"../{restart_wfn.name}"
     return input_dict
 
+def plot_dielectric_profile(z: npt.NDArray[np.float64],
+                            dielectric_constant: npt.NDArray[np.float64],
+                            output_dir: str,
+                            axis: str,
+                            ):
+    output_dir = Path(output_dir)
+    plt.style.use('cp2kdata.matplotlibstyle.jcp')
+    row = 1
+    col = 1
+    fig = plt.figure(figsize=(3.37*col,1.89*row), dpi=600, facecolor='white')
+    gs = fig.add_gridspec(row,col)
+    ax  = fig.add_subplot(gs[0])
+    ax.plot(z, dielectric_constant)
+    ax.set_ylim(bottom=0)
+    ax.set_ylabel(r"$\varepsilon_{\infty}$")
+    ax.set_xlabel(f"{axis} [Bohr]")
+    fig.savefig(output_dir/"dielectric_profile.png", dpi=600)
+    
+
 def gen_calc_opposite_efield(input_dict: Dict,
                              intensity: npt.NDArray[np.float64],
                              displacement_field: bool,
@@ -178,9 +230,9 @@ def gen_calc_opposite_efield(input_dict: Dict,
                              ):
     # for the atomic dielectric constant calculation
     direction_vector = {
-        'x': np.array([1, 0, 0]),
-        'y': np.array([0, 1, 0]),
-        'z': np.array([0, 0, 1]),
+        'x': np.array([1.0, 0.0, 0.0]),
+        'y': np.array([0.0, 1.0, 0.0]),
+        'z': np.array([0.0, 0.0, 1.0]),
     }
     # store the path for each calculation
     task_work_path_list = []
@@ -224,8 +276,7 @@ def gen_calc_opposite_efield(input_dict: Dict,
 def gen_series_calc_efield(input_dict: Dict,
                            intensity_array: npt.NDArray[np.float64],
                            displacement_field: bool,
-                           polarisation: npt.NDArray[np.float64],
-                           d_filter: npt.NDArray[np.float64],
+                           axis: str,
                            periodic: bool,
                            eps_type: str,
                            filename: str,
@@ -234,6 +285,11 @@ def gen_series_calc_efield(input_dict: Dict,
                            restart_wfn: str=None,
                            ):
     # for the global dielectric constant calculation
+    direction_vector = {
+        'x': np.array([1.0, 0.0, 0.0]),
+        'y': np.array([0.0, 1.0, 0.0]),
+        'z': np.array([0.0, 0.0, 1.0]),
+    }
     # store the path for each calculation
     task_work_path_list = []
     # produce input files for each calculation
@@ -251,7 +307,12 @@ def gen_series_calc_efield(input_dict: Dict,
         input_dict = add_restart_wfn(input_dict, restart_wfn)
     # Add the efield input to the input dictionary
     for intensity in intensity_array:
-        input_dict = add_efield_input(input_dict, intensity, displacement_field, polarisation, d_filter)
+        input_dict = add_efield_input(input_dict=input_dict, 
+                                      intensity=intensity, 
+                                      displacement_field=dispacement_field, 
+                                      polarisation=list(direction_vector[axis]), 
+                                      d_filter=list(direction_vector[axis]),
+                                      )
 
         # Write the input dictionary to a file
         single_calc_dir = output_dir/f"efield_{intensity:7.6f}"
@@ -286,8 +347,7 @@ def gen_task_list(command: str,
 
 def calc_diel_global(input_file: str,
                      intensity_array: npt.NDArray[np.float64],
-                     polarisation: npt.NDArray[np.float64],
-                     d_filter: npt.NDArray[np.float64],
+                     axis: str,
                      eps_type: str,
                      output_dir: str,
                      machine_dict: Dict,
@@ -306,8 +366,7 @@ def calc_diel_global(input_file: str,
         gen_series_calc_efield(input_dict=template_input_dict, 
                                intensity_array=intensity_array, 
                                displacement_field=False, 
-                               polarisation=polarisation, 
-                               d_filter=d_filter, 
+                               axis=axis,
                                periodic=True, 
                                eps_type=eps_type,
                                filename="="+DIPOLE_MOMENT_FILE, 
@@ -408,7 +467,7 @@ def calc_diel_atomic(input_file: str,
         forward_common_files.append(restart_wfn)
     # copy to the work base directory so that it can be uploaded
     copy_file_list(forward_common_files, output_dir)
-    # workbase will be transfer to absolute path
+    # workbase will be coverted to absolute path
     # local_root/taskpath is the full path for upload files 
     submission = Submission(work_base=output_dir,
                             machine=machine,
@@ -423,6 +482,16 @@ def calc_diel_atomic(input_file: str,
     else:
         exit_on_submit = False              
     submission.run_submission(dry_run=dry_run, exit_on_submit=exit_on_submit)
+
+    z, dielectric_constant = get_dielectic_constant_atomic(task_work_path_list=task_work_path_list,
+                                                           output_dir=output_dir,
+                                                           intensity=intensity,
+                                                           axis=axis
+                                                           )
+
+    output_dir = Path(output_dir)
+    np.savetxt(output_dir/"diel_profile.dat", np.array([z, dielectric_constant]).T)
+    plot_dielectric_profile(z, dielectric_constant, output_dir, axis)
     print("Workflow for Calculation of Dielectric Constant Complete!")
 
 def calc_diel(input_dict: Dict, 

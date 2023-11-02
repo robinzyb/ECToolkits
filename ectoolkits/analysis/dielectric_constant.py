@@ -1,15 +1,13 @@
-# Plain implementation of equations in the paper
-def get_induced_charge(rho_cube_1, rho_cube_2):
-    z_1, rho_1 = rho_cube_1.get_pav()
-    z_2, rho_2 = rho_cube_2.get_pav()
+import numpy as np
+from scipy.integrate import simpson
+
+def get_induced_charge(rho_cube_1, rho_cube_2, axis='z'):
+    z_1, rho_1 = rho_cube_1.get_pav(axis=axis)
+    z_2, rho_2 = rho_cube_2.get_pav(axis=axis)
     #assert z_1 == z_2, "the two arrays, z_1 and z_2, must be same"
-    rho_induced = rho_1 - rho_2
-    # notice I multiply au2eV in cp2kdata
-    rho_induced = rho_induced/au2eV
+    rho_induced = rho_2 - rho_1
     # electron carries negative charge
     rho_induced = -rho_induced 
-    # notice I multiply au2A in cp2kdata
-    z_1 = z_1/au2A
 
     return z_1, rho_induced
 
@@ -73,8 +71,8 @@ def get_dielectric_constant(dielectric_susceptibility):
     return dielectric_constant
 
 
-def get_dielectric_constant_profile(rho_1, rho_2, Delta_macro_Efield, Delta_macro_polarization):
-    z, rho_induced = get_induced_charge(rho_1, rho_2)
+def get_dielectric_constant_profile(rho_1, rho_2, Delta_macro_Efield, Delta_macro_polarization, axis):
+    z, rho_induced = get_induced_charge(rho_1, rho_2, axis=axis)
     micro_electric_field = get_micro_electric_field(z, rho_induced, Delta_macro_Efield=Delta_macro_Efield)
     micro_polarization = get_micro_polarization(z, rho_induced, Delta_macro_polarization=Delta_macro_polarization)
     dielectric_susceptibility = get_dielectric_susceptibility(micro_polarization, micro_electric_field)

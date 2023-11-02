@@ -76,6 +76,37 @@ def get_dielectric_constant(dipole_moment_array: npt.NDArray[np.float64],
     dielectric_constant = slope * 4 * np.pi + 1
     return dielectric_constant
 
+def plot_dielectric_fitting(intensity_array: npt.NDArray[np.float64],
+                            dipole_moment_array: npt.NDArray[np.float64],
+                            dielectric_constant: npt.NDArray[np.float64],
+                            output_dir: str,
+                            axis: str,
+                            ):
+
+    # for plotting
+    slope, intercept, r, p, se = linregress(intensity_array, dipole_moment_array)
+
+    output_dir = Path(output_dir)
+    plt.style.use('cp2kdata.matplotlibstyle.jcp')
+    row = 1
+    col = 1
+    fig = plt.figure(figsize=(3.37*col,1.89*row), dpi=600, facecolor='white')
+    gs = fig.add_gridspec(row,col)
+    ax  = fig.add_subplot(gs[0])
+
+    ax.scatter(intensity_array, dipole_moment_array)
+
+    xlim = ax.get_xlim()
+    x = np.linspace(xlim[0], xlim[1], 100)
+    ax.plot(x, slope*x+intercept, "--")
+
+    ax.set_ylim(bottom=0)
+    ax.set_xlim(left=0)
+    ax.set_ylabel("Dipole Moment [a.u.]")
+    ax.set_xlabel(f"Efield {axis} [a.u.]")
+    fig.savefig(output_dir/"dielectric_fitting.png", dpi=600, bbox_inches='tight')
+                    
+
 def get_dielectic_constant_atomic(task_work_path_list: List[str],
                                   output_dir: str,
                                   intensity: npt.NDArray[np.float64],
@@ -91,7 +122,7 @@ def get_dielectic_constant_atomic(task_work_path_list: List[str],
     volume_array = get_volume_array(task_work_path_list, output_dir)
     polarization_array = dipole_moment_array/volume_array
     Delta_macro_polarization = polarization_array[1]-polarization_array[0]
-    print(polarization_array)
+
     z, dielectric_constant = get_dielectric_constant_profile(rho_1=rho_cube_1, 
                                                              rho_2=rho_cube_2, 
                                                              Delta_macro_Efield=2.0*intensity, 
@@ -214,7 +245,7 @@ def plot_dielectric_profile(z: npt.NDArray[np.float64],
     ax.set_ylim(bottom=0)
     ax.set_ylabel(r"$\varepsilon_{\infty}$")
     ax.set_xlabel(f"{axis} [Bohr]")
-    fig.savefig(output_dir/"dielectric_profile.png", dpi=600)
+    fig.savefig(output_dir/"dielectric_profile.png", dpi=600, bbox_inches='tight')
     
 
 def gen_calc_opposite_efield(input_dict: Dict,
@@ -309,7 +340,7 @@ def gen_series_calc_efield(input_dict: Dict,
     for intensity in intensity_array:
         input_dict = add_efield_input(input_dict=input_dict, 
                                       intensity=intensity, 
-                                      displacement_field=dispacement_field, 
+                                      displacement_field=displacement_field, 
                                       polarisation=list(direction_vector[axis]), 
                                       d_filter=list(direction_vector[axis]),
                                       )
@@ -406,12 +437,17 @@ def calc_diel_global(input_file: str,
         exit_on_submit = False         
     submission.run_submission(dry_run=dry_run, exit_on_submit=exit_on_submit)
 
-    dipole_moment_array = get_dipole_moment_array(task_work_path_list, output_dir)
+    dipole_moment_array = get_dipole_moment_array(task_work_path_list, output_dir, axis)
     volume_array = get_volume_array(task_work_path_list, output_dir)
     # use one volume for all calculation
     dielectric_constant = get_dielectric_constant(dipole_moment_array, 
                                                   intensity_array, 
                                                   volume_array)
+    plot_dielectric_fitting(intensity_array=intensity_array, 
+                            dipole_moment_array=dipole_moment_array, 
+                            dielectric_constant=dielectric_constant, 
+                            output_dir=output_dir, 
+                            axis=axis,)
     #
     output_dir = Path(output_dir)
     np.savetxt(output_dir/"dipole_moment_array.dat", dipole_moment_array)

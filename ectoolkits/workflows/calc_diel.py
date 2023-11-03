@@ -204,7 +204,6 @@ def add_print_density(input_dict: Dict,
     
     density_dict = {
         '+e_density_cube': {
-            'stride': '1 1 1',
             '+each':{
                 'geo_opt': '0'
             }

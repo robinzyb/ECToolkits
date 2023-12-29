@@ -3,6 +3,8 @@ import yaml
 from ectoolkits.workflows.calc_diel import calc_diel
 
 # --- Helper functions ---
+
+
 def yaml_to_dict(yaml_file: str):
     """
     Convert a yaml file to a dictionary
@@ -10,6 +12,7 @@ def yaml_to_dict(yaml_file: str):
     with open(yaml_file, 'r') as fr:
         input_dict = yaml.safe_load(fr)
     return input_dict
+
 
 def batch_yaml_to_dict(input: str,
                        machine: str,
@@ -23,17 +26,21 @@ def batch_yaml_to_dict(input: str,
     return input_dict, machine_dict, resources_dict
 # --- End of helper functions ---
 
+
 @click.group("cli")
 def cli():
     pass
+
 
 @cli.group("wkflow")
 def wkflow():
     click.echo('Performing ECToolkits Workflow')
 
-## --input_file put every into a yaml file! keep it simple
-## --machine
-## --resources
+# --input_file put every into a yaml file! keep it simple
+# --machine
+# --resources
+
+
 @wkflow.command("calc_diel")
 @click.option('--input', '-i',
               type=click.Path(exists=True), help='Input file for workflow')

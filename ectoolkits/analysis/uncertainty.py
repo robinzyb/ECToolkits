@@ -2,6 +2,7 @@ import numpy as np
 from numpy.typing import ArrayLike
 from typing import Tuple
 
+
 def get_f_coarse_grained_data(data_list: ArrayLike, tau: int) -> ArrayLike:
     """
     coarse grain array data in forward direction with block length tau.
@@ -36,6 +37,7 @@ def get_f_coarse_grained_data(data_list: ArrayLike, tau: int) -> ArrayLike:
         new_data_list.append(Y_i)
     new_data_list = np.array(new_data_list)
     return new_data_list
+
 
 def get_uncertainty(data_list: ArrayLike, tau_range: Tuple[int, int, int] = (1, 50, 1)) -> Tuple[ArrayLike, ArrayLike]:
     """
@@ -91,7 +93,8 @@ def get_uncertainty(data_list: ArrayLike, tau_range: Tuple[int, int, int] = (1, 
     mean_list = []
     for tau in range(*tau_range):
         coarse_grained_data_list = get_f_coarse_grained_data(data_list, tau)
-        err = np.sqrt(np.var(coarse_grained_data_list)/len(coarse_grained_data_list))
+        err = np.sqrt(np.var(coarse_grained_data_list) /
+                      len(coarse_grained_data_list))
         mean = coarse_grained_data_list.mean()
         err_list.append(err)
         mean_list.append(mean)

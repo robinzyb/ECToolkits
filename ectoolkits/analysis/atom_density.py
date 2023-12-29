@@ -21,8 +21,6 @@ def analysis_run(args):
         fancy_print("FINISHED")
 
 
-
-
 class AtomDensity():
     def __init__(self, inp):
         fancy_print("Perform Atom Density Analysis")
@@ -71,15 +69,13 @@ class AtomDensity():
         self.natom = len(self.poses[0])
         fancy_print("Read Atom Number: {0}".format(self.natom))
 
-
-
     def run(self):
         # read all structure and corresponding z
         self.all_z = self.get_all_z()
 
         # cell info
         self.cell_volume = self.poses[0].get_volume()
-        _cell  = self.poses[0].get_cell()
+        _cell = self.poses[0].get_cell()
         self.xy_area = self.cell_volume/_cell[2][2]
 
         # surface 1 and 2 position along the trajectory
@@ -91,12 +87,11 @@ class AtomDensity():
         # find the water center along the trajectory
         self.water_cent_list = self.get_water_cent_list()
 
-
         # water center relative to fisrt frame
-        #self.water_cent_rel_s = self.water_cent_s - self.water_cent_s[0]
+        # self.water_cent_rel_s = self.water_cent_s - self.water_cent_s[0]
 
-        #fancy_print("Calculated Origin Water Center Position: {0} A".format(self.water_cent))
-        #fancy_print("Water Center will shift to Cell Center: {0} A".format(self.cell[2]/2))
+        # fancy_print("Calculated Origin Water Center Position: {0} A".format(self.water_cent))
+        # fancy_print("Water Center will shift to Cell Center: {0} A".format(self.cell[2]/2))
 
         for param in self.density_type:
             idx_list = self.get_idx_list(param)
@@ -104,10 +99,10 @@ class AtomDensity():
 
         self.atom_density = pd.DataFrame(self.atom_density)
         self.atom_density_z = pd.DataFrame(self.atom_density_z)
-        #self.get_o_density()
-        #self.dump_o_density()
+        # self.get_o_density()
+        # self.dump_o_density()
 
-    def get_all_z(self)->np.array :
+    def get_all_z(self) -> np.array:
         """get the z coordinates of atoms along trajectory
 
         _extended_summary_
@@ -118,13 +113,12 @@ class AtomDensity():
 
         all_z = []
         for pos in self.poses:
-            #z
+            # z
             all_z.append(pos.get_positions().T[2])
         all_z = np.stack(all_z)
         return all_z
 
-
-    def get_surf1_z_list(self)->np.array:
+    def get_surf1_z_list(self) -> np.array:
         """calculate the surface 1 average position
 
         _extended_summary_
@@ -138,7 +132,7 @@ class AtomDensity():
         surf1_z_list = surf1_z_list.mean(axis=1)
         return surf1_z_list
 
-    def get_surf2_z_list(self)->np.array:
+    def get_surf2_z_list(self) -> np.array:
         """calculate the surface 2 average position
 
         _extended_summary_
@@ -164,12 +158,13 @@ class AtomDensity():
 
     def water_O_idx(self):
         # guess the o index of water
-        i,j = neighbor_list('ij', self.poses[0], {('O', 'H'): 1.3})
+        i, j = neighbor_list('ij', self.poses[0], {('O', 'H'): 1.3})
         cn = np.bincount(i)
 
         H2O_pair_list = []
         Ow_idx = np.where(cn == 2)[0]
-        np.savetxt(os.path.join(os.path.dirname(self.xyz_file), "Ow_idx.dat"), Ow_idx, fmt='%d')
+        np.savetxt(os.path.join(os.path.dirname(
+            self.xyz_file), "Ow_idx.dat"), Ow_idx, fmt='%d')
         return Ow_idx
 
     def get_idx_list(self, param):
@@ -208,9 +203,8 @@ class AtomDensity():
         atom_z_new = []
         cell_z = self.poses[0].get_cell()[2][2]
         for num in atom_z.flatten():
-            atom_z_new.append(num%cell_z)
+            atom_z_new.append(num % cell_z)
         atom_z = np.array(atom_z_new)
-
 
         # find the length between two surface
         if self.surf1_z > self.surf2_z:
@@ -220,13 +214,12 @@ class AtomDensity():
 
         bins = int(self.surf_space/dz)
 
-        density, z = np.histogram(atom_z, bins=bins, range=(0, self.surf_space))
+        density, z = np.histogram(
+            atom_z, bins=bins, range=(0, self.surf_space))
 
         # throw the last one and move the number half bin
         z = z[:-1] + dz/2
-        #z = z[:-1]
-
-
+        # z = z[:-1]
 
         unit_conversion = self.get_unit_conversion(param, dz)
 
@@ -239,12 +232,11 @@ class AtomDensity():
         self.atom_density_z[output_file] = z
         self.atom_density[output_file] = density
 
-
         output_file = f"{output_file}.dat"
         np.savetxt(
-                output_file,
-                np.stack((z, density)).T,
-                header="FIELD: z[A], atom_density"
+            output_file,
+            np.stack((z, density)).T,
+            header="FIELD: z[A], atom_density"
         )
         fancy_print(f"Density Profile Data Save to {output_file}")
 
@@ -269,7 +261,8 @@ class AtomDensity():
             for width in width_list:
                 left_bound = cent - width/2
                 right_bound = cent + width/2
-                part_density = density[np.logical_and((z>=left_bound), (z<=right_bound))]
+                part_density = density[np.logical_and(
+                    (z >= left_bound), (z <= right_bound))]
                 cent_density = part_density.mean()
                 cent_density_list.append(cent_density)
 
@@ -278,19 +271,20 @@ class AtomDensity():
         return pd.DataFrame(all_cent_density)
 
     def plot_density(self, sym=False):
-        plt.rc('font', size=18) #controls default text size
-        plt.rc('axes', titlesize=23) #fontsize of the title
-        plt.rc('axes', labelsize=20) #fontsize of the x and y labels
-        plt.rc('xtick', labelsize=18) #fontsize of the x tick labels
-        plt.rc('ytick', labelsize=18) #fontsize of the y tick labels
-        plt.rc('legend', fontsize=16) #fontsize of the legend
+        plt.rc('font', size=18)  # controls default text size
+        plt.rc('axes', titlesize=23)  # fontsize of the title
+        plt.rc('axes', labelsize=20)  # fontsize of the x and y labels
+        plt.rc('xtick', labelsize=18)  # fontsize of the x tick labels
+        plt.rc('ytick', labelsize=18)  # fontsize of the y tick labels
+        plt.rc('legend', fontsize=16)  # fontsize of the legend
 
-        plt.rc('lines', linewidth=2, markersize=10) #controls default text size
+        # controls default text size
+        plt.rc('lines', linewidth=2, markersize=10)
 
         plt.rc('axes', linewidth=2)
         plt.rc('xtick.major', size=10, width=2)
         plt.rc('ytick.major', size=10, width=2)
-        fig = plt.figure(figsize=(16,9))
+        fig = plt.figure(figsize=(16, 9))
         ax = fig.add_subplot()
         for name, density in self.atom_density.items():
             z = self.atom_density_z[name]
@@ -302,4 +296,3 @@ class AtomDensity():
         ax.set_ylabel("Density")
         ax.set_xlabel("z [A]")
         return fig
-

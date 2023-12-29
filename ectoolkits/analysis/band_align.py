@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from ase.io import read, write
 from ..utils.utils import get_cum_mean
 from ..utils.utils import fancy_print
-#plt.style.use('./matplotlibstyle/project.mplstyle')
+# plt.style.use('./matplotlibstyle/project.mplstyle')
 
 # inp = {
 #     "input_type": "cube",
@@ -32,6 +32,7 @@ from ..utils.utils import fancy_print
 
 # }
 
+
 class BandAlign():
     """
     Class for Band Alignment.
@@ -39,6 +40,7 @@ class BandAlign():
 
     _extended_summary_
     """
+
     def __init__(self, inp: dict):
         """
         input neccesary argument.
@@ -57,7 +59,8 @@ class BandAlign():
                 self.get_pav_mav_traj_list_from_cube(**inp.get("ave_param"))
         elif self.input_type == "file":
             self.pav_x_list, self.pav_list, self.mav_x_list, self.mav_list, self.traj = \
-                self.get_pav_mav_traj_list_from_file(inp.get("ave_param").get("save_path"))
+                self.get_pav_mav_traj_list_from_file(
+                    inp.get("ave_param").get("save_path"))
 
         self.surf1_idx = inp.get("shift_param").get("surf1_idx")
         self.surf2_idx = inp.get("shift_param").get("surf2_idx")
@@ -67,21 +70,20 @@ class BandAlign():
         self.water_hartree_list = self.get_water_hartree()
         self.solid_hartree_list = self.get_solid_hartree()
 
-
-
     def plot_hartree_per_width(self, part='solid'):
         if part == 'solid':
             hartree_list = self.solid_hartree_list
         elif part == 'water':
             hartree_list = self.water_hartree_list
-        plt.rc('font', size=18) #controls default text size
-        plt.rc('axes', titlesize=23) #fontsize of the title
-        plt.rc('axes', labelsize=20) #fontsize of the x and y labels
-        plt.rc('xtick', labelsize=18) #fontsize of the x tick labels
-        plt.rc('ytick', labelsize=18) #fontsize of the y tick labels
-        plt.rc('legend', fontsize=16) #fontsize of the legend
+        plt.rc('font', size=18)  # controls default text size
+        plt.rc('axes', titlesize=23)  # fontsize of the title
+        plt.rc('axes', labelsize=20)  # fontsize of the x and y labels
+        plt.rc('xtick', labelsize=18)  # fontsize of the x tick labels
+        plt.rc('ytick', labelsize=18)  # fontsize of the y tick labels
+        plt.rc('legend', fontsize=16)  # fontsize of the legend
 
-        plt.rc('lines', linewidth=2, markersize=10) #controls default text size
+        # controls default text size
+        plt.rc('lines', linewidth=2, markersize=10)
 
         plt.rc('axes', linewidth=2)
         plt.rc('xtick.major', size=10, width=2)
@@ -90,13 +92,14 @@ class BandAlign():
         num_row = int(num_width/2) + 2
         num_col = 2
 
-        fig = plt.figure(figsize=(16,4.5*num_row), dpi=200)
+        fig = plt.figure(figsize=(16, 4.5*num_row), dpi=200)
         gs = fig.add_gridspec(num_row, num_col)
 
         # plot cum lines
         ax0 = fig.add_subplot(gs[0])
         for width, hartree_list_per_width in hartree_list.items():
-            ax0.plot(get_cum_mean(hartree_list_per_width), label=f"width {width}")
+            ax0.plot(get_cum_mean(hartree_list_per_width),
+                     label=f"width {width}")
         ax0.legend(ncol=2)
         ax0.set_xlabel("Frame Index")
         ax0.set_ylabel("Hartree [eV]")
@@ -105,7 +108,8 @@ class BandAlign():
         # plot mean alignwidth
         ax1 = fig.add_subplot(gs[1])
         mean_serial = hartree_list.mean()
-        ax1.plot(mean_serial, '-o', markerfacecolor='white', markeredgecolor='black')
+        ax1.plot(mean_serial, '-o', markerfacecolor='white',
+                 markeredgecolor='black')
         ax1.set_xlabel("Width [Å]")
         ax1.set_ylabel("Hartree [eV]")
         ax1.set_title("Last Mean Hartree")
@@ -118,7 +122,7 @@ class BandAlign():
             tmp_ax.set_ylabel("Hartree [eV]")
             tmp_ax.set_title(f"Width {width}")
         fig.tight_layout()
-        #fig.show()
+        # fig.show()
         return fig
 
     def get_water_hartree(self) -> pd.DataFrame:
@@ -146,7 +150,7 @@ class BandAlign():
         hartree_list = {}
         for width in self.solid_width_list:
             hartree_list_per_width = []
-            counter =0
+            counter = 0
             for x, mav, solid_cent, snapshot in zip(self.mav_x_list, self.mav_list, self.solid_cent_list, self.traj):
                 cell_z = snapshot.get_cell()[2][2]
                 solid_mav = mav[get_range_bool(x, solid_cent, width, cell_z)]
@@ -211,35 +215,43 @@ class BandAlign():
         mav_list = np.array(mav_list)*au2eV
 
         if save:
-            np.savetxt(os.path.join(save_path, "pav_x_list.dat"), pav_x_list, fmt="%3.4f")
-            np.savetxt(os.path.join(save_path, "pav_list.dat"), pav_list, fmt="%3.4f")
-            np.savetxt(os.path.join(save_path, "mav_x_list.dat"), mav_x_list, fmt="%3.4f")
-            np.savetxt(os.path.join(save_path, "mav_list.dat"), mav_list, fmt="%3.4f")
+            np.savetxt(os.path.join(save_path, "pav_x_list.dat"),
+                       pav_x_list, fmt="%3.4f")
+            np.savetxt(os.path.join(save_path, "pav_list.dat"),
+                       pav_list, fmt="%3.4f")
+            np.savetxt(os.path.join(save_path, "mav_x_list.dat"),
+                       mav_x_list, fmt="%3.4f")
+            np.savetxt(os.path.join(save_path, "mav_list.dat"),
+                       mav_list, fmt="%3.4f")
             write(os.path.join(save_path, "cube_traj.xyz"), traj)
 
         return pav_x_list, pav_list, mav_x_list, mav_list, traj
 
+
 def get_range_bool(x, cent, width, cell_z):
     left_bound = cent-width/2
-    left_bound = left_bound%cell_z
+    left_bound = left_bound % cell_z
     right_bound = cent+width/2
-    right_bound = right_bound%cell_z
+    right_bound = right_bound % cell_z
 
     if left_bound < right_bound:
-        range_bool = np.logical_and((x<=right_bound), (x>=left_bound))
+        range_bool = np.logical_and((x <= right_bound), (x >= left_bound))
     else:
-        range_bool = np.logical_or((x<=right_bound), (x>=left_bound))
+        range_bool = np.logical_or((x <= right_bound), (x >= left_bound))
     return range_bool
+
 
 def get_nearest_idx(array, value):
     idx = np.argmin(np.abs(array-value))
     return idx
+
 
 def get_z_mean(atoms, idx_list):
     # check_in_plane: switch to true to check the selected atoms are in similar z positions
     # sometimes z postions will shift by pbc
     z_mean = atoms[idx_list].get_positions().T[2].mean()
     return z_mean
+
 
 def get_slab_cent(traj, surf1_idx, surf2_idx, cell_z):
     slab_cent_list = []
@@ -252,6 +264,7 @@ def get_slab_cent(traj, surf1_idx, surf2_idx, cell_z):
         slab_cent_list.append(slab_cent)
     slab_cent_list = np.array(slab_cent_list)
     return slab_cent_list
+
 
 def align_to_slab_cent(x_list, pav_list, traj, surf1_idx, surf2_idx, cell_z):
     # surf1 is solid on the left
@@ -276,35 +289,42 @@ def get_alignment_water(level, ref_water_hartree):
     U = -level + ref_water_hartree + 15.35 - 15.81 - 0.35
     return U
 
+
 def get_alignment_water_2(level, ref_water_hartree, ref_solid_hartree):
     U = -level - ref_solid_hartree + ref_water_hartree + 15.35 - 15.81 - 0.35
     return U
 
+
 def get_alignment_vac(level, ref_vac_hartree):
-    U = -level + ref_vac_hartree -4.44
+    U = -level + ref_vac_hartree - 4.44
     return U
 
+
 def get_alignment_vac_2(level, ref_vac_hartree, ref_solid_hartree):
-    U = -level -ref_solid_hartree + ref_vac_hartree -4.44
+    U = -level - ref_solid_hartree + ref_vac_hartree - 4.44
     return U
 
 
 def get_alignment(level, ref_hartree, ref_solid_hartree=None, vac_model=False, ref_bulk=False):
     if vac_model:
         if ref_bulk:
-            U = get_alignment_vac_2(level=level, ref_vac_hartree=ref_hartree, ref_solid_hartree=ref_solid_hartree)
+            U = get_alignment_vac_2(
+                level=level, ref_vac_hartree=ref_hartree, ref_solid_hartree=ref_solid_hartree)
         else:
             U = get_alignment_vac(level=level, ref_vac_hartree=ref_hartree)
     else:
         if ref_bulk:
-            U = get_alignment_water_2(level=level, ref_water_hartree=ref_hartree, ref_solid_hartree=ref_solid_hartree)
+            U = get_alignment_water_2(
+                level=level, ref_water_hartree=ref_hartree, ref_solid_hartree=ref_solid_hartree)
         else:
             U = get_alignment_water(level=level, ref_water_hartree=ref_hartree)
     return U
 
+
 def get_z_mean(atoms, idx_list):
     z_mean = atoms[idx_list].get_positions().T[2].mean()
     return z_mean
+
 
 def get_water_center_list(traj, surf1_idx, surf2_idx, cell_z):
     # not recommend for surface atoms shift at boundary
@@ -319,12 +339,14 @@ def get_water_center_list(traj, surf1_idx, surf2_idx, cell_z):
     water_center_list = np.array(water_center_list)
     return water_center_list
 
+
 def get_water_hartree(x_list, pav_list, water_center_list, width_list):
     hartree_list = {}
     for width in width_list:
         hartree_list_per_width = []
         for x, pav, water_center in zip(x_list, pav_list, water_center_list):
-            water_pav = pav[np.logical_and((x > water_center-width/2), (x < water_center+width/2))]
+            water_pav = pav[np.logical_and(
+                (x > water_center-width/2), (x < water_center+width/2))]
             hartree_list_per_width.append(water_pav.mean())
 
         hartree_list[f"{width}"] = np.array(hartree_list_per_width)
@@ -346,12 +368,14 @@ def get_layer_space_list(traj, layer1_idx, layer2_idx):
 
     return layer_space_list
 
+
 def get_solid_hartree(x_list, mav_list, slab_center_list, width_list):
     hartree_list = {}
     for width in width_list:
         hartree_list_per_width = []
         for x, mav, slab_center in zip(x_list, mav_list, slab_center_list):
-            solid_mav = mav[np.logical_and((x > slab_center-width/2), (x < slab_center+width/2))]
+            solid_mav = mav[np.logical_and(
+                (x > slab_center-width/2), (x < slab_center+width/2))]
             hartree_list_per_width.append(solid_mav.mean())
 
         hartree_list[f"{width}"] = np.array(hartree_list_per_width)

@@ -11,6 +11,7 @@ from ase.geometry import cellpar_to_cell
 # distance caculation library functions
 from MDAnalysis.lib.distances import *
 
+
 def find_cn_idx(atoms1, atoms2, cutoff_hi, cutoff_lo=None, cell=None, **kwargs):
     """count the coordination number(CN) for atoms1 (center atoms), where atoms2 are coordinate atom.
     This function will calculate CN within range cutoff_lo < d < cutoff_lo, where d is the distance
@@ -47,6 +48,7 @@ def find_cn_idx(atoms1, atoms2, cutoff_hi, cutoff_lo=None, cell=None, **kwargs):
     cn_idx = pairs[:, 1]
     return cn_idx
 
+
 def count_cn(atoms1, atoms2, cutoff_hi, cutoff_lo=None, cell=None, **kwargs):
     """count the coordination number(CN) for atoms1 (center atoms), where atoms2 are coordinate atom.
     This function will calculate CN within range cutoff_lo < d < cutoff_lo, where d is the distance
@@ -73,7 +75,7 @@ def count_cn(atoms1, atoms2, cutoff_hi, cutoff_lo=None, cell=None, **kwargs):
         results:
             Array with shape (N,), CN of each atoms atoms1
     """
-    #cell = np.array(cell).astype(np.float32)
+    # cell = np.array(cell).astype(np.float32)
 
     pairs, _ = capped_distance(reference=atoms1,
                                configuration=atoms2,
@@ -83,6 +85,7 @@ def count_cn(atoms1, atoms2, cutoff_hi, cutoff_lo=None, cell=None, **kwargs):
     _minlength = atoms1.shape[0]
     results = np.bincount(pairs[:, 0], minlength=_minlength)
     return results
+
 
 def cellpar2volume(cellpar):
     cell = cellpar_to_cell(cellpar)
@@ -104,16 +107,18 @@ def get_watOidx(atoms, M="Ti", d_OH_cutoff=1.2, d_MO_cutoff=2.8, cn_M_cutoff=1):
     """
     xyz = atoms.positions
     cell = atoms.cell.cellpar()
-    idx_M = np.where(atoms.symbols==M)[0]
-    idx_O = np.where(atoms.symbols=='O')[0]
-    idx_H = np.where(atoms.symbols=='H')[0]
+    idx_M = np.where(atoms.symbols == M)[0]
+    idx_O = np.where(atoms.symbols == 'O')[0]
+    idx_H = np.where(atoms.symbols == 'H')[0]
 
     cn_H = count_cn(xyz[idx_O, :], xyz[idx_H, :], d_OH_cutoff, None, cell)
     cn_M = count_cn(xyz[idx_O, :], xyz[idx_M, :], d_MO_cutoff, None, cell)
 
     watOidx = idx_O[(cn_H >= 0) * (cn_M <= cn_M_cutoff)]
-    watHidx = find_cn_idx(xyz[watOidx, :], xyz[idx_H, :], d_OH_cutoff, None, cell)
+    watHidx = find_cn_idx(
+        xyz[watOidx, :], xyz[idx_H, :], d_OH_cutoff, None, cell)
     return watOidx, watHidx
+
 
 def interface_2_slab(atoms, M="Ti"):
     """transform rutile (110)-water interface model to only the slab, i.e., deleting all the
@@ -137,6 +142,7 @@ def interface_2_slab(atoms, M="Ti"):
     idx_slab = np.setdiff1d(indicies, idx_wat)
     atoms_slab = atoms[idx_slab]
     return idx_slab, atoms_slab
+
 
 def get_rotM(vecy, vecz):
     """get the rotation matrix for rotating a rutile model. Specifically, rotating a step
@@ -163,14 +169,16 @@ def get_rotM(vecy, vecz):
 
     refj = [vecx, vecy, vecz]
     refi = [vece1, vece2, vece3]
-    rotM    = np.empty((3, 3), dtype=float)
+    rotM = np.empty((3, 3), dtype=float)
     rotM[:] = np.nan
+
     def get_cos(vec1, vec2):
         return np.dot(vec1, vec2)/(np.linalg.norm(vec1)*np.linalg.norm(vec2))
     for ii in range(3):
         for jj in range(3):
             rotM[ii, jj] = get_cos(refj[ii], refi[jj])
     return rotM
+
 
 def sep_upper_lower(z, indicies):
     """given indicies, seperate them to upper and lower. More specifically, from
@@ -187,9 +195,10 @@ def sep_upper_lower(z, indicies):
     """
     z = z[indicies]
     zmean = z.mean()
-    i1 = indicies[z>zmean]
-    i2 = indicies[z<zmean]
+    i1 = indicies[z > zmean]
+    i2 = indicies[z < zmean]
     return np.array([i1, i2])
+
 
 def pair_M5c_n_obr(atoms, idx_cn5, idx_obrs, M="Ti"):
     """This methods will find the Ti5c's neighboring Obr atoms.
@@ -222,14 +231,14 @@ def pair_M5c_n_obr(atoms, idx_cn5, idx_obrs, M="Ti"):
     # the first column  -> obr POSY
     # the second column -> obr NEGY
     v = atoms.positions[res_idx[:, 0]] - atoms.positions[res_idx[:, 1]]
-    mic_v = minimize_vectors(v, box=atoms.cell.cellpar())      # apply minimum image convention
-    sel = mic_v[:, 1]<0                           # selective flipping
-    res_idx[sel] =  np.flip(res_idx[sel], axis=1)
+    # apply minimum image convention
+    mic_v = minimize_vectors(v, box=atoms.cell.cellpar())
+    sel = mic_v[:, 1] < 0                           # selective flipping
+    res_idx[sel] = np.flip(res_idx[sel], axis=1)
     return idx_cn5, res_idx
 
 
-
-#def group_by_row(atoms, idx, ngroup=2):
+# def group_by_row(atoms, idx, ngroup=2):
 #    """Group the atoms by row. To be more specific, rutile (110) surface has rows of Ti5c and Obrs. This method group surface atoms.
 #
 #    Args:
@@ -254,7 +263,7 @@ def pair_M5c_n_obr(atoms, idx_cn5, idx_obrs, M="Ti"):
 #    rows = idx[groups[0]], idx[groups[1]]
 #    return rows
 #
-#def sort_by_row(atoms, idx, ngroup=2):
+# def sort_by_row(atoms, idx, ngroup=2):
 #    """Group the atoms by row. To be more specific, rutile (110) surface has rows of Ti5c and Obrs. This method group surface atoms.
 #
 #    Args:
@@ -347,4 +356,3 @@ def get_sym_edge(atoms, idx_l_edge4=2):
     atoms.translate(trans)
     atoms.wrap()
     return atoms
-

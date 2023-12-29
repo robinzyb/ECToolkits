@@ -4,6 +4,7 @@ import os
 import glob
 import numpy as np
 
+
 def scale_iso_cell(atoms, start, end, step, out_name):
     """
     creat the scaling cell for vasp
@@ -17,10 +18,11 @@ def scale_iso_cell(atoms, start, end, step, out_name):
     old_cell_vector = atoms.get_cell()
     new_atoms = atoms.copy()
     for scale in cell_list:
-        new_atoms.set_cell(old_cell_vector * scale, scale_atoms = True)
-        vasp.write_vasp(out_name + "_{0:.3f}".format(scale), new_atoms, \
-                direct=True, sort=True)
+        new_atoms.set_cell(old_cell_vector * scale, scale_atoms=True)
+        vasp.write_vasp(out_name + "_{0:.3f}".format(scale), new_atoms,
+                        direct=True, sort=True)
         printtbox("create POSCAR for {0:.3f} scaling".format(scale))
+
 
 def find_outcar(dirpath, filename):
     """
@@ -40,8 +42,8 @@ def exout_vasp(files):
     """
     infos = []
     for file in files:
-        printtbox("Now extract the cell parameter, volume and "\
-                "energy from {0}".format(os.path.basename(file)))
+        printtbox("Now extract the cell parameter, volume and "
+                  "energy from {0}".format(os.path.basename(file)))
         info = []
         pos = vasp.read_vasp_out(file)
         for i in pos.get_cell_lengths_and_angles():
@@ -52,13 +54,13 @@ def exout_vasp(files):
         printtbox("extraction finished")
     infos = np.array(infos)
 
-    #sort the row by volume
+    # sort the row by volume
     infos = infos[infos[:, 6].argsort()]
     dirname = os.path.dirname(files[0])
     info_file = os.path.join(dirname, "v-e.dat")
 
-    np.savetxt(info_file, infos, fmt='%.8f', \
-               header="lengthA  lengthB  lengthC  AngleA  AngleB  AngleC"\
+    np.savetxt(info_file, infos, fmt='%.8f',
+               header="lengthA  lengthB  lengthC  AngleA  AngleB  AngleC"
                "Volume Energy")
     printtbox("store the file in {0}".format(info_file))
     return infos

@@ -46,6 +46,7 @@ import matplotlib.pyplot as plt
 #    >>> ag = u.atoms
 # # # # # # # # # # # # # # # # # # N O T I C E # # # # # # # # # # # # # # # # # #
 
+
 class WatDensity(AnalysisBase):
     """MDAnalysis class calculating z-axis averaged water densities
        for slab-water interface model. Outputs number densities for both
@@ -94,13 +95,13 @@ class WatDensity(AnalysisBase):
                 Defaults to 2.8 angstrom.
         """
 
-        self._ag    = atomgroup
-        self.rotM   = rotM
-        self.M      = M
+        self._ag = atomgroup
+        self.rotM = rotM
+        self.M = M
         self.dz_bin = dz_bin
         self.cutoff = cutoff
 
-        trajectory  = atomgroup.universe.trajectory
+        trajectory = atomgroup.universe.trajectory
         super(WatDensity, self).__init__(trajectory)
 
         # make/backup data directories
@@ -111,13 +112,13 @@ class WatDensity(AnalysisBase):
         create_path(self.figdir, bk=False)
 
     def _prepare(self):
-        #------------------------ initialize usefule constants -------------------------
+        # ------------------------ initialize usefule constants -------------------------
         self.cellpar = self._ag.dimensions
         self.volume = cellpar2volume(self.cellpar)
         self.xyz = self._ag.positions
-        self.idx_M = np.where(self._ag.elements==self.M)[0]
-        self.idx_O = np.where(self._ag.elements=='O')[0]
-        self.idx_H = np.where(self._ag.elements=='H')[0]
+        self.idx_M = np.where(self._ag.elements == self.M)[0]
+        self.idx_O = np.where(self._ag.elements == 'O')[0]
+        self.idx_H = np.where(self._ag.elements == 'H')[0]
 
         self.watOidx, self.watHidx = self.get_watOidx()
         # Note: there is a trick here
@@ -146,18 +147,22 @@ class WatDensity(AnalysisBase):
         ooooooooooooooooooooooooooooo
         """
         # such that the water are centered in the box
-        self.d_halfslab = (self.xyz[:, -1][self.idx_M].max() - self.xyz[:, -1][self.idx_M].min())/2
+        self.d_halfslab = (
+            self.xyz[:, -1][self.idx_M].max() - self.xyz[:, -1][self.idx_M].min())/2
         self._idxanchor = 2
         self._transtarget = np.array([0.3, 0.3, -self.d_halfslab])
 
-        #---------------------------- prepare results array ----------------------------
+        # ---------------------------- prepare results array ----------------------------
         # guess the water film thickness
         self.film_thickness = self.get_wat_thickness()
-        self.z_bins = np.arange(0, self.film_thickness + self.dz_bin, self.dz_bin)
+        self.z_bins = np.arange(
+            0, self.film_thickness + self.dz_bin, self.dz_bin)
         self.nbins = self.z_bins.shape[0] - 1
 
-        self.hist_oxygen   = np.empty((self.n_frames, self.nbins), dtype=np.float32)
-        self.hist_hydrogen = np.empty((self.n_frames, self.nbins), dtype=np.float32)
+        self.hist_oxygen = np.empty(
+            (self.n_frames, self.nbins), dtype=np.float32)
+        self.hist_hydrogen = np.empty(
+            (self.n_frames, self.nbins), dtype=np.float32)
 
     def _single_frame(self):
         # The calculation
@@ -165,29 +170,31 @@ class WatDensity(AnalysisBase):
         hist_o, hist_h = self.get_z_density(self._ag)
 
         # save results
-        self.hist_oxygen[self._frame_index]   = hist_o
+        self.hist_oxygen[self._frame_index] = hist_o
         self.hist_hydrogen[self._frame_index] = hist_h
 
     def _conclude(self):
-        #--------------------- save the original data (frame-wise) ---------------------
+        # --------------------- save the original data (frame-wise) ---------------------
         np.save(os.path.join(self.datdir, "hist_oxygen.npy"),   self.hist_oxygen)
         np.save(os.path.join(self.datdir, "hist_hydrogen.npy"), self.hist_hydrogen)
 
-        #----------------------- calculate time-averaged density -----------------------
+        # ----------------------- calculate time-averaged density -----------------------
         dat_z = self.z_bins[:-1] + self.dz_bin/2
         dV = self.volume*(self.film_thickness/self.cellpar[2]) / self.nbins
         const = self.number_density2watdensity(dV)
         self.hist_oxygen *= const
         self.hist_hydrogen *= const
 
-        dat_oxygen =   np.array([dat_z, self.hist_oxygen.mean(axis=0)]).T
+        dat_oxygen = np.array([dat_z, self.hist_oxygen.mean(axis=0)]).T
         dat_hydrogen = np.array([dat_z, self.hist_hydrogen.mean(axis=0)]).T
-        np.savetxt(os.path.join(self.datdir, "oxygen.dat"), dat_oxygen, header="z\tdensity", fmt="%2.6f")
-        np.savetxt(os.path.join(self.datdir, "hydrogen.dat"), dat_hydrogen, header="z\tdensity", fmt="%2.6f")
+        np.savetxt(os.path.join(self.datdir, "oxygen.dat"),
+                   dat_oxygen, header="z\tdensity", fmt="%2.6f")
+        np.savetxt(os.path.join(self.datdir, "hydrogen.dat"),
+                   dat_hydrogen, header="z\tdensity", fmt="%2.6f")
         np.savetxt(os.path.join(self.datdir, "hist2rho_scale.dat"), np.array([const]),
                    header="multiply this constant to histogram density to get number densiity in g/cm^{3} in post-process")
 
-        #-------------------------------- plot density ---------------------------------
+        # -------------------------------- plot density ---------------------------------
         self.plot_density_z(dat_oxygen, dat_hydrogen)
 
     def get_watOidx(self):
@@ -198,8 +205,10 @@ class WatDensity(AnalysisBase):
             water interface, all hydrogen comes from water.
         """
         xyz = self.xyz
-        cn_H = count_cn(xyz[self.idx_O, :], xyz[self.idx_H, :], 1.2, None, self.cellpar)
-        cn_M = count_cn(xyz[self.idx_O, :], xyz[self.idx_M, :], self.cutoff, None, self.cellpar)
+        cn_H = count_cn(xyz[self.idx_O, :],
+                        xyz[self.idx_H, :], 1.2, None, self.cellpar)
+        cn_M = count_cn(xyz[self.idx_O, :], xyz[self.idx_M,
+                        :], self.cutoff, None, self.cellpar)
         watOidx = self.idx_O[(cn_H >= 0) * (cn_M <= 1)]
         watHidx = self.idx_H
         return watOidx, watHidx
@@ -209,7 +218,8 @@ class WatDensity(AnalysisBase):
         xyz = apply_PBC(self.xyz+trans, self.cellpar)
         if self.rotM is not None:
             xyz = np.matmul(xyz, self.rotM)
-        thickness = xyz[:, -1][self.watOidx].max() - xyz[:, -1][self.watOidx].min()
+        thickness = xyz[:, -1][self.watOidx].max() - \
+            xyz[:, -1][self.watOidx].min()
         thickness = np.round(thickness)+2
         return thickness
 
@@ -261,6 +271,7 @@ class WatDensity(AnalysisBase):
         M_wat = 18.02/NA
         dV = dV*ag2cm**3
         return M_wat/dV
+
 
 class RutileDisDeg(AnalysisBase):
     """The new rutile (110)-water interface dissociation degree analysis method
@@ -326,89 +337,104 @@ class RutileDisDeg(AnalysisBase):
         """
 
         # load inputs
-        self._ag      = atomgroup
-        self.owidx    = owidx
-        self.cn5idx   = cn5idx.flatten()
+        self._ag = atomgroup
+        self.owidx = owidx
+        self.cn5idx = cn5idx.flatten()
         if edge4idx is not None:
             self.edge4idx = edge4idx.flatten()
             self.edge5idx = edge5idx.flatten()
-            self.is_step  = True
+            self.is_step = True
         else:
             self.is_step = False
-        self.nrow     = nrow
-        self.M        = M
-        self.bins     = bins
-        self.n_oh     = n_oh
+        self.nrow = nrow
+        self.M = M
+        self.bins = bins
+        self.n_oh = n_oh
 
         # MDA analysis class routine
-        trajectory    = atomgroup.universe.trajectory
+        trajectory = atomgroup.universe.trajectory
         super(RutileDisDeg, self).__init__(trajectory)
 
         # make/backup data directories
-        self.datdir   = os.path.join(".", "data_output")
-        self.figdir   = os.path.join(".", "figure_output")
+        self.datdir = os.path.join(".", "data_output")
+        self.figdir = os.path.join(".", "figure_output")
 
         create_path(self.datdir, bk=False)
         create_path(self.figdir, bk=False)
 
         # the name for output files
-        self.fn_distOH5s   = os.path.join(self.datdir, "distOH-5s.npy")
-        self.fn_distOH5e   = os.path.join(self.datdir, "distOH-5e.npy")
-        self.fn_distOH4e   = os.path.join(self.datdir, "distOH-4e.npy")
-        self.fn_disdeg     = os.path.join(self.datdir, "disdeg.npy")
-        self.fn_histOadH1  = os.path.join(self.datdir, "histOH1.dat")
-        self.fn_histOadH2  = os.path.join(self.datdir, "histOH2.dat")
+        self.fn_distOH5s = os.path.join(self.datdir, "distOH-5s.npy")
+        self.fn_distOH5e = os.path.join(self.datdir, "distOH-5e.npy")
+        self.fn_distOH4e = os.path.join(self.datdir, "distOH-4e.npy")
+        self.fn_disdeg = os.path.join(self.datdir, "disdeg.npy")
+        self.fn_histOadH1 = os.path.join(self.datdir, "histOH1.dat")
+        self.fn_histOadH2 = os.path.join(self.datdir, "histOH2.dat")
 
     def _prepare(self):
-        #------------------------ initialize usefule constants -------------------------
-        self.cellpar     = self._ag.dimensions
-        self.xyz         = self._ag.positions
-        self.idx_M       = np.where(self._ag.elements==self.M)[0]
-        self.idx_O       = np.where(self._ag.elements=='O')[0]
-        self.idx_H       = np.where(self._ag.elements=='H')[0]
-        self.bin_edges   = np.linspace(0.85, 3.5, self.bins+1)
-        self.r           = self.bin_edges[:-1] + (self.bin_edges[1]-self.bin_edges[0])/2
+        # ------------------------ initialize usefule constants -------------------------
+        self.cellpar = self._ag.dimensions
+        self.xyz = self._ag.positions
+        self.idx_M = np.where(self._ag.elements == self.M)[0]
+        self.idx_O = np.where(self._ag.elements == 'O')[0]
+        self.idx_H = np.where(self._ag.elements == 'H')[0]
+        self.bin_edges = np.linspace(0.85, 3.5, self.bins+1)
+        self.r = self.bin_edges[:-1] + (self.bin_edges[1]-self.bin_edges[0])/2
 
-        #-------------------------- prepare temporary arraies --------------------------
-        self._adO_5s     = np.empty(self.cn5idx.shape[0], dtype=int)
-        self.dm_cn5      = np.empty((self.cn5idx.shape[0], self.owidx.shape[0]), dtype=float)
-        self.dm_O5s      = np.empty((self.cn5idx.shape[0], self.idx_H.shape[0]), dtype=float)
+        # -------------------------- prepare temporary arraies --------------------------
+        self._adO_5s = np.empty(self.cn5idx.shape[0], dtype=int)
+        self.dm_cn5 = np.empty(
+            (self.cn5idx.shape[0], self.owidx.shape[0]), dtype=float)
+        self.dm_O5s = np.empty(
+            (self.cn5idx.shape[0], self.idx_H.shape[0]), dtype=float)
         if self.is_step:
-            self._adO_5e     = np.empty(self.edge5idx.shape[0], dtype=int)
-            self._adO_4e     = np.empty(self.edge4idx.shape[0]*2, dtype=int)
-            self.dm_edge4    = np.empty((self.edge4idx.shape[0], self.owidx.shape[0]), dtype=float)
-            self.dm_edge5    = np.empty((self.edge5idx.shape[0], self.owidx.shape[0]), dtype=float)
-            self.dm_O5e      = np.empty((self.edge5idx.shape[0], self.idx_H.shape[0]), dtype=float)
-            self.dm_O4e      = np.empty((self.edge4idx.shape[0]*2, self.idx_H.shape[0]), dtype=float)
+            self._adO_5e = np.empty(self.edge5idx.shape[0], dtype=int)
+            self._adO_4e = np.empty(self.edge4idx.shape[0]*2, dtype=int)
+            self.dm_edge4 = np.empty(
+                (self.edge4idx.shape[0], self.owidx.shape[0]), dtype=float)
+            self.dm_edge5 = np.empty(
+                (self.edge5idx.shape[0], self.owidx.shape[0]), dtype=float)
+            self.dm_O5e = np.empty(
+                (self.edge5idx.shape[0], self.idx_H.shape[0]), dtype=float)
+            self.dm_O4e = np.empty(
+                (self.edge4idx.shape[0]*2, self.idx_H.shape[0]), dtype=float)
 
-
-        #---------------------------- prepare results array ----------------------------
-        self.dist_5s     = np.empty((self.n_frames, self.n_oh, self.cn5idx.shape[0]), dtype=np.float32)
+        # ---------------------------- prepare results array ----------------------------
+        self.dist_5s = np.empty(
+            (self.n_frames, self.n_oh, self.cn5idx.shape[0]), dtype=np.float32)
         if self.is_step:
-            self.dist_5e     = np.empty((self.n_frames, 2, self.edge5idx.shape[0]), dtype=np.float32)
-            self.dist_4e     = np.empty((self.n_frames, 2, self.edge4idx.shape[0]*2), dtype=np.float32)
-            self._n          = self.cn5idx.shape[0] + self.edge4idx.shape[0] + self.edge5idx.shape[0]
+            self.dist_5e = np.empty(
+                (self.n_frames, 2, self.edge5idx.shape[0]), dtype=np.float32)
+            self.dist_4e = np.empty(
+                (self.n_frames, 2, self.edge4idx.shape[0]*2), dtype=np.float32)
+            self._n = self.cn5idx.shape[0] + \
+                self.edge4idx.shape[0] + self.edge5idx.shape[0]
         else:
-            self._n          = self.cn5idx.shape[0]
-        self.disdeg      = np.empty((self.n_frames, 2), dtype=np.float32)
+            self._n = self.cn5idx.shape[0]
+        self.disdeg = np.empty((self.n_frames, 2), dtype=np.float32)
 
     def _single_frame(self):
         self.get_neighbor_oxygen(self.cn5idx,   self.dm_cn5,   self._adO_5s, 1)
-        self.dist_5s[self._frame_index, ] = self.get_OH_dist(self._adO_5s, self.dm_O5s).T
+        self.dist_5s[self._frame_index, ] = self.get_OH_dist(
+            self._adO_5s, self.dm_O5s).T
         if self.is_step:
-            self.get_neighbor_oxygen(self.edge5idx, self.dm_edge5, self._adO_5e, 1)
-            self.get_neighbor_oxygen(self.edge4idx, self.dm_edge4, self._adO_4e, 2)
+            self.get_neighbor_oxygen(
+                self.edge5idx, self.dm_edge5, self._adO_5e, 1)
+            self.get_neighbor_oxygen(
+                self.edge4idx, self.dm_edge4, self._adO_4e, 2)
             # Here we sort self._adO4e such that, for all 8 Ti-4c adsorbed waters, we have
             # upper Oad*2, upper Oad-edge*2, lower Oad*2, lower Oad-edge*2.
             # This way, we can use numpy reshape and mean method to get the averages of equivalent sites
-            sort_idx  = np.argsort(self._ag.positions[self._adO_4e][:, -1])
-            upper_tmp = np.flip(self._adO_4e[sort_idx][self.edge4idx.shape[0]:])
+            sort_idx = np.argsort(self._ag.positions[self._adO_4e][:, -1])
+            upper_tmp = np.flip(
+                self._adO_4e[sort_idx][self.edge4idx.shape[0]:])
             lower_tmp = self._adO_4e[sort_idx][:self.edge4idx.shape[0]]
             self._adO_4e = np.array([upper_tmp.reshape(2, -1, order="F"),
                                     lower_tmp.reshape(2, -1, order="F")]).flatten()
             # print(self._adO_4e)
-            self.dist_5e[self._frame_index, ] = self.get_OH_dist(self._adO_5e, self.dm_O5e).T
-            self.dist_4e[self._frame_index, ] = self.get_OH_dist(self._adO_4e, self.dm_O4e).T
+            self.dist_5e[self._frame_index, ] = self.get_OH_dist(
+                self._adO_5e, self.dm_O5e).T
+            self.dist_4e[self._frame_index, ] = self.get_OH_dist(
+                self._adO_4e, self.dm_O4e).T
 
     def _conclude(self):
         np.save(self.fn_distOH5s, self.dist_5s)
@@ -416,30 +442,37 @@ class RutileDisDeg(AnalysisBase):
             np.save(self.fn_distOH5e, self.dist_5e)
             np.save(self.fn_distOH4e, self.dist_4e)
 
-        hist1_5s, hist2_5s = self.dist2histo(self.dist_5s, self.bin_edges, self.nrow)
+        hist1_5s, hist2_5s = self.dist2histo(
+            self.dist_5s, self.bin_edges, self.nrow)
         if self.is_step:
-            hist1_5e, hist2_5e = self.dist2histo(self.dist_5e, self.bin_edges, self.nrow)
-            hist1_4e, hist2_4e = self.dist2histo(self.dist_4e, self.bin_edges, self.nrow)
-            header_list = ["d(Oad-H) [A]"] + ["Oad-half"] + [r"Oad #{0}".format(ii) for ii in range(len(hist1_5s)+1)] + ["Oad-edge"]
+            hist1_5e, hist2_5e = self.dist2histo(
+                self.dist_5e, self.bin_edges, self.nrow)
+            hist1_4e, hist2_4e = self.dist2histo(
+                self.dist_4e, self.bin_edges, self.nrow)
+            header_list = ["d(Oad-H) [A]"] + ["Oad-half"] + [r"Oad #{0}".format(
+                ii) for ii in range(len(hist1_5s)+1)] + ["Oad-edge"]
             hist1 = hist1_5e + hist1_5s + hist1_4e
             hist2 = hist2_5e + hist2_5s + hist2_4e
         else:
             hist1 = hist1_5s
             hist2 = hist2_5s
-            header_list = ["d(Oad-H) [A]"] + [r"Oad #{0}".format(ii) for ii in range(len(hist1_5s))]
+            header_list = [
+                "d(Oad-H) [A]"] + [r"Oad #{0}".format(ii) for ii in range(len(hist1_5s))]
 
-        res1  = np.concatenate([[self.r], hist1], axis=0)
-        res2  = np.concatenate([[self.r], hist2], axis=0)
-        np.savetxt(self.fn_histOadH1, res1.T, fmt="%10.6f", header="\t".join(header_list))
-        np.savetxt(self.fn_histOadH2, res2.T, fmt="%10.6f", header="\t".join(header_list))
+        res1 = np.concatenate([[self.r], hist1], axis=0)
+        res2 = np.concatenate([[self.r], hist2], axis=0)
+        np.savetxt(self.fn_histOadH1, res1.T, fmt="%10.6f",
+                   header="\t".join(header_list))
+        np.savetxt(self.fn_histOadH2, res2.T, fmt="%10.6f",
+                   header="\t".join(header_list))
 
         if self.is_step:
-            cn_5s      = self.dist2cn(self.dist_5s)
-            cn_5e      = self.dist2cn(self.dist_5e)
-            cn_4e      = self.dist2cn(self.dist_4e)
-            cn         = np.concatenate([cn_5s, cn_5e, cn_4e], axis=-1)
+            cn_5s = self.dist2cn(self.dist_5s)
+            cn_5e = self.dist2cn(self.dist_5e)
+            cn_4e = self.dist2cn(self.dist_4e)
+            cn = np.concatenate([cn_5s, cn_5e, cn_4e], axis=-1)
         else:
-            cn         = self.dist2cn(self.dist_5s)
+            cn = self.dist2cn(self.dist_5s)
         self.disdeg[:] = self.cn2disdeg(cn)
         np.save(self.fn_disdeg, self.disdeg)
 
@@ -463,7 +496,8 @@ class RutileDisDeg(AnalysisBase):
                 cutoff raidius, a masking value of '-1' is provided
         """
         # group_idx
-        distance_array(self._ag.positions[idx_ti], self._ag.positions[self.owidx], result=res_dm, box=self.cellpar)
+        distance_array(
+            self._ag.positions[idx_ti], self._ag.positions[self.owidx], result=res_dm, box=self.cellpar)
         sort_idx = np.argsort(res_dm, axis=1)
         res_idx[:] = self.owidx[sort_idx[:, :n_ow]].flatten()
 
@@ -474,35 +508,36 @@ class RutileDisDeg(AnalysisBase):
 
     @staticmethod
     def dist2histo(dist, bin_edges, nrow):
-        n_frames     = dist.shape[0]
-        dist1        = dist[:, 0].reshape(n_frames, 2, nrow, -1)
-        dist2        = dist[:, 1].reshape(n_frames, 2, nrow, -1)
-        nTiTerms     = dist1.shape[-1]
+        n_frames = dist.shape[0]
+        dist1 = dist[:, 0].reshape(n_frames, 2, nrow, -1)
+        dist2 = dist[:, 1].reshape(n_frames, 2, nrow, -1)
+        nTiTerms = dist1.shape[-1]
         dist1, dist2 = dist1.reshape(-1, nTiTerms), dist2.reshape(-1, nTiTerms)
         hist1_list = []
         hist2_list = []
         for ii in range(dist1.shape[-1]):
-            hist1, _  = np.histogram(dist1[:, ii], bins=bin_edges, density=True)
-            hist2, _  = np.histogram(dist2[:, ii], bins=bin_edges, density=True)
+            hist1, _ = np.histogram(dist1[:, ii], bins=bin_edges, density=True)
+            hist2, _ = np.histogram(dist2[:, ii], bins=bin_edges, density=True)
             hist1_list.append(hist1)
             hist2_list.append(hist2)
         return hist1_list, hist2_list
 
     @staticmethod
     def dist2cn(dist):
-        cn    = dist[:, 0].astype(np.int8)
+        cn = dist[:, 0].astype(np.int8)
         cn[:] = -100
-        cn[dist[:, 1]<1.2] = 2
-        cn[dist[:, 0]>1.2] = 0
-        cn[(dist[:, 0]<1.2)&(dist[:, 1]>1.2)] = 1
+        cn[dist[:, 1] < 1.2] = 2
+        cn[dist[:, 0] > 1.2] = 0
+        cn[(dist[:, 0] < 1.2) & (dist[:, 1] > 1.2)] = 1
         return cn
 
     @staticmethod
     def cn2disdeg(cn):
         nframes = cn.shape[0]
-        nsite   = cn.shape[-1]//2
-        cn      = cn.reshape(nframes, 2, nsite)
-        return 1 - np.sum(cn==2, axis=-1)/nsite
+        nsite = cn.shape[-1]//2
+        cn = cn.reshape(nframes, 2, nsite)
+        return 1 - np.sum(cn == 2, axis=-1)/nsite
+
 
 class staleRutileDisDeg(AnalysisBase):
     # stale rutile dissociation degree analysis.
@@ -591,35 +626,39 @@ class staleRutileDisDeg(AnalysisBase):
         create_path(self.figdir, bk=False)
 
         # the name for output files
-        self.fn_adind_cn5   = os.path.join(self.datdir, "ad_O_indicies.npy")
-        self.fn_adind_edge5 = os.path.join(self.datdir, "ad_O_indicies-edge5.npy")
-        self.fn_adind_edge4 = os.path.join(self.datdir, "ad_O_indicies-edge4.npy")
-        self.fn_cn          = os.path.join(self.datdir, "SurfaceOxygenCN.npy")
-        self.fn_disdeg5s    = os.path.join(self.datdir, "disdeg-Ti5s.npy")
-        self.fn_disdeg4e    = os.path.join(self.datdir, "disdeg-Ti4e.npy")
-        self.fn_disdeg5e    = os.path.join(self.datdir, "disdeg-Ti5e.npy")
+        self.fn_adind_cn5 = os.path.join(self.datdir, "ad_O_indicies.npy")
+        self.fn_adind_edge5 = os.path.join(
+            self.datdir, "ad_O_indicies-edge5.npy")
+        self.fn_adind_edge4 = os.path.join(
+            self.datdir, "ad_O_indicies-edge4.npy")
+        self.fn_cn = os.path.join(self.datdir, "SurfaceOxygenCN.npy")
+        self.fn_disdeg5s = os.path.join(self.datdir, "disdeg-Ti5s.npy")
+        self.fn_disdeg4e = os.path.join(self.datdir, "disdeg-Ti4e.npy")
+        self.fn_disdeg5e = os.path.join(self.datdir, "disdeg-Ti5e.npy")
 
     def _prepare(self):
-        #------------------------ initialize usefule constants -------------------------
+        # ------------------------ initialize usefule constants -------------------------
         self.cellpar = self._ag.dimensions
-        self.xyz     = self._ag.positions
-        self.idx_M   = np.where(self._ag.elements==self.M)[0]
-        self.idx_O   = np.where(self._ag.elements=='O')[0]
-        self.idx_H   = np.where(self._ag.elements=='H')[0]
+        self.xyz = self._ag.positions
+        self.idx_M = np.where(self._ag.elements == self.M)[0]
+        self.idx_O = np.where(self._ag.elements == 'O')[0]
+        self.idx_H = np.where(self._ag.elements == 'H')[0]
 
-        #-------------------------- prepare temporary arraies --------------------------
-        self.dm_cn5   = np.empty((self.n_cn5idx, self.owidx.shape[0]), dtype=float)
-        self.dm_edge4 = np.empty((self.n_edge4idx, self.owidx.shape[0]), dtype=float)
-        self.dm_edge5 = np.empty((self.n_edge5idx, self.owidx.shape[0]), dtype=float)
+        # -------------------------- prepare temporary arraies --------------------------
+        self.dm_cn5 = np.empty(
+            (self.n_cn5idx, self.owidx.shape[0]), dtype=float)
+        self.dm_edge4 = np.empty(
+            (self.n_edge4idx, self.owidx.shape[0]), dtype=float)
+        self.dm_edge5 = np.empty(
+            (self.n_edge5idx, self.owidx.shape[0]), dtype=float)
 
-        #---------------------------- prepare results array ----------------------------
-        self._n          = self.n_cn5idx + self.n_edge4idx*2 + self.n_edge5idx
+        # ---------------------------- prepare results array ----------------------------
+        self._n = self.n_cn5idx + self.n_edge4idx*2 + self.n_edge5idx
         self.ad_indicies = np.empty((self.n_frames, 2, self._n), dtype=int)
-        self.cn          = np.empty((self.n_frames, 2, self._n), dtype=float)
-        self.disdeg5s    = np.empty((self.n_frames, 2, 4), dtype=float)
-        self.disdeg4e    = np.empty((self.n_frames, 2, 4), dtype=float)
-        self.disdeg5e    = np.empty((self.n_frames, 2, 4), dtype=float)
-
+        self.cn = np.empty((self.n_frames, 2, self._n), dtype=float)
+        self.disdeg5s = np.empty((self.n_frames, 2, 4), dtype=float)
+        self.disdeg4e = np.empty((self.n_frames, 2, 4), dtype=float)
+        self.disdeg5e = np.empty((self.n_frames, 2, 4), dtype=float)
 
     def _single_frame(self):
         # get 'neighbor' (Adsorbed) oxygen indicies
@@ -631,31 +670,36 @@ class staleRutileDisDeg(AnalysisBase):
             self.get_neighbor_oxygen(self.lower_cn5idx, self.dm_cn5, n_ow=1)
         if self.n_edge5idx > 0:
             self.ad_indicies[self._frame_index, 0, self.n_cn5idx:(self.n_cn5idx+self.n_edge5idx)] = \
-                self.get_neighbor_oxygen(self.upper_edge5idx, self.dm_edge5, n_ow=1)
+                self.get_neighbor_oxygen(
+                    self.upper_edge5idx, self.dm_edge5, n_ow=1)
             self.ad_indicies[self._frame_index, 1, self.n_cn5idx:(self.n_cn5idx+self.n_edge5idx)] = \
-                self.get_neighbor_oxygen(self.lower_edge5idx, self.dm_edge5, n_ow=1)
+                self.get_neighbor_oxygen(
+                    self.lower_edge5idx, self.dm_edge5, n_ow=1)
         if self.n_edge4idx > 0:
             self.ad_indicies[self._frame_index, 0, (self.n_cn5idx+self.n_edge5idx):] = \
-                self.get_neighbor_oxygen(self.upper_edge4idx, self.dm_edge4, n_ow=2)
+                self.get_neighbor_oxygen(
+                    self.upper_edge4idx, self.dm_edge4, n_ow=2)
             self.ad_indicies[self._frame_index, 1, (self.n_cn5idx+self.n_edge5idx):] = \
-                self.get_neighbor_oxygen(self.upper_edge4idx, self.dm_edge4, n_ow=2)
+                self.get_neighbor_oxygen(
+                    self.upper_edge4idx, self.dm_edge4, n_ow=2)
 
         # calculate the coordination numnber for the oxygen
         idx_o = self.ad_indicies[self._frame_index].flatten()
-        mask = (idx_o==-1)   # mask using -1 indicies
+        mask = (idx_o == -1)   # mask using -1 indicies
         cn = count_cn(self._ag.positions[idx_o], self._ag.positions[self.idx_H],
                       cutoff_hi=1.2, cutoff_lo=None, cell=self.cellpar).astype(float)
         cn[mask] = np.nan
         self.cn[self._frame_index] = cn.reshape(2, self._n)
 
     def _conclude(self):
-        res_cn5_Oind    = self.ad_indicies[:, :, :self.n_cn5idx]
+        res_cn5_Oind = self.ad_indicies[:, :, :self.n_cn5idx]
         np.save(self.fn_adind_cn5, res_cn5_Oind)
         if self.n_edge5idx > 0:
-            res_edge5_Oind  = self.ad_indicies[:, :, self.n_cn5idx:(self.n_cn5idx+self.n_edge5idx)]
+            res_edge5_Oind = self.ad_indicies[:, :, self.n_cn5idx:(
+                self.n_cn5idx+self.n_edge5idx)]
             np.save(self.fn_adind_edge5, res_edge5_Oind)
         if self.n_edge4idx > 0:
-            res_edge4_Oind  = \
+            res_edge4_Oind = \
                 self.ad_indicies[:, :, (self.n_cn5idx+self.n_edge5idx):].reshape(self.n_frames,
                                                                                  2,
                                                                                  self.n_edge4idx,
@@ -667,7 +711,7 @@ class staleRutileDisDeg(AnalysisBase):
         n_effect = np.count_nonzero(~np.isnan(self.cn), axis=-1)
         for kk in range(4):
             self.disdeg[:, :, kk] = \
-                np.nansum(self.cn==kk, axis=-1)/n_effect
+                np.nansum(self.cn == kk, axis=-1)/n_effect
         np.save(self.fn_disdeg, self.disdeg)
         return None
 
@@ -691,12 +735,15 @@ class staleRutileDisDeg(AnalysisBase):
                 cutoff raidius, a masking value of '-1' is provided
         """
         # group_idx
-        distance_array(self._ag.positions[idx_ti], self._ag.positions[self.owidx], result=res_dm, box=self.cellpar)
+        distance_array(
+            self._ag.positions[idx_ti], self._ag.positions[self.owidx], result=res_dm, box=self.cellpar)
         sort_idx = np.argsort(res_dm, axis=1)
         res_idx = self.owidx[sort_idx[:, :n_ow]]
-        mask = (np.take_along_axis(res_dm, sort_idx[:, :n_ow], axis=1)>self.cutoff)
+        mask = (np.take_along_axis(
+            res_dm, sort_idx[:, :n_ow], axis=1) > self.cutoff)
         res_idx[mask] = -1
         return res_idx.reshape(-1)
+
 
 class dAdBridge(AnalysisBase):
     """MDAnalysis class calculating distances between adsobed water oxygen atoms and two neighboring bridge
@@ -772,8 +819,10 @@ class dAdBridge(AnalysisBase):
         self._ag = atomgroup
         self.idx_cn5 = idx_cn5.flatten()
         self.idx_obr = idx_obr
-        self.idx_obr1 = np.array([idx_obr[0, :, 0], idx_obr[1, :, 0]]).flatten()
-        self.idx_obr2 = np.array([idx_obr[0, :, 1], idx_obr[1, :, 1]]).flatten()
+        self.idx_obr1 = np.array(
+            [idx_obr[0, :, 0], idx_obr[1, :, 0]]).flatten()
+        self.idx_obr2 = np.array(
+            [idx_obr[0, :, 1], idx_obr[1, :, 1]]).flatten()
         self.idx_owat = idx_owat
 
         self._find_Oad = True
@@ -804,47 +853,53 @@ class dAdBridge(AnalysisBase):
         create_path(self.figdir, bk=False)
 
         # the file names for output data
-        self.fn_upperdab  = os.path.join(self.datdir, "upper-dab.npy")
-        self.fn_lowerdab  = os.path.join(self.datdir, "lower-dab.npy")
+        self.fn_upperdab = os.path.join(self.datdir, "upper-dab.npy")
+        self.fn_lowerdab = os.path.join(self.datdir, "lower-dab.npy")
         self.fn_adind_cn5 = os.path.join(self.datdir, "ad_O_indicies.npy")
 
     def _prepare(self):
-        #------------------------ initialize usefule constants -------------------------
+        # ------------------------ initialize usefule constants -------------------------
         self.cellpar = self._ag.dimensions
-        self.xyz     = self._ag.positions
-        self.idx_M   = np.where(self._ag.elements==self.M)[0]
-        self.idx_O   = np.where(self._ag.elements=='O')[0]
-        self.idx_H   = np.where(self._ag.elements=='H')[0]
+        self.xyz = self._ag.positions
+        self.idx_M = np.where(self._ag.elements == self.M)[0]
+        self.idx_O = np.where(self._ag.elements == 'O')[0]
+        self.idx_H = np.where(self._ag.elements == 'H')[0]
         if self.ref_vec is None:
-            ref_upper    = self.get_ref(self.idx_obr[0][:, 0], self.idx_obr[0][:, 1])
-            ref_lower    = self.get_ref(self.idx_obr[1][:, 0], self.idx_obr[1][:, 1])
+            ref_upper = self.get_ref(
+                self.idx_obr[0][:, 0], self.idx_obr[0][:, 1])
+            ref_lower = self.get_ref(
+                self.idx_obr[1][:, 0], self.idx_obr[1][:, 1])
             self.ref_vec = (ref_upper + ref_lower)/2
 
-        #---------------------------- prepare results array ----------------------------
-        self.dab = np.empty((self.n_frames, 2, self.idx_cn5.shape[-1]), dtype=float)
+        # ---------------------------- prepare results array ----------------------------
+        self.dab = np.empty(
+            (self.n_frames, 2, self.idx_cn5.shape[-1]), dtype=float)
         if self._find_Oad is True:
-            self.dm_cn5 = np.empty((self.idx_cn5.shape[-1], self.idx_owat.shape[0]), dtype=float)
-            self.idx_adO = np.empty((self.n_frames, self.idx_cn5.shape[-1]), dtype=int)
+            self.dm_cn5 = np.empty(
+                (self.idx_cn5.shape[-1], self.idx_owat.shape[0]), dtype=float)
+            self.idx_adO = np.empty(
+                (self.n_frames, self.idx_cn5.shape[-1]), dtype=int)
 
     def _single_frame(self):
         if self._find_Oad:
-            self.idx_adO[self._frame_index] = self.get_neighbor_oxygen(self.idx_cn5, self.dm_cn5)
+            self.idx_adO[self._frame_index] = self.get_neighbor_oxygen(
+                self.idx_cn5, self.dm_cn5)
         v1, v2 = self.get_dab(self.idx_adO[self._frame_index, :],
                               self.idx_obr1, self.idx_obr2)
         self.dab[self._frame_index, :, ] = np.array([v1, v2])
 
-
     def _conclude(self):
-        self.dab     = self.dab.reshape(self.n_frames, 2, 2, self.idx_cn5.shape[-1]//2)
-        self.dab     = np.concatenate([self.dab[:, 0].reshape(self.n_frames, 2, 1, self.idx_cn5.shape[-1]//2),
-                                       self.dab[:, 1].reshape(self.n_frames, 2, 1, self.idx_cn5.shape[-1]//2)],
-                                       axis=2)
-        self.dab     = np.abs(self.dab)
-        self.idx_adO = self.idx_adO.reshape(self.n_frames, 2, self.idx_cn5.shape[-1]//2)
+        self.dab = self.dab.reshape(
+            self.n_frames, 2, 2, self.idx_cn5.shape[-1]//2)
+        self.dab = np.concatenate([self.dab[:, 0].reshape(self.n_frames, 2, 1, self.idx_cn5.shape[-1]//2),
+                                   self.dab[:, 1].reshape(self.n_frames, 2, 1, self.idx_cn5.shape[-1]//2)],
+                                  axis=2)
+        self.dab = np.abs(self.dab)
+        self.idx_adO = self.idx_adO.reshape(
+            self.n_frames, 2, self.idx_cn5.shape[-1]//2)
         np.save(self.fn_upperdab, self.dab[:, 0, :, :])
         np.save(self.fn_lowerdab, self.dab[:, 1, :, :])
         np.save(self.fn_adind_cn5, self.idx_adO)
-
 
     def get_ref(self, idx1, idx2):
         """use minimum image vector between two rows of obr as reference vectors"""
@@ -874,11 +929,13 @@ class dAdBridge(AnalysisBase):
         mask = (idx_adO == -1)
         xyz = self._ag.positions
 
-        micv1 = minimize_vectors(xyz[idx_adO] - xyz[idx_obr1], box=self.cellpar)
-        micv2 = minimize_vectors(xyz[idx_adO] - xyz[idx_obr2], box=self.cellpar)
+        micv1 = minimize_vectors(
+            xyz[idx_adO] - xyz[idx_obr1], box=self.cellpar)
+        micv2 = minimize_vectors(
+            xyz[idx_adO] - xyz[idx_obr2], box=self.cellpar)
 
-        res1  = np.matmul(micv1, self.ref_vec)
-        res2  = np.matmul(micv2, self.ref_vec)
+        res1 = np.matmul(micv1, self.ref_vec)
+        res2 = np.matmul(micv2, self.ref_vec)
         res1[mask] = np.nan
         res2[mask] = np.nan
         return res1, res2
@@ -903,12 +960,15 @@ class dAdBridge(AnalysisBase):
                 cutoff raidius, a masking value of '-1' is provided
         """
         # group_idx
-        distance_array(self._ag.positions[idx_ti], self._ag.positions[self.idx_owat], result=res_dm, box=self.cellpar)
+        distance_array(
+            self._ag.positions[idx_ti], self._ag.positions[self.idx_owat], result=res_dm, box=self.cellpar)
         sort_idx = np.argsort(res_dm, axis=1)
         res_idx = self.idx_owat[sort_idx[:, :n_ow]]
-        mask = (np.take_along_axis(res_dm, sort_idx[:, :n_ow], axis=1)>self.cutoff)
+        mask = (np.take_along_axis(
+            res_dm, sort_idx[:, :n_ow], axis=1) > self.cutoff)
         res_idx[mask] = -1
         return res_idx.reshape(-1)
+
 
 class dInterLayer(AnalysisBase):
     """MDAnalysis class for interlayer distances calculation. Note that this utility is only good
@@ -939,19 +999,19 @@ class dInterLayer(AnalysisBase):
                 Bin size for inter-layer distances histogram. Defaults to 0.005 angstrom.
         """
 
-        self._ag            = atomgroup
-        self.idx_Ti         = np.where(self._ag.elements=="Ti")[0]
-        self.n_ti           = 2*n_ti5c
-        n                   = self.idx_Ti.shape[0] // self.n_ti
-        z_ti                = self._ag.positions[self.idx_Ti][:, -1]
-        args                = np.argsort(z_ti)
-        idx_Ti_layered      = self.idx_Ti[args].reshape(n, self.n_ti)
+        self._ag = atomgroup
+        self.idx_Ti = np.where(self._ag.elements == "Ti")[0]
+        self.n_ti = 2*n_ti5c
+        n = self.idx_Ti.shape[0] // self.n_ti
+        z_ti = self._ag.positions[self.idx_Ti][:, -1]
+        args = np.argsort(z_ti)
+        idx_Ti_layered = self.idx_Ti[args].reshape(n, self.n_ti)
         self.idx_Ti_layered = idx_Ti_layered
-        self.n              = idx_Ti_layered.shape[0]
-        self.n_ti           = idx_Ti_layered.shape[1]
-        self.dz             = dz
+        self.n = idx_Ti_layered.shape[0]
+        self.n_ti = idx_Ti_layered.shape[1]
+        self.dz = dz
 
-        trajectory  = atomgroup.universe.trajectory
+        trajectory = atomgroup.universe.trajectory
         super(dInterLayer, self).__init__(trajectory)
 
         # make/backup data directories
@@ -961,15 +1021,15 @@ class dInterLayer(AnalysisBase):
         create_path(self.datdir, bk=False)
         create_path(self.figdir, bk=False)
 
-        self.fn_z     = os.path.join(self.datdir, "ti_z_mean.npy")
+        self.fn_z = os.path.join(self.datdir, "ti_z_mean.npy")
         self.fn_histo = os.path.join(self.datdir, "ti_z_mean_histo.dat")
 
     def _prepare(self):
-        #------------------------ initialize usefule constants -------------------------
+        # ------------------------ initialize usefule constants -------------------------
         self.cellpar = self._ag.dimensions
         self.xyz = self._ag.positions
-        self.idx_O = np.where(self._ag.elements=='O')[0]
-        self.idx_H = np.where(self._ag.elements=='H')[0]
+        self.idx_O = np.where(self._ag.elements == 'O')[0]
+        self.idx_H = np.where(self._ag.elements == 'H')[0]
 
         self._idxanchor = 2
         self._transtarget = np.array([1, 1, 3.5])
@@ -980,22 +1040,25 @@ class dInterLayer(AnalysisBase):
         _, self.z_min, self.z_max = self.get_n_trilayers(xyz, self.idx_Ti)
         self.bin_edges = np.arange(self.z_min-1, self.z_max+1+self.dz, self.dz)
 
-        #---------------------------- prepare results array ----------------------------
-        self.z_mean = np.empty((self.n_frames, self.idx_Ti_layered.shape[0]), dtype=np.float32)
+        # ---------------------------- prepare results array ----------------------------
+        self.z_mean = np.empty(
+            (self.n_frames, self.idx_Ti_layered.shape[0]), dtype=np.float32)
 
     def _single_frame(self):
         # update positions
-        xyz = self.update_pos(self._ag.positions, self._transtarget, self._idxanchor)
+        xyz = self.update_pos(self._ag.positions,
+                              self._transtarget, self._idxanchor)
         xyz = apply_PBC(xyz, box=self.cellpar)
-        self.z_mean[self._frame_index, :] = xyz[:, -1][self.idx_Ti_layered].mean(axis=-1)
+        self.z_mean[self._frame_index, :] = xyz[:, -
+                                                1][self.idx_Ti_layered].mean(axis=-1)
 
     def _conclude(self):
         np.save(self.fn_z, self.z_mean)
-        self.z  = self.bin_edges[1:] - self.dz/2
-        hist    = self.get_z_histo(self.z_mean.flatten(), self.bin_edges)
-        res     = np.array([self.z, hist]).T
-        np.savetxt(self.fn_histo, res, fmt="%10.6f", header="Z [A]\t\thistogram")
-
+        self.z = self.bin_edges[1:] - self.dz/2
+        hist = self.get_z_histo(self.z_mean.flatten(), self.bin_edges)
+        res = np.array([self.z, hist]).T
+        np.savetxt(self.fn_histo, res, fmt="%10.6f",
+                   header="Z [A]\t\thistogram")
 
     @staticmethod
     def update_pos(xyz, anchor_pos, anchor_idx):
@@ -1063,19 +1126,19 @@ class SurfTiOBondLenght(AnalysisBase):
         """
 
         # load inputs
-        self._ag     = atomgroup
+        self._ag = atomgroup
         self.idx_cn5 = idx_cn5.flatten()
         self.idx_obr = idx_obr.flatten()
-        self.idx_ow  = idx_ow
-        self.M       = M
+        self.idx_ow = idx_ow
+        self.M = M
 
         # MDA analysis class routine
-        trajectory   = atomgroup.universe.trajectory
+        trajectory = atomgroup.universe.trajectory
         super(SurfTiOBondLenght, self).__init__(trajectory)
 
         # make/backup data directories
-        self.datdir  = os.path.join(".", "data_output")
-        self.figdir  = os.path.join(".", "figure_output")
+        self.datdir = os.path.join(".", "data_output")
+        self.figdir = os.path.join(".", "figure_output")
 
         create_path(self.datdir, bk=False)
         create_path(self.figdir, bk=False)
@@ -1083,29 +1146,31 @@ class SurfTiOBondLenght(AnalysisBase):
         # the name for output files
         self.fn_dist_tioad = os.path.join(self.datdir, "d_TiOad.npy")
         self.fn_dist_tiobr = os.path.join(self.datdir, "d_TiObr.npy")
-        self.fn_indicies   = os.path.join(self.datdir, "indicies.dat")
+        self.fn_indicies = os.path.join(self.datdir, "indicies.dat")
         # header for output indicies
-        self.ind_header    = "\t\t".join(["Ti5s", "Obr", "Tibr1", "Tibr2"])
-
+        self.ind_header = "\t\t".join(["Ti5s", "Obr", "Tibr1", "Tibr2"])
 
     def _prepare(self):
-        #------------------------ initialize usefule constants -------------------------
-        self.cellpar  = self._ag.dimensions
-        self.xyz      = self._ag.positions
-        self.idx_M    = np.where(self._ag.elements==self.M)[0]
-        self.idx_O    = np.where(self._ag.elements=='O')[0]
-        self.idx_H    = np.where(self._ag.elements=='H')[0]
-        self._idx_obr, self._idx_ti = self.pair_TiObr(self.xyz, self.idx_obr, self.idx_M, self.cellpar)
-        self.indicies = np.concatenate([[self.idx_cn5], [self.idx_obr], self._idx_ti.reshape(2, -1)], axis=0)
+        # ------------------------ initialize usefule constants -------------------------
+        self.cellpar = self._ag.dimensions
+        self.xyz = self._ag.positions
+        self.idx_M = np.where(self._ag.elements == self.M)[0]
+        self.idx_O = np.where(self._ag.elements == 'O')[0]
+        self.idx_H = np.where(self._ag.elements == 'H')[0]
+        self._idx_obr, self._idx_ti = self.pair_TiObr(
+            self.xyz, self.idx_obr, self.idx_M, self.cellpar)
+        self.indicies = np.concatenate(
+            [[self.idx_cn5], [self.idx_obr], self._idx_ti.reshape(2, -1)], axis=0)
 
-        #-------------------------- prepare temporary arraies --------------------------
-        self.dM_TiOad = np.empty((self.idx_cn5.shape[0], self.idx_ow.shape[0]), dtype=float)
+        # -------------------------- prepare temporary arraies --------------------------
+        self.dM_TiOad = np.empty(
+            (self.idx_cn5.shape[0], self.idx_ow.shape[0]), dtype=float)
         self.bl_TiObr = np.empty((self._idx_obr.shape[0]), dtype=float)
 
-        #---------------------------- prepare results array ----------------------------
-        self._n       = self.idx_cn5.shape[0]
-        self.dTiOad   = np.empty((self.n_frames, self._n), dtype=float)
-        self.dTiObr   = np.empty((self.n_frames, self._n*2), dtype=float)
+        # ---------------------------- prepare results array ----------------------------
+        self._n = self.idx_cn5.shape[0]
+        self.dTiOad = np.empty((self.n_frames, self._n), dtype=float)
+        self.dTiObr = np.empty((self.n_frames, self._n*2), dtype=float)
 
     def _single_frame(self):
         self.dTiOad[self._frame_index, :] = self.get_dTiOad()
@@ -1116,7 +1181,8 @@ class SurfTiOBondLenght(AnalysisBase):
         self.dTiObr = self.dTiObr.reshape(self.n_frames, 2, -1)
         np.save(self.fn_dist_tioad, self.dTiOad)
         np.save(self.fn_dist_tiobr, self.dTiObr)
-        np.savetxt(self.fn_indicies, self.indicies.T, fmt="%8d", header=self.ind_header)
+        np.savetxt(self.fn_indicies, self.indicies.T,
+                   fmt="%8d", header=self.ind_header)
 
     def get_dTiOad(self):
         distance_array(self._ag.positions[self.idx_cn5],
@@ -1132,13 +1198,14 @@ class SurfTiOBondLenght(AnalysisBase):
 
     @staticmethod
     def pair_TiObr(xyz, idx_obr, idx_ti, box):
-        xyz1    = xyz[idx_obr]
-        xyz2    = xyz[idx_ti]
-        dm      = distance_array(xyz1, xyz2, box=box)
-        sort    = np.argsort(dm, axis=1)[:, :2]
+        xyz1 = xyz[idx_obr]
+        xyz2 = xyz[idx_ti]
+        dm = distance_array(xyz1, xyz2, box=box)
+        sort = np.argsort(dm, axis=1)[:, :2]
         res_obr = np.append(idx_obr, idx_obr)
-        res_ti  = idx_ti[sort].T.flatten()
+        res_ti = idx_ti[sort].T.flatten()
         return res_obr, res_ti
+
 
 class dObr_NearestH(AnalysisBase):
     """Distance between Obr and it's nearest proton.
@@ -1201,19 +1268,19 @@ class dObr_NearestH(AnalysisBase):
                 angstrom. Defaults to 500 -> typical binsize 0.005 angstrom.
         """
 
-        self._ag  = atomgroup
-        self.M    = M
+        self._ag = atomgroup
+        self.M = M
         self.bins = bins
         self.nrow = nrow
 
         # initializing plane_idx_array
-        self.idx_obr   = idx_obr.flatten()
-        self.is_flat   = True
+        self.idx_obr = idx_obr.flatten()
+        self.is_flat = True
         if idx_hobr1 is not None:
-            self.is_flat   = False
+            self.is_flat = False
             self.idx_hobr1 = idx_hobr1.flatten()
             self.idx_hobr2 = idx_hobr2.flatten()
-            self.idx_eobr  = idx_eobr.flatten()
+            self.idx_eobr = idx_eobr.flatten()
             self.idx_total_obr = np.concatenate([self.idx_obr,
                                                  self.idx_hobr1,
                                                  self.idx_hobr2,
@@ -1233,63 +1300,73 @@ class dObr_NearestH(AnalysisBase):
         create_path(self.figdir, bk=False)
 
         # the file names for output data
-        self.fn_obr_h   = os.path.join(self.datdir, "d_Obr-H.npy")
-        self.fn_histObrH  = os.path.join(self.datdir, "histObrH.dat")
+        self.fn_obr_h = os.path.join(self.datdir, "d_Obr-H.npy")
+        self.fn_histObrH = os.path.join(self.datdir, "histObrH.dat")
         if not self.is_flat:
             self.fn_hobr1_h = os.path.join(self.datdir, "d_hObr1-H.npy")
             self.fn_hobr2_h = os.path.join(self.datdir, "d_hObr2-H.npy")
-            self.fn_eobr_h  = os.path.join(self.datdir, "d_eObr-H.npy")
+            self.fn_eobr_h = os.path.join(self.datdir, "d_eObr-H.npy")
 
     def _prepare(self):
-        #------------------------ initialize usefule constants -------------------------
+        # ------------------------ initialize usefule constants -------------------------
         self.cellpar = self._ag.dimensions
-        self.xyz     = self._ag.positions
-        self.idx_M   = np.where(self._ag.elements==self.M)[0]
-        self.idx_O   = np.where(self._ag.elements=='O')[0]
-        self.idx_H   = np.where(self._ag.elements=='H')[0]
-        self.bin_edges   = np.linspace(0.85, 3.5, self.bins+1)
-        self.r           = self.bin_edges[:-1] + (self.bin_edges[1]-self.bin_edges[0])/2
-        self.n_obr   = self.idx_obr.shape[-1]
+        self.xyz = self._ag.positions
+        self.idx_M = np.where(self._ag.elements == self.M)[0]
+        self.idx_O = np.where(self._ag.elements == 'O')[0]
+        self.idx_H = np.where(self._ag.elements == 'H')[0]
+        self.bin_edges = np.linspace(0.85, 3.5, self.bins+1)
+        self.r = self.bin_edges[:-1] + (self.bin_edges[1]-self.bin_edges[0])/2
+        self.n_obr = self.idx_obr.shape[-1]
         if not self.is_flat:
             self.n_hobr1 = self.idx_hobr1.shape[-1]
             self.n_hobr2 = self.idx_hobr2.shape[-1]
-            self.n_eobr  = self.idx_eobr.shape[-1]
+            self.n_eobr = self.idx_eobr.shape[-1]
             self.n_total_obr = self.n_obr + self.n_hobr1 + self.n_hobr2 + self.n_eobr
         else:
             self.n_total_obr = self.n_obr
 
-        #-------------------------- prepare temporary arraies --------------------------
-        self._dmatrix = np.empty((self.n_total_obr, self.idx_H.shape[0]), dtype=float)
+        # -------------------------- prepare temporary arraies --------------------------
+        self._dmatrix = np.empty(
+            (self.n_total_obr, self.idx_H.shape[0]), dtype=float)
 
-        #---------------------------- prepare results array ----------------------------
-        self.distances = np.empty((self.n_frames, self.n_total_obr), dtype=float)
+        # ---------------------------- prepare results array ----------------------------
+        self.distances = np.empty(
+            (self.n_frames, self.n_total_obr), dtype=float)
 
     def _single_frame(self):
-        self.distances[self._frame_index, :] = self.get_min_OH(self.idx_total_obr)
+        self.distances[self._frame_index,
+                       :] = self.get_min_OH(self.idx_total_obr)
 
     def _conclude(self):
-        self.distances  = self.distances.reshape(self.n_frames, 2,
-                                                 self.n_total_obr//2)
+        self.distances = self.distances.reshape(self.n_frames, 2,
+                                                self.n_total_obr//2)
         self.dist_obr_h = self.distances[:, :, :self.n_obr//2]
         hist_obr = self.dist2histo(self.dist_obr_h, self.bin_edges, self.nrow)
-        np.save(self.fn_obr_h  , self.dist_obr_h  )
+        np.save(self.fn_obr_h, self.dist_obr_h)
         if not self.is_flat:
-            self.dist_hobr1_h = self.distances[:, :, self.n_obr//2:(self.n_obr+self.n_hobr1)//2]
-            hist_obr_n1 = self.dist2histo(self.dist_hobr1_h, self.bin_edges, self.nrow)
-            self.dist_hobr2_h = self.distances[:, :, (self.n_obr+self.n_hobr1)//2:(self.n_obr+self.n_hobr1+self.n_hobr2)//2]
-            hist_hobr   = self.dist2histo(self.dist_hobr2_h, self.bin_edges, self.nrow)
-            self.dist_eobr_h  = self.distances[:, :, (self.n_obr+self.n_hobr1+self.n_hobr2)//2:]
-            hist_e2     = self.dist2histo(self.dist_eobr_h, self.bin_edges, self.nrow)
+            self.dist_hobr1_h = self.distances[:, :,
+                                               self.n_obr//2:(self.n_obr+self.n_hobr1)//2]
+            hist_obr_n1 = self.dist2histo(
+                self.dist_hobr1_h, self.bin_edges, self.nrow)
+            self.dist_hobr2_h = self.distances[:, :, (self.n_obr+self.n_hobr1)//2:(
+                self.n_obr+self.n_hobr1+self.n_hobr2)//2]
+            hist_hobr = self.dist2histo(
+                self.dist_hobr2_h, self.bin_edges, self.nrow)
+            self.dist_eobr_h = self.distances[:, :,
+                                              (self.n_obr+self.n_hobr1+self.n_hobr2)//2:]
+            hist_e2 = self.dist2histo(
+                self.dist_eobr_h, self.bin_edges, self.nrow)
             np.save(self.fn_hobr1_h, self.dist_hobr1_h)
             np.save(self.fn_hobr2_h, self.dist_hobr2_h)
-            np.save(self.fn_eobr_h , self.dist_eobr_h )
+            np.save(self.fn_eobr_h, self.dist_eobr_h)
             hist_list = hist_hobr + hist_obr + hist_obr_n1 + hist_e2
-            header = "\t".join(['bin edges [A]'] + [r"O_br-half"] + \
-                                                   [r"O_br#%d"%(ii) for ii in range(self.n_obr//self.nrow//2)] + \
-                                                   [r"O_br#%d"%(self.n_obr//self.nrow//2)] + \
+            header = "\t".join(['bin edges [A]'] + [r"O_br-half"] +
+                                                   [r"O_br#%d" % (ii) for ii in range(self.n_obr//self.nrow//2)] +
+                                                   [r"O_br#%d" % (self.n_obr//self.nrow//2)] +
                                                    [r"O_br-edge"])
         else:
-            header = "\t".join(['bin edges [A]'] + [r"O_br#%d"%(ii) for ii in range(self.n_obr//self.nrow//2)])
+            header = "\t".join(['bin edges [A]'] + [r"O_br#%d" % (ii)
+                               for ii in range(self.n_obr//self.nrow//2)])
             hist_list = hist_obr
 
         hist_dat = np.concatenate([[self.r], hist_list], axis=0)
@@ -1301,19 +1378,19 @@ class dObr_NearestH(AnalysisBase):
         h_pos = xyz[self.idx_H, :]
         distance_array(obr_pos, h_pos, box=self.cellpar, result=self._dmatrix)
         d_oh_min = self._dmatrix.min(axis=1)
-        #sel_h_idx = self.idx_H[np.argmin(self._dmatrix, axis=1)]
-        #return d_oh_min, sel_h_idx
+        # sel_h_idx = self.idx_H[np.argmin(self._dmatrix, axis=1)]
+        # return d_oh_min, sel_h_idx
         return d_oh_min
 
     @staticmethod
     def dist2histo(dist, bin_edges, nrow):
-        n_frames     = dist.shape[0]
-        dist         = dist.reshape(n_frames, 2, nrow, -1)
-        nO2Terms     = dist.shape[-1]
-        dist         = dist.reshape(-1, nO2Terms)
+        n_frames = dist.shape[0]
+        dist = dist.reshape(n_frames, 2, nrow, -1)
+        nO2Terms = dist.shape[-1]
+        dist = dist.reshape(-1, nO2Terms)
         hist_list = []
         for ii in range(dist.shape[-1]):
-            hist, _  = np.histogram(dist[:, ii], bins=bin_edges, density=True)
+            hist, _ = np.histogram(dist[:, ii], bins=bin_edges, density=True)
             hist_list.append(hist)
         return hist_list
 
@@ -1357,7 +1434,7 @@ class dObr_NearH(AnalysisBase):
         ```
     """
 
-    def __init__(self, atomgroup, idx_obr, nrow=2, idx_hobr1=None, idx_hobr2=None, idx_eobr=None, M='Ti', bins=500, n_oh = 5):
+    def __init__(self, atomgroup, idx_obr, nrow=2, idx_hobr1=None, idx_hobr2=None, idx_eobr=None, M='Ti', bins=500, n_oh=5):
         """Initializing analysis method
 
         Args:
@@ -1379,20 +1456,20 @@ class dObr_NearH(AnalysisBase):
                 angstrom. Defaults to 500 -> typical binsize 0.005 angstrom.
         """
 
-        self._ag  = atomgroup
-        self.M    = M
+        self._ag = atomgroup
+        self.M = M
         self.bins = bins
         self.nrow = nrow
         self.n_oh = n_oh
 
         # initializing plane_idx_array
-        self.idx_obr   = idx_obr.flatten()
-        self.is_flat   = True
+        self.idx_obr = idx_obr.flatten()
+        self.is_flat = True
         if idx_hobr1 is not None:
-            self.is_flat   = False
+            self.is_flat = False
             self.idx_hobr1 = idx_hobr1.flatten()
             self.idx_hobr2 = idx_hobr2.flatten()
-            self.idx_eobr  = idx_eobr.flatten()
+            self.idx_eobr = idx_eobr.flatten()
             self.idx_total_obr = np.concatenate([self.idx_obr,
                                                  self.idx_hobr1,
                                                  self.idx_hobr2,
@@ -1412,63 +1489,74 @@ class dObr_NearH(AnalysisBase):
         create_path(self.figdir, bk=False)
 
         # the file names for output data
-        self.fn_obr_h   = os.path.join(self.datdir, "d_Obr-H.npy")
-        self.fn_histObrH  = os.path.join(self.datdir, "histObrH.dat")
+        self.fn_obr_h = os.path.join(self.datdir, "d_Obr-H.npy")
+        self.fn_histObrH = os.path.join(self.datdir, "histObrH.dat")
         if not self.is_flat:
             self.fn_hobr1_h = os.path.join(self.datdir, "d_hObr1-H.npy")
             self.fn_hobr2_h = os.path.join(self.datdir, "d_hObr2-H.npy")
-            self.fn_eobr_h  = os.path.join(self.datdir, "d_eObr-H.npy")
+            self.fn_eobr_h = os.path.join(self.datdir, "d_eObr-H.npy")
 
     def _prepare(self):
-        #------------------------ initialize usefule constants -------------------------
+        # ------------------------ initialize usefule constants -------------------------
         self.cellpar = self._ag.dimensions
-        self.xyz     = self._ag.positions
-        self.idx_M   = np.where(self._ag.elements==self.M)[0]
-        self.idx_O   = np.where(self._ag.elements=='O')[0]
-        self.idx_H   = np.where(self._ag.elements=='H')[0]
-        self.bin_edges   = np.linspace(0.85, 3.5, self.bins+1)
-        self.r           = self.bin_edges[:-1] + (self.bin_edges[1]-self.bin_edges[0])/2
-        self.n_obr   = self.idx_obr.shape[-1]
+        self.xyz = self._ag.positions
+        self.idx_M = np.where(self._ag.elements == self.M)[0]
+        self.idx_O = np.where(self._ag.elements == 'O')[0]
+        self.idx_H = np.where(self._ag.elements == 'H')[0]
+        self.bin_edges = np.linspace(0.85, 3.5, self.bins+1)
+        self.r = self.bin_edges[:-1] + (self.bin_edges[1]-self.bin_edges[0])/2
+        self.n_obr = self.idx_obr.shape[-1]
         if not self.is_flat:
             self.n_hobr1 = self.idx_hobr1.shape[-1]
             self.n_hobr2 = self.idx_hobr2.shape[-1]
-            self.n_eobr  = self.idx_eobr.shape[-1]
+            self.n_eobr = self.idx_eobr.shape[-1]
             self.n_total_obr = self.n_obr + self.n_hobr1 + self.n_hobr2 + self.n_eobr
         else:
             self.n_total_obr = self.n_obr
 
-        #-------------------------- prepare temporary arraies --------------------------
-        self._dmatrix = np.empty((self.n_total_obr, self.idx_H.shape[0]), dtype=float)
+        # -------------------------- prepare temporary arraies --------------------------
+        self._dmatrix = np.empty(
+            (self.n_total_obr, self.idx_H.shape[0]), dtype=float)
 
-        #---------------------------- prepare results array ----------------------------
-        self.distances = np.empty((self.n_frames, self.n_total_obr, self.n_oh), dtype=float)
+        # ---------------------------- prepare results array ----------------------------
+        self.distances = np.empty(
+            (self.n_frames, self.n_total_obr, self.n_oh), dtype=float)
 
     def _single_frame(self):
-        self.distances[self._frame_index, :] = self.get_OH_dist(self.idx_total_obr)
+        self.distances[self._frame_index,
+                       :] = self.get_OH_dist(self.idx_total_obr)
 
     def _conclude(self):
-        self.distances  = self.distances.reshape(self.n_frames, 2,
-                                                 self.n_total_obr//2, self.n_oh)
+        self.distances = self.distances.reshape(self.n_frames, 2,
+                                                self.n_total_obr//2, self.n_oh)
         self.dist_obr_h = self.distances[:, :, :self.n_obr//2, :]
-        hist_obr = self.dist2histo(self.dist_obr_h[:,:,:,0], self.bin_edges, self.nrow)
-        np.save(self.fn_obr_h  , self.dist_obr_h)
+        hist_obr = self.dist2histo(
+            self.dist_obr_h[:, :, :, 0], self.bin_edges, self.nrow)
+        np.save(self.fn_obr_h, self.dist_obr_h)
         if not self.is_flat:
-            self.dist_hobr1_h = self.distances[:, :, self.n_obr//2:(self.n_obr+self.n_hobr1)//2, 0]
-            hist_obr_n1 = self.dist2histo(self.dist_hobr1_h, self.bin_edges, self.nrow)
-            self.dist_hobr2_h = self.distances[:, :, (self.n_obr+self.n_hobr1)//2:(self.n_obr+self.n_hobr1+self.n_hobr2)//2, 0]
-            hist_hobr   = self.dist2histo(self.dist_hobr2_h, self.bin_edges, self.nrow)
-            self.dist_eobr_h  = self.distances[:, :, (self.n_obr+self.n_hobr1+self.n_hobr2)//2:, 0]
-            hist_e2     = self.dist2histo(self.dist_eobr_h, self.bin_edges, self.nrow)
+            self.dist_hobr1_h = self.distances[:, :,
+                                               self.n_obr//2:(self.n_obr+self.n_hobr1)//2, 0]
+            hist_obr_n1 = self.dist2histo(
+                self.dist_hobr1_h, self.bin_edges, self.nrow)
+            self.dist_hobr2_h = self.distances[:, :, (self.n_obr+self.n_hobr1)//2:(
+                self.n_obr+self.n_hobr1+self.n_hobr2)//2, 0]
+            hist_hobr = self.dist2histo(
+                self.dist_hobr2_h, self.bin_edges, self.nrow)
+            self.dist_eobr_h = self.distances[:, :,
+                                              (self.n_obr+self.n_hobr1+self.n_hobr2)//2:, 0]
+            hist_e2 = self.dist2histo(
+                self.dist_eobr_h, self.bin_edges, self.nrow)
             np.save(self.fn_hobr1_h, self.dist_hobr1_h)
             np.save(self.fn_hobr2_h, self.dist_hobr2_h)
-            np.save(self.fn_eobr_h , self.dist_eobr_h )
+            np.save(self.fn_eobr_h, self.dist_eobr_h)
             hist_list = hist_hobr + hist_obr + hist_obr_n1 + hist_e2
-            header = "\t".join(['bin edges [A]'] + [r"O_br-half"] + \
-                                                   [r"O_br#%d"%(ii) for ii in range(self.n_obr//self.nrow//2)] + \
-                                                   [r"O_br#%d"%(self.n_obr//self.nrow//2)] + \
+            header = "\t".join(['bin edges [A]'] + [r"O_br-half"] +
+                                                   [r"O_br#%d" % (ii) for ii in range(self.n_obr//self.nrow//2)] +
+                                                   [r"O_br#%d" % (self.n_obr//self.nrow//2)] +
                                                    [r"O_br-edge"])
         else:
-            header = "\t".join(['bin edges [A]'] + [r"O_br#%d"%(ii) for ii in range(self.n_obr//self.nrow//2)])
+            header = "\t".join(['bin edges [A]'] + [r"O_br#%d" % (ii)
+                               for ii in range(self.n_obr//self.nrow//2)])
             hist_list = hist_obr
 
         hist_dat = np.concatenate([[self.r], hist_list], axis=0)
@@ -1483,13 +1571,13 @@ class dObr_NearH(AnalysisBase):
 
     @staticmethod
     def dist2histo(dist, bin_edges, nrow):
-        n_frames     = dist.shape[0]
-        dist         = dist.reshape(n_frames, 2, nrow, -1)
-        nO2Terms     = dist.shape[-1]
-        dist         = dist.reshape(-1, nO2Terms)
+        n_frames = dist.shape[0]
+        dist = dist.reshape(n_frames, 2, nrow, -1)
+        nO2Terms = dist.shape[-1]
+        dist = dist.reshape(-1, nO2Terms)
         hist_list = []
         for ii in range(dist.shape[-1]):
-            hist, _  = np.histogram(dist[:, ii], bins=bin_edges, density=True)
+            hist, _ = np.histogram(dist[:, ii], bins=bin_edges, density=True)
             hist_list.append(hist)
         return hist_list
 
@@ -1510,9 +1598,10 @@ class FindSurfaceOadH(AnalysisBase):
     Args:
         AnalysisBase (_type_): _description
     """
+
     def __init__(self, atomgroup, Ow_idx, M5c_idx, M='Ti'):
-        self._ag  = atomgroup
-        self.M    = M
+        self._ag = atomgroup
+        self.M = M
         self.Ow_idx = Ow_idx
         self.M5c_idx = M5c_idx
 
@@ -1526,54 +1615,53 @@ class FindSurfaceOadH(AnalysisBase):
         create_path(self.datdir, bk=False)
 
         # the file names for output data
-        self.fn_all_info     = os.path.join(self.datdir, "surf_TiOH_cprs.npz")
+        self.fn_all_info = os.path.join(self.datdir, "surf_TiOH_cprs.npz")
 
     def _prepare(self):
-        #------------------------ initialize usefule constants -------------------------
+        # ------------------------ initialize usefule constants -------------------------
         self.cellpar = self._ag.dimensions
-        self.xyz     = self._ag.positions
-        self.M_idx   = np.where(self._ag.elements==self.M)[0]
-        self.O_idx   = np.where(self._ag.elements=='O')[0]
-        self.H_idx   = np.where(self._ag.elements=='H')[0]
+        self.xyz = self._ag.positions
+        self.M_idx = np.where(self._ag.elements == self.M)[0]
+        self.O_idx = np.where(self._ag.elements == 'O')[0]
+        self.H_idx = np.where(self._ag.elements == 'H')[0]
 
         self.num_M5c = len(self.M5c_idx)
 
-        #-------------------------- prepare result arrays --------------------------
-        self.all_Oad_H_idx    = np.full((self.n_frames, self.num_M5c), -1)
+        # -------------------------- prepare result arrays --------------------------
+        self.all_Oad_H_idx = np.full((self.n_frames, self.num_M5c), -1)
         self.all_M5c_OadH_idx = np.full((self.n_frames, self.num_M5c), -1)
-        self.all_Had_idx      = np.full((self.n_frames, self.num_M5c), -1)
-        self.all_bond_O_H     = np.full((self.n_frames, self.num_M5c), np.nan)
-        self.all_angle_M_O_H  = np.full((self.n_frames, self.num_M5c), np.nan)
+        self.all_Had_idx = np.full((self.n_frames, self.num_M5c), -1)
+        self.all_bond_O_H = np.full((self.n_frames, self.num_M5c), np.nan)
+        self.all_angle_M_O_H = np.full((self.n_frames, self.num_M5c), np.nan)
 
     def _single_frame(self):
-        Oad_idx       = self._get_Oad_idx()
-        Oad_idx       = Oad_idx.flatten()
-        Oad_cn        = self._get_Oad_H_cn(Oad_idx)
-        Oad_H_idx     = Oad_idx[Oad_cn == 1]
-        M5c_OadH_idx  = self.M5c_idx[Oad_cn == 1]
-        Had_idx       = self._get_Had_idx(Oad_H_idx)
+        Oad_idx = self._get_Oad_idx()
+        Oad_idx = Oad_idx.flatten()
+        Oad_cn = self._get_Oad_H_cn(Oad_idx)
+        Oad_H_idx = Oad_idx[Oad_cn == 1]
+        M5c_OadH_idx = self.M5c_idx[Oad_cn == 1]
+        Had_idx = self._get_Had_idx(Oad_H_idx)
         num_surf_spec = len(Oad_H_idx)
 
-        bond_O_H    = self._get_Oad_Had_dist(Oad_H_idx, Had_idx)
-        angle_M_O_H = self._get_Ti5c_Oad_Had_angle(M5c_OadH_idx, Oad_H_idx, Had_idx)
+        bond_O_H = self._get_Oad_Had_dist(Oad_H_idx, Had_idx)
+        angle_M_O_H = self._get_Ti5c_Oad_Had_angle(
+            M5c_OadH_idx, Oad_H_idx, Had_idx)
 
-
-
-        self.all_Oad_H_idx   [self._frame_index, :num_surf_spec] = Oad_H_idx
+        self.all_Oad_H_idx[self._frame_index, :num_surf_spec] = Oad_H_idx
         self.all_M5c_OadH_idx[self._frame_index, :num_surf_spec] = M5c_OadH_idx
-        self.all_Had_idx     [self._frame_index, :num_surf_spec] = Had_idx
-        self.all_bond_O_H    [self._frame_index, :num_surf_spec] = bond_O_H
-        self.all_angle_M_O_H [self._frame_index, :num_surf_spec] = angle_M_O_H
+        self.all_Had_idx[self._frame_index, :num_surf_spec] = Had_idx
+        self.all_bond_O_H[self._frame_index, :num_surf_spec] = bond_O_H
+        self.all_angle_M_O_H[self._frame_index, :num_surf_spec] = angle_M_O_H
 
     def _conclude(self):
         # save into a compress zip npy
         np.savez_compressed(
             self.fn_all_info,
-            all_Oad_H_idx    = self.all_Oad_H_idx,
-            all_M5c_OadH_idx = self.all_M5c_OadH_idx,
-            all_Had_idx      = self.all_Had_idx,
-            all_bond_O_H     = self.all_bond_O_H,
-            all_angle_M_O_H  = self.all_angle_M_O_H
+            all_Oad_H_idx=self.all_Oad_H_idx,
+            all_M5c_OadH_idx=self.all_M5c_OadH_idx,
+            all_Had_idx=self.all_Had_idx,
+            all_bond_O_H=self.all_bond_O_H,
+            all_angle_M_O_H=self.all_angle_M_O_H
         )
 
     def _get_Oad_idx(self, n_ow=1):
@@ -1582,19 +1670,21 @@ class FindSurfaceOadH(AnalysisBase):
         Ow_idx = self.Ow_idx
         cellpar = self.cellpar
         M5c_Ow_darray = distance_array(pos[M5c_idx], pos[Ow_idx], box=cellpar)
-        sort_idx = np.argsort(M5c_Ow_darray , axis=1)
+        sort_idx = np.argsort(M5c_Ow_darray, axis=1)
         Oad_idx = Ow_idx[sort_idx[:, :n_ow]]
         return Oad_idx
 
     def _get_Oad_H_cn(self, Oad_idx):
         pos = self._ag.positions
-        Oad_cn = count_cn(pos[Oad_idx], pos[self.H_idx], 1.2, None, cell=self.cellpar)
+        Oad_cn = count_cn(pos[Oad_idx], pos[self.H_idx],
+                          1.2, None, cell=self.cellpar)
         return Oad_cn
 
     def _get_Had_idx(self, Oad_H_idx):
         pos = self._ag.positions
         # Had is H atom in OadH
-        OadH_H_darray = distance_array(pos[Oad_H_idx], pos[self.H_idx], box=self.cellpar)
+        OadH_H_darray = distance_array(
+            pos[Oad_H_idx], pos[self.H_idx], box=self.cellpar)
         sort_idx = np.argsort(OadH_H_darray, axis=1)
         Had_idx = self.H_idx[sort_idx[:, :1]]
         return Had_idx.flatten()
@@ -1606,5 +1696,6 @@ class FindSurfaceOadH(AnalysisBase):
 
     def _get_Ti5c_Oad_Had_angle(self, M5c_idx, Oad_H_idx, Had_idx):
         pos = self._ag.positions
-        angle = calc_angles(pos[M5c_idx], pos[Oad_H_idx], pos[Had_idx], box=self.cellpar)
+        angle = calc_angles(pos[M5c_idx], pos[Oad_H_idx],
+                            pos[Had_idx], box=self.cellpar)
         return angle

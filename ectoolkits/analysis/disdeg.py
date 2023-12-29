@@ -3,19 +3,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from typing import List,Optional
+from typing import List, Optional
 from MDAnalysis.lib.distances import capped_distance
 from MDAnalysis.analysis.base import AnalysisBase
 from MDAnalysis import AtomGroup
 
 
-
 def count_AB_CN(positions: np.array,
-                A_idxs:List[int],
-                B_idxs:List[int],
-                box:List[float],
-                max_cutoff:float=1.2,
-                min_cutoff:Optional[float]=None,
+                A_idxs: List[int],
+                B_idxs: List[int],
+                box: List[float],
+                max_cutoff: float = 1.2,
+                min_cutoff: Optional[float] = None,
                 ):
     """
     count the number of B atoms around each A atom.
@@ -93,25 +92,24 @@ def count_AB_CN(positions: np.array,
     """
 
     _pairs = capped_distance(positions[A_idxs],
-                           positions[B_idxs],
-                           box=box,
-                           min_cutoff=min_cutoff,
-                           max_cutoff=max_cutoff,
-                           return_distances=False,
-                           )
+                             positions[B_idxs],
+                             box=box,
+                             min_cutoff=min_cutoff,
+                             max_cutoff=max_cutoff,
+                             return_distances=False,
+                             )
 
-    _pairs = _pairs[:,0]
-
+    _pairs = _pairs[:, 0]
 
     return np.bincount(_pairs, minlength=len(A_idxs))
 
 
 def cumsum_arr(arr):
-    #not vectorize:
-    #seem same in ectoolkits utils
+    # not vectorize:
+    # seem same in ectoolkits utils
     cumulative_sum = np.cumsum(arr)
-    for i,_num in enumerate(cumulative_sum):
-        cumulative_sum[i] =cumulative_sum[i]/(i+1)
+    for i, _num in enumerate(cumulative_sum):
+        cumulative_sum[i] = cumulative_sum[i]/(i+1)
     return cumulative_sum
 
 
@@ -122,11 +120,11 @@ class CNState(AnalysisBase):
     _cnstate = None
 
     def __init__(self,
-                 atomgroup: AtomGroup=None,
-                 center_atom_idx: np.array=None,
-                 coordinated_elements: List[str]=["H"],
-                 max_cutoff:float=1.2,
-                 min_cutoff:float=None,
+                 atomgroup: AtomGroup = None,
+                 center_atom_idx: np.array = None,
+                 coordinated_elements: List[str] = ["H"],
+                 max_cutoff: float = 1.2,
+                 min_cutoff: float = None,
                  ):
         """
         Initialize CNState class.
@@ -189,7 +187,6 @@ class CNState(AnalysisBase):
             self._trajectory = self._ag.universe.trajectory
             self.cellpar = self._ag.universe.dimensions
 
-
     @classmethod
     def read_cnstate_from(cls, npyfile: str):
         cls._cnstate = np.load(npyfile)
@@ -200,7 +197,6 @@ class CNState(AnalysisBase):
                    min_cutoff=None,)
 
     def _prepare(self):
-
 
         # turn a list of coordinated elements to a list of indices
         _elements = self._ag.atoms.elements
@@ -224,7 +220,7 @@ class CNState(AnalysisBase):
 
         if self.center_atom_idx.ndim == 1:
             self.center_atom_idx = np.tile(self.center_atom_idx,
-                                           (self.n_frames,1),
+                                           (self.n_frames, 1),
                                            )
 
         assert self.center_atom_idx.ndim == 2, \
@@ -241,17 +237,17 @@ class CNState(AnalysisBase):
         self._cnstate = np.zeros(
             (self.n_frames, self.num_center_atom_idx),
             dtype=int
-            )
+        )
 
     def _single_frame(self):
 
         pos = self._ag.positions
-        self._cnstate[self._frame_index]= count_AB_CN(pos,
-                                     self.center_atom_idx[self._frame_index],
-                                     self.coord_idx,
-                                     self.cellpar,
-                                     max_cutoff=self.max_cutoff,
-                                     min_cutoff=self.min_cutoff)
+        self._cnstate[self._frame_index] = count_AB_CN(pos,
+                                                       self.center_atom_idx[self._frame_index],
+                                                       self.coord_idx,
+                                                       self.cellpar,
+                                                       max_cutoff=self.max_cutoff,
+                                                       min_cutoff=self.min_cutoff)
 
     def _conclude(self):
         pass
@@ -259,20 +255,19 @@ class CNState(AnalysisBase):
     def save_cnstate(self, filename):
         np.save(filename, self._cnstate)
 
-
-
     def get_cnstate_percentage(self, expected_cn: int):
 
         # make sure self._cnstate is 2d array
         # and self._cnstate exists
         assert self._cnstate.ndim == 2, \
-                "cnstate shape is not 2d or not read from npy file"
+            "cnstate shape is not 2d or not read from npy file"
         return np.count_nonzero(self._cnstate == expected_cn, axis=1)/self._cnstate.shape[1]
 
     def plot_cnstate(self, cn_list=[0, 1, 2, 3]):
-        fig, ax = plt.subplots(figsize=(12,3),dpi=500)
+        fig, ax = plt.subplots(figsize=(12, 3), dpi=500)
         for cn in cn_list:
-            sns.lineplot(self.get_cnstate_percentage(expected_cn=cn), ax=ax, label=f"CN={cn}")
+            sns.lineplot(self.get_cnstate_percentage(
+                expected_cn=cn), ax=ax, label=f"CN={cn}")
         return fig
 
 
@@ -294,6 +289,7 @@ class DisDeg(CNState):
     -----------
      _examples_
     """
+
     def _conclude(self):
         self.get_disdeg()
 
@@ -307,8 +303,8 @@ class DisDeg(CNState):
                    min_cutoff=None,)
 
     def get_disdeg(self,
-                   cn_list_no_dis:List[int]=[2, 3],
-                   cn_list_dis:List[int]= [0, 1]
+                   cn_list_no_dis: List[int] = [2, 3],
+                   cn_list_dis: List[int] = [0, 1]
                    ):
 
         self._no_disdeg = np.zeros((self._cnstate.shape[0]), dtype=float)
@@ -318,12 +314,12 @@ class DisDeg(CNState):
         for cn in cn_list_dis:
             self._disdeg += self.get_cnstate_percentage(expected_cn=cn)
 
-    def save_disdeg(self, filename:str):
+    def save_disdeg(self, filename: str):
         np.save(filename, [self._disdeg])
 
     def plot_disdeg(self):
 
-        fig, ax = plt.subplots(figsize=(12,3),dpi=500)
+        fig, ax = plt.subplots(figsize=(12, 3), dpi=500)
         sns.lineplot(self._disdeg, ax=ax, label="disdeg")
         sns.lineplot(self._no_disdeg, ax=ax, label="no_disdeg")
 

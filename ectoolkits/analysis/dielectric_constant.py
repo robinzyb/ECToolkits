@@ -3,9 +3,10 @@ import numpy.typing as npt
 from scipy.integrate import simpson
 from cp2kdata import Cp2kCube
 
+
 def get_induced_charge(rho_cube_1: Cp2kCube,
                        rho_cube_2: Cp2kCube,
-                       axis: str='z'
+                       axis: str = 'z'
                        ):
     """
     Compute the induced charge density between two systems.
@@ -32,6 +33,7 @@ def get_induced_charge(rho_cube_1: Cp2kCube,
     rho_induced = rho_2 - rho_1
 
     return z_1, rho_induced
+
 
 def get_integrated_array(x, y):
     size = y.shape[0]
@@ -86,6 +88,7 @@ def get_micro_electric_field(x: npt.NDArray[np.float64],
 
 # get polarization
 
+
 def get_micro_polarization(x: npt.NDArray[np.float64],
                            rho: npt.NDArray[np.float64],
                            Delta_macro_polarization: float
@@ -130,11 +133,11 @@ def get_micro_polarization(x: npt.NDArray[np.float64],
     return micro_polarization
 
 
-
 def get_dielectric_susceptibility(micro_polarization, micro_electric_field):
 
     dielectric_susceptibility = micro_polarization / micro_electric_field
     return dielectric_susceptibility
+
 
 def get_dielectric_constant(dielectric_susceptibility):
     dielectric_constant = dielectric_susceptibility*np.pi*4 + 1
@@ -146,8 +149,11 @@ def get_dielectric_constant_profile(rho_1, rho_2, Delta_macro_Efield, Delta_macr
     # electron carries negative charge
     rho_induced = -rho_induced
 
-    micro_electric_field = get_micro_electric_field(z, rho_induced, Delta_macro_Efield=Delta_macro_Efield)
-    micro_polarization = get_micro_polarization(z, rho_induced, Delta_macro_polarization=Delta_macro_polarization)
-    dielectric_susceptibility = get_dielectric_susceptibility(micro_polarization, micro_electric_field)
+    micro_electric_field = get_micro_electric_field(
+        z, rho_induced, Delta_macro_Efield=Delta_macro_Efield)
+    micro_polarization = get_micro_polarization(
+        z, rho_induced, Delta_macro_polarization=Delta_macro_polarization)
+    dielectric_susceptibility = get_dielectric_susceptibility(
+        micro_polarization, micro_electric_field)
     dielectric_constant = get_dielectric_constant(dielectric_susceptibility)
     return z, dielectric_constant

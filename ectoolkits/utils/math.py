@@ -1,10 +1,12 @@
 import numpy as np
 
+
 def birch_murnaghan_equation(V, V0, E0, B0, B0_prime):
     V_ratio = np.power(np.divide(V0, V), np.divide(2, 3))
     E = E0 + np.divide((9 * V0 * B0), 16) * (np.power(V_ratio - 1, 3) * B0_prime
-            + np.power((V_ratio -1), 2) * (6 - 4 * V_ratio))
+                                             + np.power((V_ratio - 1), 2) * (6 - 4 * V_ratio))
     return E
+
 
 def fit_plane_normal(xyz):
     """Three dimensional plane fitting for a group of points
@@ -16,19 +18,21 @@ def fit_plane_normal(xyz):
         numpy.ndarray:
             Normalized plane's normal vector. z>0.
     """
-    A = np.concatenate([xyz[:, :-1], np.ones(xyz.shape[0])[:, np.newaxis]], axis=1)
+    A = np.concatenate(
+        [xyz[:, :-1], np.ones(xyz.shape[0])[:, np.newaxis]], axis=1)
     b = xyz[:, -1]
 
-    tA  = A.T
+    tA = A.T
     RHS = np.matmul(tA, b)
     tAA = np.matmul(tA, A)
 
     x = np.matmul(np.linalg.pinv(tAA), RHS)
-    pred_b   = np.matmul(A, x)
+    pred_b = np.matmul(A, x)
     std_devi = np.sum((pred_b - b)**2)/b.shape[0]
     print("Standard deviation for plain fitting is {0:.3e}".format(std_devi))
     normal_z = np.append(x[:-1], [-1])
     return -normal_z/np.linalg.norm(normal_z)
+
 
 def fit_line_vec(xyz):
     """Fit the direction vector for a group of sampling points.
@@ -40,13 +44,13 @@ def fit_line_vec(xyz):
         xyz (numpy.ndarray):
             Your group of points
     """
-    x0   = xyz.mean(axis=0)
-    X    = xyz
-    PX   = X - x0
-    Xt   = X.T
+    x0 = xyz.mean(axis=0)
+    X = xyz
+    PX = X - x0
+    Xt = X.T
     XtPX = np.matmul(Xt, PX)
     vals, vecs = np.linalg.eig(XtPX)
-    line_vec   = vecs[np.argmax(vals)]
+    line_vec = vecs[np.argmax(vals)]
     # How to calculating error?
     return line_vec/np.linalg.norm(line_vec)
 
@@ -80,16 +84,18 @@ def get_norm_vector(a, b):
     nv_a = nv_a/norm
     return nv_a
 
+
 def get_plane_distance(a, b):
 
-    ### \
+    # \
     #    \
     #     \
     #      ---------> a
     len_a = np.linalg.norm(a)
-    proj_b = np.dot(b, a) * a /len_a**2
+    proj_b = np.dot(b, a) * a / len_a**2
     plane_d = np.linalg.norm(b - proj_b)
     return plane_d
+
 
 def get_plane_eq(a, b, c=np.array([0, 0, 1])):
     """
@@ -118,9 +124,9 @@ def get_plane_eq(a, b, c=np.array([0, 0, 1])):
      _examples_
     """
     n_vec_a = get_norm_vector(c, a)
-    d1_a = np.abs(np.dot(n_vec_a, a ))
+    d1_a = np.abs(np.dot(n_vec_a, a))
     d2_a = np.abs(np.dot(n_vec_a, a+b))
     n_vec_b = get_norm_vector(b, c)
-    d1_b = np.abs(np.dot(n_vec_b, b ))
+    d1_b = np.abs(np.dot(n_vec_b, b))
     d2_b = np.abs(np.dot(n_vec_b, a+b))
     return n_vec_a, d1_a, d2_a, n_vec_b, d1_b, d2_b

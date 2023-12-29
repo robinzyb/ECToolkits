@@ -2,7 +2,7 @@
 ```python
 from ectoolkits.analysis.atom_density import AtomDensity
 
-# from 
+# from
 inp_dict={
      "xyz_file": "./Hematite-pos-1.xyz",
      "cell": [10.0564, 8.7091, 38.506],
@@ -26,11 +26,11 @@ inp_dict={
              "name": "H_density"
              }
          ]
- } 
+ }
 ad = AtomDensity(inp_dict)
 ad.run()
 
-# detail information is accessible in 
+# detail information is accessible in
 ad.atom_density
 ad.atom_density_z
 
@@ -38,7 +38,7 @@ ad.atom_density_z
 width_list = [5, 6, 7, 8, 9, 10]
 all_cent_density = ad.get_ave_density(width_list)
 
-# quick plot for denstiy 
+# quick plot for denstiy
 # if you want to symmetrize the density profile, set sym=True
 ad.plot_density(sym=False)
 

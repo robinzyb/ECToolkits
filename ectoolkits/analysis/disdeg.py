@@ -10,11 +10,11 @@ from MDAnalysis import AtomGroup
 
 
 
-def count_AB_CN(positions: np.array, 
-                A_idxs:List[int], 
-                B_idxs:List[int], 
-                box:List[float], 
-                max_cutoff:float=1.2, 
+def count_AB_CN(positions: np.array,
+                A_idxs:List[int],
+                B_idxs:List[int],
+                box:List[float],
+                max_cutoff:float=1.2,
                 min_cutoff:Optional[float]=None,
                 ):
     """
@@ -22,28 +22,28 @@ def count_AB_CN(positions: np.array,
 
     Args:
     -----------
-        positions (np.array): 
+        positions (np.array):
             The positions of all atoms, shape(N,3).
-        A_idxs (List[int]): 
+        A_idxs (List[int]):
             The indices of A atoms.
-        B_idxs (List[int]): 
+        B_idxs (List[int]):
             The indices of B atoms.
-        box (List[float], optional): 
+        box (List[float], optional):
             The box information. cellpar, dimension should be 6
             [a, b, c, alpha, beta, gamma]
-        max_cutoff (float, optional): 
+        max_cutoff (float, optional):
             maximum cutoff of neighbors. Defaults to 1.2.
-        min_cutoff (Optional[float], optional): 
+        min_cutoff (Optional[float], optional):
             minimum cutoff of neighbors. Defaults to None.
 
     Returns:
     -----------
-        cn_list (np.array): 
+        cn_list (np.array):
             list of coordination numbers of A atoms, shape(length of A_idx,).
 
     Notes:
     -----------
-     _notes_ 
+     _notes_
 
     Examples:
     -----------
@@ -56,7 +56,7 @@ def count_AB_CN(positions: np.array,
     >>> u = Universe(xyzfile)
     >>> u.dimensions = cellpar
     >>> from ectoolkits.analysis.disdeg import count_AB_CN
-    >>> u.atoms.positions 
+    >>> u.atoms.positions
     array([[ 2.7988806,  5.6870356,  1.9968334],
        [ 2.7716577,  2.41441  ,  5.3606954],
        [ 2.7103157,  5.5256004,  8.89024  ],
@@ -91,18 +91,18 @@ def count_AB_CN(positions: np.array,
     coordination number for O_idx is  [2 2 2 2 2 2 1 2]
     ```
     """
-    
-    _pairs = capped_distance(positions[A_idxs], 
-                           positions[B_idxs], 
-                           box=box, 
-                           min_cutoff=min_cutoff, 
+
+    _pairs = capped_distance(positions[A_idxs],
+                           positions[B_idxs],
+                           box=box,
+                           min_cutoff=min_cutoff,
                            max_cutoff=max_cutoff,
                            return_distances=False,
                            )
-    
+
     _pairs = _pairs[:,0]
-    
-    
+
+
     return np.bincount(_pairs, minlength=len(A_idxs))
 
 
@@ -118,7 +118,7 @@ def cumsum_arr(arr):
 class CNState(AnalysisBase):
     """
     Count Coordination number for a given index list in a trajectory.
-    """    
+    """
     _cnstate = None
 
     def __init__(self,
@@ -133,37 +133,37 @@ class CNState(AnalysisBase):
 
         Args:
         -----------
-            atomgroup (AtomGroup): 
+            atomgroup (AtomGroup):
                 AtomGroup object in MDAnalysis.
-            center_atom_idxs (np.array):): 
+            center_atom_idxs (np.array):):
                 Atom indices for center atoms.
-                could be an array of atom indices of 1d 
+                could be an array of atom indices of 1d
                 or a 2d array of atom indices with shape of (n_frames, n_idx).
-            coordinated_elements (List[str], optional): 
+            coordinated_elements (List[str], optional):
                 a list of elements as coordination of center atoms. Defaults to ["H"].
-            max_cutoff (float, optional): 
+            max_cutoff (float, optional):
                 . Defaults to 1.2.
-            min_cutoff (float, optional): 
+            min_cutoff (float, optional):
                 . Defaults to None.
 
         Raises:
         -----------
-            ValueError: 
+            ValueError:
                 _description_
 
         Notes:
         -----------
-         _notes_ 
+         _notes_
 
         Examples:
         -----------
         ```python
-        # 
+        #
         >>> O_idx_dw = [264, 267, 270, 273, 276, 279, 282, 285]
-        >>> cnstate = CNState(atomgroup=u.atoms, 
-        >>>          center_atom_idx=np.array(O_idx_dw), 
-        >>>          coordinated_elements=['H'], 
-        >>>          max_cutoff=1.2) 
+        >>> cnstate = CNState(atomgroup=u.atoms,
+        >>>          center_atom_idx=np.array(O_idx_dw),
+        >>>          coordinated_elements=['H'],
+        >>>          max_cutoff=1.2)
         >>> cnstate.run()
         >>> cnstate._cnstate
         array([[2, 2, 2, 2, 2, 2, 1, 2],
@@ -180,26 +180,26 @@ class CNState(AnalysisBase):
         # ---------------------- intput parameters --------------------------- #
         self._ag = atomgroup
         self.center_atom_idx = center_atom_idx
-        self.coordinated_elements = coordinated_elements 
+        self.coordinated_elements = coordinated_elements
         self.max_cutoff = max_cutoff
-        self.min_cutoff = min_cutoff 
+        self.min_cutoff = min_cutoff
 
         # ----------------------- extra parameters --------------------------- #
         if self._ag is not None:
             self._trajectory = self._ag.universe.trajectory
             self.cellpar = self._ag.universe.dimensions
-        
+
 
     @classmethod
     def read_cnstate_from(cls, npyfile: str):
         cls._cnstate = np.load(npyfile)
-        return cls(atomgroup=None, 
+        return cls(atomgroup=None,
                    center_atom_idx=None,
                    coordinated_elements=None,
                    max_cutoff=None,
                    min_cutoff=None,)
 
-    def _prepare(self): 
+    def _prepare(self):
 
 
         # turn a list of coordinated elements to a list of indices
@@ -219,11 +219,11 @@ class CNState(AnalysisBase):
             ("please provide cell information for Universe.dimensions")
         assert isinstance(self.center_atom_idx, np.ndarray), \
             ("center_atom_idx should be a 1d or 2d numpy array")
-        
+
         # check if the center atom index is a 2d array or 1d array
 
         if self.center_atom_idx.ndim == 1:
-            self.center_atom_idx = np.tile(self.center_atom_idx, 
+            self.center_atom_idx = np.tile(self.center_atom_idx,
                                            (self.n_frames,1),
                                            )
 
@@ -239,20 +239,20 @@ class CNState(AnalysisBase):
 
         # place holder for the cnstate
         self._cnstate = np.zeros(
-            (self.n_frames, self.num_center_atom_idx), 
+            (self.n_frames, self.num_center_atom_idx),
             dtype=int
             )
 
     def _single_frame(self):
 
         pos = self._ag.positions
-        self._cnstate[self._frame_index]= count_AB_CN(pos, 
-                                     self.center_atom_idx[self._frame_index], 
+        self._cnstate[self._frame_index]= count_AB_CN(pos,
+                                     self.center_atom_idx[self._frame_index],
                                      self.coord_idx,
                                      self.cellpar,
                                      max_cutoff=self.max_cutoff,
                                      min_cutoff=self.min_cutoff)
-    
+
     def _conclude(self):
         pass
 
@@ -268,7 +268,7 @@ class CNState(AnalysisBase):
         assert self._cnstate.ndim == 2, \
                 "cnstate shape is not 2d or not read from npy file"
         return np.count_nonzero(self._cnstate == expected_cn, axis=1)/self._cnstate.shape[1]
-    
+
     def plot_cnstate(self, cn_list=[0, 1, 2, 3]):
         fig, ax = plt.subplots(figsize=(12,3),dpi=500)
         for cn in cn_list:
@@ -283,16 +283,16 @@ class DisDeg(CNState):
 
     Args:
     -----------
-        CNState (_type_): 
+        CNState (_type_):
             _description_
 
     Notes:
     -----------
-     _notes_ 
+     _notes_
 
     Examples:
     -----------
-     _examples_ 
+     _examples_
     """
     def _conclude(self):
         self.get_disdeg()
@@ -300,37 +300,37 @@ class DisDeg(CNState):
     @classmethod
     def read_cnstate_from(cls, npyfile: str):
         cls._cnstate = np.load(npyfile)
-        return cls(atomgroup=None, 
+        return cls(atomgroup=None,
                    center_atom_idx=None,
                    coordinated_elements=None,
                    max_cutoff=None,
                    min_cutoff=None,)
-    
-    def get_disdeg(self, 
-                   cn_list_no_dis:List[int]=[2, 3], 
+
+    def get_disdeg(self,
+                   cn_list_no_dis:List[int]=[2, 3],
                    cn_list_dis:List[int]= [0, 1]
                    ):
-        
+
         self._no_disdeg = np.zeros((self._cnstate.shape[0]), dtype=float)
         self._disdeg = np.zeros((self._cnstate.shape[0]), dtype=float)
         for cn in cn_list_no_dis:
             self._no_disdeg += self.get_cnstate_percentage(expected_cn=cn)
         for cn in cn_list_dis:
             self._disdeg += self.get_cnstate_percentage(expected_cn=cn)
-    
+
     def save_disdeg(self, filename:str):
         np.save(filename, [self._disdeg])
 
     def plot_disdeg(self):
-        
+
         fig, ax = plt.subplots(figsize=(12,3),dpi=500)
         sns.lineplot(self._disdeg, ax=ax, label="disdeg")
         sns.lineplot(self._no_disdeg, ax=ax, label="no_disdeg")
-        
+
         return fig
-    
+
     # def save_obj(self, filename="disdeg.pkl", path_output="./"):
-        
+
     #     import pickle
     #     with open(os.path.join(path_output, filename), "wb") as f:
     #         pickle.dump(self,f)

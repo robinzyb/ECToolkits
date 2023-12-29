@@ -2,7 +2,7 @@
 # summary: rutile (110)-water slab and interface methods
 # 2021-2022
 
-# Fater classes 
+# Fater classes
 from cgi import test
 from .slab import Slab
 from .interface import Interface
@@ -20,29 +20,29 @@ from ..utils.rutile110 import (get_rotM,
                                count_cn,
                                sep_upper_lower,
                                interface_2_slab)
-from ..utils.math import (fit_plane_normal, 
+from ..utils.math import (fit_plane_normal,
                           fit_line_vec)
 
 class SlabRutile110(Slab):
     """Slab object for rutile 110 slabs
 
     Args:
-        Slab (Slab): Child class of ASE Atoms class. 
+        Slab (Slab): Child class of ASE Atoms class.
     """
 
     def __init__(self, slab, M="Ti", nrow=2, cutoff=2.8, bridge_along="y"):
         """Init rutile 110 slab
 
         Args:
-            slab (ASE atoms): 
+            slab (ASE atoms):
                 ASE atoms object for a rutile (110) slab model
-            M (str, optional): 
+            M (str, optional):
                 The metal element in the model. Defaults to "Ti".
-            nrow (int, optional): 
+            nrow (int, optional):
                 Nuber of Obr rows in the slab model. Defaults to 2.
-            cutoff (float, optional): 
+            cutoff (float, optional):
                 Cutoff distances for Ti-O bond. Used for coordination number calculation. Defaults to 2.8.
-            bridge_along (str, optional): 
+            bridge_along (str, optional):
                 "x" or "y". The direction of Obr rows (i.e. [001] direction). Defaults to "y".
         """
         self.slab = slab
@@ -50,14 +50,14 @@ class SlabRutile110(Slab):
         self.cellpar = slab.cell.cellpar()
         self.M = M
         self.nrow = nrow
-        self.cutoff = cutoff 
+        self.cutoff = cutoff
         self.bridge_along = bridge_along
         # positions and indicies
         self.xyz    = slab.positions
         self.idx_H  = np.where(slab.symbols=="H")[0]
         self.idx_O  = np.where(slab.symbols=="O")[0]
         self.idx_M = np.where(slab.symbols==self.M)[0]
-        # result dictionary: 
+        # result dictionary:
         # the keys are the names of the special atoms
         # the values are the corresponding indicies
         # the indicies array looks like [[<idx_upper>], [idx_lower]]
@@ -66,23 +66,23 @@ class SlabRutile110(Slab):
             "idx_Obr": None,
             }
         self.get_surface_indicies()
-            
+
     def get_surf_ti(self):
-        cn = count_cn(self.xyz[self.idx_M], self.xyz[self.idx_O], 
+        cn = count_cn(self.xyz[self.idx_M], self.xyz[self.idx_O],
             cutoff_hi=self.cutoff, cutoff_lo=None, cell=self.cellpar)
         idx_M5c = self.idx_M[cn==5]
         return idx_M5c
 
     def get_surf_o(self):
-        cn = count_cn(self.xyz[self.idx_O], self.xyz[self.idx_M], 
+        cn = count_cn(self.xyz[self.idx_O], self.xyz[self.idx_M],
             cutoff_hi=self.cutoff, cutoff_lo=None, cell=self.cellpar)
-        idx_Obr2 = self.idx_O[cn==2] 
+        idx_Obr2 = self.idx_O[cn==2]
         return idx_Obr2
-    
-    def get_surface_indicies(self): 
+
+    def get_surface_indicies(self):
         idx_M5c = self.get_surf_ti()
         idx_Obr2 = self.get_surf_o()
-        res = [idx_M5c, 
+        res = [idx_M5c,
                idx_Obr2]
         for ii, key in enumerate(self.indicies):
             self.indicies[key] = res[ii]
@@ -117,15 +117,15 @@ class Rutile110(Interface):
         """Initialize rutile110
 
         Args:
-            slab (ASE atoms): 
+            slab (ASE atoms):
                 ASE atoms object for a rutile (110) slab model
-            M (str, optional): 
+            M (str, optional):
                 The metal element in the model. Defaults to "Ti".
-            nrow (int, optional): 
+            nrow (int, optional):
                 Nuber of Obr rows in the slab model. Defaults to 2.
-            cutoff (float, optional): 
+            cutoff (float, optional):
                 Cutoff distances for Ti-O bond. Used for coordination number calculation. Defaults to 2.8.
-            bridge_along (str, optional): 
+            bridge_along (str, optional):
                 "x" or "y". The direction of Obr rows (i.e. [001] direction). Defaults to "y".
         """
         self.atoms = atoms
@@ -144,16 +144,16 @@ class Rutile110(Interface):
 
         # get corresponding slab model
         self.idx_slab, self.slab = self.get_slab_obj()
-        self.slab.sep_upper_lower() 
+        self.slab.sep_upper_lower()
         self.slab.sort_idx()
 
         # convert slab indicies to indicies edge model
         self.indicies = self.get_indicies()
-    
+
     def get_slab_obj(self):
         idx_slab, slab = interface_2_slab(self.atoms, self.M)
-        obj = SlabRutile110(slab, 
-                M=self.M, 
+        obj = SlabRutile110(slab,
+                M=self.M,
                 nrow=self.nrow,
                 cutoff=self.cutoff,
                 bridge_along=self.bridge_along)
@@ -184,19 +184,19 @@ class SlabRutile1p11Edge(Slab):
         """intitialize 'Slab' object for rutile (110) slab with <1 -1 1> step edge
 
         Args:
-            slab (ASE atoms): 
+            slab (ASE atoms):
                 ASE atoms object for a rutile (110) slab model
-            rotM (numpy.ndarray): 
-                3x3 numpy array. A rotation matrix for triclicnic simulation box. 
+            rotM (numpy.ndarray):
+                3x3 numpy array. A rotation matrix for triclicnic simulation box.
                 To get positions after rotation, use 'np.matmul(slab.positions, rotM)'.
                 The results should be z-Axis of the triclicnic simulation box parallel to [1 1 0].
-            M (str, optional): 
+            M (str, optional):
                 The metal element in the model. Defaults to "Ti".
-            nrow (int, optional): 
+            nrow (int, optional):
                 Nuber of Obr rows in the slab model. Defaults to 2.
-            cutoff (float, optional): 
+            cutoff (float, optional):
                 Cutoff distances for Ti-O bond. Used for coordination number calculation. Defaults to 2.8.
-            bridge_along (str, optional): 
+            bridge_along (str, optional):
                 "x" or "y". The direction of Obr rows (i.e. [001] direction). Defaults to "y".
         """
         self.slab = slab
@@ -212,7 +212,7 @@ class SlabRutile1p11Edge(Slab):
         self.idx_H  = np.where(slab.symbols=="H")[0]
         self.idx_O  = np.where(slab.symbols=="O")[0]
         self.idx_M = np.where(slab.symbols==self.M)[0]
-        # result dictionary: 
+        # result dictionary:
         # the keys are the names of the special atoms
         # the values are the corresponding indicies
         # the indicies array looks like [[<idx_upper>], [idx_lower]]
@@ -226,27 +226,27 @@ class SlabRutile1p11Edge(Slab):
             "idx_edge_O2": None
             }
         self.get_surface_indicies()
-            
+
     def get_surf_ti(self):
-        cn = count_cn(self.xyz[self.idx_M], self.xyz[self.idx_O], 
+        cn = count_cn(self.xyz[self.idx_M], self.xyz[self.idx_O],
             cutoff_hi=self.cutoff, cutoff_lo=None, cell=self.cellpar)
         idx_edge4 = self.idx_M[cn==4]
-        idx_edge5, idx_surf5 = self.sep_ticn5(self.slab, self.xyz, self.idx_O, 
+        idx_edge5, idx_surf5 = self.sep_ticn5(self.slab, self.xyz, self.idx_O,
             self.idx_M, cn)
         return idx_edge4, idx_edge5, idx_surf5
 
     def get_surf_o(self):
-        cn = count_cn(self.xyz[self.idx_O], self.xyz[self.idx_M], 
+        cn = count_cn(self.xyz[self.idx_O], self.xyz[self.idx_M],
             cutoff_hi=self.cutoff, cutoff_lo=None, cell=self.cellpar)
-        idx_edge2, idx_hobr, idx_obr = self.sep_ocn2(self.slab, self.xyz, 
+        idx_edge2, idx_hobr, idx_obr = self.sep_ocn2(self.slab, self.xyz,
             self.idx_O, self.idx_M, cn)
         return idx_edge2, idx_hobr, idx_obr
-    
-    def get_surface_indicies(self): 
+
+    def get_surface_indicies(self):
         idx_edge4, idx_edge5, idx_surf5 = self.get_surf_ti()
-        idx_edge2, idx_hobr, idx_obr = self.get_surf_o() 
+        idx_edge2, idx_hobr, idx_obr = self.get_surf_o()
         idx_hobr1, idx_hobr2 = self.sep_hobr(self.slab, idx_hobr, self.M)
-        res = [idx_surf5, idx_edge5, idx_edge4, 
+        res = [idx_surf5, idx_edge5, idx_edge4,
                idx_obr, idx_hobr1, idx_hobr2, idx_edge2]
         for ii, key in enumerate(self.indicies):
             #res[ii] = sep_upper_lower(self.xyz[:,-1], res[ii])
@@ -259,12 +259,12 @@ class SlabRutile1p11Edge(Slab):
                     self.indicies[key])
         self.ngroup = self.indicies['idx_M5c'].shape[-1]//self.nrow
         return self.indicies
-    
+
     def sort_idx(self):
         for key in self.indicies:
             tmp = []
             for ii in range(2):
-                idx_sorted = sort_by_rows(self.slab, self.indicies[key][ii], 
+                idx_sorted = sort_by_rows(self.slab, self.indicies[key][ii],
                                           rotM=self.rotM, n_row=self.nrow,
                                           bridge_along=self.bridge_along)
                 tmp.append(idx_sorted)
@@ -301,14 +301,14 @@ class SlabRutile1p11Edge(Slab):
         idx_hobr = idx_O[idx_cn2[cnti_sum==11]]
         idx_obr = idx_O[idx_cn2[cnti_sum==12]]
         return idx_edge2, idx_hobr, idx_obr
-        
+
     @staticmethod
     def sep_hobr(atoms, idx_hobr, M="Ti"):
         trig = get_triangle(atoms, idx_hobr, M)
         vec = trig_vec(atoms, trig)
         hobr1 = idx_hobr[np.abs(np.dot(vec, [0, 0, 1])) < 2]
         hobr2 = idx_hobr[np.abs(np.dot(vec, [0, 0, 1])) > 2]
-        return hobr1, hobr2 
+        return hobr1, hobr2
 
 
 class Rutile1p11Edge(Interface):
@@ -321,19 +321,19 @@ class Rutile1p11Edge(Interface):
         """Initialize `Interface` object for rutile (110) with <1 -1 1> edge-water interface
 
         Args:
-            slab (ASE atoms): 
+            slab (ASE atoms):
                 ASE atoms object for a rutile (110) slab model
-            vecy (numpy.ndarray): 
+            vecy (numpy.ndarray):
                 (3, )-shaped numpy array. Could be any vector parallel to Obr rows ([001] direction).
-            vecz (numpy.ndarray): 
+            vecz (numpy.ndarray):
                 (3, )-shaped numpy array. Could be any vector parallel to [110] direction.
-            M (str, optional): 
+            M (str, optional):
                 The metal element in the model. Defaults to "Ti".
-            nrow (int, optional): 
+            nrow (int, optional):
                 Nuber of Obr rows in the slab model. Defaults to 2.
-            cutoff (float, optional): 
+            cutoff (float, optional):
                 Cutoff distances for Ti-O bond. Used for coordination number calculation. Defaults to 2.8.
-            bridge_along (str, optional): 
+            bridge_along (str, optional):
                 "x" or "y". The direction of Obr rows (i.e. [001] direction). Defaults to "y".
         """
         self.atoms = atoms
@@ -353,20 +353,20 @@ class Rutile1p11Edge(Interface):
         self.idx_Ow, _ = self.get_wat()
 
         # get_rotation matrix
-        self.rotM = get_rotM(vecy, vecz) 
+        self.rotM = get_rotM(vecy, vecz)
         # get corresponding slab model
         self.idx_slab, self.slab = self.get_slab_obj()
-        self.slab.sep_upper_lower() 
+        self.slab.sep_upper_lower()
         self.slab.sort_idx()
 
         # convert slab indicies to indicies edge model
         self.indicies = self.get_indicies()
-    
+
     def get_slab_obj(self):
         idx_slab, slab = interface_2_slab(self.atoms, self.M)
-        obj = SlabRutile1p11Edge(slab, 
+        obj = SlabRutile1p11Edge(slab,
                 rotM=self.rotM,
-                M=self.M, 
+                M=self.M,
                 nrow=self.nrow,
                 cutoff=self.cutoff,
                 bridge_along=self.bridge_along)

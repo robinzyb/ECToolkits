@@ -204,7 +204,7 @@ class BandAlign():
             stc = cube.get_stc()
             traj.append(stc)
             print(f"process cube {idx} finished", end="\r")
-            
+
         pav_x_list = np.array(pav_x_list)*au2A
         pav_list = np.array(pav_list)*au2eV
         mav_x_list = np.array(mav_x_list)*au2A
@@ -237,7 +237,7 @@ def get_nearest_idx(array, value):
 
 def get_z_mean(atoms, idx_list):
     # check_in_plane: switch to true to check the selected atoms are in similar z positions
-    # sometimes z postions will shift by pbc 
+    # sometimes z postions will shift by pbc
     z_mean = atoms[idx_list].get_positions().T[2].mean()
     return z_mean
 

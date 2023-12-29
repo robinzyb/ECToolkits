@@ -95,7 +95,7 @@ def file_content(file, num):
 def create_path(path, bk=False):
     """create 'path' directory. If 'path' already exists, then check 'bk':
        if 'bk' is True, backup original directory and create new directory naming 'path';
-       if 'bk' is False, do nothing. 
+       if 'bk' is False, do nothing.
 
     Args:
         path ('str' or 'os.path'): The direcotry you are making.

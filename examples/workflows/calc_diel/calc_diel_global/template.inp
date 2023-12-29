@@ -7,7 +7,7 @@
 
 
 &FORCE_EVAL
-  METHOD         Quickstep 
+  METHOD         Quickstep
   &DFT
     BASIS_SET_FILE_NAME     BASIS_ADMM
     BASIS_SET_FILE_NAME     BASIS_ADMM_MOLOPT
@@ -17,13 +17,13 @@
 
     CHARGE 0
     MULTIPLICITY 1
- 
+
     &MGRID
       NGRIDS 4
       CUTOFF 500
       REL_CUTOFF 60
     &END MGRID
- 
+
     &QS
       EPS_DEFAULT  1.0E-15
       WF_INTERPOLATION PS

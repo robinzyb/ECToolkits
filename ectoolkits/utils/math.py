@@ -57,24 +57,24 @@ def get_norm_vector(a, b):
 
     Args:
     -----------
-        a (_type_): 
+        a (_type_):
             _description_
-        b (_type_): 
+        b (_type_):
             _description_
 
     Returns:
     -----------
-        _type_: 
+        _type_:
             _description_
 
     Notes:
     -----------
-     _notes_ 
+     _notes_
 
     Examples:
     -----------
-     _examples_ 
-    """    
+     _examples_
+    """
     nv_a = np.cross(a, b)
     norm = np.linalg.norm(nv_a)
     nv_a = nv_a/norm
@@ -87,7 +87,7 @@ def get_plane_distance(a, b):
     #     \
     #      ---------> a
     len_a = np.linalg.norm(a)
-    proj_b = np.dot(b, a) * a /len_a**2 
+    proj_b = np.dot(b, a) * a /len_a**2
     plane_d = np.linalg.norm(b - proj_b)
     return plane_d
 
@@ -97,26 +97,26 @@ def get_plane_eq(a, b, c=np.array([0, 0, 1])):
 
     Args:
     -----------
-        a (_type_): 
+        a (_type_):
             _description_
-        b (_type_): 
+        b (_type_):
             _description_
-        c (_type_, optional): 
+        c (_type_, optional):
             _description_. Defaults to np.array([0, 0, 1]).
 
     Returns:
     -----------
-        _type_: 
+        _type_:
             _description_
 
     Notes:
     -----------
-     _notes_ 
+     _notes_
 
     Examples:
     -----------
-     _examples_ 
-    """    
+     _examples_
+    """
     n_vec_a = get_norm_vector(c, a)
     d1_a = np.abs(np.dot(n_vec_a, a ))
     d2_a = np.abs(np.dot(n_vec_a, a+b))

@@ -2,20 +2,20 @@ import numpy as np
 from numpy.typing import ArrayLike
 from typing import Tuple
 
-def get_f_coarse_grained_data(data_list: ArrayLike, tau: int) -> ArrayLike:    
+def get_f_coarse_grained_data(data_list: ArrayLike, tau: int) -> ArrayLike:
     """
     coarse grain array data in forward direction with block length tau.
 
     Args:
     -----------
-        data_list (ArrayLike): 
+        data_list (ArrayLike):
             Time Serials Data, shape(1,N), like energies.
-        tau (int): 
+        tau (int):
             block length
 
     Returns:
     -----------
-        ArrayLike: 
+        ArrayLike:
             Coarse-grained Time Serials Data, shape(1, int(N/tau)).
 
     Notes:
@@ -25,9 +25,9 @@ def get_f_coarse_grained_data(data_list: ArrayLike, tau: int) -> ArrayLike:
     Examples:
     -----------
     >>> get_f_coarse_grained_data(energies_list, 50)
-    
 
-    """    
+
+    """
     new_data_list = []
     n = len(data_list)
     l = int(n/tau)
@@ -43,27 +43,27 @@ def get_uncertainty(data_list: ArrayLike, tau_range: Tuple[int, int, int] = (1, 
 
     Args:
     -----------
-        data_list (ArrayLike): 
+        data_list (ArrayLike):
             Time Serials Data, shape(1,N), like energies.
-        tau_range (Tuple[int, int, int], optional): 
+        tau_range (Tuple[int, int, int], optional):
             A list of tau values. Defaults to (1, 50, 1).
 
     Returns:
     -----------
-        Tuple[ArrayLike, ArrayLike]: 
-            1. a list of mean values corresponding to tau 
-            2. a list of uncertainties corresponding to tau 
+        Tuple[ArrayLike, ArrayLike]:
+            1. a list of mean values corresponding to tau
+            2. a list of uncertainties corresponding to tau
 
     Notes:
     -----------
-     see https://doi.org/10.1063/1.1638996 
+     see https://doi.org/10.1063/1.1638996
 
     Examples:
     -----------
     >>>  vgap
     array([17.21097182, 17.21777723, 17.22483708, ..., 17.72987759,
        17.76217987, 17.80458071])
-    >>>  vgap.shape 
+    >>>  vgap.shape
     (13401,)
     >>> get_uncertainty(vgap, tau_range=(1, 50, 1))
     (array([17.72412774, 17.72412174, 17.72412774, 17.72412174, 17.72412174,
@@ -86,7 +86,7 @@ def get_uncertainty(data_list: ArrayLike, tau_range: Tuple[int, int, int] = (1, 
         0.02759716, 0.02792354, 0.02817088, 0.02851189, 0.02871313,
         0.02902685, 0.0294121 , 0.02958297, 0.02987098, 0.0297415 ,
         0.02995385, 0.03045183, 0.03049436, 0.03114382]))
-    """    
+    """
     err_list = []
     mean_list = []
     for tau in range(*tau_range):

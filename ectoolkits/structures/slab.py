@@ -29,8 +29,8 @@ class Slab(Atoms):
         coord_num_list = np.bincount(neighbor_list('i', self, cutoff))[input_idx]
         target_idx = input_idx[coord_num_list == coord_num]
         return target_idx
-    
-    def get_neighbor_list(self, idx: int, cutoff: dict) -> list:        
+
+    def get_neighbor_list(self, idx: int, cutoff: dict) -> list:
         """
             provided that atom index and return its neighbor in list
         Args:
@@ -39,10 +39,10 @@ class Slab(Atoms):
 
         Returns:
             list: list of atom indices
-        
+
         Examples:
             get_neighbor_list(16, {("O", "H"): 1.4})
-        """        
+        """
         i, j = neighbor_list('ij', self, cutoff=cutoff)
         return j[i==idx]
 
@@ -57,15 +57,15 @@ class Slab(Atoms):
 
         Returns:
             list: list of atom indices
-        """            
+        """
         cs = self.get_chemical_symbols()
         cs = np.array(cs)
         idx_list = np.where(cs==element)[0]
         return list(idx_list)
 
-    def find_surf_idx(self, 
-                      element:str=None, 
-                      tolerance:float=0.1, 
+    def find_surf_idx(self,
+                      element:str=None,
+                      tolerance:float=0.1,
                       dsur:str='up',
                       check_cross_boundary=False,
                       trans_z_dist = 5
@@ -78,13 +78,13 @@ class Slab(Atoms):
         Args:
             element (str): element symbol
             tolerance (float, optional): tolerance for define a layer. Defaults to 0.1.
-            dsur (str, optional): direction of surface, 'up' or 'dw'. for a vacuum-slab model, 
+            dsur (str, optional): direction of surface, 'up' or 'dw'. for a vacuum-slab model,
             you have up surface and down surface. Defaults to 'up'.
 
         Returns:
             list: list of atom indices
-        """ 
-        tmp_stc = self.copy()  
+        """
+        tmp_stc = self.copy()
         if check_cross_boundary:
             while tmp_stc.is_cross_z_boundary(element=element):
                 print(f"The slab part is cross z boundary, tranlate {trans_z_dist:3.3f} A!")
@@ -94,7 +94,7 @@ class Slab(Atoms):
         if element:
             idx_list = tmp_stc.find_element_idx_list(element)
             z_list = tmp_stc[idx_list].get_positions().T[2]
-        else: 
+        else:
             z_list = tmp_stc.get_positions().T[2]
         if dsur == 'up':
             z = z_list.max()
@@ -104,7 +104,7 @@ class Slab(Atoms):
         zmin = z-tolerance
         zmax = z+tolerance
         idx_list = tmp_stc.find_idx_from_range(zmin=zmin, zmax=zmax, element=element)
-    
+
         return idx_list
 
     def del_surf_layer(self, element: str =None, tolerance=0.1, dsur='up', check_cross_boundary=False):
@@ -119,14 +119,14 @@ class Slab(Atoms):
 
         Returns:
             _type_: _description_
-        """        
+        """
 
-        del_list = self.find_surf_idx(element=element, 
-                                      tolerance=tolerance, 
-                                      dsur=dsur, 
+        del_list = self.find_surf_idx(element=element,
+                                      tolerance=tolerance,
+                                      dsur=dsur,
                                       check_cross_boundary=check_cross_boundary
                                       )
-        
+
         tmp = self.copy()
         del tmp[del_list]
         return tmp
@@ -137,13 +137,13 @@ class Slab(Atoms):
         _extended_summary_
 
         Args:
-            zmin (int): minimum in z 
+            zmin (int): minimum in z
             zmax (int): maximum in z
             element (str, optional): element symbol, None means all atoms. Defaults to None.
 
         Returns:
             list: list of atom indices
-        """        
+        """
         idx_list = []
         if element:
             for atom in self:
@@ -153,7 +153,7 @@ class Slab(Atoms):
         else:
             for atom in self:
                 if (atom.position[2] < zmax) and (atom.position[2] > zmin):
-                    idx_list.append(atom.index)       
+                    idx_list.append(atom.index)
         return idx_list
 
     def del_from_range(self, zmin: int, zmax: int, element: str =None) -> Atoms:
@@ -168,18 +168,18 @@ class Slab(Atoms):
 
         Returns:
             Atoms: _description_
-        """           
+        """
         tmp = self.copy()
         del_idx_list = self.find_idx_from_range(zmin=zmin, zmax=zmax, element=element)
 
         del tmp[del_idx_list]
-        
+
         return tmp
-    
-    def add_adsorbate(self, 
-                  ad_site_idx:int, 
-                  vertical_dist:float, 
-                  adsorbate:Atoms, 
+
+    def add_adsorbate(self,
+                  ad_site_idx:int,
+                  vertical_dist:float,
+                  adsorbate:Atoms,
                   contact_atom_idx:int=0,
                   lateral_shift:Tuple[float]=(0,0),
                   ):
@@ -195,11 +195,11 @@ class Slab(Atoms):
         tmp_adsorbate.translate(target_pos)
         tmp_stc.extend(tmp_adsorbate)
         return tmp_stc
-    
+
     def add_adsorbates(self,
-                    ad_site_idx_list:List[int], 
-                    vertical_dist:float, 
-                    adsorbate:Atoms, 
+                    ad_site_idx_list:List[int],
+                    vertical_dist:float,
+                    adsorbate:Atoms,
                     contact_atom_idx:int=0,
                     lateral_shift:Tuple[float]=(0,0),
                     ):
@@ -207,16 +207,16 @@ class Slab(Atoms):
         for ad_site_idx in ad_site_idx_list:
             tmp_stc = tmp_stc.add_adsorbate(ad_site_idx=ad_site_idx,
                                       vertical_dist=vertical_dist,
-                                      adsorbate=adsorbate, 
+                                      adsorbate=adsorbate,
                                       contact_atom_idx=contact_atom_idx,
                                       lateral_shift=lateral_shift,
                                       )
         return tmp_stc
-        
 
-    def generate_interface(self, 
-                           water_box_len: float, 
-                           top_surface_idx: List[int], 
+
+    def generate_interface(self,
+                           water_box_len: float,
+                           top_surface_idx: List[int],
                            bottom_surface_idx: List[int]
                            ):
         """merge slab model and water box together
@@ -257,7 +257,7 @@ class Slab(Atoms):
         tmp.wrap()
         print("Merge Water and Slab Box Finished")
         return tmp
-    
+
     def generate_water_box(self, water_box_len):
         """function to generate water box
         x and y length is from self length
@@ -280,7 +280,7 @@ class Slab(Atoms):
         #print("Read Cell Y: {0:03f} A".format(cell_b))
         print("Read Water Box Length: {0:03f} A".format(water_box_len))
         print("Predict Water Number: {0}".format(wat_num))
-        
+
         n_vec_a, d1_a, d2_a, n_vec_b, d1_b, d2_b = get_plane_eq(cell_a, cell_b)
         print("Calculate Plane Equation")
 
@@ -356,13 +356,13 @@ class Slab(Atoms):
         vec_raw = coord_z_max - coord_z_min
 
         vec_minimized = minimize_vectors(vectors=vec_raw, box=cellpar)
-        
+
         #print(vec_minimized[2], vec_raw[2])
         if np.isclose(vec_minimized[2], vec_raw[2], atol=1e-5, rtol=0):
             return False
         else:
             return True
-    
+
 
 class RutileSlab(Slab):
     """
@@ -385,7 +385,7 @@ class RutileSlab(Slab):
             "100": self.rutile_slab_100,
             "101": self.rutile_slab_101,
         }
-        
+
         method = method_entry.get(entry, None)
 
         try:
@@ -405,7 +405,7 @@ class RutileSlab(Slab):
         this function is valid only for 6 atoms conventional cell.
         """
         # create six layer and a supercell
-        
+
         slab = surface(self, (1, 1, 0), n_layers+1, vacuum)
 
         # remove bottom layer
@@ -441,14 +441,14 @@ class RutileSlab(Slab):
         slab = slab[slab.positions.T[2].argsort()]
 
         return slab
-    
+
     def rutile_slab_100(self, n_layers=5, lateral_repeat: tuple=(2, 3), vacuum=10.0):
         """
         function for create symmetry slab for rutile structure 100 surface
         space group: P42/mnm
         this function is valid only for 6 atoms conventional cell.
         """
-        # create six layer and a supercell    
+        # create six layer and a supercell
 
         if n_layers%2 == 1:
             slab = surface(self, (1, 0, 0), int(n_layers/2)+1, vacuum)
@@ -469,14 +469,14 @@ class RutileSlab(Slab):
         slab = slab[slab.positions.T[2].argsort()]
 
         return slab
-    
+
     def rutile_slab_101(self, n_layers=5, lateral_repeat: tuple=(2, 2), vacuum=10.0):
         """
         function for create symmetry slab for rutile structure 101 surface
         space group: P42/mnm
         this function is valid only for 6 atoms conventional cell.
         """
-        # create six layer and a supercell    
+        # create six layer and a supercell
         slab = surface(self, (1, 0, 1), n_layers+1, vacuum)
         slab = slab.del_surf_layer(tolerance=0.1, dsur='dw')
         slab = slab.del_surf_layer(tolerance=0.1, dsur='dw')

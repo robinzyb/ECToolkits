@@ -1,5 +1,5 @@
 # this module collect acidity calculation functions
-# 
+#
 from cp2kdata.units import *
 import numpy as np
 
@@ -13,7 +13,7 @@ def get_quantum_correction_hydronium(T=298):
     H2O_frequencies_list = np.array([1610, 3710, 3820])
 
     quant_corr_hydronium = get_quantum_correction(H3O_frequencies_list, T=T) - get_quantum_correction(H2O_frequencies_list, T=298)
-    
+
     return quant_corr_hydronium
 
 def get_quantum_correction(frequencies_list, T):
@@ -28,12 +28,12 @@ def get_quantum_correction(frequencies_list, T):
     return quant_corr
 
 def get_quant_vib_fe(frequencies_list):
-    
+
     quant_vib_fe = np.sum(frequencies_list) * 0.5 * WaveNumber2eV
     return quant_vib_fe
 
 def get_cls_vib_fe(frequencies_list, T):
-    
+
     cls_vib_fe = -kB * T * np.log(np.prod((kB*T) / (frequencies_list * WaveNumber2eV)))
     return cls_vib_fe
 
@@ -47,8 +47,8 @@ def get_dummy_insert_fe(frequencies_list, T):
 def get_dummy_insert_fe_hydronium(T=298):
     fH2Od        = get_partition_ratio_hydronium(T=T)
     Delta_A_H2Od = _get_dummy_insert_fe(fH2Od, T=T)
-    return Delta_A_H2Od 
-    
+    return Delta_A_H2Od
+
 def _get_dummy_insert_fe(fAd, T):
     """get dummy insertion free energy
      \Delta A_{Ad} = -kBT ln(c0 \Lambda_{\ce{H+}}^{3} f_{Ad})
@@ -75,7 +75,7 @@ def get_partition_ratio(frequencies_list, T=298):
 def get_partition_ratio_hydronium(T=298):
     # moment of inertia (I) in atomic unit
     # frequency of a vibration mode in cm-1
-    
+
     I_H2O     = np.array([4150, 7740, 11890])
     freq_H2O  = np.array([1610, 3650, 3750])
     q_H2O     = get_gas_partition(freq_H2O, I_H2O, T=T, sigma=2)
@@ -112,10 +112,10 @@ def get_gas_partition(frequencies_list, I_list, T, sigma):
 
     Tpow3          = np.power(T,3)
     prod_theta_rot = np.prod(get_rot_temp(I_list))
-    
+
     constant  = pi_sqrt / sigma
     partition = Tpown / prod_theta_vib * constant * np.sqrt(Tpow3 / prod_theta_rot)
-    
+
     return partition
 
 
@@ -138,7 +138,7 @@ def get_vib_temp(frequency):
 def get_rot_temp(I):
     """moment of inertia (I) in atomic unit
 
-    see ref eq 
+    see ref eq
     B = hbar^2 / 2I
     theta_rot = B/kB
     Args:

@@ -90,7 +90,7 @@ class AtomDensity():
 
         # find the water center along the trajectory
         self.water_cent_list = self.get_water_cent_list()
-        
+
 
         # water center relative to fisrt frame
         #self.water_cent_rel_s = self.water_cent_s - self.water_cent_s[0]
@@ -114,8 +114,8 @@ class AtomDensity():
 
         Returns:
             np.array: the z coordinates of atoms
-        """        
-        
+        """
+
         all_z = []
         for pos in self.poses:
             #z
@@ -131,7 +131,7 @@ class AtomDensity():
 
         Returns:
             np.array: axis 0: traj
-        """        
+        """
 
         surf1_z_list = self.all_z.T[self.surf1]
         surf1_z_list = surf1_z_list.T
@@ -145,7 +145,7 @@ class AtomDensity():
 
         Returns:
             np.array: axis 0: traj
-        """        
+        """
 
         surf2_z_list = self.all_z.T[self.surf2]
         surf2_z_list = surf2_z_list.T
@@ -211,7 +211,7 @@ class AtomDensity():
             atom_z_new.append(num%cell_z)
         atom_z = np.array(atom_z_new)
 
-        
+
         # find the length between two surface
         if self.surf1_z > self.surf2_z:
             self.surf_space = self.surf2_z + cell_z - self.surf1_z
@@ -227,7 +227,7 @@ class AtomDensity():
         #z = z[:-1]
 
 
-        
+
         unit_conversion = self.get_unit_conversion(param, dz)
 
         # normalized wrt density of bulk water
@@ -272,11 +272,11 @@ class AtomDensity():
                 part_density = density[np.logical_and((z>=left_bound), (z<=right_bound))]
                 cent_density = part_density.mean()
                 cent_density_list.append(cent_density)
-            
+
             all_cent_density[f"{name}"] = cent_density_list
-        
+
         return pd.DataFrame(all_cent_density)
-    
+
     def plot_density(self, sym=False):
         plt.rc('font', size=18) #controls default text size
         plt.rc('axes', titlesize=23) #fontsize of the title

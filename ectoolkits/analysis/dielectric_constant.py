@@ -3,8 +3,8 @@ import numpy.typing as npt
 from scipy.integrate import simpson
 from cp2kdata import Cp2kCube
 
-def get_induced_charge(rho_cube_1: Cp2kCube, 
-                       rho_cube_2: Cp2kCube, 
+def get_induced_charge(rho_cube_1: Cp2kCube,
+                       rho_cube_2: Cp2kCube,
                        axis: str='z'
                        ):
     """
@@ -42,8 +42,8 @@ def get_integrated_array(x, y):
 
 
 # get electric field
-def get_micro_electric_field(x: npt.NDArray[np.float64], 
-                             rho: npt.NDArray[np.float64], 
+def get_micro_electric_field(x: npt.NDArray[np.float64],
+                             rho: npt.NDArray[np.float64],
                              Delta_macro_Efield: float
                              ) -> npt.NDArray[np.float64]:
     """
@@ -73,21 +73,21 @@ def get_micro_electric_field(x: npt.NDArray[np.float64],
 
     The units of the input and output arrays are atomic units (au).
     """
-    
+
     # atomic unit
     integrand = np.pi * 4 * rho
     micro_electric_field = get_integrated_array(x, integrand)
 
     # determine constant
     constant = Delta_macro_Efield - micro_electric_field.mean()
-    
+
     micro_electric_field += constant
     return micro_electric_field
-    
+
 # get polarization
 
-def get_micro_polarization(x: npt.NDArray[np.float64], 
-                           rho: npt.NDArray[np.float64], 
+def get_micro_polarization(x: npt.NDArray[np.float64],
+                           rho: npt.NDArray[np.float64],
                            Delta_macro_polarization: float
                            ) -> npt.NDArray[np.float64]:
     """
@@ -126,13 +126,13 @@ def get_micro_polarization(x: npt.NDArray[np.float64],
     constant = Delta_macro_polarization - micro_polarization.mean()
 
     micro_polarization += constant
-    
+
     return micro_polarization
 
 
 
 def get_dielectric_susceptibility(micro_polarization, micro_electric_field):
-    
+
     dielectric_susceptibility = micro_polarization / micro_electric_field
     return dielectric_susceptibility
 
@@ -144,7 +144,7 @@ def get_dielectric_constant(dielectric_susceptibility):
 def get_dielectric_constant_profile(rho_1, rho_2, Delta_macro_Efield, Delta_macro_polarization, axis):
     z, rho_induced = get_induced_charge(rho_1, rho_2, axis=axis)
     # electron carries negative charge
-    rho_induced = -rho_induced 
+    rho_induced = -rho_induced
 
     micro_electric_field = get_micro_electric_field(z, rho_induced, Delta_macro_Efield=Delta_macro_Efield)
     micro_polarization = get_micro_polarization(z, rho_induced, Delta_macro_polarization=Delta_macro_polarization)

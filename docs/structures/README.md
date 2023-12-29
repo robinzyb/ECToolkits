@@ -7,7 +7,7 @@ In some cases, the solid parts of slab/interface models may cross the z boundary
 
 To check if a solid part crosses the z boundary, use the Slab.is_cross_z_boundary method. Here is an example usage:
 ```python
-stc = Slab(stc) 
+stc = Slab(stc)
 # The element argument specifies the element in the slab part.
 stc.is_cross_z_boundary(element='Ti')
 ```

@@ -8,8 +8,10 @@ import os
 import glob
 import numpy as np
 from ase.geometry import cellpar_to_cell
+from ase import Atoms
 # distance caculation library functions
 from MDAnalysis.lib.distances import *
+from MDAnalysis.lib.c_distances import _minimize_vectors_triclinic
 
 def get_pair(xyz, idx1, idx2, cutoff_hi, cutoff_lo=None, cell=None, **kwargs):
 

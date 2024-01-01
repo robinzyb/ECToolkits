@@ -45,7 +45,6 @@ def file_to_list(fname: str):
 
 
 def get_dipole_moment_array(task_work_path_list: List[str],
-
                             output_dir: str,
                             axis: str):
     index_dict = {

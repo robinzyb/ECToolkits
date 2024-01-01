@@ -438,7 +438,7 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atomgroup</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s1">&#39;Ti&#39;</span><span class="p">,</span> <span class="n">rotM</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dz_bin</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">2.8</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Init water density analysis</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Init water density analysis</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            atomgroup (MDAnalysis.atomgroup):</span>
@@ -561,7 +561,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">plot_density_z</span><span class="p">(</span><span class="n">dat_oxygen</span><span class="p">,</span> <span class="n">dat_hydrogen</span><span class="p">)</span>
 
 <div class="viewcode-block" id="WatDensity.get_watOidx"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.WatDensity.get_watOidx">[docs]</a>    <span class="k">def</span> <span class="nf">get_watOidx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;This methods would select all water oxygen index</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;This methods would select all water oxygen index</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            tuple: (&lt;water oxygen index&gt;, &lt;all Hydrogen index&gt;). Note, for rutile-\hkl(110)</span>
@@ -672,8 +672,8 @@ document.write(`
 <span class="sd">        ```</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atomgroup</span><span class="p">,</span> <span class="n">owidx</span><span class="p">,</span> <span class="n">cn5idx</span><span class="p">,</span> <span class="n">edge4idx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edge5idx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nrow</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s1">&#39;Ti&#39;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">n_oh</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializing rutile interface dissociation degree analysis</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atomgroup</span><span class="p">,</span> <span class="n">owidx</span><span class="p">,</span> <span class="n">cn5idx</span><span class="p">,</span> <span class="n">edge4idx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edge5idx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nrow</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s1">&#39;Ti&#39;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">n_oh</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Initializing rutile interface dissociation degree analysis</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            atomgroup (MDAnalysis.Atomgroup):</span>
@@ -907,7 +907,7 @@ document.write(`
     <span class="c1"># Feature:</span>
     <span class="c1"># - use hard cutoff (1.2 A) to determine proton dissociation</span>
     <span class="c1"># - will save raw data: coordination number surf-water and surf-water oxygen atom indicies</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;MDAnalysis class calculating surface water dissociation degree for rutile \hkl(110)-water interface.</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;MDAnalysis class calculating surface water dissociation degree for rutile \hkl(110)-water interface.</span>
 <span class="sd">    Besides dissociation, this method will also output surface adsorption water oxygen index, which is useful for</span>
 <span class="sd">    TiO2-water interface, because adsorbed water in this system sometimes exchange with sub-interface water.</span>
 
@@ -932,7 +932,7 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atomgroup</span><span class="p">,</span> <span class="n">owidx</span><span class="p">,</span> <span class="n">cn5idx</span><span class="p">,</span> <span class="n">edge4idx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edge5idx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s1">&#39;Ti&#39;</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">2.8</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialising a dissociation degree calculating class</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Initialising a dissociation degree calculating class</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            atomgroup (MDAnalysis.Atomgroup):</span>

@@ -458,7 +458,27 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="ectoolkits.structures.rutile110.Rutile1p11Edge.get_indicies">
 <span class="sig-name descname"><span class="pre">get_indicies</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/structures/rutile110.html#Rutile1p11Edge.get_indicies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.structures.rutile110.Rutile1p11Edge.get_indicies" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Returns a dictionary of atom indices in the slab.</p>
+<p>This method creates a copy of the <cite>indicies</cite> dictionary from the <cite>slab</cite> attribute.
+It then updates each value in the dictionary by converting the slab index to the corresponding atom index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dictionary where the keys are atom types and the values are lists of atom indices.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Assuming <cite>rutile</cite> is an instance of the <cite>Rutile110</cite> class:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">indicies</span> <span class="o">=</span> <span class="n">rutile</span><span class="o">.</span><span class="n">get_indicies</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">indicies</span><span class="p">)</span>
+<span class="go">{&#39;O&#39;: [1, 2, 3, 4], &#39;Ti&#39;: [5, 6, 7, 8]}</span>
+</pre></div>
+</div>
+<p>This will print a dictionary where the keys are atom types (‘O’ and ‘Ti’ in this case)
+and the values are lists of atom indices.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ectoolkits.structures.rutile110.Rutile1p11Edge.get_slab_obj">

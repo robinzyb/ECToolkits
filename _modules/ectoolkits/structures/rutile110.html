@@ -690,13 +690,13 @@ document.write(`
 <span class="sd">        Args:</span>
 <span class="sd">            slab (ASE atoms):</span>
 <span class="sd">                ASE atoms object for a rutile (110) slab model</span>
-<span class="sd">            vecy (numpy.ndarray, optional): </span>
+<span class="sd">            vecy (numpy.ndarray, optional):</span>
 <span class="sd">                (3, )-shaped numpy array. Could be any vector parallel to Obr rows ([001] direction).</span>
 <span class="sd">                defualts to None.</span>
-<span class="sd">            vecz (numpy.ndarray, optional): </span>
+<span class="sd">            vecz (numpy.ndarray, optional):</span>
 <span class="sd">                (3, )-shaped numpy array. Could be any vector parallel to [110] direction.</span>
 <span class="sd">                defualts to None.</span>
-<span class="sd">            M (str, optional): </span>
+<span class="sd">            M (str, optional):</span>
 <span class="sd">                The metal element in the model. Defaults to &quot;Ti&quot;.</span>
 <span class="sd">            nrow (int, optional):</span>
 <span class="sd">                Nuber of Obr rows in the slab model. Defaults to 2.</span>
@@ -723,7 +723,7 @@ document.write(`
 
         <span class="c1"># get_rotation matrix</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">vecy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">vecz</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">rotM</span> <span class="o">=</span> <span class="n">get_rotM</span><span class="p">(</span><span class="n">vecy</span><span class="p">,</span> <span class="n">vecz</span><span class="p">)</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">rotM</span> <span class="o">=</span> <span class="n">get_rotM</span><span class="p">(</span><span class="n">vecy</span><span class="p">,</span> <span class="n">vecz</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">tmp</span> <span class="o">=</span> <span class="n">get_rotM_edged_rutile110</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
             <span class="n">vecy</span><span class="p">,</span> <span class="n">vecz</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
@@ -752,6 +752,25 @@ document.write(`
         <span class="k">return</span> <span class="n">idx_Ow</span><span class="p">,</span> <span class="n">idx_H</span></div>
 
 <div class="viewcode-block" id="Rutile1p11Edge.get_indicies"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.Rutile1p11Edge.get_indicies">[docs]</a>    <span class="k">def</span> <span class="nf">get_indicies</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a dictionary of atom indices in the slab.</span>
+
+<span class="sd">        This method creates a copy of the `indicies` dictionary from the `slab` attribute.</span>
+<span class="sd">        It then updates each value in the dictionary by converting the slab index to the corresponding atom index.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: A dictionary where the keys are atom types and the values are lists of atom indices.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            Assuming `rutile` is an instance of the `Rutile110` class:</span>
+
+<span class="sd">            &gt;&gt;&gt; indicies = rutile.get_indicies()</span>
+<span class="sd">            &gt;&gt;&gt; print(indicies)</span>
+<span class="sd">            {&#39;O&#39;: [1, 2, 3, 4], &#39;Ti&#39;: [5, 6, 7, 8]}</span>
+
+<span class="sd">            This will print a dictionary where the keys are atom types (&#39;O&#39; and &#39;Ti&#39; in this case)</span>
+<span class="sd">            and the values are lists of atom indices.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">indicies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">slab</span><span class="o">.</span><span class="n">indicies</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">indicies</span><span class="p">:</span>
             <span class="n">indicies</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">idxslab2idxatoms</span><span class="p">(</span><span class="n">indicies</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx_slab</span><span class="p">)</span>

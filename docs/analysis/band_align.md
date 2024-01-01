@@ -1,16 +1,16 @@
-# Band Alignment 
+# Band Alignment
 ## Quick Start
 ```python
 from ectoolkits..analysis.band_align import BandAlign
 inp = {
-     "input_type": "cube", 
+     "input_type": "cube",
      "ave_param":{
-         "prefix": "./00.interface/hartree/Hematite-v_hartree-1_", 
-         "index": (1, 502), 
-         "l1": 4.8, 
-         "l2": 4.8, 
-         "ncov": 2, 
-         "save": True,  
+         "prefix": "./00.interface/hartree/Hematite-v_hartree-1_",
+         "index": (1, 502),
+         "l1": 4.8,
+         "l2": 4.8,
+         "ncov": 2,
+         "save": True,
          "save_path":"00.interface"
      },
      "shift_param":{
@@ -26,7 +26,7 @@ ba = BandAlign(inp)
 fig = ba.plot_hartree_per_width('water')
 fig = ba.plot_hartree_per_width('solid')
 
-# detail information is accessible in 
+# detail information is accessible in
 ba.water_hartree_list
 ba.solid_hartree_list
 ```

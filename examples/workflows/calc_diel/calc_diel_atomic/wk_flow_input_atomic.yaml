@@ -3,7 +3,7 @@ eps_type: "optical"
 scale: "atomic"
 intensity: 0.0001
 axis: "z"
-output_dir: "./output"  
+output_dir: "./output"
 command: "srun cp2k.psmp -i input.inp"
 extra_forward_files: [
   "rutile_pristine_relaxed.xyz"

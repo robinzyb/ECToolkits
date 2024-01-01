@@ -1,15 +1,154 @@
-# author:  brh
+# author:  Rui-Hao Bi (biruihao@westlake.edu.cn)
 # summary: rutile (110)-water interface toolkit
 # summary: this contains the general methods for rutile-water(110)
-# 2021-2022
+# 2021-2024
 
 # general modules
 import os
 import glob
 import numpy as np
 from ase.geometry import cellpar_to_cell
+from ase import Atoms
 # distance caculation library functions
 from MDAnalysis.lib.distances import *
+from MDAnalysis.lib.c_distances import _minimize_vectors_triclinic
+
+def get_pair(xyz, idx1, idx2, cutoff_hi, cutoff_lo=None, cell=None, **kwargs):
+
+    """
+    search possible pairs between idx1 and idx2, 
+    whose distance between are smaller than cutoff_hi
+    """
+    
+    atoms1 = xyz[idx1]
+    atoms2 = xyz[idx2]
+    pairs, distances = capped_distance(reference=atoms1, configuration=atoms2,
+                                   max_cutoff=cutoff_hi, min_cutoff=cutoff_lo,
+                                   box=cell)
+    return np.vstack((idx1[pairs[:, 0]], idx2[pairs[:, 1]])).T
+
+
+
+def minimize_vectors_triclinic(v: np.ndarray, box: np.ndarray, ):
+    """
+    computes the mic vector
+    """
+    res = np.zeros_like(v, dtype=np.float32)
+    v_32 = v.astype(np.float32) 
+    box_32 = box.flatten().astype(np.float32)
+    _minimize_vectors_triclinic(vectors=v_32, box=box_32, output=res)
+
+    return res
+
+def normalized_vector(v: np.ndarray):
+    """calculate the normalized vector
+
+    Args:
+        v (np.ndarray): a vector
+
+    Returns:
+        np.ndarray : normalized vector
+    """
+    return v / np.linalg.norm(v)
+
+def d_unique_vecs(vecs):
+    """get the unique distance vectors
+
+    Args:
+        vecs (np.ndarray): distance vectors
+
+    Returns:
+        dict: a dictionary holds the unique distance vectors. 
+    """
+    u = {}
+    count = 1
+    for vec in vecs:
+        flag = 0
+        if len(u.keys()) == 0:
+            u.update({count: [vec]})
+        else:
+            for k in u.keys():
+                if np.linalg.norm(np.cross(vec, u[k][0])) > 0.5:
+                    flag += 1
+                else:
+                    u[k].append(vec)
+            if len(u.keys()) == flag:
+                count += 1
+                u.update({count: [vec]})
+    return u
+
+def g_unique_vecs(d: dict):
+    """ensures the unique vectors calculated by `d_unique_vecs`. 
+    
+    Handles the case when the each key in the `d` dictonary has multiple numerically close values. Take the average of these vectors as the "bond" vector.
+
+    Args:
+        d (dict): dictionary calculated from `d_unique_vecs`
+
+    Returns:
+        np.ndarray: a numpy array holds the "bond" vectors. For an octahedral center metal, there are 6 distinct vectors.
+    """
+    for k in d.keys():
+        tmp = np.array(d[k])
+        tmp = np.where((tmp[:, -1]>0)[:, np.newaxis], tmp, -tmp)
+        d[k] = tmp.mean(axis=0)
+    vecs = np.empty((len(d), 3), dtype=float)
+    count = 0
+    for k in d.keys():
+        vecs[count] = d[k]
+        count+=1
+    return vecs
+
+def get_octahedral_bonds(tio2_cut: Atoms, octahedral_bonds_upper_bound: float=2.4):
+    """calculate the octahedral bonds (vectors) in an \\hkl(1-11) edge model
+
+    Args:
+        tio2_cut (Atoms): the edge model cut from the bulk structure. (the output of `cut_edge_from_bulk`.) 
+        octahedral_bonds_upper_bound (float, optional): The longest length to recogonize an oxygen as a octahedral ligand. Defaults to 2.4.
+
+    Returns:
+        np.ndarray: a coordinates array for the octahedral vectors.
+    """
+        
+    # compute the distance matrix under PBC 
+    xyz = tio2_cut.positions
+    o_idx = np.where(tio2_cut.symbols=="O")[0]
+    ti_idx = np.where(tio2_cut.symbols=="Ti")[0]
+
+    pair = get_pair(xyz, ti_idx, o_idx, cutoff_hi=2.4, cutoff_lo=None, cell=tio2_cut.cell.cellpar())
+    diff = xyz[pair[:, 1]] - xyz[pair[:, 0]]
+    vecs = minimize_vectors_triclinic(diff, tio2_cut.get_cell().array)
+
+    uniqe_dist_vec = d_unique_vecs(vecs)
+    octahedral_bonds = g_unique_vecs(uniqe_dist_vec)
+    return octahedral_bonds
+
+def get_rotM_edged_rutile110(tio2: Atoms, octahedral_bonds_upper_bound: float=2.4):
+    """compute the unit xyz vectors for a slab of \\hkl(1-11) edged tio2.
+    
+    Detailed algorithm:
+    First, one will get all the 6-"octahedral bonds", (as detailed in `get_octahedral_bonds`)
+    Second, notice the two of the enlogated octahedral bonds roughly aligns with:
+        - unit z direction <the direction of the terminal water -> Ti bond >
+        - unit x direction <perpendicular to the bridge water row>
+    With unit z and unit x, one can reconstruct the unit x by simply cross product
+
+    Args:
+        tio2_cut (Atoms): any tio2 \\hkl(1-11) edge model (hopefully it will work for all input)
+        octahedral_bonds_upper_bound (float, optional): The longest length to recogonize an oxygen as a octahedral ligand. Defaults to 2.4.
+
+    Returns:
+        np.array: the normal vectors, which could be used as the rotM matrix for the coordinates
+    """
+    octahedral_bonds = get_octahedral_bonds(tio2, octahedral_bonds_upper_bound)
+    # argy = np.abs(octahedral_bonds)[:, 1].argmax()
+    argx = np.abs(octahedral_bonds)[:, 0].argmax()
+    argz = np.abs(octahedral_bonds)[:, 2].argmax()
+    x_up = normalized_vector(octahedral_bonds[argx])
+    z_up = normalized_vector(octahedral_bonds[argz])
+    y_up = np.cross(z_up, x_up)
+    return np.array([x_up, y_up, z_up])
+
 
 
 def find_cn_idx(atoms1, atoms2, cutoff_hi, cutoff_lo=None, cell=None, **kwargs):
@@ -45,7 +184,8 @@ def find_cn_idx(atoms1, atoms2, cutoff_hi, cutoff_lo=None, cell=None, **kwargs):
                                max_cutoff=cutoff_hi,
                                min_cutoff=cutoff_lo,
                                box=cell)
-    cn_idx = pairs[:, 1]
+    # to avoid double counting
+    cn_idx = np.unique(pairs[:, 1])
     return cn_idx
 
 
@@ -115,8 +255,8 @@ def get_watOidx(atoms, M="Ti", d_OH_cutoff=1.2, d_MO_cutoff=2.8, cn_M_cutoff=1):
     cn_M = count_cn(xyz[idx_O, :], xyz[idx_M, :], d_MO_cutoff, None, cell)
 
     watOidx = idx_O[(cn_H >= 0) * (cn_M <= cn_M_cutoff)]
-    watHidx = find_cn_idx(
-        xyz[watOidx, :], xyz[idx_H, :], d_OH_cutoff, None, cell)
+    hcn_idx = find_cn_idx(xyz[watOidx, :], xyz[idx_H, :], d_OH_cutoff, None, cell)
+    watHidx = idx_H[hcn_idx]
     return watOidx, watHidx
 
 

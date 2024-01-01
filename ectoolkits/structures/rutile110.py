@@ -15,6 +15,7 @@ from scipy.spatial import distance_matrix
 from MDAnalysis.lib.distances import (capped_distance,
                                       minimize_vectors)
 from ..utils.rutile110 import (get_rotM,
+                               get_rotM_edged_rutile110,
                                get_sym_edge,
                                get_watOidx,
                                count_cn,
@@ -320,18 +321,19 @@ class Rutile1p11Edge(Interface):
     Args:
         Interface (ASE Atoms): A child class of ASE atoms
     """
-
-    def __init__(self, atoms, vecy, vecz, M="Ti", nrow=2, cutoff=2.8, bridge_along="y"):
+    def __init__(self, atoms, vecy=None, vecz=None, M="Ti", nrow=2, cutoff=2.8, bridge_along="y"):
         """Initialize `Interface` object for rutile (110) with <1 -1 1> edge-water interface
 
         Args:
             slab (ASE atoms):
                 ASE atoms object for a rutile (110) slab model
-            vecy (numpy.ndarray):
+            vecy (numpy.ndarray, optional): 
                 (3, )-shaped numpy array. Could be any vector parallel to Obr rows ([001] direction).
-            vecz (numpy.ndarray):
+                defualts to None.
+            vecz (numpy.ndarray, optional): 
                 (3, )-shaped numpy array. Could be any vector parallel to [110] direction.
-            M (str, optional):
+                defualts to None.
+            M (str, optional): 
                 The metal element in the model. Defaults to "Ti".
             nrow (int, optional):
                 Nuber of Obr rows in the slab model. Defaults to 2.
@@ -357,7 +359,13 @@ class Rutile1p11Edge(Interface):
         self.idx_Ow, _ = self.get_wat()
 
         # get_rotation matrix
-        self.rotM = get_rotM(vecy, vecz)
+        if (vecy is not None) and (vecz is not None):
+            self.rotM = get_rotM(vecy, vecz) 
+        else:
+            tmp = get_rotM_edged_rutile110(atoms)
+            vecy, vecz = tmp[1], tmp[2]
+            self.rotM = get_rotM(vecy, vecz)
+
         # get corresponding slab model
         self.idx_slab, self.slab = self.get_slab_obj()
         self.slab.sep_upper_lower()

@@ -44,7 +44,8 @@ def find_cn_idx(atoms1, atoms2, cutoff_hi, cutoff_lo=None, cell=None, **kwargs):
                                max_cutoff=cutoff_hi,
                                min_cutoff=cutoff_lo,
                                box=cell)
-    cn_idx = pairs[:, 1]
+    # to avoid double counting
+    cn_idx = np.unique(pairs[:, 1])
     return cn_idx
 
 def count_cn(atoms1, atoms2, cutoff_hi, cutoff_lo=None, cell=None, **kwargs):
@@ -112,7 +113,8 @@ def get_watOidx(atoms, M="Ti", d_OH_cutoff=1.2, d_MO_cutoff=2.8, cn_M_cutoff=1):
     cn_M = count_cn(xyz[idx_O, :], xyz[idx_M, :], d_MO_cutoff, None, cell)
 
     watOidx = idx_O[(cn_H >= 0) * (cn_M <= cn_M_cutoff)]
-    watHidx = find_cn_idx(xyz[watOidx, :], xyz[idx_H, :], d_OH_cutoff, None, cell)
+    hcn_idx = find_cn_idx(xyz[watOidx, :], xyz[idx_H, :], d_OH_cutoff, None, cell)
+    watHidx = idx_H[hcn_idx]
     return watOidx, watHidx
 
 def interface_2_slab(atoms, M="Ti"):

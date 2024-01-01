@@ -449,6 +449,23 @@ If it’s not None, the CN calculation will use minimum image convention. Defaul
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.utils.rutile110.d_unique_vecs">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">d_unique_vecs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vecs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#d_unique_vecs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.d_unique_vecs" title="Permalink to this definition">#</a></dt>
+<dd><p>get the unique distance vectors</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vecs</strong> (<em>np.ndarray</em>) – distance vectors</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a dictionary holds the unique distance vectors.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="ectoolkits.utils.rutile110.find_cn_idx">
 <span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">find_cn_idx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atoms2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff_hi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff_lo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#find_cn_idx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.find_cn_idx" title="Permalink to this definition">#</a></dt>
 <dd><p>count the coordination number(CN) for atoms1 (center atoms), where atoms2 are coordinate atom.
@@ -479,6 +496,51 @@ If it’s not None, the CN calculation will use minimum image convention. Defaul
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.utils.rutile110.g_unique_vecs">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">g_unique_vecs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#g_unique_vecs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.g_unique_vecs" title="Permalink to this definition">#</a></dt>
+<dd><p>ensures the unique vectors calculated by <cite>d_unique_vecs</cite>.</p>
+<p>Handles the case when the each key in the <cite>d</cite> dictonary has multiple numerically close values. Take the average of these vectors as the “bond” vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>d</strong> (<em>dict</em>) – dictionary calculated from <cite>d_unique_vecs</cite></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a numpy array holds the “bond” vectors. For an octahedral center metal, there are 6 distinct vectors.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.utils.rutile110.get_octahedral_bonds">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">get_octahedral_bonds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tio2_cut</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">octahedral_bonds_upper_bound</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#get_octahedral_bonds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.get_octahedral_bonds" title="Permalink to this definition">#</a></dt>
+<dd><p>calculate the octahedral bonds (vectors) in an hkl(1-11) edge model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tio2_cut</strong> (<em>Atoms</em>) – the edge model cut from the bulk structure. (the output of <cite>cut_edge_from_bulk</cite>.)</p></li>
+<li><p><strong>octahedral_bonds_upper_bound</strong> (<em>float</em><em>, </em><em>optional</em>) – The longest length to recogonize an oxygen as a octahedral ligand. Defaults to 2.4.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a coordinates array for the octahedral vectors.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.utils.rutile110.get_pair">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">get_pair</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff_hi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff_lo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#get_pair"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.get_pair" title="Permalink to this definition">#</a></dt>
+<dd><p>search possible pairs between idx1 and idx2,
+whose distance between are smaller than cutoff_hi</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="ectoolkits.utils.rutile110.get_rotM">
 <span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">get_rotM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vecy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vecz</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#get_rotM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.get_rotM" title="Permalink to this definition">#</a></dt>
 <dd><p>get the rotation matrix for rotating a rutile model. Specifically, rotating a step
@@ -497,6 +559,36 @@ original simulation cell.</p></li>
 <li><p><strong>vecz</strong> (<em>numpy.ndarray</em>) – Array with shape (3, ). This direction parallels to the [110] of the original
 simulation cell.</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.utils.rutile110.get_rotM_edged_rutile110">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">get_rotM_edged_rutile110</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tio2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">octahedral_bonds_upper_bound</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#get_rotM_edged_rutile110"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.get_rotM_edged_rutile110" title="Permalink to this definition">#</a></dt>
+<dd><p>compute the unit xyz vectors for a slab of hkl(1-11) edged tio2.</p>
+<p>Detailed algorithm:
+First, one will get all the 6-“octahedral bonds”, (as detailed in <cite>get_octahedral_bonds</cite>)
+Second, notice the two of the enlogated octahedral bonds roughly aligns with:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>unit z direction &lt;the direction of the terminal water -&gt; Ti bond &gt;</p></li>
+<li><p>unit x direction &lt;perpendicular to the bridge water row&gt;</p></li>
+</ul>
+</div></blockquote>
+<p>With unit z and unit x, one can reconstruct the unit x by simply cross product</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tio2_cut</strong> (<em>Atoms</em>) – any tio2 hkl(1-11) edge model (hopefully it will work for all input)</p></li>
+<li><p><strong>octahedral_bonds_upper_bound</strong> (<em>float</em><em>, </em><em>optional</em>) – The longest length to recogonize an oxygen as a octahedral ligand. Defaults to 2.4.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the normal vectors, which could be used as the rotM matrix for the coordinates</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array</p>
 </dd>
 </dl>
 </dd></dl>
@@ -581,6 +673,29 @@ atoms_slab(ase.atoms):</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>idx_slab(numpy.ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.utils.rutile110.minimize_vectors_triclinic">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">minimize_vectors_triclinic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">box</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#minimize_vectors_triclinic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.minimize_vectors_triclinic" title="Permalink to this definition">#</a></dt>
+<dd><p>computes the mic vector</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.utils.rutile110.normalized_vector">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">normalized_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#normalized_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.normalized_vector" title="Permalink to this definition">#</a></dt>
+<dd><p>calculate the normalized vector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>v</strong> (<em>np.ndarray</em>) – a vector</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>normalized vector</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
 </dd></dl>

@@ -378,6 +378,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">MDAnalysis.lib.distances</span> <span class="kn">import</span> <span class="p">(</span><span class="n">capped_distance</span><span class="p">,</span>
                                       <span class="n">minimize_vectors</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..utils.rutile110</span> <span class="kn">import</span> <span class="p">(</span><span class="n">get_rotM</span><span class="p">,</span>
+                               <span class="n">get_rotM_edged_rutile110</span><span class="p">,</span>
                                <span class="n">get_sym_edge</span><span class="p">,</span>
                                <span class="n">get_watOidx</span><span class="p">,</span>
                                <span class="n">count_cn</span><span class="p">,</span>
@@ -683,18 +684,19 @@ document.write(`
 <span class="sd">    Args:</span>
 <span class="sd">        Interface (ASE Atoms): A child class of ASE atoms</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="p">,</span> <span class="n">vecy</span><span class="p">,</span> <span class="n">vecz</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s2">&quot;Ti&quot;</span><span class="p">,</span> <span class="n">nrow</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">2.8</span><span class="p">,</span> <span class="n">bridge_along</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="p">,</span> <span class="n">vecy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vecz</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s2">&quot;Ti&quot;</span><span class="p">,</span> <span class="n">nrow</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">2.8</span><span class="p">,</span> <span class="n">bridge_along</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize `Interface` object for rutile (110) with &lt;1 -1 1&gt; edge-water interface</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            slab (ASE atoms):</span>
 <span class="sd">                ASE atoms object for a rutile (110) slab model</span>
-<span class="sd">            vecy (numpy.ndarray):</span>
+<span class="sd">            vecy (numpy.ndarray, optional): </span>
 <span class="sd">                (3, )-shaped numpy array. Could be any vector parallel to Obr rows ([001] direction).</span>
-<span class="sd">            vecz (numpy.ndarray):</span>
+<span class="sd">                defualts to None.</span>
+<span class="sd">            vecz (numpy.ndarray, optional): </span>
 <span class="sd">                (3, )-shaped numpy array. Could be any vector parallel to [110] direction.</span>
-<span class="sd">            M (str, optional):</span>
+<span class="sd">                defualts to None.</span>
+<span class="sd">            M (str, optional): </span>
 <span class="sd">                The metal element in the model. Defaults to &quot;Ti&quot;.</span>
 <span class="sd">            nrow (int, optional):</span>
 <span class="sd">                Nuber of Obr rows in the slab model. Defaults to 2.</span>
@@ -720,7 +722,13 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">idx_Ow</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_wat</span><span class="p">()</span>
 
         <span class="c1"># get_rotation matrix</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rotM</span> <span class="o">=</span> <span class="n">get_rotM</span><span class="p">(</span><span class="n">vecy</span><span class="p">,</span> <span class="n">vecz</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">vecy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">vecz</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rotM</span> <span class="o">=</span> <span class="n">get_rotM</span><span class="p">(</span><span class="n">vecy</span><span class="p">,</span> <span class="n">vecz</span><span class="p">)</span> 
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">get_rotM_edged_rutile110</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
+            <span class="n">vecy</span><span class="p">,</span> <span class="n">vecz</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rotM</span> <span class="o">=</span> <span class="n">get_rotM</span><span class="p">(</span><span class="n">vecy</span><span class="p">,</span> <span class="n">vecz</span><span class="p">)</span>
+
         <span class="c1"># get corresponding slab model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">idx_slab</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">slab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_slab_obj</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">slab</span><span class="o">.</span><span class="n">sep_upper_lower</span><span class="p">()</span>

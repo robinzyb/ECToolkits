@@ -1,0 +1,16 @@
+# .github/release.yml
+
+changelog:
+  categories:
+    - title: New Features
+      labels:
+        - New-Feature
+    - title: Enhancements
+      labels:
+        - Enhancement
+    - title: Bug Fixes
+      labels:
+        - Bug-Fix
+    - title: Other Changes
+      labels:
+        - "*"

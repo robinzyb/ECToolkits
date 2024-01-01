@@ -18,10 +18,10 @@ FIXTURE_DIR = os.path.dirname(
 DATA_DIR    = os.path.join("./", "data_output")
 FIGURE_DIR  = os.path.join("./", "figure_output")
 
-pytest.skip(allow_module_level=True, 
-            reason="This entire test module is disabled for now."
-                              "Failing test - needs to be fixed"
-            )
+# pytest.skip(allow_module_level=True, 
+#             reason="This entire test module is disabled for now."
+#                               "Failing test - needs to be fixed"
+#             )
 
 class R110EdgeInp():
     """
@@ -62,7 +62,7 @@ r110edge_to_try = list(map(load_r110_edge, traj_name_list, vecy_list, vecz_list)
 
 inp_to_try  = list(map(R110EdgeInp, ag_to_try, r110edge_to_try))
 
-@pytest.mark.parametrize('inp', inp_to_try, ids=traj_name_list)
+@pytest.mark.parametrize('inp', inp_to_try, ids=traj_name_list) # id is a good way to name the test
 def test_pair_M5c_n_obr(inp):
     atoms = inp.r110edge
     ind = inp.r110edge.get_indicies()

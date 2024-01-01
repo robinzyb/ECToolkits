@@ -327,13 +327,13 @@ class Rutile1p11Edge(Interface):
         Args:
             slab (ASE atoms):
                 ASE atoms object for a rutile (110) slab model
-            vecy (numpy.ndarray, optional): 
+            vecy (numpy.ndarray, optional):
                 (3, )-shaped numpy array. Could be any vector parallel to Obr rows ([001] direction).
                 defualts to None.
-            vecz (numpy.ndarray, optional): 
+            vecz (numpy.ndarray, optional):
                 (3, )-shaped numpy array. Could be any vector parallel to [110] direction.
                 defualts to None.
-            M (str, optional): 
+            M (str, optional):
                 The metal element in the model. Defaults to "Ti".
             nrow (int, optional):
                 Nuber of Obr rows in the slab model. Defaults to 2.
@@ -360,7 +360,7 @@ class Rutile1p11Edge(Interface):
 
         # get_rotation matrix
         if (vecy is not None) and (vecz is not None):
-            self.rotM = get_rotM(vecy, vecz) 
+            self.rotM = get_rotM(vecy, vecz)
         else:
             tmp = get_rotM_edged_rutile110(atoms)
             vecy, vecz = tmp[1], tmp[2]
@@ -389,6 +389,25 @@ class Rutile1p11Edge(Interface):
         return idx_Ow, idx_H
 
     def get_indicies(self):
+        """
+        Returns a dictionary of atom indices in the slab.
+
+        This method creates a copy of the `indicies` dictionary from the `slab` attribute.
+        It then updates each value in the dictionary by converting the slab index to the corresponding atom index.
+
+        Returns:
+            dict: A dictionary where the keys are atom types and the values are lists of atom indices.
+
+        Example:
+            Assuming `rutile` is an instance of the `Rutile110` class:
+
+            >>> indicies = rutile.get_indicies()
+            >>> print(indicies)
+            {'O': [1, 2, 3, 4], 'Ti': [5, 6, 7, 8]}
+
+            This will print a dictionary where the keys are atom types ('O' and 'Ti' in this case)
+            and the values are lists of atom indices.
+        """
         indicies = self.slab.indicies.copy()
         for key in indicies:
             indicies[key] = self.idxslab2idxatoms(indicies[key], self.idx_slab)

@@ -20,10 +20,10 @@ FIXTURE_DIR = os.path.dirname(
 
 DATA_DIR    = os.path.join("./", "data_output")
 FIGURE_DIR  = os.path.join("./", "figure_output")
-pytest.skip(allow_module_level=True, 
-            reason="This entire test module is disabled for now."
-                              "Failing test - needs to be fixed"
-            )
+# pytest.skip(allow_module_level=True, 
+#             reason="This entire test module is disabled for now."
+#                               "Failing test - needs to be fixed"
+#             )
 #DATA_DIR    = os.path.join(
 #    os.path.dirname(os.path.realpath(__file__)), "data_output"
 #    )
@@ -140,7 +140,11 @@ class TestRutile110Flat():
     def test_dInterLayer(self, inp):
         # test could this ananlysis run normally
         ag   = inp.ag
-        dil  = dInterLayer(ag) 
+        ind = inp.r110.get_indicies()
+        ind['idx_M5c'][0] = np.flip(ind['idx_M5c'][0], axis=1)
+        cn5idx = ind['idx_M5c'].reshape(2, -1)
+        n_ti5c = int(cn5idx.shape[1]/2)
+        dil  = dInterLayer(ag, n_ti5c=n_ti5c) 
         dil.run()
 
         # test if all output files are dumped correctly

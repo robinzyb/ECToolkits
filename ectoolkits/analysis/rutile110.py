@@ -75,7 +75,7 @@ class WatDensity(AnalysisBase):
     """
 
     def __init__(self, atomgroup, M='Ti', rotM=None, dz_bin=0.1, cutoff=2.8):
-        """Init water density analysis
+        r"""Init water density analysis
 
         Args:
             atomgroup (MDAnalysis.atomgroup):
@@ -198,7 +198,7 @@ class WatDensity(AnalysisBase):
         self.plot_density_z(dat_oxygen, dat_hydrogen)
 
     def get_watOidx(self):
-        """This methods would select all water oxygen index
+        r"""This methods would select all water oxygen index
 
         Returns:
             tuple: (<water oxygen index>, <all Hydrogen index>). Note, for rutile-\hkl(110)
@@ -309,8 +309,8 @@ class RutileDisDeg(AnalysisBase):
         ```
     """
 
-    def __init__(self, atomgroup, owidx, cn5idx, edge4idx=None, edge5idx=None, nrow=2, M='Ti', bins=500, n_oh=5):
-        """Initializing rutile interface dissociation degree analysis
+    def __init__(self, atomgroup, owidx, cn5idx, edge4idx=None, edge5idx=None, nrow=2, M='Ti', bins=500, n_oh=2):
+        r"""Initializing rutile interface dissociation degree analysis
 
         Args:
             atomgroup (MDAnalysis.Atomgroup):
@@ -544,7 +544,7 @@ class staleRutileDisDeg(AnalysisBase):
     # Feature:
     # - use hard cutoff (1.2 A) to determine proton dissociation
     # - will save raw data: coordination number surf-water and surf-water oxygen atom indicies
-    """MDAnalysis class calculating surface water dissociation degree for rutile \hkl(110)-water interface.
+    r"""MDAnalysis class calculating surface water dissociation degree for rutile \hkl(110)-water interface.
     Besides dissociation, this method will also output surface adsorption water oxygen index, which is useful for
     TiO2-water interface, because adsorbed water in this system sometimes exchange with sub-interface water.
 
@@ -569,7 +569,7 @@ class staleRutileDisDeg(AnalysisBase):
     """
 
     def __init__(self, atomgroup, owidx, cn5idx, edge4idx=None, edge5idx=None, M='Ti', cutoff=2.8):
-        """Initialising a dissociation degree calculating class
+        r"""Initialising a dissociation degree calculating class
 
         Args:
             atomgroup (MDAnalysis.Atomgroup):

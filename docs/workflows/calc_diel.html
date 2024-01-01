@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,9 +38,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
-  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -141,6 +141,7 @@ const thebe_selector_output = ".output, .cell_output"
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
   
 
 <a class="navbar-brand logo" href="../../intro.html">
@@ -368,6 +369,7 @@ const thebe_selector_output = ".output, .cell_output"
 </button>
 
 
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -377,6 +379,7 @@ document.write(`
   </button>
 `);
 </script>
+
 
 <script>
 document.write(`
@@ -445,12 +448,12 @@ document.write(`
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">input_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;template.inp&quot;</span><span class="w"> </span><span class="c1"># the template file of cp2k input.</span>
 <span class="nt">eps_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;optical&quot;</span><span class="w"> </span><span class="c1"># optical or static</span>
 <span class="nt">scale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;global&quot;</span><span class="w">   </span><span class="c1"># global or atomic</span>
-<span class="nt">intensity_array</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.0000</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0001</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0002</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># List for global or Value for atomic </span>
+<span class="nt">intensity_array</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.0000</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0001</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.0002</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># List for global or Value for atomic</span>
 <span class="nt">axis</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;z&quot;</span><span class="w"> </span><span class="c1"># the direction in which the electric field is applied</span>
 <span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./output&quot;</span><span class="w">  </span><span class="c1"># the directory/folder that saves the calculations and resutls</span>
 <span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;srun</span><span class="nv"> </span><span class="s">cp2k.psmp</span><span class="nv"> </span><span class="s">-i</span><span class="nv"> </span><span class="s">input.inp&quot;</span><span class="w"> </span><span class="c1"># command to run cp2k in</span>
 <span class="nt">extra_forward_files</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
-<span class="w">  </span><span class="s">&quot;anatase_bulk_relaxed.xyz&quot;</span><span class="w"> </span><span class="c1"># extra files that are copied to calculation </span>
+<span class="w">  </span><span class="s">&quot;anatase_bulk_relaxed.xyz&quot;</span><span class="w"> </span><span class="c1"># extra files that are copied to calculation</span>
 <span class="p p-Indicator">]</span>
 <span class="nt">extra_forward_common_files</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="c1"># extra common files that are copied to calculation</span>
 <span class="p p-Indicator">]</span>
@@ -463,7 +466,7 @@ document.write(`
 <span class="nt">scale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;atomic&quot;</span>
 <span class="nt">intensity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0001</span>
 <span class="nt">axis</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;z&quot;</span>
-<span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./output&quot;</span><span class="w">  </span>
+<span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./output&quot;</span>
 <span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;srun</span><span class="nv"> </span><span class="s">cp2k.psmp</span><span class="nv"> </span><span class="s">-i</span><span class="nv"> </span><span class="s">input.inp&quot;</span>
 <span class="nt">extra_forward_files</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
 <span class="w">  </span><span class="s">&quot;rutile_pristine_relaxed.xyz&quot;</span>
@@ -474,37 +477,37 @@ document.write(`
 </pre></div>
 </div>
 <p>Example: <code class="docutils literal notranslate"><span class="pre">machine.yaml</span></code>:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">batch_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Slurm&quot;</span><span class="w">                                                             </span>
-<span class="nt">context_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;LocalContext&quot;</span><span class="w">                                                    </span>
-<span class="nt">local_root</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./&quot;</span><span class="w">                                                                </span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">batch_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Slurm&quot;</span>
+<span class="nt">context_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;LocalContext&quot;</span>
+<span class="nt">local_root</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./&quot;</span>
 <span class="nt">remote_root</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./work_dir&quot;</span>
 </pre></div>
 </div>
 <p>Example: <code class="docutils literal notranslate"><span class="pre">resources.yaml</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">cpu_per_node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">12</span>
 <span class="nt">gpu_per_node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<span class="nt">number_node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w">                                                                  </span>
-<span class="nt">exclude_list</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w">                                                                </span>
-<span class="nt">custom_flags</span><span class="p">:</span><span class="w">                                                                   </span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;#SBATCH</span><span class="nv"> </span><span class="s">--job-name=&#39;miniwkflow&#39;&quot;</span><span class="w">                                           </span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;#SBATCH</span><span class="nv"> </span><span class="s">--account=&#39;blabla&#39;&quot;</span><span class="w">                                                 </span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;#SBATCH</span><span class="nv"> </span><span class="s">--mail-type=ALL&quot;</span><span class="w">                                                   </span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;#SBATCH</span><span class="nv"> </span><span class="s">--mail-user=blabla&quot;</span><span class="w">                                </span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;#SBATCH</span><span class="nv"> </span><span class="s">--constraint=gpu&quot;</span><span class="w">                                                  </span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;#SBATCH</span><span class="nv"> </span><span class="s">--cpus-per-task=1&quot;</span><span class="w">                                                 </span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;#SBATCH</span><span class="nv"> </span><span class="s">--time=24:00:00&quot;</span><span class="w">                                                   </span>
-<span class="nt">source_list</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w">                                                                 </span>
-<span class="nt">module_list</span><span class="p">:</span><span class="w">                                                                    </span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;daint-gpu&quot;</span><span class="w">                                                                 </span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;CP2K&quot;</span><span class="w">                                                                      </span>
-<span class="nt">envs</span><span class="p">:</span><span class="w">                                                                           </span>
-<span class="w">  </span><span class="nt">OMP_NUM_THREADS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;$SLURM_CPUS_PER_TASK&quot;</span><span class="w">                                       </span>
-<span class="w">  </span><span class="nt">CRAY_CUDA_MPS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w">                                                            </span>
-<span class="nt">prepend_script</span><span class="p">:</span><span class="w">                                                                 </span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;ulimit</span><span class="nv"> </span><span class="s">-s</span><span class="nv"> </span><span class="s">unlimited&quot;</span><span class="w">                                                       </span>
-<span class="nt">time_limit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;24:00:00&quot;</span><span class="w">                                                          </span>
-<span class="nt">queue_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;normal&quot;</span><span class="w">                                                            </span>
-<span class="nt">group_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w">       </span>
+<span class="nt">number_node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="nt">exclude_list</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+<span class="nt">custom_flags</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;#SBATCH</span><span class="nv"> </span><span class="s">--job-name=&#39;miniwkflow&#39;&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;#SBATCH</span><span class="nv"> </span><span class="s">--account=&#39;blabla&#39;&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;#SBATCH</span><span class="nv"> </span><span class="s">--mail-type=ALL&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;#SBATCH</span><span class="nv"> </span><span class="s">--mail-user=blabla&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;#SBATCH</span><span class="nv"> </span><span class="s">--constraint=gpu&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;#SBATCH</span><span class="nv"> </span><span class="s">--cpus-per-task=1&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;#SBATCH</span><span class="nv"> </span><span class="s">--time=24:00:00&quot;</span>
+<span class="nt">source_list</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+<span class="nt">module_list</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;daint-gpu&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;CP2K&quot;</span>
+<span class="nt">envs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">OMP_NUM_THREADS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;$SLURM_CPUS_PER_TASK&quot;</span>
+<span class="w">  </span><span class="nt">CRAY_CUDA_MPS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span>
+<span class="nt">prepend_script</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;ulimit</span><span class="nv"> </span><span class="s">-s</span><span class="nv"> </span><span class="s">unlimited&quot;</span>
+<span class="nt">time_limit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;24:00:00&quot;</span>
+<span class="nt">queue_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;normal&quot;</span>
+<span class="nt">group_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
 </pre></div>
 </div>
 </section>
@@ -529,7 +532,7 @@ and this paper <span id="id2">[<a class="reference internal" href="#id5" title="
 <p>Basically, we need to calculate dipole moments with varying electric fields. Then, fit the data to the following equation:</p>
 <div class="math notranslate nohighlight">
 \[
-\varepsilon = 4\pi\frac{M}{\Omega E} + 1 
+\varepsilon = 4\pi\frac{M}{\Omega E} + 1
 \]</div>
 </section>
 </section>
@@ -576,7 +579,7 @@ and this paper <span id="id2">[<a class="reference internal" href="#id5" title="
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
     <a class="left-prev"
        href="../analysis/redox.html"
@@ -644,6 +647,7 @@ By Yong-Bin Zhuang
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2023.
@@ -670,8 +674,8 @@ By Yong-Bin Zhuang
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
   <footer class="bd-footer">
   </footer>

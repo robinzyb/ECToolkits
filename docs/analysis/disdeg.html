@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,9 +38,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
-  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -139,6 +139,7 @@ const thebe_selector_output = ".output, .cell_output"
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
   
 
 <a class="navbar-brand logo" href="../../intro.html">
@@ -366,6 +367,7 @@ const thebe_selector_output = ".output, .cell_output"
 </button>
 
 
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -375,6 +377,7 @@ document.write(`
   </button>
 `);
 </script>
+
 
 <script>
 document.write(`
@@ -451,10 +454,10 @@ document.write(`
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">ectoolkits.analysis.disdeg</span> <span class="kn">import</span> <span class="n">CNState</span>
 <span class="c1"># O_idx_dw is the indexes of adsorbed oxygen atoms. You may obtained by yourself.</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">O_idx_dw</span> <span class="o">=</span> <span class="p">[</span><span class="mi">264</span><span class="p">,</span> <span class="mi">267</span><span class="p">,</span> <span class="mi">270</span><span class="p">,</span> <span class="mi">273</span><span class="p">,</span> <span class="mi">276</span><span class="p">,</span> <span class="mi">279</span><span class="p">,</span> <span class="mi">282</span><span class="p">,</span> <span class="mi">285</span><span class="p">]</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">cnstate</span> <span class="o">=</span> <span class="n">CNState</span><span class="p">(</span><span class="n">atomgroup</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">atoms</span><span class="p">,</span> 
-<span class="o">&gt;&gt;&gt;</span>          <span class="n">center_atom_idx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">O_idx_dw</span><span class="p">),</span> 
-<span class="o">&gt;&gt;&gt;</span>          <span class="n">coordinated_elements</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;H&#39;</span><span class="p">],</span> 
-<span class="o">&gt;&gt;&gt;</span>          <span class="n">max_cutoff</span><span class="o">=</span><span class="mf">1.2</span><span class="p">)</span> 
+<span class="o">&gt;&gt;&gt;</span> <span class="n">cnstate</span> <span class="o">=</span> <span class="n">CNState</span><span class="p">(</span><span class="n">atomgroup</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">atoms</span><span class="p">,</span>
+<span class="o">&gt;&gt;&gt;</span>          <span class="n">center_atom_idx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">O_idx_dw</span><span class="p">),</span>
+<span class="o">&gt;&gt;&gt;</span>          <span class="n">coordinated_elements</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;H&#39;</span><span class="p">],</span>
+<span class="o">&gt;&gt;&gt;</span>          <span class="n">max_cutoff</span><span class="o">=</span><span class="mf">1.2</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">cnstate</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">cnstate</span><span class="o">.</span><span class="n">_cnstate</span>
 <span class="n">array</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
@@ -496,14 +499,14 @@ The <code class="docutils literal notranslate"><span class="pre">DisDeg</span></
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">ectoolkits.analysis.disdeg</span> <span class="kn">import</span> <span class="n">DisDeg</span>
 <span class="c1"># O_idx_dw is the indexes of adsorbed oxygen atoms. You may obtained by yourself.</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">O_idx_dw</span> <span class="o">=</span> <span class="p">[</span><span class="mi">264</span><span class="p">,</span> <span class="mi">267</span><span class="p">,</span> <span class="mi">270</span><span class="p">,</span> <span class="mi">273</span><span class="p">,</span> <span class="mi">276</span><span class="p">,</span> <span class="mi">279</span><span class="p">,</span> <span class="mi">282</span><span class="p">,</span> <span class="mi">285</span><span class="p">]</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">disdeg</span> <span class="o">=</span> <span class="n">DisDeg</span><span class="p">(</span><span class="n">atomgroup</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">atoms</span><span class="p">,</span> 
-<span class="o">&gt;&gt;&gt;</span>          <span class="n">center_atom_idx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">O_idx_dw</span><span class="p">),</span> 
-<span class="o">&gt;&gt;&gt;</span>          <span class="n">coordinated_elements</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;H&#39;</span><span class="p">],</span> 
-<span class="o">&gt;&gt;&gt;</span>          <span class="n">max_cutoff</span><span class="o">=</span><span class="mf">1.2</span><span class="p">)</span> 
+<span class="o">&gt;&gt;&gt;</span> <span class="n">disdeg</span> <span class="o">=</span> <span class="n">DisDeg</span><span class="p">(</span><span class="n">atomgroup</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">atoms</span><span class="p">,</span>
+<span class="o">&gt;&gt;&gt;</span>          <span class="n">center_atom_idx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">O_idx_dw</span><span class="p">),</span>
+<span class="o">&gt;&gt;&gt;</span>          <span class="n">coordinated_elements</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;H&#39;</span><span class="p">],</span>
+<span class="o">&gt;&gt;&gt;</span>          <span class="n">max_cutoff</span><span class="o">=</span><span class="mf">1.2</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">disdeg</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-<span class="c1"># Third, obtain the dissociation degree </span>
+<span class="c1"># Third, obtain the dissociation degree</span>
 <span class="c1"># Assign the coordination numbers of 2 and 3 to the intact water molecules and the coordination numbers of 0 and 1 to the dissociated water molecules.</span>
-<span class="c1"># one can customize the cn_list_no_dis and cn_list_dis </span>
+<span class="c1"># one can customize the cn_list_no_dis and cn_list_dis</span>
 <span class="n">cn_list_no_dis</span><span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
 <span class="n">cn_list_dis</span><span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">disdeg</span><span class="o">.</span><span class="n">get_disdeg</span><span class="p">(</span><span class="n">cn_list_no_dis</span><span class="o">=</span><span class="n">cn_list_no_dis</span><span class="p">,</span> <span class="n">cn_list_dis</span><span class="o">=</span><span class="n">cn_list_dis</span><span class="p">)</span>
@@ -548,7 +551,7 @@ The <code class="docutils literal notranslate"><span class="pre">DisDeg</span></
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
     <a class="left-prev"
        href="band_align.html"
@@ -619,6 +622,7 @@ By Yong-Bin Zhuang
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2023.
@@ -645,8 +649,8 @@ By Yong-Bin Zhuang
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
   <footer class="bd-footer">
   </footer>

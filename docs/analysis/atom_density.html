@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,9 +38,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
-  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -139,6 +139,7 @@ const thebe_selector_output = ".output, .cell_output"
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
   
 
 <a class="navbar-brand logo" href="../../intro.html">
@@ -366,6 +367,7 @@ const thebe_selector_output = ".output, .cell_output"
 </button>
 
 
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -375,6 +377,7 @@ document.write(`
   </button>
 `);
 </script>
+
 
 <script>
 document.write(`
@@ -412,7 +415,7 @@ document.write(`
 <h1>Atom Density Analysis<a class="headerlink" href="#atom-density-analysis" title="Permalink to this heading">#</a></h1>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ectoolkits.analysis.atom_density</span> <span class="kn">import</span> <span class="n">AtomDensity</span>
 
-<span class="c1"># from </span>
+<span class="c1"># from</span>
 <span class="n">inp_dict</span><span class="o">=</span><span class="p">{</span>
      <span class="s2">&quot;xyz_file&quot;</span><span class="p">:</span> <span class="s2">&quot;./Hematite-pos-1.xyz&quot;</span><span class="p">,</span>
      <span class="s2">&quot;cell&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">10.0564</span><span class="p">,</span> <span class="mf">8.7091</span><span class="p">,</span> <span class="mf">38.506</span><span class="p">],</span>
@@ -436,11 +439,11 @@ document.write(`
              <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;H_density&quot;</span>
              <span class="p">}</span>
          <span class="p">]</span>
- <span class="p">}</span> 
+ <span class="p">}</span>
 <span class="n">ad</span> <span class="o">=</span> <span class="n">AtomDensity</span><span class="p">(</span><span class="n">inp_dict</span><span class="p">)</span>
 <span class="n">ad</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 
-<span class="c1"># detail information is accessible in </span>
+<span class="c1"># detail information is accessible in</span>
 <span class="n">ad</span><span class="o">.</span><span class="n">atom_density</span>
 <span class="n">ad</span><span class="o">.</span><span class="n">atom_density_z</span>
 
@@ -448,7 +451,7 @@ document.write(`
 <span class="n">width_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
 <span class="n">all_cent_density</span> <span class="o">=</span> <span class="n">ad</span><span class="o">.</span><span class="n">get_ave_density</span><span class="p">(</span><span class="n">width_list</span><span class="p">)</span>
 
-<span class="c1"># quick plot for denstiy </span>
+<span class="c1"># quick plot for denstiy</span>
 <span class="c1"># if you want to symmetrize the density profile, set sym=True</span>
 <span class="n">ad</span><span class="o">.</span><span class="n">plot_density</span><span class="p">(</span><span class="n">sym</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
@@ -485,7 +488,7 @@ document.write(`
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
     <a class="left-prev"
        href="../../intro.html"
@@ -528,6 +531,7 @@ By Yong-Bin Zhuang
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2023.
@@ -554,8 +558,8 @@ By Yong-Bin Zhuang
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
   <footer class="bd-footer">
   </footer>

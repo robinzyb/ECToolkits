@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
@@ -18,12 +18,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -37,9 +37,9 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
-  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
@@ -136,6 +136,7 @@ const thebe_selector_output = ".output, .cell_output"
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
   
 
 <a class="navbar-brand logo" href="../../../intro.html">
@@ -315,6 +316,7 @@ const thebe_selector_output = ".output, .cell_output"
 </button>
 
 
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -324,6 +326,7 @@ document.write(`
   </button>
 `);
 </script>
+
 
 <script>
 document.write(`
@@ -359,17 +362,41 @@ document.write(`
                   
   <h1>Source code for ectoolkits.analysis.dielectric_constant</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.typing</span> <span class="k">as</span> <span class="nn">npt</span>
 <span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">simpson</span>
+<span class="kn">from</span> <span class="nn">cp2kdata</span> <span class="kn">import</span> <span class="n">Cp2kCube</span>
 
-<div class="viewcode-block" id="get_induced_charge"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.dielectric_constant.html#ectoolkits.analysis.dielectric_constant.get_induced_charge">[docs]</a><span class="k">def</span> <span class="nf">get_induced_charge</span><span class="p">(</span><span class="n">rho_cube_1</span><span class="p">,</span> <span class="n">rho_cube_2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;z&#39;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_induced_charge"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.dielectric_constant.html#ectoolkits.analysis.dielectric_constant.get_induced_charge">[docs]</a><span class="k">def</span> <span class="nf">get_induced_charge</span><span class="p">(</span><span class="n">rho_cube_1</span><span class="p">:</span> <span class="n">Cp2kCube</span><span class="p">,</span>
+                       <span class="n">rho_cube_2</span><span class="p">:</span> <span class="n">Cp2kCube</span><span class="p">,</span>
+                       <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;z&#39;</span>
+                       <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the induced charge density between two systems.</span>
+<span class="sd">    Induced charge density is defined as rho_cube_2 - rho_cube_1.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rho_cube_1 : Cp2kCube</span>
+<span class="sd">        The first charge density cube.</span>
+<span class="sd">    rho_cube_2 : Cp2kCube</span>
+<span class="sd">        The second charge density cube.</span>
+<span class="sd">    axis : str, optional</span>
+<span class="sd">        The axis along which to compute the average charge density, by default &#39;z&#39;.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[np.ndarray, np.ndarray]</span>
+<span class="sd">        The coordinates and the induced charge density array.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">z_1</span><span class="p">,</span> <span class="n">rho_1</span> <span class="o">=</span> <span class="n">rho_cube_1</span><span class="o">.</span><span class="n">get_pav</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
     <span class="n">z_2</span><span class="p">,</span> <span class="n">rho_2</span> <span class="o">=</span> <span class="n">rho_cube_2</span><span class="o">.</span><span class="n">get_pav</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
-    <span class="c1">#assert z_1 == z_2, &quot;the two arrays, z_1 and z_2, must be same&quot;</span>
+
     <span class="n">rho_induced</span> <span class="o">=</span> <span class="n">rho_2</span> <span class="o">-</span> <span class="n">rho_1</span>
-    <span class="c1"># electron carries negative charge</span>
-    <span class="n">rho_induced</span> <span class="o">=</span> <span class="o">-</span><span class="n">rho_induced</span> 
 
     <span class="k">return</span> <span class="n">z_1</span><span class="p">,</span> <span class="n">rho_induced</span></div>
+
 
 <div class="viewcode-block" id="get_integrated_array"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.dielectric_constant.html#ectoolkits.analysis.dielectric_constant.get_integrated_array">[docs]</a><span class="k">def</span> <span class="nf">get_integrated_array</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="n">size</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -380,33 +407,81 @@ document.write(`
 
 
 <span class="c1"># get electric field</span>
-<div class="viewcode-block" id="get_micro_electric_field"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.dielectric_constant.html#ectoolkits.analysis.dielectric_constant.get_micro_electric_field">[docs]</a><span class="k">def</span> <span class="nf">get_micro_electric_field</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">Delta_macro_Efield</span><span class="p">):</span>
+<div class="viewcode-block" id="get_micro_electric_field"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.dielectric_constant.html#ectoolkits.analysis.dielectric_constant.get_micro_electric_field">[docs]</a><span class="k">def</span> <span class="nf">get_micro_electric_field</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+                             <span class="n">rho</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+                             <span class="n">Delta_macro_Efield</span><span class="p">:</span> <span class="nb">float</span>
+                             <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    in atomic units (au)</span>
-<span class="sd">    Delta_macro_Efield is the macroscopic electric field difference between two systems</span>
-<span class="sd">    Delat_macro_Efield (au)</span>
+<span class="sd">    Calculate the micro electric field from the charge density and the macroscopic electric field difference.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : numpy.ndarray</span>
+<span class="sd">        The grid points where the charge density is defined.</span>
+<span class="sd">    rho : numpy.ndarray</span>
+<span class="sd">        The charge density in atomic units.</span>
+<span class="sd">    Delta_macro_Efield : float</span>
+<span class="sd">        The macroscopic electric field difference between two systems in atomic units.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    numpy.ndarray</span>
+<span class="sd">        The micro electric field in atomic units.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The micro electric field is calculated as follows:</span>
+<span class="sd">    1. Calculate the integrand as pi * 4 * rho.</span>
+<span class="sd">    2. Integrate the integrand over the grid points x to obtain the micro electric field.</span>
+<span class="sd">    3. Determine a constant such that the mean of the micro electric field matches the macroscopic electric field difference.</span>
+<span class="sd">    4. Add the constant to the micro electric field.</span>
+
+<span class="sd">    The units of the input and output arrays are atomic units (au).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    
     <span class="c1"># atomic unit</span>
-    <span class="c1"># the electron charge is negative!</span>
     <span class="n">integrand</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">rho</span>
     <span class="n">micro_electric_field</span> <span class="o">=</span> <span class="n">get_integrated_array</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">integrand</span><span class="p">)</span>
 
     <span class="c1"># determine constant</span>
     <span class="n">constant</span> <span class="o">=</span> <span class="n">Delta_macro_Efield</span> <span class="o">-</span> <span class="n">micro_electric_field</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-    
+
     <span class="n">micro_electric_field</span> <span class="o">+=</span> <span class="n">constant</span>
     <span class="k">return</span> <span class="n">micro_electric_field</span></div>
-    
+
 <span class="c1"># get polarization</span>
 
-<div class="viewcode-block" id="get_micro_polarization"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.dielectric_constant.html#ectoolkits.analysis.dielectric_constant.get_micro_polarization">[docs]</a><span class="k">def</span> <span class="nf">get_micro_polarization</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">Delta_macro_polarization</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_micro_polarization"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.dielectric_constant.html#ectoolkits.analysis.dielectric_constant.get_micro_polarization">[docs]</a><span class="k">def</span> <span class="nf">get_micro_polarization</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+                           <span class="n">rho</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+                           <span class="n">Delta_macro_polarization</span><span class="p">:</span> <span class="nb">float</span>
+                           <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    rho: induced charge density in atomic units (au)</span>
-<span class="sd">    </span>
-<span class="sd">    Delta_macro_polarization is the macroscopic polarization difference between two systems</span>
-<span class="sd">    </span>
+<span class="sd">    Calculate the micro polarization from the induced charge density and the macroscopic polarization difference.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : numpy.ndarray</span>
+<span class="sd">        The grid points where the charge density is defined.</span>
+<span class="sd">    rho : numpy.ndarray</span>
+<span class="sd">        The induced charge density in atomic units.</span>
+<span class="sd">    Delta_macro_polarization : float</span>
+<span class="sd">        The macroscopic polarization difference between two systems in atomic units.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    numpy.ndarray</span>
+<span class="sd">        The micro polarization in atomic units.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The micro polarization is calculated as follows:</span>
+<span class="sd">    1. Calculate the integrand as -rho.</span>
+<span class="sd">    2. Integrate the integrand over the grid points x to obtain the micro polarization.</span>
+<span class="sd">    3. Determine a constant such that the mean of the micro polarization matches the macroscopic polarization difference.</span>
+<span class="sd">    4. Add the constant to the micro polarization.</span>
+
+<span class="sd">    The units of the input and output arrays are atomic units (au).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># atomic unit</span>
     <span class="c1"># the electron charge is negative!</span>
@@ -417,14 +492,15 @@ document.write(`
     <span class="n">constant</span> <span class="o">=</span> <span class="n">Delta_macro_polarization</span> <span class="o">-</span> <span class="n">micro_polarization</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
     <span class="n">micro_polarization</span> <span class="o">+=</span> <span class="n">constant</span>
-    
+
     <span class="k">return</span> <span class="n">micro_polarization</span></div>
 
 
 <div class="viewcode-block" id="get_dielectric_susceptibility"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.dielectric_constant.html#ectoolkits.analysis.dielectric_constant.get_dielectric_susceptibility">[docs]</a><span class="k">def</span> <span class="nf">get_dielectric_susceptibility</span><span class="p">(</span><span class="n">micro_polarization</span><span class="p">,</span> <span class="n">micro_electric_field</span><span class="p">):</span>
-    
+
     <span class="n">dielectric_susceptibility</span> <span class="o">=</span> <span class="n">micro_polarization</span> <span class="o">/</span> <span class="n">micro_electric_field</span>
     <span class="k">return</span> <span class="n">dielectric_susceptibility</span></div>
+
 
 <div class="viewcode-block" id="get_dielectric_constant"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.dielectric_constant.html#ectoolkits.analysis.dielectric_constant.get_dielectric_constant">[docs]</a><span class="k">def</span> <span class="nf">get_dielectric_constant</span><span class="p">(</span><span class="n">dielectric_susceptibility</span><span class="p">):</span>
     <span class="n">dielectric_constant</span> <span class="o">=</span> <span class="n">dielectric_susceptibility</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mi">4</span> <span class="o">+</span> <span class="mi">1</span>
@@ -433,9 +509,15 @@ document.write(`
 
 <div class="viewcode-block" id="get_dielectric_constant_profile"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.dielectric_constant.html#ectoolkits.analysis.dielectric_constant.get_dielectric_constant_profile">[docs]</a><span class="k">def</span> <span class="nf">get_dielectric_constant_profile</span><span class="p">(</span><span class="n">rho_1</span><span class="p">,</span> <span class="n">rho_2</span><span class="p">,</span> <span class="n">Delta_macro_Efield</span><span class="p">,</span> <span class="n">Delta_macro_polarization</span><span class="p">,</span> <span class="n">axis</span><span class="p">):</span>
     <span class="n">z</span><span class="p">,</span> <span class="n">rho_induced</span> <span class="o">=</span> <span class="n">get_induced_charge</span><span class="p">(</span><span class="n">rho_1</span><span class="p">,</span> <span class="n">rho_2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
-    <span class="n">micro_electric_field</span> <span class="o">=</span> <span class="n">get_micro_electric_field</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">rho_induced</span><span class="p">,</span> <span class="n">Delta_macro_Efield</span><span class="o">=</span><span class="n">Delta_macro_Efield</span><span class="p">)</span>
-    <span class="n">micro_polarization</span> <span class="o">=</span> <span class="n">get_micro_polarization</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">rho_induced</span><span class="p">,</span> <span class="n">Delta_macro_polarization</span><span class="o">=</span><span class="n">Delta_macro_polarization</span><span class="p">)</span>
-    <span class="n">dielectric_susceptibility</span> <span class="o">=</span> <span class="n">get_dielectric_susceptibility</span><span class="p">(</span><span class="n">micro_polarization</span><span class="p">,</span> <span class="n">micro_electric_field</span><span class="p">)</span>
+    <span class="c1"># electron carries negative charge</span>
+    <span class="n">rho_induced</span> <span class="o">=</span> <span class="o">-</span><span class="n">rho_induced</span>
+
+    <span class="n">micro_electric_field</span> <span class="o">=</span> <span class="n">get_micro_electric_field</span><span class="p">(</span>
+        <span class="n">z</span><span class="p">,</span> <span class="n">rho_induced</span><span class="p">,</span> <span class="n">Delta_macro_Efield</span><span class="o">=</span><span class="n">Delta_macro_Efield</span><span class="p">)</span>
+    <span class="n">micro_polarization</span> <span class="o">=</span> <span class="n">get_micro_polarization</span><span class="p">(</span>
+        <span class="n">z</span><span class="p">,</span> <span class="n">rho_induced</span><span class="p">,</span> <span class="n">Delta_macro_polarization</span><span class="o">=</span><span class="n">Delta_macro_polarization</span><span class="p">)</span>
+    <span class="n">dielectric_susceptibility</span> <span class="o">=</span> <span class="n">get_dielectric_susceptibility</span><span class="p">(</span>
+        <span class="n">micro_polarization</span><span class="p">,</span> <span class="n">micro_electric_field</span><span class="p">)</span>
     <span class="n">dielectric_constant</span> <span class="o">=</span> <span class="n">get_dielectric_constant</span><span class="p">(</span><span class="n">dielectric_susceptibility</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">z</span><span class="p">,</span> <span class="n">dielectric_constant</span></div>
 </pre></div>
@@ -448,7 +530,7 @@ document.write(`
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
 </div>
                 </footer>
@@ -473,6 +555,7 @@ By Yong-Bin Zhuang
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2023.
@@ -499,8 +582,8 @@ By Yong-Bin Zhuang
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
   <footer class="bd-footer">
   </footer>

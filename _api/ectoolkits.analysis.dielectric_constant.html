@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,9 +38,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
-  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -139,6 +139,7 @@ const thebe_selector_output = ".output, .cell_output"
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
   
 
 <a class="navbar-brand logo" href="../intro.html">
@@ -366,6 +367,7 @@ const thebe_selector_output = ".output, .cell_output"
 </button>
 
 
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -375,6 +377,7 @@ document.write(`
   </button>
 `);
 </script>
+
 
 <script>
 document.write(`
@@ -427,8 +430,25 @@ document.write(`
 
 <dl class="py function">
 <dt class="sig sig-object py" id="ectoolkits.analysis.dielectric_constant.get_induced_charge">
-<span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.dielectric_constant.</span></span><span class="sig-name descname"><span class="pre">get_induced_charge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho_cube_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho_cube_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'z'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/dielectric_constant.html#get_induced_charge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.dielectric_constant.get_induced_charge" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.dielectric_constant.</span></span><span class="sig-name descname"><span class="pre">get_induced_charge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho_cube_1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Cp2kCube</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho_cube_2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Cp2kCube</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'z'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/dielectric_constant.html#get_induced_charge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.dielectric_constant.get_induced_charge" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the induced charge density between two systems.
+Induced charge density is defined as rho_cube_2 - rho_cube_1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rho_cube_1</strong> (<em>Cp2kCube</em>) – The first charge density cube.</p></li>
+<li><p><strong>rho_cube_2</strong> (<em>Cp2kCube</em>) – The second charge density cube.</p></li>
+<li><p><strong>axis</strong> (<em>str</em><em>, </em><em>optional</em>) – The axis along which to compute the average charge density, by default ‘z’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The coordinates and the induced charge density array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[np.ndarray, np.ndarray]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="ectoolkits.analysis.dielectric_constant.get_integrated_array">
@@ -437,17 +457,58 @@ document.write(`
 
 <dl class="py function">
 <dt class="sig sig-object py" id="ectoolkits.analysis.dielectric_constant.get_micro_electric_field">
-<span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.dielectric_constant.</span></span><span class="sig-name descname"><span class="pre">get_micro_electric_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Delta_macro_Efield</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/dielectric_constant.html#get_micro_electric_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.dielectric_constant.get_micro_electric_field" title="Permalink to this definition">#</a></dt>
-<dd><p>in atomic units (au)
-Delta_macro_Efield is the macroscopic electric field difference between two systems
-Delat_macro_Efield (au)</p>
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.dielectric_constant.</span></span><span class="sig-name descname"><span class="pre">get_micro_electric_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Delta_macro_Efield</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ectoolkits/analysis/dielectric_constant.html#get_micro_electric_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.dielectric_constant.get_micro_electric_field" title="Permalink to this definition">#</a></dt>
+<dd><p>Calculate the micro electric field from the charge density and the macroscopic electric field difference.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>numpy.ndarray</em>) – The grid points where the charge density is defined.</p></li>
+<li><p><strong>rho</strong> (<em>numpy.ndarray</em>) – The charge density in atomic units.</p></li>
+<li><p><strong>Delta_macro_Efield</strong> (<em>float</em>) – The macroscopic electric field difference between two systems in atomic units.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The micro electric field in atomic units.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The micro electric field is calculated as follows:
+1. Calculate the integrand as pi * 4 * rho.
+2. Integrate the integrand over the grid points x to obtain the micro electric field.
+3. Determine a constant such that the mean of the micro electric field matches the macroscopic electric field difference.
+4. Add the constant to the micro electric field.</p>
+<p>The units of the input and output arrays are atomic units (au).</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="ectoolkits.analysis.dielectric_constant.get_micro_polarization">
-<span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.dielectric_constant.</span></span><span class="sig-name descname"><span class="pre">get_micro_polarization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Delta_macro_polarization</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/dielectric_constant.html#get_micro_polarization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.dielectric_constant.get_micro_polarization" title="Permalink to this definition">#</a></dt>
-<dd><p>rho: induced charge density in atomic units (au)</p>
-<p>Delta_macro_polarization is the macroscopic polarization difference between two systems</p>
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.dielectric_constant.</span></span><span class="sig-name descname"><span class="pre">get_micro_polarization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Delta_macro_polarization</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ectoolkits/analysis/dielectric_constant.html#get_micro_polarization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.dielectric_constant.get_micro_polarization" title="Permalink to this definition">#</a></dt>
+<dd><p>Calculate the micro polarization from the induced charge density and the macroscopic polarization difference.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>numpy.ndarray</em>) – The grid points where the charge density is defined.</p></li>
+<li><p><strong>rho</strong> (<em>numpy.ndarray</em>) – The induced charge density in atomic units.</p></li>
+<li><p><strong>Delta_macro_polarization</strong> (<em>float</em>) – The macroscopic polarization difference between two systems in atomic units.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The micro polarization in atomic units.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The micro polarization is calculated as follows:
+1. Calculate the integrand as -rho.
+2. Integrate the integrand over the grid points x to obtain the micro polarization.
+3. Determine a constant such that the mean of the micro polarization matches the macroscopic polarization difference.
+4. Add the constant to the micro polarization.</p>
+<p>The units of the input and output arrays are atomic units (au).</p>
 </dd></dl>
 
 </section>
@@ -480,7 +541,7 @@ Delat_macro_Efield (au)</p>
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
     <a class="left-prev"
        href="ectoolkits.analysis.band_align.html"
@@ -523,6 +584,7 @@ By Yong-Bin Zhuang
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2023.
@@ -549,8 +611,8 @@ By Yong-Bin Zhuang
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
   <footer class="bd-footer">
   </footer>

@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
@@ -18,12 +18,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -37,9 +37,9 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
-  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
@@ -136,6 +136,7 @@ const thebe_selector_output = ".output, .cell_output"
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
   
 
 <a class="navbar-brand logo" href="../../../intro.html">
@@ -315,6 +316,7 @@ const thebe_selector_output = ".output, .cell_output"
 </button>
 
 
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -324,6 +326,7 @@ document.write(`
   </button>
 `);
 </script>
+
 
 <script>
 document.write(`
@@ -381,8 +384,6 @@ document.write(`
         <span class="n">fancy_print</span><span class="p">(</span><span class="s2">&quot;FINISHED&quot;</span><span class="p">)</span></div>
 
 
-
-
 <div class="viewcode-block" id="AtomDensity"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity">[docs]</a><span class="k">class</span> <span class="nc">AtomDensity</span><span class="p">():</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inp</span><span class="p">):</span>
         <span class="n">fancy_print</span><span class="p">(</span><span class="s2">&quot;Perform Atom Density Analysis&quot;</span><span class="p">)</span>
@@ -431,15 +432,13 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">natom</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">fancy_print</span><span class="p">(</span><span class="s2">&quot;Read Atom Number: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">natom</span><span class="p">))</span>
 
-
-
 <div class="viewcode-block" id="AtomDensity.run"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># read all structure and corresponding z</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">all_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_z</span><span class="p">()</span>
 
         <span class="c1"># cell info</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_volume</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_volume</span><span class="p">()</span>
-        <span class="n">_cell</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_cell</span><span class="p">()</span>
+        <span class="n">_cell</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_cell</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">xy_area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_volume</span><span class="o">/</span><span class="n">_cell</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
 
         <span class="c1"># surface 1 and 2 position along the trajectory</span>
@@ -450,13 +449,12 @@ document.write(`
 
         <span class="c1"># find the water center along the trajectory</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">water_cent_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_water_cent_list</span><span class="p">()</span>
-        
 
         <span class="c1"># water center relative to fisrt frame</span>
-        <span class="c1">#self.water_cent_rel_s = self.water_cent_s - self.water_cent_s[0]</span>
+        <span class="c1"># self.water_cent_rel_s = self.water_cent_s - self.water_cent_s[0]</span>
 
-        <span class="c1">#fancy_print(&quot;Calculated Origin Water Center Position: {0} A&quot;.format(self.water_cent))</span>
-        <span class="c1">#fancy_print(&quot;Water Center will shift to Cell Center: {0} A&quot;.format(self.cell[2]/2))</span>
+        <span class="c1"># fancy_print(&quot;Calculated Origin Water Center Position: {0} A&quot;.format(self.water_cent))</span>
+        <span class="c1"># fancy_print(&quot;Water Center will shift to Cell Center: {0} A&quot;.format(self.cell[2]/2))</span>
 
         <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">density_type</span><span class="p">:</span>
             <span class="n">idx_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx_list</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
@@ -464,48 +462,47 @@ document.write(`
 
         <span class="bp">self</span><span class="o">.</span><span class="n">atom_density</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atom_density</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">atom_density_z</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atom_density_z</span><span class="p">)</span></div>
-        <span class="c1">#self.get_o_density()</span>
-        <span class="c1">#self.dump_o_density()</span>
+        <span class="c1"># self.get_o_density()</span>
+        <span class="c1"># self.dump_o_density()</span>
 
-<div class="viewcode-block" id="AtomDensity.get_all_z"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_all_z">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_z</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="p">:</span>
+<div class="viewcode-block" id="AtomDensity.get_all_z"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_all_z">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_z</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;get the z coordinates of atoms along trajectory</span>
 
 <span class="sd">        _extended_summary_</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            np.array: the z coordinates of atoms</span>
-<span class="sd">        &quot;&quot;&quot;</span>        
-        
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">all_z</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">:</span>
-            <span class="c1">#z</span>
+            <span class="c1"># z</span>
             <span class="n">all_z</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">get_positions</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
         <span class="n">all_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">all_z</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">all_z</span></div>
 
-
-<div class="viewcode-block" id="AtomDensity.get_surf1_z_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_surf1_z_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_surf1_z_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<div class="viewcode-block" id="AtomDensity.get_surf1_z_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_surf1_z_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_surf1_z_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;calculate the surface 1 average position</span>
 
 <span class="sd">        _extended_summary_</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            np.array: axis 0: traj</span>
-<span class="sd">        &quot;&quot;&quot;</span>        
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">surf1_z_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_z</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">surf1</span><span class="p">]</span>
         <span class="n">surf1_z_list</span> <span class="o">=</span> <span class="n">surf1_z_list</span><span class="o">.</span><span class="n">T</span>
         <span class="n">surf1_z_list</span> <span class="o">=</span> <span class="n">surf1_z_list</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">surf1_z_list</span></div>
 
-<div class="viewcode-block" id="AtomDensity.get_surf2_z_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_surf2_z_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_surf2_z_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<div class="viewcode-block" id="AtomDensity.get_surf2_z_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_surf2_z_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_surf2_z_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;calculate the surface 2 average position</span>
 
 <span class="sd">        _extended_summary_</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            np.array: axis 0: traj</span>
-<span class="sd">        &quot;&quot;&quot;</span>        
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">surf2_z_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_z</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">surf2</span><span class="p">]</span>
         <span class="n">surf2_z_list</span> <span class="o">=</span> <span class="n">surf2_z_list</span><span class="o">.</span><span class="n">T</span>
@@ -524,12 +521,13 @@ document.write(`
 
 <div class="viewcode-block" id="AtomDensity.water_O_idx"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.water_O_idx">[docs]</a>    <span class="k">def</span> <span class="nf">water_O_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># guess the o index of water</span>
-        <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="o">=</span> <span class="n">neighbor_list</span><span class="p">(</span><span class="s1">&#39;ij&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">{(</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">):</span> <span class="mf">1.3</span><span class="p">})</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">neighbor_list</span><span class="p">(</span><span class="s1">&#39;ij&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">{(</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">):</span> <span class="mf">1.3</span><span class="p">})</span>
         <span class="n">cn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 
         <span class="n">H2O_pair_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">Ow_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cn</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz_file</span><span class="p">),</span> <span class="s2">&quot;Ow_idx.dat&quot;</span><span class="p">),</span> <span class="n">Ow_idx</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xyz_file</span><span class="p">),</span> <span class="s2">&quot;Ow_idx.dat&quot;</span><span class="p">),</span> <span class="n">Ow_idx</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Ow_idx</span></div>
 
 <div class="viewcode-block" id="AtomDensity.get_idx_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_idx_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_idx_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
@@ -568,10 +566,9 @@ document.write(`
         <span class="n">atom_z_new</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">cell_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_cell</span><span class="p">()[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">atom_z</span><span class="o">.</span><span class="n">flatten</span><span class="p">():</span>
-            <span class="n">atom_z_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="o">%</span><span class="n">cell_z</span><span class="p">)</span>
+            <span class="n">atom_z_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span> <span class="o">%</span> <span class="n">cell_z</span><span class="p">)</span>
         <span class="n">atom_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">atom_z_new</span><span class="p">)</span>
 
-        
         <span class="c1"># find the length between two surface</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf1_z</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf2_z</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">surf_space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf2_z</span> <span class="o">+</span> <span class="n">cell_z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf1_z</span>
@@ -580,14 +577,13 @@ document.write(`
 
         <span class="n">bins</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surf_space</span><span class="o">/</span><span class="n">dz</span><span class="p">)</span>
 
-        <span class="n">density</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">atom_z</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf_space</span><span class="p">))</span>
+        <span class="n">density</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span>
+            <span class="n">atom_z</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf_space</span><span class="p">))</span>
 
         <span class="c1"># throw the last one and move the number half bin</span>
         <span class="n">z</span> <span class="o">=</span> <span class="n">z</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">dz</span><span class="o">/</span><span class="mi">2</span>
-        <span class="c1">#z = z[:-1]</span>
+        <span class="c1"># z = z[:-1]</span>
 
-
-        
         <span class="n">unit_conversion</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_unit_conversion</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">dz</span><span class="p">)</span>
 
         <span class="c1"># normalized wrt density of bulk water</span>
@@ -599,12 +595,11 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">atom_density_z</span><span class="p">[</span><span class="n">output_file</span><span class="p">]</span> <span class="o">=</span> <span class="n">z</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">atom_density</span><span class="p">[</span><span class="n">output_file</span><span class="p">]</span> <span class="o">=</span> <span class="n">density</span>
 
-
         <span class="n">output_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s2">.dat&quot;</span>
         <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span>
-                <span class="n">output_file</span><span class="p">,</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">z</span><span class="p">,</span> <span class="n">density</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
-                <span class="n">header</span><span class="o">=</span><span class="s2">&quot;FIELD: z[A], atom_density&quot;</span>
+            <span class="n">output_file</span><span class="p">,</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">z</span><span class="p">,</span> <span class="n">density</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+            <span class="n">header</span><span class="o">=</span><span class="s2">&quot;FIELD: z[A], atom_density&quot;</span>
         <span class="p">)</span>
         <span class="n">fancy_print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Density Profile Data Save to </span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
@@ -629,28 +624,30 @@ document.write(`
             <span class="k">for</span> <span class="n">width</span> <span class="ow">in</span> <span class="n">width_list</span><span class="p">:</span>
                 <span class="n">left_bound</span> <span class="o">=</span> <span class="n">cent</span> <span class="o">-</span> <span class="n">width</span><span class="o">/</span><span class="mi">2</span>
                 <span class="n">right_bound</span> <span class="o">=</span> <span class="n">cent</span> <span class="o">+</span> <span class="n">width</span><span class="o">/</span><span class="mi">2</span>
-                <span class="n">part_density</span> <span class="o">=</span> <span class="n">density</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">((</span><span class="n">z</span><span class="o">&gt;=</span><span class="n">left_bound</span><span class="p">),</span> <span class="p">(</span><span class="n">z</span><span class="o">&lt;=</span><span class="n">right_bound</span><span class="p">))]</span>
+                <span class="n">part_density</span> <span class="o">=</span> <span class="n">density</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">z</span> <span class="o">&gt;=</span> <span class="n">left_bound</span><span class="p">),</span> <span class="p">(</span><span class="n">z</span> <span class="o">&lt;=</span> <span class="n">right_bound</span><span class="p">))]</span>
                 <span class="n">cent_density</span> <span class="o">=</span> <span class="n">part_density</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
                 <span class="n">cent_density_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cent_density</span><span class="p">)</span>
-            
-            <span class="n">all_cent_density</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cent_density_list</span>
-        
-        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">all_cent_density</span><span class="p">)</span></div>
-    
-<div class="viewcode-block" id="AtomDensity.plot_density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.plot_density">[docs]</a>    <span class="k">def</span> <span class="nf">plot_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;font&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span> <span class="c1">#controls default text size</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">titlesize</span><span class="o">=</span><span class="mi">23</span><span class="p">)</span> <span class="c1">#fontsize of the title</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span> <span class="c1">#fontsize of the x and y labels</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;xtick&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span> <span class="c1">#fontsize of the x tick labels</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;ytick&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span> <span class="c1">#fontsize of the y tick labels</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;legend&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span> <span class="c1">#fontsize of the legend</span>
 
-        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="c1">#controls default text size</span>
+            <span class="n">all_cent_density</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cent_density_list</span>
+
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">all_cent_density</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AtomDensity.plot_density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.plot_density">[docs]</a>    <span class="k">def</span> <span class="nf">plot_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;font&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>  <span class="c1"># controls default text size</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">titlesize</span><span class="o">=</span><span class="mi">23</span><span class="p">)</span>  <span class="c1"># fontsize of the title</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>  <span class="c1"># fontsize of the x and y labels</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;xtick&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>  <span class="c1"># fontsize of the x tick labels</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;ytick&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>  <span class="c1"># fontsize of the y tick labels</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;legend&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>  <span class="c1"># fontsize of the legend</span>
+
+        <span class="c1"># controls default text size</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
         <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;xtick.major&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;ytick.major&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">9</span><span class="p">))</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">density</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">atom_density</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atom_density_z</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
@@ -662,7 +659,6 @@ document.write(`
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Density&quot;</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;z [A]&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">fig</span></div></div>
-
 </pre></div>
 
                 </article>
@@ -673,7 +669,7 @@ document.write(`
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
 </div>
                 </footer>
@@ -698,6 +694,7 @@ By Yong-Bin Zhuang
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2023.
@@ -724,8 +721,8 @@ By Yong-Bin Zhuang
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
   <footer class="bd-footer">
   </footer>

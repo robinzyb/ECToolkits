@@ -3,7 +3,7 @@ eps_type: "optical"
 scale: "global"
 intensity_array: [0.0000, 0.0001, 0.0002]
 axis: "z"
-output_dir: "./output"  
+output_dir: "./output"
 command: "srun cp2k.psmp -i input.inp"
 extra_forward_files: [
   "anatase_bulk_relaxed.xyz"

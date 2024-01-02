@@ -487,10 +487,11 @@ def sort_by_rows(atoms, idx, rotM=None, n_row=2, bridge_along="y"):
     else:
         xyz = atoms.positions
     # THEN: group ti5c by X-axis (AFTER ROTATE)
-    if bridge_along == "x":
-        yy, xx = np.round(xyz[:, 0]), np.round(xyz[:, 1])
-    elif bridge_along == "y":
-        xx, yy = np.round(xyz[:, 0]), np.round(xyz[:, 1])
+        # if bridge_along == "x":
+        #     yy, xx = np.round(xyz[:, 0]), np.round(xyz[:, 1])
+        # elif bridge_along == "y":
+        #     xx, yy = np.round(xyz[:, 0]), np.round(xyz[:, 1])
+    xx, yy = np.round(xyz[:, 0]), np.round(xyz[:, 1])
     dm = distance_matrix(xx[idx].reshape(-1, 1), xx[idx].reshape(-1, 1))
     groups = np.unique(dm <= 2, axis=0)
 

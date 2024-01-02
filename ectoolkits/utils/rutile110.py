@@ -16,10 +16,10 @@ from MDAnalysis.lib.c_distances import _minimize_vectors_triclinic
 def get_pair(xyz, idx1, idx2, cutoff_hi, cutoff_lo=None, cell=None, **kwargs):
 
     """
-    search possible pairs between idx1 and idx2, 
+    search possible pairs between idx1 and idx2,
     whose distance between are smaller than cutoff_hi
     """
-    
+
     atoms1 = xyz[idx1]
     atoms2 = xyz[idx2]
     pairs, distances = capped_distance(reference=atoms1, configuration=atoms2,
@@ -34,7 +34,7 @@ def minimize_vectors_triclinic(v: np.ndarray, box: np.ndarray, ):
     computes the mic vector
     """
     res = np.zeros_like(v, dtype=np.float32)
-    v_32 = v.astype(np.float32) 
+    v_32 = v.astype(np.float32)
     box_32 = box.flatten().astype(np.float32)
     _minimize_vectors_triclinic(vectors=v_32, box=box_32, output=res)
 
@@ -58,7 +58,7 @@ def d_unique_vecs(vecs):
         vecs (np.ndarray): distance vectors
 
     Returns:
-        dict: a dictionary holds the unique distance vectors. 
+        dict: a dictionary holds the unique distance vectors.
     """
     u = {}
     count = 1
@@ -78,8 +78,8 @@ def d_unique_vecs(vecs):
     return u
 
 def g_unique_vecs(d: dict):
-    """ensures the unique vectors calculated by `d_unique_vecs`. 
-    
+    """ensures the unique vectors calculated by `d_unique_vecs`.
+
     Handles the case when the each key in the `d` dictonary has multiple numerically close values. Take the average of these vectors as the "bond" vector.
 
     Args:
@@ -103,14 +103,14 @@ def get_octahedral_bonds(tio2_cut: Atoms, octahedral_bonds_upper_bound: float=2.
     """calculate the octahedral bonds (vectors) in an \\hkl(1-11) edge model
 
     Args:
-        tio2_cut (Atoms): the edge model cut from the bulk structure. (the output of `cut_edge_from_bulk`.) 
+        tio2_cut (Atoms): the edge model cut from the bulk structure. (the output of `cut_edge_from_bulk`.)
         octahedral_bonds_upper_bound (float, optional): The longest length to recogonize an oxygen as a octahedral ligand. Defaults to 2.4.
 
     Returns:
         np.ndarray: a coordinates array for the octahedral vectors.
     """
-        
-    # compute the distance matrix under PBC 
+
+    # compute the distance matrix under PBC
     xyz = tio2_cut.positions
     o_idx = np.where(tio2_cut.symbols=="O")[0]
     ti_idx = np.where(tio2_cut.symbols=="Ti")[0]
@@ -123,9 +123,9 @@ def get_octahedral_bonds(tio2_cut: Atoms, octahedral_bonds_upper_bound: float=2.
     octahedral_bonds = g_unique_vecs(uniqe_dist_vec)
     return octahedral_bonds
 
-def get_rotM_edged_rutile110(tio2: Atoms, octahedral_bonds_upper_bound: float=2.4):
+def get_rotM_edged_rutile110(tio2: Atoms, octahedral_bonds_upper_bound: float=2.4, bridge_along="x"):
     """compute the unit xyz vectors for a slab of \\hkl(1-11) edged tio2.
-    
+
     Detailed algorithm:
     First, one will get all the 6-"octahedral bonds", (as detailed in `get_octahedral_bonds`)
     Second, notice the two of the enlogated octahedral bonds roughly aligns with:
@@ -136,17 +136,26 @@ def get_rotM_edged_rutile110(tio2: Atoms, octahedral_bonds_upper_bound: float=2.
     Args:
         tio2_cut (Atoms): any tio2 \\hkl(1-11) edge model (hopefully it will work for all input)
         octahedral_bonds_upper_bound (float, optional): The longest length to recogonize an oxygen as a octahedral ligand. Defaults to 2.4.
+        bridge_along (str, optional): The direction of the bridge oxygens, could be either "x" or "y". Defaults to "y". 
 
     Returns:
         np.array: the normal vectors, which could be used as the rotM matrix for the coordinates
     """
     octahedral_bonds = get_octahedral_bonds(tio2, octahedral_bonds_upper_bound)
-    # argy = np.abs(octahedral_bonds)[:, 1].argmax()
-    argx = np.abs(octahedral_bonds)[:, 0].argmax()
-    argz = np.abs(octahedral_bonds)[:, 2].argmax()
-    x_up = normalized_vector(octahedral_bonds[argx])
-    z_up = normalized_vector(octahedral_bonds[argz])
-    y_up = np.cross(z_up, x_up)
+
+    if bridge_along == "y":
+        argx = np.abs(octahedral_bonds)[:, 0].argmax()
+        argz = np.abs(octahedral_bonds)[:, 2].argmax()
+        x_up = normalized_vector(octahedral_bonds[argx])
+        z_up = normalized_vector(octahedral_bonds[argz])
+        y_up = np.cross(z_up, x_up)
+    elif bridge_along== "x":
+        argy = np.abs(octahedral_bonds)[:, 1].argmax()
+        argz = np.abs(octahedral_bonds)[:, 2].argmax()
+        y_up = normalized_vector(octahedral_bonds[argy])
+        z_up = normalized_vector(octahedral_bonds[argz])
+        x_up = np.cross(y_up, z_up)
+   
     return np.array([x_up, y_up, z_up])
 
 
@@ -285,7 +294,7 @@ def interface_2_slab(atoms, M="Ti"):
 
 
 def get_rotM(vecy, vecz):
-    """get the rotation matrix for rotating a rutile model. Specifically, rotating a step
+    r"""get the rotation matrix for rotating a rutile model. Specifically, rotating a step
     edge model s.t x is parrallel to [001], y is parrallel to [1-10], and z is parallel
     to \hkl<110>.
 

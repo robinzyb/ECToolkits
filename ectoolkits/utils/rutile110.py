@@ -123,7 +123,7 @@ def get_octahedral_bonds(tio2_cut: Atoms, octahedral_bonds_upper_bound: float=2.
     octahedral_bonds = g_unique_vecs(uniqe_dist_vec)
     return octahedral_bonds
 
-def get_rotM_edged_rutile110(tio2: Atoms, octahedral_bonds_upper_bound: float=2.4):
+def get_rotM_edged_rutile110(tio2: Atoms, octahedral_bonds_upper_bound: float=2.4, bridge_along="x"):
     """compute the unit xyz vectors for a slab of \\hkl(1-11) edged tio2.
     
     Detailed algorithm:
@@ -136,17 +136,26 @@ def get_rotM_edged_rutile110(tio2: Atoms, octahedral_bonds_upper_bound: float=2.
     Args:
         tio2_cut (Atoms): any tio2 \\hkl(1-11) edge model (hopefully it will work for all input)
         octahedral_bonds_upper_bound (float, optional): The longest length to recogonize an oxygen as a octahedral ligand. Defaults to 2.4.
+        bridge_along (str, optional): The direction of the bridge oxygens, could be either "x" or "y". Defaults to "y". 
 
     Returns:
         np.array: the normal vectors, which could be used as the rotM matrix for the coordinates
     """
     octahedral_bonds = get_octahedral_bonds(tio2, octahedral_bonds_upper_bound)
-    # argy = np.abs(octahedral_bonds)[:, 1].argmax()
-    argx = np.abs(octahedral_bonds)[:, 0].argmax()
-    argz = np.abs(octahedral_bonds)[:, 2].argmax()
-    x_up = normalized_vector(octahedral_bonds[argx])
-    z_up = normalized_vector(octahedral_bonds[argz])
-    y_up = np.cross(z_up, x_up)
+
+    if bridge_along == "y":
+        argx = np.abs(octahedral_bonds)[:, 0].argmax()
+        argz = np.abs(octahedral_bonds)[:, 2].argmax()
+        x_up = normalized_vector(octahedral_bonds[argx])
+        z_up = normalized_vector(octahedral_bonds[argz])
+        y_up = np.cross(z_up, x_up)
+    elif bridge_along== "x":
+        argy = np.abs(octahedral_bonds)[:, 1].argmax()
+        argz = np.abs(octahedral_bonds)[:, 2].argmax()
+        y_up = normalized_vector(octahedral_bonds[argy])
+        z_up = normalized_vector(octahedral_bonds[argz])
+        x_up = np.cross(y_up, z_up)
+   
     return np.array([x_up, y_up, z_up])
 
 

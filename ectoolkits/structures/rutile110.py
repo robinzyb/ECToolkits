@@ -362,8 +362,13 @@ class Rutile1p11Edge(Interface):
         if (vecy is not None) and (vecz is not None):
             self.rotM = get_rotM(vecy, vecz)
         else:
-            tmp = get_rotM_edged_rutile110(atoms)
-            vecy, vecz = tmp[1], tmp[2]
+            tmp = get_rotM_edged_rutile110(atoms, bridge_along=bridge_along)
+            if bridge_along == "y":
+                vecy, vecz = tmp[1], tmp[2]
+            elif bridge_along == "x":
+                vecy, vecz = tmp[0], tmp[2]
+            else:
+                raise ValueError(f"The value for 'bridge_along' could only be 'x' or 'y'. However, you provided '{bridge_along}'.")
             self.rotM = get_rotM(vecy, vecz)
 
         # get corresponding slab model

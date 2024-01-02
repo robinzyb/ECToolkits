@@ -3,7 +3,7 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ECToolKits"
+name = "ECToolkits"
 version = "0.2.5"
 authors = [
 {name = "Yongbin Zhuang", email = "robinzhuang@outlook.com"}

@@ -126,6 +126,9 @@ def get_octahedral_bonds(tio2_cut: Atoms, octahedral_bonds_upper_bound: float=2.
 def get_rotM_edged_rutile110(tio2: Atoms, octahedral_bonds_upper_bound: float=2.4, bridge_along="x"):
     """compute the unit xyz vectors for a slab of \\hkl(1-11) edged tio2.
 
+    !!!!! TODO ---> This method is currently very adhoc and prone to failure
+    !!!!! WE NEED TO IMPROVE THIS
+
     Detailed algorithm:
     First, one will get all the 6-"octahedral bonds", (as detailed in `get_octahedral_bonds`)
     Second, notice the two of the enlogated octahedral bonds roughly aligns with:
@@ -141,24 +144,65 @@ def get_rotM_edged_rutile110(tio2: Atoms, octahedral_bonds_upper_bound: float=2.
     Returns:
         np.array: the normal vectors, which could be used as the rotM matrix for the coordinates
     """
+
+    def is_v_dominant(v, ind):
+        abs_val = np.abs(v)
+        if np.max(abs_val) == abs_val[ind]:
+            i = np.arange(3)
+            iother = i[i!=ind]
+            if (abs_val[iother][0] / abs_val[ind] < 0.5) and (abs_val[iother][1] / abs_val[ind] < 0.5) and (abs_val[ind] > 1.1):
+                return True
+        return False
+
+    def do_average(v_list, ind):
+        abs_val = np.abs(v_list)
+        avg_amplitude = abs_val.mean(axis=0)
+        i = np.arange(3)
+        iother = i[i!=ind]
+        arg_second_largest = np.argmax(avg_amplitude[iother])
+        values = v_list[:, iother[arg_second_largest]]
+        signs = np.sign(values)
+        if len(signs)==1:
+            return v_list
+        # Check if all signs are the same
+        if (signs[1:] == signs[:-1]).all():
+            return np.mean(v_list, axis=0)
+        else:
+            # Find the majority sign
+            positive_count = np.sum(signs > 0)
+            negative_count = np.sum(signs < 0)
+            
+            if positive_count >= negative_count:
+                # If positive signs are the majority, average the positive vectors
+                positive_vectors = v_list[signs > 0]
+                return np.mean(positive_vectors, axis=0) if len(positive_vectors) > 2 else positive_vectors
+            else:
+                # If negative signs are the majority or if counts are equal, average the negative vectors
+                negative_vectors = v_list[signs < 0]
+                return np.mean(negative_vectors, axis=0) if len(negative_vectors) > 2 else negative_vectors
+
+    def get_averaged(octahedral_bonds, ind):
+        v_list = []
+        for v in octahedral_bonds:
+            if is_v_dominant(v, ind):
+                out = v if v[ind] > 0 else -v
+                v_list.append(out)
+        v_list = np.array(v_list)
+        return do_average(v_list, ind)
+
+   
     octahedral_bonds = get_octahedral_bonds(tio2, octahedral_bonds_upper_bound)
 
     if bridge_along == "y":
-        argx = np.abs(octahedral_bonds)[:, 0].argmax()
-        argz = np.abs(octahedral_bonds)[:, 2].argmax()
-        x_up = normalized_vector(octahedral_bonds[argx])
-        z_up = normalized_vector(octahedral_bonds[argz])
+        x_up = normalized_vector(get_averaged(octahedral_bonds, 0))
+        z_up = normalized_vector(get_averaged(octahedral_bonds, 2))
         y_up = np.cross(z_up, x_up)
     elif bridge_along== "x":
-        argy = np.abs(octahedral_bonds)[:, 1].argmax()
-        argz = np.abs(octahedral_bonds)[:, 2].argmax()
-        y_up = normalized_vector(octahedral_bonds[argy])
-        z_up = normalized_vector(octahedral_bonds[argz])
+        y_up = normalized_vector(get_averaged(octahedral_bonds, 1))
+        z_up = normalized_vector(get_averaged(octahedral_bonds, 2))
         x_up = np.cross(y_up, z_up)
-   
+
     return np.array([x_up, y_up, z_up])
-
-
 
 def find_cn_idx(atoms1, atoms2, cutoff_hi, cutoff_lo=None, cell=None, **kwargs):
     """count the coordination number(CN) for atoms1 (center atoms), where atoms2 are coordinate atom.

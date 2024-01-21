@@ -7,6 +7,8 @@ from cgi import test
 from .slab import Slab
 from .interface import Interface
 
+import warnings
+
 # general modules
 import numpy as np
 from scipy.spatial import distance_matrix
@@ -101,7 +103,7 @@ class SlabRutile110(Slab):
         for key in self.indices:
             tmp = []
             for ii in range(2):
-                idx_sorted = sort_by_rows(self.slab, self.indices[key][ii],
+                idx_sorted = sort_by_rows(self.xyz, self.indices[key][ii],
                                           rotM=None, n_row=self.nrow,
                                           bridge_along=self.bridge_along)
                 tmp.append(idx_sorted)
@@ -268,7 +270,7 @@ class SlabRutile1p11Edge(Slab):
         for key in self.indices:
             tmp = []
             for ii in range(2):
-                idx_sorted = sort_by_rows(self.slab, self.indices[key][ii],
+                idx_sorted = sort_by_rows(self.xyz, self.indices[key][ii],
                                           rotM=self.rotM, n_row=self.nrow,
                                           bridge_along=self.bridge_along)
                 tmp.append(idx_sorted)
@@ -424,8 +426,7 @@ class Rutile1p11Edge(Interface):
         testy = np.isnan(_vecy).sum()
         testz = np.isnan(_vecz).sum()
         if (testy+testz) > 0:
-            print(
-                "warning! couldn't refine rotM for some reason. Return the original rotM instead")
+            warnings.warn("warning! couldn't refine rotM for some reason. Return the original rotM instead")
             return self.rotM
         else:
             return get_rotM(_vecy, _vecz)
@@ -472,44 +473,105 @@ class Rutile1p11Edge(Interface):
     def idxslab2idxatoms(idx_target, idx_slab):
         return idx_slab[idx_target]
 
-# non-universal utilities
+def sort_by_rows(xyz, idx, rotM=None, n_row=2, bridge_along="y"):
+    """ Sorting surface atoms in the (110) row, particularly the M5c's and Obr's row-wise.
 
+    Algorithm description:
+    (NB: the rotation matrix assumes: bridge_along="y". See this convention in the constructor for 'Rutile1p11Edge')
+    1. save the (xx, yy) coordinates with and without rotation (rotation matrix is not required for for a flat model)
+    2. the 'make_groups' method will group rows together using the (rotated) x coordinates:
+    ^ y
+    |
+    |---------     On the left we have and simple demonstration.
+    | *    + |     Due to the nature of a triclinic box,
+    |  *    +|     single rows, denoted by symbols "+" and "*",
+    | + * ...|     might be wrapped to the other end of the box.
+    |  + *   |     The 'make_groups' function essentially distinguishes
+    |   + *  |     "+" and "*". Specifically, the method does something like:
+    |    + * |           make_groups(array("+", "*")) = array(array("+"), array("*"))
+    |------------> x
+    3. the collection of three methods, namely, "group_each_row", "sort_each_row", and "sort_grouped_rows",
+    are used to sort each row. For rows without "discontinuity" ("*"), method 'sort_each_row' will suffice.
+    However, complexity arise at discontinuity. For example, if we use "o" to denote a discontinuity, we observe
+    ^ y               that after apply the rotation matridx, the two "o" will have the nearly identical 'yy_rot' value. 
+    |                 Hence, in may cases, sorting of this discontinuity is not straitforward. Fortuanetely, this problem is solved 
+    |---------        if we first treat different segments of the "+" row separately, and for the discontinuity, we use the original
+    | *    + |        coordinates to sort the discontinuity (o). A implementation of this algorithm is given in 'sort_grouped_rows'
+    |  *    o|     
+    | o * ...|     
+    |  + *   |     
+    ..............
 
-def sort_by_rows(atoms, idx, rotM=None, n_row=2, bridge_along="y"):
-    """Non-robust temporary method for sorting surface atoms by their
-       'x' and 'y' coordinates.
     """
-    xyz = atoms.positions
-    n_group = idx.shape[0]//n_row
-    # FIRST: rotate xyz and cell param
+
+    # Firsrt: rotate xyz and cell param
+    if bridge_along == "y":
+        xx, yy = xyz[:, 0].copy(), xyz[:, 1].copy()
+    elif bridge_along == "x":
+        yy, xx = xyz[:, 0].copy(), xyz[:, 1].copy()
+    else:
+        raise ValueError(f"bridge_along should be either 'x' or 'y'. However, you have {bridge_along}")
+
     if rotM is not None:
-        xyz = np.matmul(atoms.positions, rotM)
+        xyz_rot = np.matmul(xyz, rotM)
+        xx_rot, yy_rot = xyz_rot[:, 0].copy(), xyz_rot[:, 1].copy()
     else:
-        xyz = atoms.positions
-    # THEN: group ti5c by X-axis (AFTER ROTATE)
-        # if bridge_along == "x":
-        #     yy, xx = np.round(xyz[:, 0]), np.round(xyz[:, 1])
-        # elif bridge_along == "y":
-        #     xx, yy = np.round(xyz[:, 0]), np.round(xyz[:, 1])
-    xx, yy = np.round(xyz[:, 0]), np.round(xyz[:, 1])
-    dm = distance_matrix(xx[idx].reshape(-1, 1), xx[idx].reshape(-1, 1))
-    groups = np.unique(dm <= 2, axis=0)
+        xy_rot, yy_rot = xx, yy
 
-    if groups.shape[0] == n_row:
-        pass
-    else:
-        sel = (groups.sum(axis=1) < n_group)
-        merge = np.array(groups[sel].sum(axis=0)).astype(bool)[:, np.newaxis].T
-        groups = np.concatenate([groups[~sel], merge], axis=0)
-    # LAST: sort ti5c according to Y-axis
+    # Second: group the rows 
+    def make_groups(idx, xx):
+        dm = distance_matrix(xx[idx].reshape(-1, 1), xx[idx].reshape(-1, 1))
+        groups = np.unique(dm <= 2, axis=0)
 
-    def sort_row(row, yy=yy):
-        return row[np.argsort(yy[row])]
-    rows = [idx[groups[ii, :]] for ii in range(n_row)]
-    cols = np.array(list(map(sort_row, rows)))
-    res = cols[np.argsort(xx[cols[:, 0]])]
+        if groups.shape[0] == n_row:
+            pass
+        else:
+            sel = (groups.sum(axis=1) < dm.shape[0] // n_row)
+            merge = np.array(groups[sel].sum(axis=0)).astype(bool)[:, np.newaxis].T
+            groups = np.concatenate([groups[~sel], merge], axis=0)
+        rows = [idx[groups[ii, :]] for ii in range(n_row)]
+        return rows
+
+
+    # Third: algorithms to sort each row
+    def group_each_row(id, coords, ):
+        dm = distance_matrix(coords[id].reshape(-1, 1), coords[id].reshape(-1, 1))
+        dm_coarse = np.round(dm)
+        groups = np.unique(dm_coarse <= 2, axis=0)
+    
+        return groups
+
+    # Thrid sort along x axis
+    def sort_each_row(row, coords):
+        return row[np.argsort(coords[row])]
+
+    def sort_grouped_rows(id, groups, coords, coords_rot):
+        if len(groups) == 1:
+            return sort_each_row(id, coords_rot)
+
+        else:
+            rows = []
+            first_elements_coords = []
+
+            for ig, g in enumerate(groups):
+                row_ig = sort_each_row(id[g], coords_rot)
+                rows.append(row_ig)
+                first_elements_coords.append(coords[row_ig[0]])
+
+            argsort = np.argsort(first_elements_coords)
+            rows = np.array(rows, dtype=object)[argsort] 
+            rows = np.concatenate(rows).astype(int)
+            return rows
+
+    idx_sorted_perpendicular_bridge = make_groups(idx, xx_rot) 
+    res = np.zeros_like(idx_sorted_perpendicular_bridge)
+
+    for irow in range(n_row):
+        id = idx_sorted_perpendicular_bridge[irow]
+        groups = group_each_row(id, xx_rot)
+        res[irow] = sort_grouped_rows(id, groups, yy, yy_rot)
+
     return res
-
 
 def get_triangle(atoms, idx_obr, M="Ti", cutoff=2.8):
     """What the heck is this?

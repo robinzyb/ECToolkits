@@ -503,7 +503,7 @@ def pair_M5c_n_obr(atoms, idx_cn5, idx_obrs, M="Ti"):
 
 
 # tricks
-def get_sym_edge(atoms, idx_l_edge4=2):
+def get_sym_edge(atoms, idx_l_edge4=0):
     """Translate the rutile <1-11> edge-water interface model s.t. it looks
     pretty and symmetric.
 
@@ -544,7 +544,7 @@ def get_sym_edge(atoms, idx_l_edge4=2):
         ase.Atoms:
             symmetric & pretty-looking edge model
     """
-    target_pos = np.array([0.3, 0.3, 3.5])
+    target_pos = np.array([1.5, 1.5, 3.0])
     trans = target_pos - atoms.positions[idx_l_edge4]
     atoms.translate(trans)
     atoms.wrap()

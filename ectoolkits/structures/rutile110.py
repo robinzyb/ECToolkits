@@ -54,20 +54,20 @@ class SlabRutile110(Slab):
         self.nrow = nrow
         self.cutoff = cutoff
         self.bridge_along = bridge_along
-        # positions and indicies
+        # positions and indices
         self.xyz = slab.positions
         self.idx_H = np.where(slab.symbols == "H")[0]
         self.idx_O = np.where(slab.symbols == "O")[0]
         self.idx_M = np.where(slab.symbols == self.M)[0]
         # result dictionary:
         # the keys are the names of the special atoms
-        # the values are the corresponding indicies
-        # the indicies array looks like [[<idx_upper>], [idx_lower]]
-        self.indicies = {
+        # the values are the corresponding indices
+        # the indices array looks like [[<idx_upper>], [idx_lower]]
+        self.indices = {
             "idx_M5c": None,
             "idx_Obr": None,
         }
-        self.get_surface_indicies()
+        self.get_surface_indices()
 
     def get_surf_ti(self):
         cn = count_cn(self.xyz[self.idx_M], self.xyz[self.idx_O],
@@ -81,32 +81,32 @@ class SlabRutile110(Slab):
         idx_Obr2 = self.idx_O[cn == 2]
         return idx_Obr2
 
-    def get_surface_indicies(self):
+    def get_surface_indices(self):
         idx_M5c = self.get_surf_ti()
         idx_Obr2 = self.get_surf_o()
         res = [idx_M5c,
                idx_Obr2]
-        for ii, key in enumerate(self.indicies):
-            self.indicies[key] = res[ii]
-        return self.indicies
+        for ii, key in enumerate(self.indices):
+            self.indices[key] = res[ii]
+        return self.indices
 
     def sep_upper_lower(self):
-        for key in self.indicies:
-            self.indicies[key] = sep_upper_lower(self.xyz[:, -1],
-                                                 self.indicies[key])
-        self.ngroup = self.indicies['idx_M5c'].shape[-1]//self.nrow
-        return self.indicies
+        for key in self.indices:
+            self.indices[key] = sep_upper_lower(self.xyz[:, -1],
+                                                 self.indices[key])
+        self.ngroup = self.indices['idx_M5c'].shape[-1]//self.nrow
+        return self.indices
 
     def sort_idx(self):
-        for key in self.indicies:
+        for key in self.indices:
             tmp = []
             for ii in range(2):
-                idx_sorted = sort_by_rows(self.slab, self.indicies[key][ii],
+                idx_sorted = sort_by_rows(self.slab, self.indices[key][ii],
                                           rotM=None, n_row=self.nrow,
                                           bridge_along=self.bridge_along)
                 tmp.append(idx_sorted)
-            self.indicies[key] = np.array(tmp)
-        return self.indicies
+            self.indices[key] = np.array(tmp)
+        return self.indices
 
 
 class Rutile110(Interface):
@@ -138,7 +138,7 @@ class Rutile110(Interface):
         self.nrow = nrow
         self.cutoff = cutoff
         self.bridge_along = bridge_along
-        # positions and indicies
+        # positions and indices
         self.xyz = atoms.positions
         self.idx_H = np.where(atoms.symbols == "H")[0]
         self.idx_O = np.where(atoms.symbols == "O")[0]
@@ -150,8 +150,8 @@ class Rutile110(Interface):
         self.slab.sep_upper_lower()
         self.slab.sort_idx()
 
-        # convert slab indicies to indicies edge model
-        self.indicies = self.get_indicies()
+        # convert slab indices to indices edge model
+        self.indices = self.get_indices()
 
     def get_slab_obj(self):
         idx_slab, slab = interface_2_slab(self.atoms, self.M)
@@ -166,11 +166,11 @@ class Rutile110(Interface):
         idx_Ow, idx_H = get_watOidx(self.atoms, M=self.M)
         return idx_Ow, idx_H
 
-    def get_indicies(self):
-        indicies = self.slab.indicies.copy()
-        for key in indicies:
-            indicies[key] = self.idxslab2idxatoms(indicies[key], self.idx_slab)
-        return indicies
+    def get_indices(self):
+        indices = self.slab.indices.copy()
+        for key in indices:
+            indices[key] = self.idxslab2idxatoms(indices[key], self.idx_slab)
+        return indices
 
     @staticmethod
     def idxslab2idxatoms(idx_target, idx_slab):
@@ -211,16 +211,16 @@ class SlabRutile1p11Edge(Slab):
         self.nrow = nrow
         self.cutoff = cutoff
         self.bridge_along = bridge_along
-        # positions and indicies
+        # positions and indices
         self.xyz = slab.positions
         self.idx_H = np.where(slab.symbols == "H")[0]
         self.idx_O = np.where(slab.symbols == "O")[0]
         self.idx_M = np.where(slab.symbols == self.M)[0]
         # result dictionary:
         # the keys are the names of the special atoms
-        # the values are the corresponding indicies
-        # the indicies array looks like [[<idx_upper>], [idx_lower]]
-        self.indicies = {
+        # the values are the corresponding indices
+        # the indices array looks like [[<idx_upper>], [idx_lower]]
+        self.indices = {
             "idx_M5c": None,
             "idx_edge_M5c": None,
             "idx_edge_M4c": None,
@@ -229,7 +229,7 @@ class SlabRutile1p11Edge(Slab):
             "idx_hObr_upper": None,
             "idx_edge_O2": None
         }
-        self.get_surface_indicies()
+        self.get_surface_indices()
 
     def get_surf_ti(self):
         cn = count_cn(self.xyz[self.idx_M], self.xyz[self.idx_O],
@@ -246,34 +246,34 @@ class SlabRutile1p11Edge(Slab):
                                                      self.idx_O, self.idx_M, cn)
         return idx_edge2, idx_hobr, idx_obr
 
-    def get_surface_indicies(self):
+    def get_surface_indices(self):
         idx_edge4, idx_edge5, idx_surf5 = self.get_surf_ti()
         idx_edge2, idx_hobr, idx_obr = self.get_surf_o()
         idx_hobr1, idx_hobr2 = self.sep_hobr(self.slab, idx_hobr, self.M)
         res = [idx_surf5, idx_edge5, idx_edge4,
                idx_obr, idx_hobr1, idx_hobr2, idx_edge2]
-        for ii, key in enumerate(self.indicies):
+        for ii, key in enumerate(self.indices):
             # res[ii] = sep_upper_lower(self.xyz[:,-1], res[ii])
-            self.indicies[key] = res[ii]
-        return self.indicies
+            self.indices[key] = res[ii]
+        return self.indices
 
     def sep_upper_lower(self):
-        for key in self.indicies:
-            self.indicies[key] = sep_upper_lower(self.xyz[:, -1],
-                                                 self.indicies[key])
-        self.ngroup = self.indicies['idx_M5c'].shape[-1]//self.nrow
-        return self.indicies
+        for key in self.indices:
+            self.indices[key] = sep_upper_lower(self.xyz[:, -1],
+                                                 self.indices[key])
+        self.ngroup = self.indices['idx_M5c'].shape[-1]//self.nrow
+        return self.indices
 
     def sort_idx(self):
-        for key in self.indicies:
+        for key in self.indices:
             tmp = []
             for ii in range(2):
-                idx_sorted = sort_by_rows(self.slab, self.indicies[key][ii],
+                idx_sorted = sort_by_rows(self.slab, self.indices[key][ii],
                                           rotM=self.rotM, n_row=self.nrow,
                                           bridge_along=self.bridge_along)
                 tmp.append(idx_sorted)
-            self.indicies[key] = np.array(tmp)
-        return self.indicies
+            self.indices[key] = np.array(tmp)
+        return self.indices
 
     def sep_ticn5(self, slab, xyz, idx_O, idx_M, cn):
         pairs, _ = capped_distance(xyz[idx_M], xyz[idx_O], self.cutoff, None,
@@ -351,7 +351,7 @@ class Rutile1p11Edge(Interface):
         self.bridge_along = bridge_along
         # tanslate the cell first
         self.atoms = get_sym_edge(self.atoms)
-        # positions and indicies
+        # positions and indices
         self.xyz = atoms.positions
         self.idx_H = np.where(atoms.symbols == "H")[0]
         self.idx_O = np.where(atoms.symbols == "O")[0]
@@ -376,8 +376,8 @@ class Rutile1p11Edge(Interface):
         self.slab.sep_upper_lower()
         self.slab.sort_idx()
 
-        # convert slab indicies to indicies edge model
-        self.indicies = self.get_indicies()
+        # convert slab indices to indices edge model
+        self.indices = self.get_indices()
 
     def get_slab_obj(self):
         idx_slab, slab = interface_2_slab(self.atoms, self.M)
@@ -393,11 +393,11 @@ class Rutile1p11Edge(Interface):
         idx_Ow, idx_H = get_watOidx(self.atoms, M=self.M)
         return idx_Ow, idx_H
 
-    def get_indicies(self):
+    def get_indices(self):
         """
         Returns a dictionary of atom indices in the slab.
 
-        This method creates a copy of the `indicies` dictionary from the `slab` attribute.
+        This method creates a copy of the `indices` dictionary from the `slab` attribute.
         It then updates each value in the dictionary by converting the slab index to the corresponding atom index.
 
         Returns:
@@ -406,17 +406,17 @@ class Rutile1p11Edge(Interface):
         Example:
             Assuming `rutile` is an instance of the `Rutile110` class:
 
-            >>> indicies = rutile.get_indicies()
-            >>> print(indicies)
+            >>> indices = rutile.get_indices()
+            >>> print(indices)
             {'O': [1, 2, 3, 4], 'Ti': [5, 6, 7, 8]}
 
             This will print a dictionary where the keys are atom types ('O' and 'Ti' in this case)
             and the values are lists of atom indices.
         """
-        indicies = self.slab.indicies.copy()
-        for key in indicies:
-            indicies[key] = self.idxslab2idxatoms(indicies[key], self.idx_slab)
-        return indicies
+        indices = self.slab.indices.copy()
+        for key in indices:
+            indices[key] = self.idxslab2idxatoms(indices[key], self.idx_slab)
+        return indices
 
     def refine_rotM(self):
         _vecy = self._refine_vecy()
@@ -431,7 +431,7 @@ class Rutile1p11Edge(Interface):
             return get_rotM(_vecy, _vecz)
 
     def _refine_vecz(self):
-        ind = self.get_indicies()
+        ind = self.get_indices()
         xyz = self.positions
         nTi_per_row = ind['idx_M5c'].shape[-1]
         idx_upperM5c, idx_lowerM5c = ind['idx_M5c'].reshape(
@@ -448,7 +448,7 @@ class Rutile1p11Edge(Interface):
         return _vecz
 
     def _refine_vecy(self):
-        ind = self.get_indicies()
+        ind = self.get_indices()
         xyz = self.positions
         nTi_per_row = ind['idx_M5c'].shape[-1]
         idx_M5c = ind['idx_M5c'].reshape(-1, nTi_per_row)

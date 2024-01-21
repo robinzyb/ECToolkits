@@ -287,7 +287,7 @@ class RutileDisDeg(AnalysisBase):
         atoms = read("init.cif")
         r110edge = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, cutoff=2.9)
         owidx, _ = r110edge.get_wat()
-        ind      = r110edge.get_indicies()
+        ind      = r110edge.get_indices()
         ind['idx_M5c'][0] = np.flip(ind['idx_M5c'][0], axis=1)
 
         cn5idx = ind['idx_M5c'].reshape(2, -1)
@@ -303,7 +303,7 @@ class RutileDisDeg(AnalysisBase):
         atoms = read("init.cif")
         r110  = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)
         owidx, _ = r110.get_wat()
-        cn5idx   = r110.get_indicies()['idx_M5c']
+        cn5idx   = r110.get_indices()['idx_M5c']
         disdeg   = RutileDisDeg(ag, owidx, cn5idx, nrow=r110.nrow)
         disdeg.run()
         ```
@@ -316,17 +316,17 @@ class RutileDisDeg(AnalysisBase):
             atomgroup (MDAnalysis.Atomgroup):
                 Just use all the atoms in your universe. universe.atoms
             owidx (np.ndarray):
-                1-d integer array, which contains the indicies for water oxygen in your inteface model.
+                1-d integer array, which contains the indices for water oxygen in your inteface model.
                 you can use medthod 'get_watOidx' to get this index.
             cn5idx (np.ndarray):
-                2-d integer array, which contains all the indicies for terrace Ti_{5c} atoms in your
+                2-d integer array, which contains all the indices for terrace Ti_{5c} atoms in your
                 interface model. This can be obtained using Method 'Rutile1p11Edge' or 'Rutile110'.
             edge4idx (np.ndarray, optional):
-                2-d integer array, which contains all the indicies for edge Ti_{4c} atoms in your
+                2-d integer array, which contains all the indices for edge Ti_{4c} atoms in your
                 interface model. This option is specially tailored for \hkl<1-11> edge model. You don't need
                 to specify this. Defaults to None.
             edge5idx (np.ndarray, optional):
-                2-d integer array, which contains all the indicies for edge Ti_{5c} atoms in your
+                2-d integer array, which contains all the indices for edge Ti_{5c} atoms in your
                 interface model. This option is specially tailored for \hkl<1-11> edge model. You don't need
                 to specify this. Defaults to None.
             M (str, optional):
@@ -478,11 +478,11 @@ class RutileDisDeg(AnalysisBase):
 
     def get_neighbor_oxygen(self, idx_ti, res_dm, res_idx, n_ow=1):
         """Give a group of ti atoms, find their neighboring water oxygen within cutoff rasius `self.cutoff`.
-        Returns water oxygen indicies
+        Returns water oxygen indices
 
         Args:
             idx_ti (np.ndarray):
-                1-d integer array containing indicies for Ti5c atoms.
+                1-d integer array containing indices for Ti5c atoms.
             res_dm (np.ndarray):
                 2-d distance array containing pair-wise distance between Ti and all water oxygen atoms.
                 This array is prepared in `_prepare`.
@@ -492,7 +492,7 @@ class RutileDisDeg(AnalysisBase):
 
         Returns:
             np.ndarray:
-                1-d array containing adsorbed water oxygen indicies. If these is no water oxygen within the
+                1-d array containing adsorbed water oxygen indices. If these is no water oxygen within the
                 cutoff raidius, a masking value of '-1' is provided
         """
         # group_idx
@@ -543,7 +543,7 @@ class staleRutileDisDeg(AnalysisBase):
     # stale rutile dissociation degree analysis.
     # Feature:
     # - use hard cutoff (1.2 A) to determine proton dissociation
-    # - will save raw data: coordination number surf-water and surf-water oxygen atom indicies
+    # - will save raw data: coordination number surf-water and surf-water oxygen atom indices
     r"""MDAnalysis class calculating surface water dissociation degree for rutile \hkl(110)-water interface.
     Besides dissociation, this method will also output surface adsorption water oxygen index, which is useful for
     TiO2-water interface, because adsorbed water in this system sometimes exchange with sub-interface water.
@@ -557,7 +557,7 @@ class staleRutileDisDeg(AnalysisBase):
         vecy = np.array([26.34844236,  1.8642182,  -2.0615678])
         vecz = np.array([0.49339,  -0.070221,  9.201458])
         r110edge = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, M="Ti", nrow=2)
-        ind = r110edge.get_indicies()
+        ind = r110edge.get_indices()
         idx_ow, _ = r110edge.get_wat()
         ind['idx_M5c'][0] = np.flip(ind['idx_M5c'][0], axis=1)
         cn5idx = ind['idx_M5c'].reshape(2, -1)
@@ -575,17 +575,17 @@ class staleRutileDisDeg(AnalysisBase):
             atomgroup (MDAnalysis.Atomgroup):
                 Just use all the atoms in your universe. universe.atoms
             owidx (np.ndarray):
-                1-d integer array, which contains the indicies for water oxygen in your inteface model.
+                1-d integer array, which contains the indices for water oxygen in your inteface model.
                 you can use medthod 'get_watOidx' to get this index.
             cn5idx (np.ndarray):
-                2-d integer array, which contains all the indicies for terrace Ti_{5c} atoms in your
+                2-d integer array, which contains all the indices for terrace Ti_{5c} atoms in your
                 interface model. This can be obtained using Method 'Rutile1p11Edge' or 'Rutile110'.
             edge4idx (np.ndarray, optional):
-                2-d integer array, which contains all the indicies for edge Ti_{4c} atoms in your
+                2-d integer array, which contains all the indices for edge Ti_{4c} atoms in your
                 interface model. This option is specially tailored for \hkl<1-11> edge model. You don't need
                 to specify this. Defaults to None.
             edge5idx (np.ndarray, optional):
-                2-d integer array, which contains all the indicies for edge Ti_{5c} atoms in your
+                2-d integer array, which contains all the indices for edge Ti_{5c} atoms in your
                 interface model. This option is specially tailored for \hkl<1-11> edge model. You don't need
                 to specify this. Defaults to None.
             M (str, optional):
@@ -626,11 +626,11 @@ class staleRutileDisDeg(AnalysisBase):
         create_path(self.figdir, bk=False)
 
         # the name for output files
-        self.fn_adind_cn5 = os.path.join(self.datdir, "ad_O_indicies.npy")
+        self.fn_adind_cn5 = os.path.join(self.datdir, "ad_O_indices.npy")
         self.fn_adind_edge5 = os.path.join(
-            self.datdir, "ad_O_indicies-edge5.npy")
+            self.datdir, "ad_O_indices-edge5.npy")
         self.fn_adind_edge4 = os.path.join(
-            self.datdir, "ad_O_indicies-edge4.npy")
+            self.datdir, "ad_O_indices-edge4.npy")
         self.fn_cn = os.path.join(self.datdir, "SurfaceOxygenCN.npy")
         self.fn_disdeg5s = os.path.join(self.datdir, "disdeg-Ti5s.npy")
         self.fn_disdeg4e = os.path.join(self.datdir, "disdeg-Ti4e.npy")
@@ -654,53 +654,53 @@ class staleRutileDisDeg(AnalysisBase):
 
         # ---------------------------- prepare results array ----------------------------
         self._n = self.n_cn5idx + self.n_edge4idx*2 + self.n_edge5idx
-        self.ad_indicies = np.empty((self.n_frames, 2, self._n), dtype=int)
+        self.ad_indices = np.empty((self.n_frames, 2, self._n), dtype=int)
         self.cn = np.empty((self.n_frames, 2, self._n), dtype=float)
         self.disdeg5s = np.empty((self.n_frames, 2, 4), dtype=float)
         self.disdeg4e = np.empty((self.n_frames, 2, 4), dtype=float)
         self.disdeg5e = np.empty((self.n_frames, 2, 4), dtype=float)
 
     def _single_frame(self):
-        # get 'neighbor' (Adsorbed) oxygen indicies
-        # indicies being -1 means no adsorbed oxygen atoms
+        # get 'neighbor' (Adsorbed) oxygen indices
+        # indices being -1 means no adsorbed oxygen atoms
         # within a cutoff sphere (self.cutoff)
-        self.ad_indicies[self._frame_index, 0, :self.n_cn5idx] = \
+        self.ad_indices[self._frame_index, 0, :self.n_cn5idx] = \
             self.get_neighbor_oxygen(self.upper_cn5idx, self.dm_cn5, n_ow=1)
-        self.ad_indicies[self._frame_index, 1, :self.n_cn5idx] = \
+        self.ad_indices[self._frame_index, 1, :self.n_cn5idx] = \
             self.get_neighbor_oxygen(self.lower_cn5idx, self.dm_cn5, n_ow=1)
         if self.n_edge5idx > 0:
-            self.ad_indicies[self._frame_index, 0, self.n_cn5idx:(self.n_cn5idx+self.n_edge5idx)] = \
+            self.ad_indices[self._frame_index, 0, self.n_cn5idx:(self.n_cn5idx+self.n_edge5idx)] = \
                 self.get_neighbor_oxygen(
                     self.upper_edge5idx, self.dm_edge5, n_ow=1)
-            self.ad_indicies[self._frame_index, 1, self.n_cn5idx:(self.n_cn5idx+self.n_edge5idx)] = \
+            self.ad_indices[self._frame_index, 1, self.n_cn5idx:(self.n_cn5idx+self.n_edge5idx)] = \
                 self.get_neighbor_oxygen(
                     self.lower_edge5idx, self.dm_edge5, n_ow=1)
         if self.n_edge4idx > 0:
-            self.ad_indicies[self._frame_index, 0, (self.n_cn5idx+self.n_edge5idx):] = \
+            self.ad_indices[self._frame_index, 0, (self.n_cn5idx+self.n_edge5idx):] = \
                 self.get_neighbor_oxygen(
                     self.upper_edge4idx, self.dm_edge4, n_ow=2)
-            self.ad_indicies[self._frame_index, 1, (self.n_cn5idx+self.n_edge5idx):] = \
+            self.ad_indices[self._frame_index, 1, (self.n_cn5idx+self.n_edge5idx):] = \
                 self.get_neighbor_oxygen(
                     self.upper_edge4idx, self.dm_edge4, n_ow=2)
 
         # calculate the coordination numnber for the oxygen
-        idx_o = self.ad_indicies[self._frame_index].flatten()
-        mask = (idx_o == -1)   # mask using -1 indicies
+        idx_o = self.ad_indices[self._frame_index].flatten()
+        mask = (idx_o == -1)   # mask using -1 indices
         cn = count_cn(self._ag.positions[idx_o], self._ag.positions[self.idx_H],
                       cutoff_hi=1.2, cutoff_lo=None, cell=self.cellpar).astype(float)
         cn[mask] = np.nan
         self.cn[self._frame_index] = cn.reshape(2, self._n)
 
     def _conclude(self):
-        res_cn5_Oind = self.ad_indicies[:, :, :self.n_cn5idx]
+        res_cn5_Oind = self.ad_indices[:, :, :self.n_cn5idx]
         np.save(self.fn_adind_cn5, res_cn5_Oind)
         if self.n_edge5idx > 0:
-            res_edge5_Oind = self.ad_indicies[:, :, self.n_cn5idx:(
+            res_edge5_Oind = self.ad_indices[:, :, self.n_cn5idx:(
                 self.n_cn5idx+self.n_edge5idx)]
             np.save(self.fn_adind_edge5, res_edge5_Oind)
         if self.n_edge4idx > 0:
             res_edge4_Oind = \
-                self.ad_indicies[:, :, (self.n_cn5idx+self.n_edge5idx):].reshape(self.n_frames,
+                self.ad_indices[:, :, (self.n_cn5idx+self.n_edge5idx):].reshape(self.n_frames,
                                                                                  2,
                                                                                  self.n_edge4idx,
                                                                                  2)
@@ -717,11 +717,11 @@ class staleRutileDisDeg(AnalysisBase):
 
     def get_neighbor_oxygen(self, idx_ti, res_dm, n_ow=1):
         """Give a group of ti atoms, find their neighboring water oxygen within cutoff rasius `self.cutoff`.
-        Returns water oxygen indicies
+        Returns water oxygen indices
 
         Args:
             idx_ti (np.ndarray):
-                1-d integer array containing indicies for Ti5c atoms.
+                1-d integer array containing indices for Ti5c atoms.
             res_dm (np.ndarray):
                 2-d distance array containing pair-wise distance between Ti and all water oxygen atoms.
                 This array is prepared in `_prepare`.
@@ -731,7 +731,7 @@ class staleRutileDisDeg(AnalysisBase):
 
         Returns:
             np.ndarray:
-                1-d array containing adsorbed water oxygen indicies. If these is no water oxygen within the
+                1-d array containing adsorbed water oxygen indices. If these is no water oxygen within the
                 cutoff raidius, a masking value of '-1' is provided
         """
         # group_idx
@@ -757,7 +757,7 @@ class dAdBridge(AnalysisBase):
         atoms = read(os.path.join("init.cif"))
         r110  = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)
         idx_owat, _ = r110.get_wat()
-        ind = edge_water.get_indicies()
+        ind = edge_water.get_indices()
         # split cn5idx and obr_idx to [<upper idx>, <lower idx>]
         idx_cn5     = ind['idx_M5c'].reshape(2, -1)
         idx_obr     = ind['idx_Obr'].reshape(2, -1)
@@ -773,7 +773,7 @@ class dAdBridge(AnalysisBase):
         vecy = np.array([26.34844236,  1.8642182,  -2.0615678])
         vecz = np.array([0.49339,  -0.070221,  9.201458])
         r110edge = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, M="Ti", nrow=2)
-        ind = r110edge.get_indicies()
+        ind = r110edge.get_indices()
         ind['idx_M5c'][0] = np.flip(ind['idx_M5c'][0], axis=1)
         idx_cn5 = ind['idx_M5c'].reshape(2, -1)
         idx_obr = np.concatenate([ind['idx_Obr'].reshape(2, -1),
@@ -794,16 +794,16 @@ class dAdBridge(AnalysisBase):
             atomgroup (MDAnalysis.Atomgroup):
                 Just use all the atoms in your universe. universe.atoms
             idx_cn5 (np.ndarray):
-                2-d integer array, with shape (2, n_cn5), which contains the upper and lower indicies for
+                2-d integer array, with shape (2, n_cn5), which contains the upper and lower indices for
                 terrace Ti_{5c} atoms in your interface model. This can be obtained using Method 'Rutile1p11Edge'
                 or 'Rutile110'.
             idx_adO (np.ndarray):
-                3-d integer array, with shape (n_frames, 2, n_cn5), which contains the indicies of adsorbed
+                3-d integer array, with shape (n_frames, 2, n_cn5), which contains the indices of adsorbed
                 water oxygen atoms at every MD snapshot. This array is obtained using MDAnalsis analysis
                 class: RutileDisDeg.
             idx_obr (np.ndarray):
-                3-d integer array, with shape (2, n_cn5, 2), which contains the upper and lower indicies for
-                two rows of bridge oxygen indicies corresponding to `idx_cn5`. This can be obtained using Method
+                3-d integer array, with shape (2, n_cn5, 2), which contains the upper and lower indices for
+                two rows of bridge oxygen indices corresponding to `idx_cn5`. This can be obtained using Method
                 'pair_M5c_n_obr'.
             ref_vec (np.ndarray, optional):
                 reference vector v_r. The horizontal distances between adsorption oxygen and pairing bridge oxygen
@@ -855,7 +855,7 @@ class dAdBridge(AnalysisBase):
         # the file names for output data
         self.fn_upperdab = os.path.join(self.datdir, "upper-dab.npy")
         self.fn_lowerdab = os.path.join(self.datdir, "lower-dab.npy")
-        self.fn_adind_cn5 = os.path.join(self.datdir, "ad_O_indicies.npy")
+        self.fn_adind_cn5 = os.path.join(self.datdir, "ad_O_indices.npy")
 
     def _prepare(self):
         # ------------------------ initialize usefule constants -------------------------
@@ -912,12 +912,12 @@ class dAdBridge(AnalysisBase):
 
         Args:
             idx_adO (np.ndarray):
-                indicies of ad water oxygen atoms. Use -1 as masking marker, meaning didn't found Obr
+                indices of ad water oxygen atoms. Use -1 as masking marker, meaning didn't found Obr
                 whthin cutoff. (see analysis class `RutileDisDeg`)
             idx_obr1 (np.ndarray):
-                indicies of row#1 of bridge oxygen atoms.
+                indices of row#1 of bridge oxygen atoms.
             idx_obr2 (np.ndarray):
-                indicies of row#2 of bridge oxygen atoms.
+                indices of row#2 of bridge oxygen atoms.
 
         Returns:
             tuple (np.ndarray, np.ndarray):
@@ -942,11 +942,11 @@ class dAdBridge(AnalysisBase):
 
     def get_neighbor_oxygen(self, idx_ti, res_dm, n_ow=1):
         """Give a group of ti atoms, find their neighboring water oxygen within cutoff rasius `self.cutoff`.
-        Returns water oxygen indicies
+        Returns water oxygen indices
 
         Args:
             idx_ti (np.ndarray):
-                1-d integer array containing indicies for Ti5c atoms.
+                1-d integer array containing indices for Ti5c atoms.
             res_dm (np.ndarray):
                 2-d distance array containing pair-wise distance between Ti and all water oxygen atoms.
                 This array is prepared in `_prepare`.
@@ -956,7 +956,7 @@ class dAdBridge(AnalysisBase):
 
         Returns:
             np.ndarray:
-                1-d array containing adsorbed water oxygen indicies. If these is no water oxygen within the
+                1-d array containing adsorbed water oxygen indices. If these is no water oxygen within the
                 cutoff raidius, a masking value of '-1' is provided
         """
         # group_idx
@@ -981,7 +981,7 @@ class dInterLayer(AnalysisBase):
         ```python
         atoms  = read(os.path.join("init.cif"))
         r110   = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)
-        n_ti5c = r110.get_indicies()['idx_M5c'].flatten().shape[0]//2
+        n_ti5c = r110.get_indices()['idx_M5c'].flatten().shape[0]//2
         dil    = dInterLayer(ag, n_ti5c)
         dil.run()
         ```
@@ -1096,7 +1096,7 @@ class SurfTiOBondLenght(AnalysisBase):
         atoms = read(os.path.join("init.cif"))
         r110  = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)
         idx_owat, _ = r110.get_wat()
-        ind = inp.r110.get_indicies()
+        ind = inp.r110.get_indices()
         ind['idx_M5c'][0] = np.flip(ind['idx_M5c'][0], axis=1)
         ind['idx_Obr'][0] = np.flip(ind['idx_M5c'][0], axis=1)
         idx_cn5  = ind['idx_M5c'].reshape(2, -1)
@@ -1113,13 +1113,13 @@ class SurfTiOBondLenght(AnalysisBase):
             atomgroup (MDAnalysis.Atomgroup):
                 Just use all the atoms in your universe. universe.atoms
             idx_cn5 (numpy.ndarray):
-                Index array for 5-coordinated Surface Ti. The index array should be sorted st. [<upper surface indicies>,
-                <lower surface indicies>]
+                Index array for 5-coordinated Surface Ti. The index array should be sorted st. [<upper surface indices>,
+                <lower surface indices>]
             idx_obr (numpy.ndarray):
-                Index array for Surface bridge O atoms. The index array should be sorted st. [<upper surface indicies>,
-                <lower surface indicies>]
+                Index array for Surface bridge O atoms. The index array should be sorted st. [<upper surface indices>,
+                <lower surface indices>]
             idx_ow (numpy.ndarray):
-                1-d index array for water indicies.
+                1-d index array for water indices.
             M (str, optional):
                 Metal element in rutile strucure. Defaults to 'Ti'.. Defaults to 'Ti'.
 
@@ -1146,8 +1146,8 @@ class SurfTiOBondLenght(AnalysisBase):
         # the name for output files
         self.fn_dist_tioad = os.path.join(self.datdir, "d_TiOad.npy")
         self.fn_dist_tiobr = os.path.join(self.datdir, "d_TiObr.npy")
-        self.fn_indicies = os.path.join(self.datdir, "indicies.dat")
-        # header for output indicies
+        self.fn_indices = os.path.join(self.datdir, "indices.dat")
+        # header for output indices
         self.ind_header = "\t\t".join(["Ti5s", "Obr", "Tibr1", "Tibr2"])
 
     def _prepare(self):
@@ -1159,7 +1159,7 @@ class SurfTiOBondLenght(AnalysisBase):
         self.idx_H = np.where(self._ag.elements == 'H')[0]
         self._idx_obr, self._idx_ti = self.pair_TiObr(
             self.xyz, self.idx_obr, self.idx_M, self.cellpar)
-        self.indicies = np.concatenate(
+        self.indices = np.concatenate(
             [[self.idx_cn5], [self.idx_obr], self._idx_ti.reshape(2, -1)], axis=0)
 
         # -------------------------- prepare temporary arraies --------------------------
@@ -1181,7 +1181,7 @@ class SurfTiOBondLenght(AnalysisBase):
         self.dTiObr = self.dTiObr.reshape(self.n_frames, 2, -1)
         np.save(self.fn_dist_tioad, self.dTiOad)
         np.save(self.fn_dist_tiobr, self.dTiObr)
-        np.savetxt(self.fn_indicies, self.indicies.T,
+        np.savetxt(self.fn_indices, self.indices.T,
                    fmt="%8d", header=self.ind_header)
 
     def get_dTiOad(self):
@@ -1221,7 +1221,7 @@ class dObr_NearestH(AnalysisBase):
         atoms = read("init.cif")
         r110edge = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, cutoff=2.9)
         idx_owat, _ = r110edge.get_wat()
-        ind         = r110edge.get_indicies()
+        ind         = r110edge.get_indices()
         ind['idx_Obr'][0] = np.flip(ind['idx_Obr'][0], axis=1)
         idx_obr  = ind['idx_Obr'].reshape(2, -1)
         idx_hobr1 = ind['idx_hObr_mid'].reshape(2, -1)
@@ -1238,7 +1238,7 @@ class dObr_NearestH(AnalysisBase):
         atoms    = read("init.cif")
         r110     = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)
         idx_owat, _ = r110.get_wat()
-        ind = inp.r110.get_indicies()
+        ind = inp.r110.get_indices()
         ind['idx_Obr'][0] = np.flip(ind['idx_Obr'][0], axis=1)
         idx_obr  = ind['idx_Obr'].reshape(2, -1)
         doh = dObr_NearestH(ag, idx_obr, nrow=r110.nrow, idx_hobr1=None, idx_hobr2=None, idx_eobr=None)
@@ -1253,8 +1253,8 @@ class dObr_NearestH(AnalysisBase):
             atomgroup (MDAnalysis.Atomgroup):
                 Just use all the atoms in your universe. universe.atoms
             idx_obr (numpy.ndarray):
-                Index array for Surface bridge O atoms. The index array should be sorted st. [<upper surface indicies>,
-                <lower surface indicies>]
+                Index array for Surface bridge O atoms. The index array should be sorted st. [<upper surface indices>,
+                <lower surface indices>]
             idx_hobr1 (numpy.ndarray, optional):
                 Use this for <1-11> edge. Index array for surface half-Obr atoms. Defaults to None.
             idx_hobr2 (numpy.ndarray, optional):
@@ -1372,9 +1372,9 @@ class dObr_NearestH(AnalysisBase):
         hist_dat = np.concatenate([[self.r], hist_list], axis=0)
         np.savetxt(self.fn_histObrH, hist_dat.T, fmt="%10.6f", header=header)
 
-    def get_min_OH(self, obr_indicies):
+    def get_min_OH(self, obr_indices):
         xyz = self._ag.positions
-        obr_pos = xyz[obr_indicies, :]
+        obr_pos = xyz[obr_indices, :]
         h_pos = xyz[self.idx_H, :]
         distance_array(obr_pos, h_pos, box=self.cellpar, result=self._dmatrix)
         d_oh_min = self._dmatrix.min(axis=1)
@@ -1409,7 +1409,7 @@ class dObr_NearH(AnalysisBase):
         atoms = read("init.cif")
         r110edge = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, cutoff=2.9)
         idx_owat, _ = r110edge.get_wat()
-        ind         = r110edge.get_indicies()
+        ind         = r110edge.get_indices()
         ind['idx_Obr'][0] = np.flip(ind['idx_Obr'][0], axis=1)
         idx_obr  = ind['idx_Obr'].reshape(2, -1)
         idx_hobr1 = ind['idx_hObr_mid'].reshape(2, -1)
@@ -1426,7 +1426,7 @@ class dObr_NearH(AnalysisBase):
         atoms    = read("init.cif")
         r110     = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)
         idx_owat, _ = r110.get_wat()
-        ind = inp.r110.get_indicies()
+        ind = inp.r110.get_indices()
         ind['idx_Obr'][0] = np.flip(ind['idx_Obr'][0], axis=1)
         idx_obr  = ind['idx_Obr'].reshape(2, -1)
         doh = dObr_NearestH(ag, idx_obr, nrow=r110.nrow, idx_hobr1=None, idx_hobr2=None, idx_eobr=None)
@@ -1441,8 +1441,8 @@ class dObr_NearH(AnalysisBase):
             atomgroup (MDAnalysis.Atomgroup):
                 Just use all the atoms in your universe. universe.atoms
             idx_obr (numpy.ndarray):
-                Index array for Surface bridge O atoms. The index array should be sorted st. [<upper surface indicies>,
-                <lower surface indicies>]
+                Index array for Surface bridge O atoms. The index array should be sorted st. [<upper surface indices>,
+                <lower surface indices>]
             idx_hobr1 (numpy.ndarray, optional):
                 Use this for <1-11> edge. Index array for surface half-Obr atoms. Defaults to None.
             idx_hobr2 (numpy.ndarray, optional):
@@ -1562,9 +1562,9 @@ class dObr_NearH(AnalysisBase):
         hist_dat = np.concatenate([[self.r], hist_list], axis=0)
         np.savetxt(self.fn_histObrH, hist_dat.T, fmt="%10.6f", header=header)
 
-    def get_OH_dist(self, obr_indicies):
+    def get_OH_dist(self, obr_indices):
         xyz = self._ag.positions
-        obr_pos = xyz[obr_indicies, :]
+        obr_pos = xyz[obr_indices, :]
         h_pos = xyz[self.idx_H, :]
         distance_array(obr_pos, h_pos, result=self._dmatrix, box=self.cellpar)
         return np.sort(self._dmatrix, axis=1)[:, :self.n_oh]
@@ -1591,7 +1591,7 @@ class FindSurfaceOadH(AnalysisBase):
         atoms = read("init.cif")
         r110  = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)
         Ow_idx, _ = r110.get_wat()
-        Ti5c_idx  = r110.indicies["idx_M5c"].flatten()
+        Ti5c_idx  = r110.indices["idx_M5c"].flatten()
         findOH   = FindSurfaceOadH(ag, owidx, cn5idx, nrow=r110.nrow)
         findOH.run()
         ```

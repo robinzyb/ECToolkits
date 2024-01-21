@@ -286,7 +286,7 @@ def cellpar2volume(cellpar):
 
 
 def get_watOidx(atoms, M="Ti", d_OH_cutoff=1.2, d_MO_cutoff=2.8, cn_M_cutoff=1):
-    """gets all the water oxygen indicies in rutile (110)-water interface
+    """gets all the water oxygen indices in rutile (110)-water interface
 
     Args:
         atoms (ase.Atoms):
@@ -295,8 +295,8 @@ def get_watOidx(atoms, M="Ti", d_OH_cutoff=1.2, d_MO_cutoff=2.8, cn_M_cutoff=1):
             The metal atom in rutile structrue. Defaults to "Ti".
 
     Returns:
-        watOidx (numpy.ndarray): 0-based indicies for water oxygen atoms.
-        watHidx (numpy.ndarray): 0-based indicies for water hydrogen atoms. (all the hydrogens)
+        watOidx (numpy.ndarray): 0-based indices for water oxygen atoms.
+        watHidx (numpy.ndarray): 0-based indices for water hydrogen atoms. (all the hydrogens)
     """
     xyz = atoms.positions
     cell = atoms.cell.cellpar()
@@ -325,14 +325,14 @@ def interface_2_slab(atoms, M="Ti"):
 
     Returns:
         idx_slab(numpy.ndarray):
-            The indicies for the slab model.
+            The indices for the slab model.
         atoms_slab(ase.atoms):
             Slab model atoms object.
     """
-    indicies = np.arange(atoms.get_global_number_of_atoms())
+    indices = np.arange(atoms.get_global_number_of_atoms())
     idx_ow, idx_hw = get_watOidx(atoms, M="Ti")
     idx_wat = np.append(idx_ow, idx_hw)
-    idx_slab = np.setdiff1d(indicies, idx_wat)
+    idx_slab = np.setdiff1d(indices, idx_wat)
     atoms_slab = atoms[idx_slab]
     return idx_slab, atoms_slab
 
@@ -373,23 +373,23 @@ def get_rotM(vecy, vecz):
     return rotM
 
 
-def sep_upper_lower(z, indicies):
-    """given indicies, seperate them to upper and lower. More specifically, from
-    [<indicies>] to [[<idx_upper>], [<idx_lower>]]
+def sep_upper_lower(z, indices):
+    """given indices, seperate them to upper and lower. More specifically, from
+    [<indices>] to [[<idx_upper>], [<idx_lower>]]
 
     Args:
         z (numpy.ndarray):
             z coordinates
-        indicies (numpy.ndarray):
-            0-based indicies
+        indices (numpy.ndarray):
+            0-based indices
 
     Returns:
         numpy.ndarray: [[<idx_upper>], [<idx_lower>]]
     """
-    z = z[indicies]
+    z = z[indices]
     zmean = z.mean()
-    i1 = indicies[z > zmean]
-    i2 = indicies[z < zmean]
+    i1 = indices[z > zmean]
+    i2 = indices[z < zmean]
     return np.array([i1, i2])
 
 
@@ -400,15 +400,15 @@ def pair_M5c_n_obr(atoms, idx_cn5, idx_obrs, M="Ti"):
         atoms (ASE.Atoms):
             ase atoms of your interface model.
         idx_cn5 (np.ndarray):
-            1-d integer array, which contains indicies for Ti5c atoms.
+            1-d integer array, which contains indices for Ti5c atoms.
         idx_obrs (np.ndarray):
-            1-d integer array, which contains indicies for all the Obr atoms.
+            1-d integer array, which contains indices for all the Obr atoms.
         M (str, optional):
             Metal elements in the rutile structure. Defaults to "Ti".
 
     Returns:
         tuple: (<idx_cn5>, <res_obr>).
-            Paired Ti5c and Obr indicies. Check if they are really paired before you use.
+            Paired Ti5c and Obr indices. Check if they are really paired before you use.
     """
     # obtain the distance matrix between Ti5c and Obr
     xyz1 = atoms.positions[idx_cn5]
@@ -503,7 +503,7 @@ def pair_M5c_n_obr(atoms, idx_cn5, idx_obrs, M="Ti"):
 
 
 # tricks
-def get_sym_edge(atoms, idx_l_edge4=2):
+def get_sym_edge(atoms, idx_l_edge4=0):
     """Translate the rutile <1-11> edge-water interface model s.t. it looks
     pretty and symmetric.
 
@@ -544,7 +544,7 @@ def get_sym_edge(atoms, idx_l_edge4=2):
         ase.Atoms:
             symmetric & pretty-looking edge model
     """
-    target_pos = np.array([0.3, 0.3, 3.5])
+    target_pos = np.array([1.5, 1.5, 3.0])
     trans = target_pos - atoms.positions[idx_l_edge4]
     atoms.translate(trans)
     atoms.wrap()

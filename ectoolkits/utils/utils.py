@@ -1,14 +1,79 @@
 """
 this script put misc function here.
 """
-from ase.geometry.analysis import Analysis
 import numpy as np
 import os
 import shutil
+from random import random
+from ase.geometry.analysis import Analysis
+from ase.build import molecule
+from ..structures.slab import Slab
 
 # frequently used unit convertion
 au2eV = 27.211386245988
 au2A = 0.529177210903
+
+
+def insert_water(atoms, z1, z2, water_num, model='random', space_x=0.3, space_y=0.3, space_z=0.3):
+    # make a copy
+    tmp = atoms.copy()
+    tmp = Slab(tmp)
+    point_x = int(np.linalg.norm(tmp.get_cell()[0])/space_x)
+    point_y = int(np.linalg.norm(tmp.get_cell()[1])/space_y)
+    point_z = int((z2-z1)/space_z)
+    if water_num == 0:
+        return tmp
+    if model == 'grid':
+        water_added_counter = 0
+        for i in np.linspace(0.0, 1.0, point_x):
+            for j in np.linspace(0.0, 1.0, point_y):
+                for k in np.linspace(0.0, 1.0, point_z):
+                    water_z = z1+(z2-z1)*k
+                    cell_vec_a = tmp.get_cell()[0]
+                    cell_vec_b = tmp.get_cell()[1]
+                    water_xyz_pos = cell_vec_a*i + cell_vec_b*j
+                    water_xyz_pos[2] += water_z
+                    H2O = molecule("H2O")
+                    H2O.translate(water_xyz_pos)
+                    tmp.extend(H2O)
+                    O_idx = len(tmp)-3
+                    if len(tmp.get_neighbor_list(O_idx, 2.5)) == 2:
+                        water_added_counter += 1
+                        print("add water at {0}".format(water_xyz_pos))
+                        print("add one water succeessfully")
+                        if water_added_counter == water_num:
+                            print(f"add {water_num} water molecules done")
+                            return tmp
+                    else:
+                        del tmp[-3:]
+                        print(f"reject, the water overlaps with other water at {water_xyz_pos}", end='\r')
+
+        print(f"add {water_added_counter} water molecules, could not find enough space to add water")
+        return tmp
+    elif model == 'random':
+        for i in range(water_num):
+            water_overlap = True
+            while water_overlap:
+                water_z = z1+(z2-z1)*random()
+                cell_vec_a = tmp.get_cell()[0]
+                cell_vec_b = tmp.get_cell()[1]
+                water_xyz_pos = cell_vec_a*random() + cell_vec_b*random()
+                water_xyz_pos[2] += water_z
+                H2O = molecule("H2O")
+                H2O.translate(water_xyz_pos)
+                tmp.extend(H2O)
+                O_idx = len(tmp)-3
+                if len(tmp.get_neighbor_list(O_idx, 2.5)) == 2:
+                    water_overlap = False
+                    print("add water at {0}".format(water_xyz_pos))
+                    print("add one water succeessfully")
+                else:
+                    del tmp[-3:]
+                    print("reject, the water overlaps with other water", end='\r')
+        return tmp
+    else:
+        print("model must be grid or random")
+        return None
 
 
 def get_cum_mean(array):

@@ -65,7 +65,7 @@ inp_to_try  = list(map(R110EdgeInp, ag_to_try, r110edge_to_try))
 @pytest.mark.parametrize('inp', inp_to_try, ids=traj_name_list) # id is a good way to name the test
 def test_pair_M5c_n_obr(inp):
     atoms = inp.r110edge
-    ind = inp.r110edge.get_indicies()
+    ind = inp.r110edge.get_indices()
     ind['idx_M5c'][0] = np.flip(ind['idx_M5c'][0], axis=1)
     cn5idx  = ind['idx_M5c'].reshape(2, -1)
     obr_idx = np.concatenate([ind['idx_Obr'].reshape(2, -1), ind['idx_hObr_upper'].reshape(2, -1)], axis=1)
@@ -104,7 +104,7 @@ class TestRutile110Edge():
         ag       = inp.ag
         r110edge = inp.r110edge
         owidx, _ = r110edge.get_wat()
-        ind      = r110edge.get_indicies()
+        ind      = r110edge.get_indices()
         ind['idx_M5c'][0] = np.flip(ind['idx_M5c'][0], axis=1)
 
         cn5idx = ind['idx_M5c'].reshape(2, -1)
@@ -128,7 +128,7 @@ class TestRutile110Edge():
         ag       = inp.ag
         r110edge = inp.r110edge
         idx_owat, _ = r110edge.get_wat()
-        ind = r110edge.get_indicies()
+        ind = r110edge.get_indices()
         ind['idx_M5c'][0] = np.flip(ind['idx_M5c'][0], axis=1)
         cn5idx  = ind['idx_M5c'].reshape(2, -1)
         # 'idx_hObr_upper' is also known as the last Obr 
@@ -143,7 +143,7 @@ class TestRutile110Edge():
         # test if all output files are dumped correctly
         has_upper_dab  = os.path.isfile(os.path.join(DATA_DIR, "upper-dab.npy"))
         has_lower_dab  = os.path.isfile(os.path.join(DATA_DIR, "lower-dab.npy"))
-        has_ind_Oad    = os.path.isfile(os.path.join(DATA_DIR, "ad_O_indicies.npy"))
+        has_ind_Oad    = os.path.isfile(os.path.join(DATA_DIR, "ad_O_indices.npy"))
         assert (has_upper_dab & has_lower_dab & has_ind_Oad)
    
     def test_dObr_NearestH(self, inp):
@@ -151,7 +151,7 @@ class TestRutile110Edge():
         ag          = inp.ag
         r110edge    = inp.r110edge
         idx_owat, _ = r110edge.get_wat()
-        ind         = r110edge.get_indicies()
+        ind         = r110edge.get_indices()
         ind['idx_Obr'][0] = np.flip(ind['idx_Obr'][0], axis=1)
         idx_obr  = ind['idx_Obr'].reshape(2, -1)
         idx_hobr1 = ind['idx_hObr_mid'].reshape(2, -1)

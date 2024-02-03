@@ -493,13 +493,13 @@ def sort_by_rows(xyz, idx, rotM=None, n_row=2, bridge_along="y"):
     3. the collection of three methods, namely, "group_each_row", "sort_each_row", and "sort_grouped_rows",
     are used to sort each row. For rows without "discontinuity" ("*"), method 'sort_each_row' will suffice.
     However, complexity arise at discontinuity. For example, if we use "o" to denote a discontinuity, we observe
-    ^ y               that after apply the rotation matridx, the two "o" will have the nearly identical 'yy_rot' value. 
-    |                 Hence, in may cases, sorting of this discontinuity is not straitforward. Fortuanetely, this problem is solved 
+    ^ y               that after apply the rotation matridx, the two "o" will have the nearly identical 'yy_rot' value.
+    |                 Hence, in may cases, sorting of this discontinuity is not straitforward. Fortuanetely, this problem is solved
     |---------        if we first treat different segments of the "+" row separately, and for the discontinuity, we use the original
     | *    + |        coordinates to sort the discontinuity (o). A implementation of this algorithm is given in 'sort_grouped_rows'
-    |  *    o|     
-    | o * ...|     
-    |  + *   |     
+    |  *    o|
+    | o * ...|
+    |  + *   |
     ..............
 
     """
@@ -516,9 +516,9 @@ def sort_by_rows(xyz, idx, rotM=None, n_row=2, bridge_along="y"):
         xyz_rot = np.matmul(xyz, rotM)
         xx_rot, yy_rot = xyz_rot[:, 0].copy(), xyz_rot[:, 1].copy()
     else:
-        xy_rot, yy_rot = xx, yy
+        xx_rot, yy_rot = xx, yy
 
-    # Second: group the rows 
+    # Second: group the rows
     def make_groups(idx, xx):
         dm = distance_matrix(xx[idx].reshape(-1, 1), xx[idx].reshape(-1, 1))
         groups = np.unique(dm <= 2, axis=0)
@@ -538,7 +538,7 @@ def sort_by_rows(xyz, idx, rotM=None, n_row=2, bridge_along="y"):
         dm = distance_matrix(coords[id].reshape(-1, 1), coords[id].reshape(-1, 1))
         dm_coarse = np.round(dm)
         groups = np.unique(dm_coarse <= 2, axis=0)
-    
+
         return groups
 
     # Thrid sort along x axis
@@ -559,11 +559,11 @@ def sort_by_rows(xyz, idx, rotM=None, n_row=2, bridge_along="y"):
                 first_elements_coords.append(coords[row_ig[0]])
 
             argsort = np.argsort(first_elements_coords)
-            rows = np.array(rows, dtype=object)[argsort] 
+            rows = np.array(rows, dtype=object)[argsort]
             rows = np.concatenate(rows).astype(int)
             return rows
 
-    idx_sorted_perpendicular_bridge = make_groups(idx, xx_rot) 
+    idx_sorted_perpendicular_bridge = make_groups(idx, xx_rot)
     res = np.zeros_like(idx_sorted_perpendicular_bridge)
 
     for irow in range(n_row):

@@ -650,7 +650,7 @@ document.write(`
 <span class="sd">        atoms = read(&quot;init.cif&quot;)</span>
 <span class="sd">        r110edge = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, cutoff=2.9)</span>
 <span class="sd">        owidx, _ = r110edge.get_wat()</span>
-<span class="sd">        ind      = r110edge.get_indicies()</span>
+<span class="sd">        ind      = r110edge.get_indices()</span>
 <span class="sd">        ind[&#39;idx_M5c&#39;][0] = np.flip(ind[&#39;idx_M5c&#39;][0], axis=1)</span>
 
 <span class="sd">        cn5idx = ind[&#39;idx_M5c&#39;].reshape(2, -1)</span>
@@ -666,7 +666,7 @@ document.write(`
 <span class="sd">        atoms = read(&quot;init.cif&quot;)</span>
 <span class="sd">        r110  = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)</span>
 <span class="sd">        owidx, _ = r110.get_wat()</span>
-<span class="sd">        cn5idx   = r110.get_indicies()[&#39;idx_M5c&#39;]</span>
+<span class="sd">        cn5idx   = r110.get_indices()[&#39;idx_M5c&#39;]</span>
 <span class="sd">        disdeg   = RutileDisDeg(ag, owidx, cn5idx, nrow=r110.nrow)</span>
 <span class="sd">        disdeg.run()</span>
 <span class="sd">        ```</span>
@@ -679,17 +679,17 @@ document.write(`
 <span class="sd">            atomgroup (MDAnalysis.Atomgroup):</span>
 <span class="sd">                Just use all the atoms in your universe. universe.atoms</span>
 <span class="sd">            owidx (np.ndarray):</span>
-<span class="sd">                1-d integer array, which contains the indicies for water oxygen in your inteface model.</span>
+<span class="sd">                1-d integer array, which contains the indices for water oxygen in your inteface model.</span>
 <span class="sd">                you can use medthod &#39;get_watOidx&#39; to get this index.</span>
 <span class="sd">            cn5idx (np.ndarray):</span>
-<span class="sd">                2-d integer array, which contains all the indicies for terrace Ti_{5c} atoms in your</span>
+<span class="sd">                2-d integer array, which contains all the indices for terrace Ti_{5c} atoms in your</span>
 <span class="sd">                interface model. This can be obtained using Method &#39;Rutile1p11Edge&#39; or &#39;Rutile110&#39;.</span>
 <span class="sd">            edge4idx (np.ndarray, optional):</span>
-<span class="sd">                2-d integer array, which contains all the indicies for edge Ti_{4c} atoms in your</span>
+<span class="sd">                2-d integer array, which contains all the indices for edge Ti_{4c} atoms in your</span>
 <span class="sd">                interface model. This option is specially tailored for \hkl&lt;1-11&gt; edge model. You don&#39;t need</span>
 <span class="sd">                to specify this. Defaults to None.</span>
 <span class="sd">            edge5idx (np.ndarray, optional):</span>
-<span class="sd">                2-d integer array, which contains all the indicies for edge Ti_{5c} atoms in your</span>
+<span class="sd">                2-d integer array, which contains all the indices for edge Ti_{5c} atoms in your</span>
 <span class="sd">                interface model. This option is specially tailored for \hkl&lt;1-11&gt; edge model. You don&#39;t need</span>
 <span class="sd">                to specify this. Defaults to None.</span>
 <span class="sd">            M (str, optional):</span>
@@ -841,11 +841,11 @@ document.write(`
 
 <div class="viewcode-block" id="RutileDisDeg.get_neighbor_oxygen"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.RutileDisDeg.get_neighbor_oxygen">[docs]</a>    <span class="k">def</span> <span class="nf">get_neighbor_oxygen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx_ti</span><span class="p">,</span> <span class="n">res_dm</span><span class="p">,</span> <span class="n">res_idx</span><span class="p">,</span> <span class="n">n_ow</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Give a group of ti atoms, find their neighboring water oxygen within cutoff rasius `self.cutoff`.</span>
-<span class="sd">        Returns water oxygen indicies</span>
+<span class="sd">        Returns water oxygen indices</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            idx_ti (np.ndarray):</span>
-<span class="sd">                1-d integer array containing indicies for Ti5c atoms.</span>
+<span class="sd">                1-d integer array containing indices for Ti5c atoms.</span>
 <span class="sd">            res_dm (np.ndarray):</span>
 <span class="sd">                2-d distance array containing pair-wise distance between Ti and all water oxygen atoms.</span>
 <span class="sd">                This array is prepared in `_prepare`.</span>
@@ -855,7 +855,7 @@ document.write(`
 
 <span class="sd">        Returns:</span>
 <span class="sd">            np.ndarray:</span>
-<span class="sd">                1-d array containing adsorbed water oxygen indicies. If these is no water oxygen within the</span>
+<span class="sd">                1-d array containing adsorbed water oxygen indices. If these is no water oxygen within the</span>
 <span class="sd">                cutoff raidius, a masking value of &#39;-1&#39; is provided</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># group_idx</span>
@@ -906,7 +906,7 @@ document.write(`
     <span class="c1"># stale rutile dissociation degree analysis.</span>
     <span class="c1"># Feature:</span>
     <span class="c1"># - use hard cutoff (1.2 A) to determine proton dissociation</span>
-    <span class="c1"># - will save raw data: coordination number surf-water and surf-water oxygen atom indicies</span>
+    <span class="c1"># - will save raw data: coordination number surf-water and surf-water oxygen atom indices</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;MDAnalysis class calculating surface water dissociation degree for rutile \hkl(110)-water interface.</span>
 <span class="sd">    Besides dissociation, this method will also output surface adsorption water oxygen index, which is useful for</span>
 <span class="sd">    TiO2-water interface, because adsorbed water in this system sometimes exchange with sub-interface water.</span>
@@ -920,7 +920,7 @@ document.write(`
 <span class="sd">        vecy = np.array([26.34844236,  1.8642182,  -2.0615678])</span>
 <span class="sd">        vecz = np.array([0.49339,  -0.070221,  9.201458])</span>
 <span class="sd">        r110edge = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, M=&quot;Ti&quot;, nrow=2)</span>
-<span class="sd">        ind = r110edge.get_indicies()</span>
+<span class="sd">        ind = r110edge.get_indices()</span>
 <span class="sd">        idx_ow, _ = r110edge.get_wat()</span>
 <span class="sd">        ind[&#39;idx_M5c&#39;][0] = np.flip(ind[&#39;idx_M5c&#39;][0], axis=1)</span>
 <span class="sd">        cn5idx = ind[&#39;idx_M5c&#39;].reshape(2, -1)</span>
@@ -938,17 +938,17 @@ document.write(`
 <span class="sd">            atomgroup (MDAnalysis.Atomgroup):</span>
 <span class="sd">                Just use all the atoms in your universe. universe.atoms</span>
 <span class="sd">            owidx (np.ndarray):</span>
-<span class="sd">                1-d integer array, which contains the indicies for water oxygen in your inteface model.</span>
+<span class="sd">                1-d integer array, which contains the indices for water oxygen in your inteface model.</span>
 <span class="sd">                you can use medthod &#39;get_watOidx&#39; to get this index.</span>
 <span class="sd">            cn5idx (np.ndarray):</span>
-<span class="sd">                2-d integer array, which contains all the indicies for terrace Ti_{5c} atoms in your</span>
+<span class="sd">                2-d integer array, which contains all the indices for terrace Ti_{5c} atoms in your</span>
 <span class="sd">                interface model. This can be obtained using Method &#39;Rutile1p11Edge&#39; or &#39;Rutile110&#39;.</span>
 <span class="sd">            edge4idx (np.ndarray, optional):</span>
-<span class="sd">                2-d integer array, which contains all the indicies for edge Ti_{4c} atoms in your</span>
+<span class="sd">                2-d integer array, which contains all the indices for edge Ti_{4c} atoms in your</span>
 <span class="sd">                interface model. This option is specially tailored for \hkl&lt;1-11&gt; edge model. You don&#39;t need</span>
 <span class="sd">                to specify this. Defaults to None.</span>
 <span class="sd">            edge5idx (np.ndarray, optional):</span>
-<span class="sd">                2-d integer array, which contains all the indicies for edge Ti_{5c} atoms in your</span>
+<span class="sd">                2-d integer array, which contains all the indices for edge Ti_{5c} atoms in your</span>
 <span class="sd">                interface model. This option is specially tailored for \hkl&lt;1-11&gt; edge model. You don&#39;t need</span>
 <span class="sd">                to specify this. Defaults to None.</span>
 <span class="sd">            M (str, optional):</span>
@@ -989,11 +989,11 @@ document.write(`
         <span class="n">create_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">figdir</span><span class="p">,</span> <span class="n">bk</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="c1"># the name for output files</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fn_adind_cn5</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datdir</span><span class="p">,</span> <span class="s2">&quot;ad_O_indicies.npy&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fn_adind_cn5</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datdir</span><span class="p">,</span> <span class="s2">&quot;ad_O_indices.npy&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fn_adind_edge5</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">datdir</span><span class="p">,</span> <span class="s2">&quot;ad_O_indicies-edge5.npy&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">datdir</span><span class="p">,</span> <span class="s2">&quot;ad_O_indices-edge5.npy&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fn_adind_edge4</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">datdir</span><span class="p">,</span> <span class="s2">&quot;ad_O_indicies-edge4.npy&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">datdir</span><span class="p">,</span> <span class="s2">&quot;ad_O_indices-edge4.npy&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fn_cn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datdir</span><span class="p">,</span> <span class="s2">&quot;SurfaceOxygenCN.npy&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fn_disdeg5s</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datdir</span><span class="p">,</span> <span class="s2">&quot;disdeg-Ti5s.npy&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fn_disdeg4e</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datdir</span><span class="p">,</span> <span class="s2">&quot;disdeg-Ti4e.npy&quot;</span><span class="p">)</span>
@@ -1017,53 +1017,53 @@ document.write(`
 
         <span class="c1"># ---------------------------- prepare results array ----------------------------</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_edge4idx</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_edge5idx</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ad_indicies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ad_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">disdeg5s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">disdeg4e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">disdeg5e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_single_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># get &#39;neighbor&#39; (Adsorbed) oxygen indicies</span>
-        <span class="c1"># indicies being -1 means no adsorbed oxygen atoms</span>
+        <span class="c1"># get &#39;neighbor&#39; (Adsorbed) oxygen indices</span>
+        <span class="c1"># indices being -1 means no adsorbed oxygen atoms</span>
         <span class="c1"># within a cutoff sphere (self.cutoff)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ad_indicies</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_index</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span><span class="p">]</span> <span class="o">=</span> \
+        <span class="bp">self</span><span class="o">.</span><span class="n">ad_indices</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_index</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span><span class="p">]</span> <span class="o">=</span> \
             <span class="bp">self</span><span class="o">.</span><span class="n">get_neighbor_oxygen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper_cn5idx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dm_cn5</span><span class="p">,</span> <span class="n">n_ow</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ad_indicies</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_index</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span><span class="p">]</span> <span class="o">=</span> \
+        <span class="bp">self</span><span class="o">.</span><span class="n">ad_indices</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_index</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span><span class="p">]</span> <span class="o">=</span> \
             <span class="bp">self</span><span class="o">.</span><span class="n">get_neighbor_oxygen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lower_cn5idx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dm_cn5</span><span class="p">,</span> <span class="n">n_ow</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_edge5idx</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ad_indicies</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_index</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span><span class="p">:(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">n_edge5idx</span><span class="p">)]</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">ad_indices</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_index</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span><span class="p">:(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">n_edge5idx</span><span class="p">)]</span> <span class="o">=</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">get_neighbor_oxygen</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">upper_edge5idx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dm_edge5</span><span class="p">,</span> <span class="n">n_ow</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ad_indicies</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_index</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span><span class="p">:(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">n_edge5idx</span><span class="p">)]</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">ad_indices</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_index</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span><span class="p">:(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">n_edge5idx</span><span class="p">)]</span> <span class="o">=</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">get_neighbor_oxygen</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">lower_edge5idx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dm_edge5</span><span class="p">,</span> <span class="n">n_ow</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_edge4idx</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ad_indicies</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_index</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">n_edge5idx</span><span class="p">):]</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">ad_indices</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_index</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">n_edge5idx</span><span class="p">):]</span> <span class="o">=</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">get_neighbor_oxygen</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">upper_edge4idx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dm_edge4</span><span class="p">,</span> <span class="n">n_ow</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ad_indicies</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_index</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">n_edge5idx</span><span class="p">):]</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">ad_indices</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_index</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">n_edge5idx</span><span class="p">):]</span> <span class="o">=</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">get_neighbor_oxygen</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">upper_edge4idx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dm_edge4</span><span class="p">,</span> <span class="n">n_ow</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
         <span class="c1"># calculate the coordination numnber for the oxygen</span>
-        <span class="n">idx_o</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ad_indicies</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_index</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">idx_o</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>   <span class="c1"># mask using -1 indicies</span>
+        <span class="n">idx_o</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ad_indices</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_index</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">idx_o</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>   <span class="c1"># mask using -1 indices</span>
         <span class="n">cn</span> <span class="o">=</span> <span class="n">count_cn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ag</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">idx_o</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ag</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idx_H</span><span class="p">],</span>
                       <span class="n">cutoff_hi</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">cutoff_lo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
         <span class="n">cn</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cn</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">cn</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_conclude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">res_cn5_Oind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ad_indicies</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span><span class="p">]</span>
+        <span class="n">res_cn5_Oind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ad_indices</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span><span class="p">]</span>
         <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fn_adind_cn5</span><span class="p">,</span> <span class="n">res_cn5_Oind</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_edge5idx</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">res_edge5_Oind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ad_indicies</span><span class="p">[:,</span> <span class="p">:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span><span class="p">:(</span>
+            <span class="n">res_edge5_Oind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ad_indices</span><span class="p">[:,</span> <span class="p">:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span><span class="p">:(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">n_edge5idx</span><span class="p">)]</span>
             <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fn_adind_edge5</span><span class="p">,</span> <span class="n">res_edge5_Oind</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_edge4idx</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">res_edge4_Oind</span> <span class="o">=</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">ad_indicies</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">n_edge5idx</span><span class="p">):]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ad_indices</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cn5idx</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">n_edge5idx</span><span class="p">):]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span><span class="p">,</span>
                                                                                  <span class="mi">2</span><span class="p">,</span>
                                                                                  <span class="bp">self</span><span class="o">.</span><span class="n">n_edge4idx</span><span class="p">,</span>
                                                                                  <span class="mi">2</span><span class="p">)</span>
@@ -1080,11 +1080,11 @@ document.write(`
 
 <div class="viewcode-block" id="staleRutileDisDeg.get_neighbor_oxygen"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.staleRutileDisDeg.get_neighbor_oxygen">[docs]</a>    <span class="k">def</span> <span class="nf">get_neighbor_oxygen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx_ti</span><span class="p">,</span> <span class="n">res_dm</span><span class="p">,</span> <span class="n">n_ow</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Give a group of ti atoms, find their neighboring water oxygen within cutoff rasius `self.cutoff`.</span>
-<span class="sd">        Returns water oxygen indicies</span>
+<span class="sd">        Returns water oxygen indices</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            idx_ti (np.ndarray):</span>
-<span class="sd">                1-d integer array containing indicies for Ti5c atoms.</span>
+<span class="sd">                1-d integer array containing indices for Ti5c atoms.</span>
 <span class="sd">            res_dm (np.ndarray):</span>
 <span class="sd">                2-d distance array containing pair-wise distance between Ti and all water oxygen atoms.</span>
 <span class="sd">                This array is prepared in `_prepare`.</span>
@@ -1094,7 +1094,7 @@ document.write(`
 
 <span class="sd">        Returns:</span>
 <span class="sd">            np.ndarray:</span>
-<span class="sd">                1-d array containing adsorbed water oxygen indicies. If these is no water oxygen within the</span>
+<span class="sd">                1-d array containing adsorbed water oxygen indices. If these is no water oxygen within the</span>
 <span class="sd">                cutoff raidius, a masking value of &#39;-1&#39; is provided</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># group_idx</span>
@@ -1120,7 +1120,7 @@ document.write(`
 <span class="sd">        atoms = read(os.path.join(&quot;init.cif&quot;))</span>
 <span class="sd">        r110  = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)</span>
 <span class="sd">        idx_owat, _ = r110.get_wat()</span>
-<span class="sd">        ind = edge_water.get_indicies()</span>
+<span class="sd">        ind = edge_water.get_indices()</span>
 <span class="sd">        # split cn5idx and obr_idx to [&lt;upper idx&gt;, &lt;lower idx&gt;]</span>
 <span class="sd">        idx_cn5     = ind[&#39;idx_M5c&#39;].reshape(2, -1)</span>
 <span class="sd">        idx_obr     = ind[&#39;idx_Obr&#39;].reshape(2, -1)</span>
@@ -1136,7 +1136,7 @@ document.write(`
 <span class="sd">        vecy = np.array([26.34844236,  1.8642182,  -2.0615678])</span>
 <span class="sd">        vecz = np.array([0.49339,  -0.070221,  9.201458])</span>
 <span class="sd">        r110edge = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, M=&quot;Ti&quot;, nrow=2)</span>
-<span class="sd">        ind = r110edge.get_indicies()</span>
+<span class="sd">        ind = r110edge.get_indices()</span>
 <span class="sd">        ind[&#39;idx_M5c&#39;][0] = np.flip(ind[&#39;idx_M5c&#39;][0], axis=1)</span>
 <span class="sd">        idx_cn5 = ind[&#39;idx_M5c&#39;].reshape(2, -1)</span>
 <span class="sd">        idx_obr = np.concatenate([ind[&#39;idx_Obr&#39;].reshape(2, -1),</span>
@@ -1157,16 +1157,16 @@ document.write(`
 <span class="sd">            atomgroup (MDAnalysis.Atomgroup):</span>
 <span class="sd">                Just use all the atoms in your universe. universe.atoms</span>
 <span class="sd">            idx_cn5 (np.ndarray):</span>
-<span class="sd">                2-d integer array, with shape (2, n_cn5), which contains the upper and lower indicies for</span>
+<span class="sd">                2-d integer array, with shape (2, n_cn5), which contains the upper and lower indices for</span>
 <span class="sd">                terrace Ti_{5c} atoms in your interface model. This can be obtained using Method &#39;Rutile1p11Edge&#39;</span>
 <span class="sd">                or &#39;Rutile110&#39;.</span>
 <span class="sd">            idx_adO (np.ndarray):</span>
-<span class="sd">                3-d integer array, with shape (n_frames, 2, n_cn5), which contains the indicies of adsorbed</span>
+<span class="sd">                3-d integer array, with shape (n_frames, 2, n_cn5), which contains the indices of adsorbed</span>
 <span class="sd">                water oxygen atoms at every MD snapshot. This array is obtained using MDAnalsis analysis</span>
 <span class="sd">                class: RutileDisDeg.</span>
 <span class="sd">            idx_obr (np.ndarray):</span>
-<span class="sd">                3-d integer array, with shape (2, n_cn5, 2), which contains the upper and lower indicies for</span>
-<span class="sd">                two rows of bridge oxygen indicies corresponding to `idx_cn5`. This can be obtained using Method</span>
+<span class="sd">                3-d integer array, with shape (2, n_cn5, 2), which contains the upper and lower indices for</span>
+<span class="sd">                two rows of bridge oxygen indices corresponding to `idx_cn5`. This can be obtained using Method</span>
 <span class="sd">                &#39;pair_M5c_n_obr&#39;.</span>
 <span class="sd">            ref_vec (np.ndarray, optional):</span>
 <span class="sd">                reference vector v_r. The horizontal distances between adsorption oxygen and pairing bridge oxygen</span>
@@ -1218,7 +1218,7 @@ document.write(`
         <span class="c1"># the file names for output data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fn_upperdab</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datdir</span><span class="p">,</span> <span class="s2">&quot;upper-dab.npy&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fn_lowerdab</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datdir</span><span class="p">,</span> <span class="s2">&quot;lower-dab.npy&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fn_adind_cn5</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datdir</span><span class="p">,</span> <span class="s2">&quot;ad_O_indicies.npy&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fn_adind_cn5</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datdir</span><span class="p">,</span> <span class="s2">&quot;ad_O_indices.npy&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># ------------------------ initialize usefule constants -------------------------</span>
@@ -1275,12 +1275,12 @@ document.write(`
 
 <span class="sd">        Args:</span>
 <span class="sd">            idx_adO (np.ndarray):</span>
-<span class="sd">                indicies of ad water oxygen atoms. Use -1 as masking marker, meaning didn&#39;t found Obr</span>
+<span class="sd">                indices of ad water oxygen atoms. Use -1 as masking marker, meaning didn&#39;t found Obr</span>
 <span class="sd">                whthin cutoff. (see analysis class `RutileDisDeg`)</span>
 <span class="sd">            idx_obr1 (np.ndarray):</span>
-<span class="sd">                indicies of row#1 of bridge oxygen atoms.</span>
+<span class="sd">                indices of row#1 of bridge oxygen atoms.</span>
 <span class="sd">            idx_obr2 (np.ndarray):</span>
-<span class="sd">                indicies of row#2 of bridge oxygen atoms.</span>
+<span class="sd">                indices of row#2 of bridge oxygen atoms.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            tuple (np.ndarray, np.ndarray):</span>
@@ -1305,11 +1305,11 @@ document.write(`
 
 <div class="viewcode-block" id="dAdBridge.get_neighbor_oxygen"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.dAdBridge.get_neighbor_oxygen">[docs]</a>    <span class="k">def</span> <span class="nf">get_neighbor_oxygen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx_ti</span><span class="p">,</span> <span class="n">res_dm</span><span class="p">,</span> <span class="n">n_ow</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Give a group of ti atoms, find their neighboring water oxygen within cutoff rasius `self.cutoff`.</span>
-<span class="sd">        Returns water oxygen indicies</span>
+<span class="sd">        Returns water oxygen indices</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            idx_ti (np.ndarray):</span>
-<span class="sd">                1-d integer array containing indicies for Ti5c atoms.</span>
+<span class="sd">                1-d integer array containing indices for Ti5c atoms.</span>
 <span class="sd">            res_dm (np.ndarray):</span>
 <span class="sd">                2-d distance array containing pair-wise distance between Ti and all water oxygen atoms.</span>
 <span class="sd">                This array is prepared in `_prepare`.</span>
@@ -1319,7 +1319,7 @@ document.write(`
 
 <span class="sd">        Returns:</span>
 <span class="sd">            np.ndarray:</span>
-<span class="sd">                1-d array containing adsorbed water oxygen indicies. If these is no water oxygen within the</span>
+<span class="sd">                1-d array containing adsorbed water oxygen indices. If these is no water oxygen within the</span>
 <span class="sd">                cutoff raidius, a masking value of &#39;-1&#39; is provided</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># group_idx</span>
@@ -1344,7 +1344,7 @@ document.write(`
 <span class="sd">        ```python</span>
 <span class="sd">        atoms  = read(os.path.join(&quot;init.cif&quot;))</span>
 <span class="sd">        r110   = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)</span>
-<span class="sd">        n_ti5c = r110.get_indicies()[&#39;idx_M5c&#39;].flatten().shape[0]//2</span>
+<span class="sd">        n_ti5c = r110.get_indices()[&#39;idx_M5c&#39;].flatten().shape[0]//2</span>
 <span class="sd">        dil    = dInterLayer(ag, n_ti5c)</span>
 <span class="sd">        dil.run()</span>
 <span class="sd">        ```</span>
@@ -1459,7 +1459,7 @@ document.write(`
 <span class="sd">        atoms = read(os.path.join(&quot;init.cif&quot;))</span>
 <span class="sd">        r110  = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)</span>
 <span class="sd">        idx_owat, _ = r110.get_wat()</span>
-<span class="sd">        ind = inp.r110.get_indicies()</span>
+<span class="sd">        ind = inp.r110.get_indices()</span>
 <span class="sd">        ind[&#39;idx_M5c&#39;][0] = np.flip(ind[&#39;idx_M5c&#39;][0], axis=1)</span>
 <span class="sd">        ind[&#39;idx_Obr&#39;][0] = np.flip(ind[&#39;idx_M5c&#39;][0], axis=1)</span>
 <span class="sd">        idx_cn5  = ind[&#39;idx_M5c&#39;].reshape(2, -1)</span>
@@ -1476,13 +1476,13 @@ document.write(`
 <span class="sd">            atomgroup (MDAnalysis.Atomgroup):</span>
 <span class="sd">                Just use all the atoms in your universe. universe.atoms</span>
 <span class="sd">            idx_cn5 (numpy.ndarray):</span>
-<span class="sd">                Index array for 5-coordinated Surface Ti. The index array should be sorted st. [&lt;upper surface indicies&gt;,</span>
-<span class="sd">                &lt;lower surface indicies&gt;]</span>
+<span class="sd">                Index array for 5-coordinated Surface Ti. The index array should be sorted st. [&lt;upper surface indices&gt;,</span>
+<span class="sd">                &lt;lower surface indices&gt;]</span>
 <span class="sd">            idx_obr (numpy.ndarray):</span>
-<span class="sd">                Index array for Surface bridge O atoms. The index array should be sorted st. [&lt;upper surface indicies&gt;,</span>
-<span class="sd">                &lt;lower surface indicies&gt;]</span>
+<span class="sd">                Index array for Surface bridge O atoms. The index array should be sorted st. [&lt;upper surface indices&gt;,</span>
+<span class="sd">                &lt;lower surface indices&gt;]</span>
 <span class="sd">            idx_ow (numpy.ndarray):</span>
-<span class="sd">                1-d index array for water indicies.</span>
+<span class="sd">                1-d index array for water indices.</span>
 <span class="sd">            M (str, optional):</span>
 <span class="sd">                Metal element in rutile strucure. Defaults to &#39;Ti&#39;.. Defaults to &#39;Ti&#39;.</span>
 
@@ -1509,8 +1509,8 @@ document.write(`
         <span class="c1"># the name for output files</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fn_dist_tioad</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datdir</span><span class="p">,</span> <span class="s2">&quot;d_TiOad.npy&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fn_dist_tiobr</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datdir</span><span class="p">,</span> <span class="s2">&quot;d_TiObr.npy&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fn_indicies</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datdir</span><span class="p">,</span> <span class="s2">&quot;indicies.dat&quot;</span><span class="p">)</span>
-        <span class="c1"># header for output indicies</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fn_indices</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datdir</span><span class="p">,</span> <span class="s2">&quot;indices.dat&quot;</span><span class="p">)</span>
+        <span class="c1"># header for output indices</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ind_header</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\t\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;Ti5s&quot;</span><span class="p">,</span> <span class="s2">&quot;Obr&quot;</span><span class="p">,</span> <span class="s2">&quot;Tibr1&quot;</span><span class="p">,</span> <span class="s2">&quot;Tibr2&quot;</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="nf">_prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1522,7 +1522,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">idx_H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ag</span><span class="o">.</span><span class="n">elements</span> <span class="o">==</span> <span class="s1">&#39;H&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_idx_obr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_idx_ti</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pair_TiObr</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">xyz</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx_obr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx_M</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
             <span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">idx_cn5</span><span class="p">],</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idx_obr</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_idx_ti</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
         <span class="c1"># -------------------------- prepare temporary arraies --------------------------</span>
@@ -1544,7 +1544,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">dTiObr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dTiObr</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fn_dist_tioad</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dTiOad</span><span class="p">)</span>
         <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fn_dist_tiobr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dTiObr</span><span class="p">)</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fn_indicies</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">indicies</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fn_indices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
                    <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%8d</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ind_header</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SurfTiOBondLenght.get_dTiOad"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.SurfTiOBondLenght.get_dTiOad">[docs]</a>    <span class="k">def</span> <span class="nf">get_dTiOad</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1584,7 +1584,7 @@ document.write(`
 <span class="sd">        atoms = read(&quot;init.cif&quot;)</span>
 <span class="sd">        r110edge = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, cutoff=2.9)</span>
 <span class="sd">        idx_owat, _ = r110edge.get_wat()</span>
-<span class="sd">        ind         = r110edge.get_indicies()</span>
+<span class="sd">        ind         = r110edge.get_indices()</span>
 <span class="sd">        ind[&#39;idx_Obr&#39;][0] = np.flip(ind[&#39;idx_Obr&#39;][0], axis=1)</span>
 <span class="sd">        idx_obr  = ind[&#39;idx_Obr&#39;].reshape(2, -1)</span>
 <span class="sd">        idx_hobr1 = ind[&#39;idx_hObr_mid&#39;].reshape(2, -1)</span>
@@ -1601,7 +1601,7 @@ document.write(`
 <span class="sd">        atoms    = read(&quot;init.cif&quot;)</span>
 <span class="sd">        r110     = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)</span>
 <span class="sd">        idx_owat, _ = r110.get_wat()</span>
-<span class="sd">        ind = inp.r110.get_indicies()</span>
+<span class="sd">        ind = inp.r110.get_indices()</span>
 <span class="sd">        ind[&#39;idx_Obr&#39;][0] = np.flip(ind[&#39;idx_Obr&#39;][0], axis=1)</span>
 <span class="sd">        idx_obr  = ind[&#39;idx_Obr&#39;].reshape(2, -1)</span>
 <span class="sd">        doh = dObr_NearestH(ag, idx_obr, nrow=r110.nrow, idx_hobr1=None, idx_hobr2=None, idx_eobr=None)</span>
@@ -1616,8 +1616,8 @@ document.write(`
 <span class="sd">            atomgroup (MDAnalysis.Atomgroup):</span>
 <span class="sd">                Just use all the atoms in your universe. universe.atoms</span>
 <span class="sd">            idx_obr (numpy.ndarray):</span>
-<span class="sd">                Index array for Surface bridge O atoms. The index array should be sorted st. [&lt;upper surface indicies&gt;,</span>
-<span class="sd">                &lt;lower surface indicies&gt;]</span>
+<span class="sd">                Index array for Surface bridge O atoms. The index array should be sorted st. [&lt;upper surface indices&gt;,</span>
+<span class="sd">                &lt;lower surface indices&gt;]</span>
 <span class="sd">            idx_hobr1 (numpy.ndarray, optional):</span>
 <span class="sd">                Use this for &lt;1-11&gt; edge. Index array for surface half-Obr atoms. Defaults to None.</span>
 <span class="sd">            idx_hobr2 (numpy.ndarray, optional):</span>
@@ -1735,9 +1735,9 @@ document.write(`
         <span class="n">hist_dat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([[</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">],</span> <span class="n">hist_list</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fn_histObrH</span><span class="p">,</span> <span class="n">hist_dat</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%10.6f</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">)</span>
 
-<div class="viewcode-block" id="dObr_NearestH.get_min_OH"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.dObr_NearestH.get_min_OH">[docs]</a>    <span class="k">def</span> <span class="nf">get_min_OH</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obr_indicies</span><span class="p">):</span>
+<div class="viewcode-block" id="dObr_NearestH.get_min_OH"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.dObr_NearestH.get_min_OH">[docs]</a>    <span class="k">def</span> <span class="nf">get_min_OH</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obr_indices</span><span class="p">):</span>
         <span class="n">xyz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ag</span><span class="o">.</span><span class="n">positions</span>
-        <span class="n">obr_pos</span> <span class="o">=</span> <span class="n">xyz</span><span class="p">[</span><span class="n">obr_indicies</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">obr_pos</span> <span class="o">=</span> <span class="n">xyz</span><span class="p">[</span><span class="n">obr_indices</span><span class="p">,</span> <span class="p">:]</span>
         <span class="n">h_pos</span> <span class="o">=</span> <span class="n">xyz</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idx_H</span><span class="p">,</span> <span class="p">:]</span>
         <span class="n">distance_array</span><span class="p">(</span><span class="n">obr_pos</span><span class="p">,</span> <span class="n">h_pos</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dmatrix</span><span class="p">)</span>
         <span class="n">d_oh_min</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dmatrix</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -1772,7 +1772,7 @@ document.write(`
 <span class="sd">        atoms = read(&quot;init.cif&quot;)</span>
 <span class="sd">        r110edge = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, cutoff=2.9)</span>
 <span class="sd">        idx_owat, _ = r110edge.get_wat()</span>
-<span class="sd">        ind         = r110edge.get_indicies()</span>
+<span class="sd">        ind         = r110edge.get_indices()</span>
 <span class="sd">        ind[&#39;idx_Obr&#39;][0] = np.flip(ind[&#39;idx_Obr&#39;][0], axis=1)</span>
 <span class="sd">        idx_obr  = ind[&#39;idx_Obr&#39;].reshape(2, -1)</span>
 <span class="sd">        idx_hobr1 = ind[&#39;idx_hObr_mid&#39;].reshape(2, -1)</span>
@@ -1789,7 +1789,7 @@ document.write(`
 <span class="sd">        atoms    = read(&quot;init.cif&quot;)</span>
 <span class="sd">        r110     = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)</span>
 <span class="sd">        idx_owat, _ = r110.get_wat()</span>
-<span class="sd">        ind = inp.r110.get_indicies()</span>
+<span class="sd">        ind = inp.r110.get_indices()</span>
 <span class="sd">        ind[&#39;idx_Obr&#39;][0] = np.flip(ind[&#39;idx_Obr&#39;][0], axis=1)</span>
 <span class="sd">        idx_obr  = ind[&#39;idx_Obr&#39;].reshape(2, -1)</span>
 <span class="sd">        doh = dObr_NearestH(ag, idx_obr, nrow=r110.nrow, idx_hobr1=None, idx_hobr2=None, idx_eobr=None)</span>
@@ -1804,8 +1804,8 @@ document.write(`
 <span class="sd">            atomgroup (MDAnalysis.Atomgroup):</span>
 <span class="sd">                Just use all the atoms in your universe. universe.atoms</span>
 <span class="sd">            idx_obr (numpy.ndarray):</span>
-<span class="sd">                Index array for Surface bridge O atoms. The index array should be sorted st. [&lt;upper surface indicies&gt;,</span>
-<span class="sd">                &lt;lower surface indicies&gt;]</span>
+<span class="sd">                Index array for Surface bridge O atoms. The index array should be sorted st. [&lt;upper surface indices&gt;,</span>
+<span class="sd">                &lt;lower surface indices&gt;]</span>
 <span class="sd">            idx_hobr1 (numpy.ndarray, optional):</span>
 <span class="sd">                Use this for &lt;1-11&gt; edge. Index array for surface half-Obr atoms. Defaults to None.</span>
 <span class="sd">            idx_hobr2 (numpy.ndarray, optional):</span>
@@ -1925,9 +1925,9 @@ document.write(`
         <span class="n">hist_dat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([[</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">],</span> <span class="n">hist_list</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fn_histObrH</span><span class="p">,</span> <span class="n">hist_dat</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%10.6f</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">)</span>
 
-<div class="viewcode-block" id="dObr_NearH.get_OH_dist"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.dObr_NearH.get_OH_dist">[docs]</a>    <span class="k">def</span> <span class="nf">get_OH_dist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obr_indicies</span><span class="p">):</span>
+<div class="viewcode-block" id="dObr_NearH.get_OH_dist"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.dObr_NearH.get_OH_dist">[docs]</a>    <span class="k">def</span> <span class="nf">get_OH_dist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obr_indices</span><span class="p">):</span>
         <span class="n">xyz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ag</span><span class="o">.</span><span class="n">positions</span>
-        <span class="n">obr_pos</span> <span class="o">=</span> <span class="n">xyz</span><span class="p">[</span><span class="n">obr_indicies</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">obr_pos</span> <span class="o">=</span> <span class="n">xyz</span><span class="p">[</span><span class="n">obr_indices</span><span class="p">,</span> <span class="p">:]</span>
         <span class="n">h_pos</span> <span class="o">=</span> <span class="n">xyz</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idx_H</span><span class="p">,</span> <span class="p">:]</span>
         <span class="n">distance_array</span><span class="p">(</span><span class="n">obr_pos</span><span class="p">,</span> <span class="n">h_pos</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dmatrix</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dmatrix</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_oh</span><span class="p">]</span></div>
@@ -1954,7 +1954,7 @@ document.write(`
 <span class="sd">        atoms = read(&quot;init.cif&quot;)</span>
 <span class="sd">        r110  = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)</span>
 <span class="sd">        Ow_idx, _ = r110.get_wat()</span>
-<span class="sd">        Ti5c_idx  = r110.indicies[&quot;idx_M5c&quot;].flatten()</span>
+<span class="sd">        Ti5c_idx  = r110.indices[&quot;idx_M5c&quot;].flatten()</span>
 <span class="sd">        findOH   = FindSurfaceOadH(ag, owidx, cn5idx, nrow=r110.nrow)</span>
 <span class="sd">        findOH.run()</span>
 <span class="sd">        ```</span>

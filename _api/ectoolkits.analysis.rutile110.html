@@ -426,7 +426,7 @@ Usage Examples:</p>
 <span class="pre">atoms</span> <span class="pre">=</span> <span class="pre">read(&quot;init.cif&quot;)</span>
 <span class="pre">r110</span>&#160; <span class="pre">=</span> <span class="pre">Rutile110(atoms,</span> <span class="pre">nrow=nrow,</span> <span class="pre">bridge_along=bridge_along)</span>
 <span class="pre">Ow_idx,</span> <span class="pre">_</span> <span class="pre">=</span> <span class="pre">r110.get_wat()</span>
-<span class="pre">Ti5c_idx</span>&#160; <span class="pre">=</span> <span class="pre">r110.indicies[&quot;idx_M5c&quot;].flatten()</span>
+<span class="pre">Ti5c_idx</span>&#160; <span class="pre">=</span> <span class="pre">r110.indices[&quot;idx_M5c&quot;].flatten()</span>
 <span class="pre">findOH</span>&#160;&#160; <span class="pre">=</span> <span class="pre">FindSurfaceOadH(ag,</span> <span class="pre">owidx,</span> <span class="pre">cn5idx,</span> <span class="pre">nrow=r110.nrow)</span>
 <span class="pre">findOH.run()</span>
 <span class="pre">`</span></code></p>
@@ -456,7 +456,7 @@ from toolkit.structures.rutile110 import Rutile1p11Edge</p>
 <p>atoms = read(“init.cif”)
 r110edge = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, cutoff=2.9)
 owidx, _ = r110edge.get_wat()
-ind      = r110edge.get_indicies()
+ind      = r110edge.get_indices()
 ind[‘idx_M5c’][0] = np.flip(ind[‘idx_M5c’][0], axis=1)</p>
 <p>cn5idx = ind[‘idx_M5c’].reshape(2, -1)
 edge5idx = ind[‘idx_edge_M5c’].reshape(2, -1)
@@ -474,7 +474,7 @@ edge4idx = ind[‘idx_edge_M4c’].reshape(2, -1)</p>
 <span class="pre">atoms</span> <span class="pre">=</span> <span class="pre">read(&quot;init.cif&quot;)</span>
 <span class="pre">r110</span>&#160; <span class="pre">=</span> <span class="pre">Rutile110(atoms,</span> <span class="pre">nrow=nrow,</span> <span class="pre">bridge_along=bridge_along)</span>
 <span class="pre">owidx,</span> <span class="pre">_</span> <span class="pre">=</span> <span class="pre">r110.get_wat()</span>
-<span class="pre">cn5idx</span>&#160;&#160; <span class="pre">=</span> <span class="pre">r110.get_indicies()['idx_M5c']</span>
+<span class="pre">cn5idx</span>&#160;&#160; <span class="pre">=</span> <span class="pre">r110.get_indices()['idx_M5c']</span>
 <span class="pre">disdeg</span>&#160;&#160; <span class="pre">=</span> <span class="pre">RutileDisDeg(ag,</span> <span class="pre">owidx,</span> <span class="pre">cn5idx,</span> <span class="pre">nrow=r110.nrow)</span>
 <span class="pre">disdeg.run()</span>
 <span class="pre">`</span></code></p>
@@ -506,11 +506,11 @@ edge4idx = ind[‘idx_edge_M4c’].reshape(2, -1)</p>
 <dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.RutileDisDeg.get_neighbor_oxygen">
 <span class="sig-name descname"><span class="pre">get_neighbor_oxygen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx_ti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_dm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_ow</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#RutileDisDeg.get_neighbor_oxygen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.RutileDisDeg.get_neighbor_oxygen" title="Permalink to this definition">#</a></dt>
 <dd><p>Give a group of ti atoms, find their neighboring water oxygen within cutoff rasius <cite>self.cutoff</cite>.
-Returns water oxygen indicies</p>
+Returns water oxygen indices</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>idx_ti</strong> (<em>np.ndarray</em>) – 1-d integer array containing indicies for Ti5c atoms.</p></li>
+<li><p><strong>idx_ti</strong> (<em>np.ndarray</em>) – 1-d integer array containing indices for Ti5c atoms.</p></li>
 <li><p><strong>res_dm</strong> (<em>np.ndarray</em>) – 2-d distance array containing pair-wise distance between Ti and all water oxygen atoms.
 This array is prepared in <cite>_prepare</cite>.</p></li>
 <li><p><strong>n_ow</strong> (<em>int</em><em>, </em><em>optional</em>) – number of neighboring oxygen for input group of Ti atoms. For example, Ti5c has 1 ad-water;
@@ -518,7 +518,7 @@ and edge Ti4c has 2 ad-water. Defaults to 1.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>1-d array containing adsorbed water oxygen indicies. If these is no water oxygen within the
+<dd class="field-even"><p>1-d array containing adsorbed water oxygen indices. If these is no water oxygen within the
 cutoff raidius, a masking value of ‘-1’ is provided</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -546,7 +546,7 @@ cutoff raidius, a masking value of ‘-1’ is provided</p>
 <span class="pre">atoms</span> <span class="pre">=</span> <span class="pre">read(os.path.join(&quot;init.cif&quot;))</span>
 <span class="pre">r110</span>&#160; <span class="pre">=</span> <span class="pre">Rutile110(atoms,</span> <span class="pre">nrow=nrow,</span> <span class="pre">bridge_along=bridge_along)</span>
 <span class="pre">idx_owat,</span> <span class="pre">_</span> <span class="pre">=</span> <span class="pre">r110.get_wat()</span>
-<span class="pre">ind</span> <span class="pre">=</span> <span class="pre">inp.r110.get_indicies()</span>
+<span class="pre">ind</span> <span class="pre">=</span> <span class="pre">inp.r110.get_indices()</span>
 <span class="pre">ind['idx_M5c'][0]</span> <span class="pre">=</span> <span class="pre">np.flip(ind['idx_M5c'][0],</span> <span class="pre">axis=1)</span>
 <span class="pre">ind['idx_Obr'][0]</span> <span class="pre">=</span> <span class="pre">np.flip(ind['idx_M5c'][0],</span> <span class="pre">axis=1)</span>
 <span class="pre">idx_cn5</span>&#160; <span class="pre">=</span> <span class="pre">ind['idx_M5c'].reshape(2,</span> <span class="pre">-1)</span>
@@ -667,7 +667,7 @@ oxygen atoms. The oxygen water oxygen adsorb on terrace Ti5c atoms.
 <span class="pre">atoms</span> <span class="pre">=</span> <span class="pre">read(os.path.join(&quot;init.cif&quot;))</span>
 <span class="pre">r110</span>&#160; <span class="pre">=</span> <span class="pre">Rutile110(atoms,</span> <span class="pre">nrow=nrow,</span> <span class="pre">bridge_along=bridge_along)</span>
 <span class="pre">idx_owat,</span> <span class="pre">_</span> <span class="pre">=</span> <span class="pre">r110.get_wat()</span>
-<span class="pre">ind</span> <span class="pre">=</span> <span class="pre">edge_water.get_indicies()</span>
+<span class="pre">ind</span> <span class="pre">=</span> <span class="pre">edge_water.get_indices()</span>
 <span class="pre">#</span> <span class="pre">split</span> <span class="pre">cn5idx</span> <span class="pre">and</span> <span class="pre">obr_idx</span> <span class="pre">to</span> <span class="pre">[&lt;upper</span> <span class="pre">idx&gt;,</span> <span class="pre">&lt;lower</span> <span class="pre">idx&gt;]</span>
 <span class="pre">idx_cn5</span>&#160;&#160;&#160;&#160; <span class="pre">=</span> <span class="pre">ind['idx_M5c'].reshape(2,</span> <span class="pre">-1)</span>
 <span class="pre">idx_obr</span>&#160;&#160;&#160;&#160; <span class="pre">=</span> <span class="pre">ind['idx_Obr'].reshape(2,</span> <span class="pre">-1)</span>
@@ -685,7 +685,7 @@ atoms = read(os.path.join(“init.cif”))
 vecy = np.array([26.34844236,  1.8642182,  -2.0615678])
 vecz = np.array([0.49339,  -0.070221,  9.201458])
 r110edge = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, M=”Ti”, nrow=2)
-ind = r110edge.get_indicies()
+ind = r110edge.get_indices()
 ind[‘idx_M5c’][0] = np.flip(ind[‘idx_M5c’][0], axis=1)
 idx_cn5 = ind[‘idx_M5c’].reshape(2, -1)
 idx_obr = np.concatenate([ind[‘idx_Obr’].reshape(2, -1),</p>
@@ -709,10 +709,10 @@ dab.run()
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>idx_adO</strong> (<em>np.ndarray</em>) – indicies of ad water oxygen atoms. Use -1 as masking marker, meaning didn’t found Obr
+<li><p><strong>idx_adO</strong> (<em>np.ndarray</em>) – indices of ad water oxygen atoms. Use -1 as masking marker, meaning didn’t found Obr
 whthin cutoff. (see analysis class <cite>RutileDisDeg</cite>)</p></li>
-<li><p><strong>idx_obr1</strong> (<em>np.ndarray</em>) – indicies of row#1 of bridge oxygen atoms.</p></li>
-<li><p><strong>idx_obr2</strong> (<em>np.ndarray</em>) – indicies of row#2 of bridge oxygen atoms.</p></li>
+<li><p><strong>idx_obr1</strong> (<em>np.ndarray</em>) – indices of row#1 of bridge oxygen atoms.</p></li>
+<li><p><strong>idx_obr2</strong> (<em>np.ndarray</em>) – indices of row#2 of bridge oxygen atoms.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -728,11 +728,11 @@ whthin cutoff. (see analysis class <cite>RutileDisDeg</cite>)</p></li>
 <dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.dAdBridge.get_neighbor_oxygen">
 <span class="sig-name descname"><span class="pre">get_neighbor_oxygen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx_ti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_dm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_ow</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#dAdBridge.get_neighbor_oxygen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.dAdBridge.get_neighbor_oxygen" title="Permalink to this definition">#</a></dt>
 <dd><p>Give a group of ti atoms, find their neighboring water oxygen within cutoff rasius <cite>self.cutoff</cite>.
-Returns water oxygen indicies</p>
+Returns water oxygen indices</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>idx_ti</strong> (<em>np.ndarray</em>) – 1-d integer array containing indicies for Ti5c atoms.</p></li>
+<li><p><strong>idx_ti</strong> (<em>np.ndarray</em>) – 1-d integer array containing indices for Ti5c atoms.</p></li>
 <li><p><strong>res_dm</strong> (<em>np.ndarray</em>) – 2-d distance array containing pair-wise distance between Ti and all water oxygen atoms.
 This array is prepared in <cite>_prepare</cite>.</p></li>
 <li><p><strong>n_ow</strong> (<em>int</em><em>, </em><em>optional</em>) – number of neighboring oxygen for input group of Ti atoms. For example, Ti5c has 1 ad-water;
@@ -740,7 +740,7 @@ and edge Ti4c has 2 ad-water. Defaults to 1.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>1-d array containing adsorbed water oxygen indicies. If these is no water oxygen within the
+<dd class="field-even"><p>1-d array containing adsorbed water oxygen indices. If these is no water oxygen within the
 cutoff raidius, a masking value of ‘-1’ is provided</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -771,7 +771,7 @@ method is only for flat rutile 110 water interface currently.</p>
 <div><p><code class="docutils literal notranslate"><span class="pre">`python</span>
 <span class="pre">atoms</span>&#160; <span class="pre">=</span> <span class="pre">read(os.path.join(&quot;init.cif&quot;))</span>
 <span class="pre">r110</span>&#160;&#160; <span class="pre">=</span> <span class="pre">Rutile110(atoms,</span> <span class="pre">nrow=nrow,</span> <span class="pre">bridge_along=bridge_along)</span>
-<span class="pre">n_ti5c</span> <span class="pre">=</span> <span class="pre">r110.get_indicies()['idx_M5c'].flatten().shape[0]//2</span>
+<span class="pre">n_ti5c</span> <span class="pre">=</span> <span class="pre">r110.get_indices()['idx_M5c'].flatten().shape[0]//2</span>
 <span class="pre">dil</span>&#160;&#160;&#160; <span class="pre">=</span> <span class="pre">dInterLayer(ag,</span> <span class="pre">n_ti5c)</span>
 <span class="pre">dil.run()</span>
 <span class="pre">`</span></code></p>
@@ -814,7 +814,7 @@ from toolkit.structures.rutile110 import Rutile1p11Edge</p>
 <p>atoms = read(“init.cif”)
 r110edge = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, cutoff=2.9)
 idx_owat, _ = r110edge.get_wat()
-ind         = r110edge.get_indicies()
+ind         = r110edge.get_indices()
 ind[‘idx_Obr’][0] = np.flip(ind[‘idx_Obr’][0], axis=1)
 idx_obr  = ind[‘idx_Obr’].reshape(2, -1)
 idx_hobr1 = ind[‘idx_hObr_mid’].reshape(2, -1)
@@ -834,7 +834,7 @@ from toolkit.structures.rutile110 import Rutile110</p>
 <p>atoms    = read(“init.cif”)
 r110     = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)
 idx_owat, _ = r110.get_wat()
-ind = inp.r110.get_indicies()
+ind = inp.r110.get_indices()
 ind[‘idx_Obr’][0] = np.flip(ind[‘idx_Obr’][0], axis=1)
 idx_obr  = ind[‘idx_Obr’].reshape(2, -1)
 doh = dObr_NearestH(ag, idx_obr, nrow=r110.nrow, idx_hobr1=None, idx_hobr2=None, idx_eobr=None)
@@ -849,7 +849,7 @@ doh.run()
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.dObr_NearH.get_OH_dist">
-<span class="sig-name descname"><span class="pre">get_OH_dist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obr_indicies</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#dObr_NearH.get_OH_dist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.dObr_NearH.get_OH_dist" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_OH_dist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obr_indices</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#dObr_NearH.get_OH_dist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.dObr_NearH.get_OH_dist" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -872,7 +872,7 @@ from toolkit.structures.rutile110 import Rutile1p11Edge</p>
 <p>atoms = read(“init.cif”)
 r110edge = Rutile1p11Edge(atoms, vecy=vecy, vecz=vecz, cutoff=2.9)
 idx_owat, _ = r110edge.get_wat()
-ind         = r110edge.get_indicies()
+ind         = r110edge.get_indices()
 ind[‘idx_Obr’][0] = np.flip(ind[‘idx_Obr’][0], axis=1)
 idx_obr  = ind[‘idx_Obr’].reshape(2, -1)
 idx_hobr1 = ind[‘idx_hObr_mid’].reshape(2, -1)
@@ -892,7 +892,7 @@ from toolkit.structures.rutile110 import Rutile110</p>
 <p>atoms    = read(“init.cif”)
 r110     = Rutile110(atoms, nrow=nrow, bridge_along=bridge_along)
 idx_owat, _ = r110.get_wat()
-ind = inp.r110.get_indicies()
+ind = inp.r110.get_indices()
 ind[‘idx_Obr’][0] = np.flip(ind[‘idx_Obr’][0], axis=1)
 idx_obr  = ind[‘idx_Obr’].reshape(2, -1)
 doh = dObr_NearestH(ag, idx_obr, nrow=r110.nrow, idx_hobr1=None, idx_hobr2=None, idx_eobr=None)
@@ -907,7 +907,7 @@ doh.run()
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.dObr_NearestH.get_min_OH">
-<span class="sig-name descname"><span class="pre">get_min_OH</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obr_indicies</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#dObr_NearestH.get_min_OH"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.dObr_NearestH.get_min_OH" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_min_OH</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obr_indices</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#dObr_NearestH.get_min_OH"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.dObr_NearestH.get_min_OH" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -931,7 +931,7 @@ TiO2-water interface, because adsorbed water in this system sometimes exchange w
 <span class="pre">vecy</span> <span class="pre">=</span> <span class="pre">np.array([26.34844236,</span>&#160; <span class="pre">1.8642182,</span>&#160; <span class="pre">-2.0615678])</span>
 <span class="pre">vecz</span> <span class="pre">=</span> <span class="pre">np.array([0.49339,</span>&#160; <span class="pre">-0.070221,</span>&#160; <span class="pre">9.201458])</span>
 <span class="pre">r110edge</span> <span class="pre">=</span> <span class="pre">Rutile1p11Edge(atoms,</span> <span class="pre">vecy=vecy,</span> <span class="pre">vecz=vecz,</span> <span class="pre">M=&quot;Ti&quot;,</span> <span class="pre">nrow=2)</span>
-<span class="pre">ind</span> <span class="pre">=</span> <span class="pre">r110edge.get_indicies()</span>
+<span class="pre">ind</span> <span class="pre">=</span> <span class="pre">r110edge.get_indices()</span>
 <span class="pre">idx_ow,</span> <span class="pre">_</span> <span class="pre">=</span> <span class="pre">r110edge.get_wat()</span>
 <span class="pre">ind['idx_M5c'][0]</span> <span class="pre">=</span> <span class="pre">np.flip(ind['idx_M5c'][0],</span> <span class="pre">axis=1)</span>
 <span class="pre">cn5idx</span> <span class="pre">=</span> <span class="pre">ind['idx_M5c'].reshape(2,</span> <span class="pre">-1)</span>
@@ -945,11 +945,11 @@ TiO2-water interface, because adsorbed water in this system sometimes exchange w
 <dt class="sig sig-object py" id="ectoolkits.analysis.rutile110.staleRutileDisDeg.get_neighbor_oxygen">
 <span class="sig-name descname"><span class="pre">get_neighbor_oxygen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx_ti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_dm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_ow</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/rutile110.html#staleRutileDisDeg.get_neighbor_oxygen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.rutile110.staleRutileDisDeg.get_neighbor_oxygen" title="Permalink to this definition">#</a></dt>
 <dd><p>Give a group of ti atoms, find their neighboring water oxygen within cutoff rasius <cite>self.cutoff</cite>.
-Returns water oxygen indicies</p>
+Returns water oxygen indices</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>idx_ti</strong> (<em>np.ndarray</em>) – 1-d integer array containing indicies for Ti5c atoms.</p></li>
+<li><p><strong>idx_ti</strong> (<em>np.ndarray</em>) – 1-d integer array containing indices for Ti5c atoms.</p></li>
 <li><p><strong>res_dm</strong> (<em>np.ndarray</em>) – 2-d distance array containing pair-wise distance between Ti and all water oxygen atoms.
 This array is prepared in <cite>_prepare</cite>.</p></li>
 <li><p><strong>n_ow</strong> (<em>int</em><em>, </em><em>optional</em>) – number of neighboring oxygen for input group of Ti atoms. For example, Ti5c has 1 ad-water;
@@ -957,7 +957,7 @@ and edge Ti4c has 2 ad-water. Defaults to 1.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>1-d array containing adsorbed water oxygen indicies. If these is no water oxygen within the
+<dd class="field-even"><p>1-d array containing adsorbed water oxygen indices. If these is no water oxygen within the
 cutoff raidius, a masking value of ‘-1’ is provided</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>

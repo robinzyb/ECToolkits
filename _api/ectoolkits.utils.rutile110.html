@@ -567,6 +567,8 @@ simulation cell.</p></li>
 <dt class="sig sig-object py" id="ectoolkits.utils.rutile110.get_rotM_edged_rutile110">
 <span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">get_rotM_edged_rutile110</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tio2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">octahedral_bonds_upper_bound</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bridge_along</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#get_rotM_edged_rutile110"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.get_rotM_edged_rutile110" title="Permalink to this definition">#</a></dt>
 <dd><p>compute the unit xyz vectors for a slab of hkl(1-11) edged tio2.</p>
+<p>!!!!! TODO —&gt; This method is currently very adhoc and prone to failure
+!!!!! WE NEED TO IMPROVE THIS</p>
 <p>Detailed algorithm:
 First, one will get all the 6-“octahedral bonds”, (as detailed in <cite>get_octahedral_bonds</cite>)
 Second, notice the two of the enlogated octahedral bonds roughly aligns with:</p>
@@ -596,7 +598,7 @@ Second, notice the two of the enlogated octahedral bonds roughly aligns with:</p
 
 <dl class="py function">
 <dt class="sig sig-object py" id="ectoolkits.utils.rutile110.get_sym_edge">
-<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">get_sym_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_l_edge4</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#get_sym_edge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.get_sym_edge" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">get_sym_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_l_edge4</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#get_sym_edge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.get_sym_edge" title="Permalink to this definition">#</a></dt>
 <dd><p>Translate the rutile &lt;1-11&gt; edge-water interface model s.t. it looks
 pretty and symmetric.</p>
 <p>The trick is, when using experimental rutile structrue and ase ‘surface’
@@ -634,7 +636,7 @@ ooooooooooooooooooooooooooooo  ^
 <dl class="py function">
 <dt class="sig sig-object py" id="ectoolkits.utils.rutile110.get_watOidx">
 <span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">get_watOidx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Ti'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_OH_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_MO_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cn_M_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#get_watOidx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.get_watOidx" title="Permalink to this definition">#</a></dt>
-<dd><p>gets all the water oxygen indicies in rutile (110)-water interface</p>
+<dd><p>gets all the water oxygen indices in rutile (110)-water interface</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -643,8 +645,8 @@ ooooooooooooooooooooooooooooo  ^
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>0-based indicies for water oxygen atoms.
-watHidx (numpy.ndarray): 0-based indicies for water hydrogen atoms. (all the hydrogens)</p>
+<dd class="field-even"><p>0-based indices for water oxygen atoms.
+watHidx (numpy.ndarray): 0-based indices for water hydrogen atoms. (all the hydrogens)</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>watOidx (numpy.ndarray)</p>
@@ -665,7 +667,7 @@ water molecules.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><p>The indicies for the slab model.
+<dd class="field-even"><p><p>The indices for the slab model.
 atoms_slab(ase.atoms):</p>
 <blockquote>
 <div><p>Slab model atoms object.</p>
@@ -709,14 +711,14 @@ atoms_slab(ase.atoms):</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>atoms</strong> (<em>ASE.Atoms</em>) – ase atoms of your interface model.</p></li>
-<li><p><strong>idx_cn5</strong> (<em>np.ndarray</em>) – 1-d integer array, which contains indicies for Ti5c atoms.</p></li>
-<li><p><strong>idx_obrs</strong> (<em>np.ndarray</em>) – 1-d integer array, which contains indicies for all the Obr atoms.</p></li>
+<li><p><strong>idx_cn5</strong> (<em>np.ndarray</em>) – 1-d integer array, which contains indices for Ti5c atoms.</p></li>
+<li><p><strong>idx_obrs</strong> (<em>np.ndarray</em>) – 1-d integer array, which contains indices for all the Obr atoms.</p></li>
 <li><p><strong>M</strong> (<em>str</em><em>, </em><em>optional</em>) – Metal elements in the rutile structure. Defaults to “Ti”.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><dl class="simple">
-<dt>(&lt;idx_cn5&gt;, &lt;res_obr&gt;).</dt><dd><p>Paired Ti5c and Obr indicies. Check if they are really paired before you use.</p>
+<dt>(&lt;idx_cn5&gt;, &lt;res_obr&gt;).</dt><dd><p>Paired Ti5c and Obr indices. Check if they are really paired before you use.</p>
 </dd>
 </dl>
 </p>
@@ -729,14 +731,14 @@ atoms_slab(ase.atoms):</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="ectoolkits.utils.rutile110.sep_upper_lower">
-<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">sep_upper_lower</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indicies</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#sep_upper_lower"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.sep_upper_lower" title="Permalink to this definition">#</a></dt>
-<dd><p>given indicies, seperate them to upper and lower. More specifically, from
-[&lt;indicies&gt;] to [[&lt;idx_upper&gt;], [&lt;idx_lower&gt;]]</p>
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.rutile110.</span></span><span class="sig-name descname"><span class="pre">sep_upper_lower</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/rutile110.html#sep_upper_lower"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.rutile110.sep_upper_lower" title="Permalink to this definition">#</a></dt>
+<dd><p>given indices, seperate them to upper and lower. More specifically, from
+[&lt;indices&gt;] to [[&lt;idx_upper&gt;], [&lt;idx_lower&gt;]]</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>z</strong> (<em>numpy.ndarray</em>) – z coordinates</p></li>
-<li><p><strong>indicies</strong> (<em>numpy.ndarray</em>) – 0-based indicies</p></li>
+<li><p><strong>indices</strong> (<em>numpy.ndarray</em>) – 0-based indices</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

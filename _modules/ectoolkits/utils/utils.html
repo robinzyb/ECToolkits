@@ -364,14 +364,79 @@ document.write(`
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">this script put misc function here.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">ase.geometry.analysis</span> <span class="kn">import</span> <span class="n">Analysis</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">random</span>
+<span class="kn">from</span> <span class="nn">ase.geometry.analysis</span> <span class="kn">import</span> <span class="n">Analysis</span>
+<span class="kn">from</span> <span class="nn">ase.build</span> <span class="kn">import</span> <span class="n">molecule</span>
+<span class="kn">from</span> <span class="nn">..structures.slab</span> <span class="kn">import</span> <span class="n">Slab</span>
 
 <span class="c1"># frequently used unit convertion</span>
 <span class="n">au2eV</span> <span class="o">=</span> <span class="mf">27.211386245988</span>
 <span class="n">au2A</span> <span class="o">=</span> <span class="mf">0.529177210903</span>
+
+
+<div class="viewcode-block" id="insert_water"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.utils.html#ectoolkits.utils.utils.insert_water">[docs]</a><span class="k">def</span> <span class="nf">insert_water</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">water_num</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;random&#39;</span><span class="p">,</span> <span class="n">space_x</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">space_y</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">space_z</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
+    <span class="c1"># make a copy</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">Slab</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+    <span class="n">point_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">get_cell</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">space_x</span><span class="p">)</span>
+    <span class="n">point_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">get_cell</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="n">space_y</span><span class="p">)</span>
+    <span class="n">point_z</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">z2</span><span class="o">-</span><span class="n">z1</span><span class="p">)</span><span class="o">/</span><span class="n">space_z</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">water_num</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">tmp</span>
+    <span class="k">if</span> <span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;grid&#39;</span><span class="p">:</span>
+        <span class="n">water_added_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">point_x</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">point_y</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">point_z</span><span class="p">):</span>
+                    <span class="n">water_z</span> <span class="o">=</span> <span class="n">z1</span><span class="o">+</span><span class="p">(</span><span class="n">z2</span><span class="o">-</span><span class="n">z1</span><span class="p">)</span><span class="o">*</span><span class="n">k</span>
+                    <span class="n">cell_vec_a</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">get_cell</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">cell_vec_b</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">get_cell</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">water_xyz_pos</span> <span class="o">=</span> <span class="n">cell_vec_a</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="n">cell_vec_b</span><span class="o">*</span><span class="n">j</span>
+                    <span class="n">water_xyz_pos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="n">water_z</span>
+                    <span class="n">H2O</span> <span class="o">=</span> <span class="n">molecule</span><span class="p">(</span><span class="s2">&quot;H2O&quot;</span><span class="p">)</span>
+                    <span class="n">H2O</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">water_xyz_pos</span><span class="p">)</span>
+                    <span class="n">tmp</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">H2O</span><span class="p">)</span>
+                    <span class="n">O_idx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span><span class="o">-</span><span class="mi">3</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">get_neighbor_list</span><span class="p">(</span><span class="n">O_idx</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">))</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="n">water_added_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;add water at </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">water_xyz_pos</span><span class="p">))</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;add one water succeessfully&quot;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">water_added_counter</span> <span class="o">==</span> <span class="n">water_num</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;add </span><span class="si">{</span><span class="n">water_num</span><span class="si">}</span><span class="s2"> water molecules done&quot;</span><span class="p">)</span>
+                            <span class="k">return</span> <span class="n">tmp</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">del</span> <span class="n">tmp</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;reject, the water overlaps with other water at </span><span class="si">{</span><span class="n">water_xyz_pos</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;add </span><span class="si">{</span><span class="n">water_added_counter</span><span class="si">}</span><span class="s2"> water molecules, could not find enough space to add water&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tmp</span>
+    <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;random&#39;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">water_num</span><span class="p">):</span>
+            <span class="n">water_overlap</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">while</span> <span class="n">water_overlap</span><span class="p">:</span>
+                <span class="n">water_z</span> <span class="o">=</span> <span class="n">z1</span><span class="o">+</span><span class="p">(</span><span class="n">z2</span><span class="o">-</span><span class="n">z1</span><span class="p">)</span><span class="o">*</span><span class="n">random</span><span class="p">()</span>
+                <span class="n">cell_vec_a</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">get_cell</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">cell_vec_b</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">get_cell</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">water_xyz_pos</span> <span class="o">=</span> <span class="n">cell_vec_a</span><span class="o">*</span><span class="n">random</span><span class="p">()</span> <span class="o">+</span> <span class="n">cell_vec_b</span><span class="o">*</span><span class="n">random</span><span class="p">()</span>
+                <span class="n">water_xyz_pos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="n">water_z</span>
+                <span class="n">H2O</span> <span class="o">=</span> <span class="n">molecule</span><span class="p">(</span><span class="s2">&quot;H2O&quot;</span><span class="p">)</span>
+                <span class="n">H2O</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">water_xyz_pos</span><span class="p">)</span>
+                <span class="n">tmp</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">H2O</span><span class="p">)</span>
+                <span class="n">O_idx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span><span class="o">-</span><span class="mi">3</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">get_neighbor_list</span><span class="p">(</span><span class="n">O_idx</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">))</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">water_overlap</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;add water at </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">water_xyz_pos</span><span class="p">))</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;add one water succeessfully&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">del</span> <span class="n">tmp</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;reject, the water overlaps with other water&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tmp</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;model must be grid or random&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="get_cum_mean"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.utils.html#ectoolkits.utils.utils.get_cum_mean">[docs]</a><span class="k">def</span> <span class="nf">get_cum_mean</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>

@@ -489,6 +489,9 @@ document.write(`
 <div class="viewcode-block" id="get_rotM_edged_rutile110"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.get_rotM_edged_rutile110">[docs]</a><span class="k">def</span> <span class="nf">get_rotM_edged_rutile110</span><span class="p">(</span><span class="n">tio2</span><span class="p">:</span> <span class="n">Atoms</span><span class="p">,</span> <span class="n">octahedral_bonds_upper_bound</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">2.4</span><span class="p">,</span> <span class="n">bridge_along</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;compute the unit xyz vectors for a slab of \\hkl(1-11) edged tio2.</span>
 
+<span class="sd">    !!!!! TODO ---&gt; This method is currently very adhoc and prone to failure</span>
+<span class="sd">    !!!!! WE NEED TO IMPROVE THIS</span>
+
 <span class="sd">    Detailed algorithm:</span>
 <span class="sd">    First, one will get all the 6-&quot;octahedral bonds&quot;, (as detailed in `get_octahedral_bonds`)</span>
 <span class="sd">    Second, notice the two of the enlogated octahedral bonds roughly aligns with:</span>
@@ -504,24 +507,65 @@ document.write(`
 <span class="sd">    Returns:</span>
 <span class="sd">        np.array: the normal vectors, which could be used as the rotM matrix for the coordinates</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">is_v_dominant</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
+        <span class="n">abs_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">abs_val</span><span class="p">)</span> <span class="o">==</span> <span class="n">abs_val</span><span class="p">[</span><span class="n">ind</span><span class="p">]:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">iother</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="n">i</span><span class="o">!=</span><span class="n">ind</span><span class="p">]</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">abs_val</span><span class="p">[</span><span class="n">iother</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">abs_val</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">abs_val</span><span class="p">[</span><span class="n">iother</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">abs_val</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">abs_val</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">1.1</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">do_average</span><span class="p">(</span><span class="n">v_list</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
+        <span class="n">abs_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">v_list</span><span class="p">)</span>
+        <span class="n">avg_amplitude</span> <span class="o">=</span> <span class="n">abs_val</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">iother</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="n">i</span><span class="o">!=</span><span class="n">ind</span><span class="p">]</span>
+        <span class="n">arg_second_largest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">avg_amplitude</span><span class="p">[</span><span class="n">iother</span><span class="p">])</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">v_list</span><span class="p">[:,</span> <span class="n">iother</span><span class="p">[</span><span class="n">arg_second_largest</span><span class="p">]]</span>
+        <span class="n">signs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">signs</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">v_list</span>
+        <span class="c1"># Check if all signs are the same</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">signs</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">==</span> <span class="n">signs</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">v_list</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Find the majority sign</span>
+            <span class="n">positive_count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">signs</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">negative_count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">signs</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">positive_count</span> <span class="o">&gt;=</span> <span class="n">negative_count</span><span class="p">:</span>
+                <span class="c1"># If positive signs are the majority, average the positive vectors</span>
+                <span class="n">positive_vectors</span> <span class="o">=</span> <span class="n">v_list</span><span class="p">[</span><span class="n">signs</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">positive_vectors</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">positive_vectors</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">positive_vectors</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># If negative signs are the majority or if counts are equal, average the negative vectors</span>
+                <span class="n">negative_vectors</span> <span class="o">=</span> <span class="n">v_list</span><span class="p">[</span><span class="n">signs</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">negative_vectors</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">negative_vectors</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">negative_vectors</span>
+
+    <span class="k">def</span> <span class="nf">get_averaged</span><span class="p">(</span><span class="n">octahedral_bonds</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
+        <span class="n">v_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">octahedral_bonds</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">is_v_dominant</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
+                <span class="n">out</span> <span class="o">=</span> <span class="n">v</span> <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="o">-</span><span class="n">v</span>
+                <span class="n">v_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">v_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">v_list</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">do_average</span><span class="p">(</span><span class="n">v_list</span><span class="p">,</span> <span class="n">ind</span><span class="p">)</span>
+
+   
     <span class="n">octahedral_bonds</span> <span class="o">=</span> <span class="n">get_octahedral_bonds</span><span class="p">(</span><span class="n">tio2</span><span class="p">,</span> <span class="n">octahedral_bonds_upper_bound</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">bridge_along</span> <span class="o">==</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span>
-        <span class="n">argx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">octahedral_bonds</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">argmax</span><span class="p">()</span>
-        <span class="n">argz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">octahedral_bonds</span><span class="p">)[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">argmax</span><span class="p">()</span>
-        <span class="n">x_up</span> <span class="o">=</span> <span class="n">normalized_vector</span><span class="p">(</span><span class="n">octahedral_bonds</span><span class="p">[</span><span class="n">argx</span><span class="p">])</span>
-        <span class="n">z_up</span> <span class="o">=</span> <span class="n">normalized_vector</span><span class="p">(</span><span class="n">octahedral_bonds</span><span class="p">[</span><span class="n">argz</span><span class="p">])</span>
+        <span class="n">x_up</span> <span class="o">=</span> <span class="n">normalized_vector</span><span class="p">(</span><span class="n">get_averaged</span><span class="p">(</span><span class="n">octahedral_bonds</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="n">z_up</span> <span class="o">=</span> <span class="n">normalized_vector</span><span class="p">(</span><span class="n">get_averaged</span><span class="p">(</span><span class="n">octahedral_bonds</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
         <span class="n">y_up</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">z_up</span><span class="p">,</span> <span class="n">x_up</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">bridge_along</span><span class="o">==</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span>
-        <span class="n">argy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">octahedral_bonds</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">argmax</span><span class="p">()</span>
-        <span class="n">argz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">octahedral_bonds</span><span class="p">)[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">argmax</span><span class="p">()</span>
-        <span class="n">y_up</span> <span class="o">=</span> <span class="n">normalized_vector</span><span class="p">(</span><span class="n">octahedral_bonds</span><span class="p">[</span><span class="n">argy</span><span class="p">])</span>
-        <span class="n">z_up</span> <span class="o">=</span> <span class="n">normalized_vector</span><span class="p">(</span><span class="n">octahedral_bonds</span><span class="p">[</span><span class="n">argz</span><span class="p">])</span>
+        <span class="n">y_up</span> <span class="o">=</span> <span class="n">normalized_vector</span><span class="p">(</span><span class="n">get_averaged</span><span class="p">(</span><span class="n">octahedral_bonds</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">z_up</span> <span class="o">=</span> <span class="n">normalized_vector</span><span class="p">(</span><span class="n">get_averaged</span><span class="p">(</span><span class="n">octahedral_bonds</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
         <span class="n">x_up</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">y_up</span><span class="p">,</span> <span class="n">z_up</span><span class="p">)</span>
-   
+
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_up</span><span class="p">,</span> <span class="n">y_up</span><span class="p">,</span> <span class="n">z_up</span><span class="p">])</span></div>
-
-
 
 <div class="viewcode-block" id="find_cn_idx"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.find_cn_idx">[docs]</a><span class="k">def</span> <span class="nf">find_cn_idx</span><span class="p">(</span><span class="n">atoms1</span><span class="p">,</span> <span class="n">atoms2</span><span class="p">,</span> <span class="n">cutoff_hi</span><span class="p">,</span> <span class="n">cutoff_lo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;count the coordination number(CN) for atoms1 (center atoms), where atoms2 are coordinate atom.</span>
@@ -605,7 +649,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="get_watOidx"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.get_watOidx">[docs]</a><span class="k">def</span> <span class="nf">get_watOidx</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s2">&quot;Ti&quot;</span><span class="p">,</span> <span class="n">d_OH_cutoff</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">d_MO_cutoff</span><span class="o">=</span><span class="mf">2.8</span><span class="p">,</span> <span class="n">cn_M_cutoff</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;gets all the water oxygen indicies in rutile (110)-water interface</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;gets all the water oxygen indices in rutile (110)-water interface</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        atoms (ase.Atoms):</span>
@@ -614,8 +658,8 @@ document.write(`
 <span class="sd">            The metal atom in rutile structrue. Defaults to &quot;Ti&quot;.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        watOidx (numpy.ndarray): 0-based indicies for water oxygen atoms.</span>
-<span class="sd">        watHidx (numpy.ndarray): 0-based indicies for water hydrogen atoms. (all the hydrogens)</span>
+<span class="sd">        watOidx (numpy.ndarray): 0-based indices for water oxygen atoms.</span>
+<span class="sd">        watHidx (numpy.ndarray): 0-based indices for water hydrogen atoms. (all the hydrogens)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">xyz</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">positions</span>
     <span class="n">cell</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">cellpar</span><span class="p">()</span>
@@ -644,14 +688,14 @@ document.write(`
 
 <span class="sd">    Returns:</span>
 <span class="sd">        idx_slab(numpy.ndarray):</span>
-<span class="sd">            The indicies for the slab model.</span>
+<span class="sd">            The indices for the slab model.</span>
 <span class="sd">        atoms_slab(ase.atoms):</span>
 <span class="sd">            Slab model atoms object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">indicies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">get_global_number_of_atoms</span><span class="p">())</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">get_global_number_of_atoms</span><span class="p">())</span>
     <span class="n">idx_ow</span><span class="p">,</span> <span class="n">idx_hw</span> <span class="o">=</span> <span class="n">get_watOidx</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s2">&quot;Ti&quot;</span><span class="p">)</span>
     <span class="n">idx_wat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx_ow</span><span class="p">,</span> <span class="n">idx_hw</span><span class="p">)</span>
-    <span class="n">idx_slab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">indicies</span><span class="p">,</span> <span class="n">idx_wat</span><span class="p">)</span>
+    <span class="n">idx_slab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">idx_wat</span><span class="p">)</span>
     <span class="n">atoms_slab</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">idx_slab</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">idx_slab</span><span class="p">,</span> <span class="n">atoms_slab</span></div>
 
@@ -692,23 +736,23 @@ document.write(`
     <span class="k">return</span> <span class="n">rotM</span></div>
 
 
-<div class="viewcode-block" id="sep_upper_lower"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.sep_upper_lower">[docs]</a><span class="k">def</span> <span class="nf">sep_upper_lower</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">indicies</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;given indicies, seperate them to upper and lower. More specifically, from</span>
-<span class="sd">    [&lt;indicies&gt;] to [[&lt;idx_upper&gt;], [&lt;idx_lower&gt;]]</span>
+<div class="viewcode-block" id="sep_upper_lower"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.sep_upper_lower">[docs]</a><span class="k">def</span> <span class="nf">sep_upper_lower</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;given indices, seperate them to upper and lower. More specifically, from</span>
+<span class="sd">    [&lt;indices&gt;] to [[&lt;idx_upper&gt;], [&lt;idx_lower&gt;]]</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        z (numpy.ndarray):</span>
 <span class="sd">            z coordinates</span>
-<span class="sd">        indicies (numpy.ndarray):</span>
-<span class="sd">            0-based indicies</span>
+<span class="sd">        indices (numpy.ndarray):</span>
+<span class="sd">            0-based indices</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        numpy.ndarray: [[&lt;idx_upper&gt;], [&lt;idx_lower&gt;]]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">z</span> <span class="o">=</span> <span class="n">z</span><span class="p">[</span><span class="n">indicies</span><span class="p">]</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">z</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
     <span class="n">zmean</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-    <span class="n">i1</span> <span class="o">=</span> <span class="n">indicies</span><span class="p">[</span><span class="n">z</span> <span class="o">&gt;</span> <span class="n">zmean</span><span class="p">]</span>
-    <span class="n">i2</span> <span class="o">=</span> <span class="n">indicies</span><span class="p">[</span><span class="n">z</span> <span class="o">&lt;</span> <span class="n">zmean</span><span class="p">]</span>
+    <span class="n">i1</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="n">z</span> <span class="o">&gt;</span> <span class="n">zmean</span><span class="p">]</span>
+    <span class="n">i2</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="n">z</span> <span class="o">&lt;</span> <span class="n">zmean</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">i1</span><span class="p">,</span> <span class="n">i2</span><span class="p">])</span></div>
 
 
@@ -719,15 +763,15 @@ document.write(`
 <span class="sd">        atoms (ASE.Atoms):</span>
 <span class="sd">            ase atoms of your interface model.</span>
 <span class="sd">        idx_cn5 (np.ndarray):</span>
-<span class="sd">            1-d integer array, which contains indicies for Ti5c atoms.</span>
+<span class="sd">            1-d integer array, which contains indices for Ti5c atoms.</span>
 <span class="sd">        idx_obrs (np.ndarray):</span>
-<span class="sd">            1-d integer array, which contains indicies for all the Obr atoms.</span>
+<span class="sd">            1-d integer array, which contains indices for all the Obr atoms.</span>
 <span class="sd">        M (str, optional):</span>
 <span class="sd">            Metal elements in the rutile structure. Defaults to &quot;Ti&quot;.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tuple: (&lt;idx_cn5&gt;, &lt;res_obr&gt;).</span>
-<span class="sd">            Paired Ti5c and Obr indicies. Check if they are really paired before you use.</span>
+<span class="sd">            Paired Ti5c and Obr indices. Check if they are really paired before you use.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># obtain the distance matrix between Ti5c and Obr</span>
     <span class="n">xyz1</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">idx_cn5</span><span class="p">]</span>
@@ -822,7 +866,7 @@ document.write(`
 
 
 <span class="c1"># tricks</span>
-<div class="viewcode-block" id="get_sym_edge"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.get_sym_edge">[docs]</a><span class="k">def</span> <span class="nf">get_sym_edge</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">idx_l_edge4</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<div class="viewcode-block" id="get_sym_edge"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.get_sym_edge">[docs]</a><span class="k">def</span> <span class="nf">get_sym_edge</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">idx_l_edge4</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Translate the rutile &lt;1-11&gt; edge-water interface model s.t. it looks</span>
 <span class="sd">    pretty and symmetric.</span>
 
@@ -863,7 +907,7 @@ document.write(`
 <span class="sd">        ase.Atoms:</span>
 <span class="sd">            symmetric &amp; pretty-looking edge model</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">target_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">])</span>
+    <span class="n">target_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">])</span>
     <span class="n">trans</span> <span class="o">=</span> <span class="n">target_pos</span> <span class="o">-</span> <span class="n">atoms</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">idx_l_edge4</span><span class="p">]</span>
     <span class="n">atoms</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">trans</span><span class="p">)</span>
     <span class="n">atoms</span><span class="o">.</span><span class="n">wrap</span><span class="p">()</span>

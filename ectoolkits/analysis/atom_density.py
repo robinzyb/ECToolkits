@@ -43,7 +43,7 @@ class AtomDensity():
         self.surf2 = np.array(self.surf2)
         fancy_print("Read Surface 2 Atoms Index: {0}".format(inp["surf2"]))
 
-        if self.surf1 == self.surf2:
+        if np.all(self.surf1 == self.surf2):
             self.twoD = True
             fancy_print("Surface 1 and Surface 2 are the same, this is a 2D material.")
 

@@ -25,6 +25,7 @@ class AtomDensity():
     def __init__(self, inp):
         fancy_print("Perform Atom Density Analysis")
         # print file name
+        self.twoD = False
         self.xyz_file = inp.get("xyz_file")
         if not os.path.isfile(self.xyz_file):
             raise FileNotFoundError
@@ -41,6 +42,10 @@ class AtomDensity():
         self.surf2 = inp["surf2"]
         self.surf2 = np.array(self.surf2)
         fancy_print("Read Surface 2 Atoms Index: {0}".format(inp["surf2"]))
+
+        if self.surf1 == self.surf2:
+            self.twoD = True
+            fancy_print("Surface 1 and Surface 2 are the same, this is a 2D material.")
 
         self.atom_density = {}
         self.atom_density_z = {}
@@ -207,7 +212,7 @@ class AtomDensity():
         atom_z = np.array(atom_z_new)
 
         # find the length between two surface
-        if self.surf1_z > self.surf2_z:
+        if (self.surf1_z > self.surf2_z) or self.twoD:
             self.surf_space = self.surf2_z + cell_z - self.surf1_z
         else:
             self.surf_space = self.surf2_z - self.surf1_z

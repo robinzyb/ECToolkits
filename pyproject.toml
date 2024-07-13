@@ -23,7 +23,7 @@ dependencies = [
     "ase >= 3.20.1",
     "cp2kdata >= 0.6.1",
     "pandas",
-    "MDAnalysis >= 2.1.0",
+    "MDAnalysis",
     "dpdispatcher",
     "cp2k-input-tools",
     "pyyaml"

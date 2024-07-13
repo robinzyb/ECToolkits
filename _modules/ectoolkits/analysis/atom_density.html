@@ -388,6 +388,7 @@ document.write(`
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inp</span><span class="p">):</span>
         <span class="n">fancy_print</span><span class="p">(</span><span class="s2">&quot;Perform Atom Density Analysis&quot;</span><span class="p">)</span>
         <span class="c1"># print file name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">twoD</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">xyz_file</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;xyz_file&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz_file</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">FileNotFoundError</span>
@@ -404,6 +405,10 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">surf2</span> <span class="o">=</span> <span class="n">inp</span><span class="p">[</span><span class="s2">&quot;surf2&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">surf2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surf2</span><span class="p">)</span>
         <span class="n">fancy_print</span><span class="p">(</span><span class="s2">&quot;Read Surface 2 Atoms Index: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inp</span><span class="p">[</span><span class="s2">&quot;surf2&quot;</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surf1</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf2</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">twoD</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">fancy_print</span><span class="p">(</span><span class="s2">&quot;Surface 1 and Surface 2 are the same, this is a 2D material.&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">atom_density</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">atom_density_z</span> <span class="o">=</span> <span class="p">{}</span>
@@ -570,7 +575,7 @@ document.write(`
         <span class="n">atom_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">atom_z_new</span><span class="p">)</span>
 
         <span class="c1"># find the length between two surface</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf1_z</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf2_z</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surf1_z</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf2_z</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">twoD</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">surf_space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf2_z</span> <span class="o">+</span> <span class="n">cell_z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf1_z</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">surf_space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf2_z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf1_z</span>

@@ -856,13 +856,13 @@ document.write(`
 <span class="sd">    3. the collection of three methods, namely, &quot;group_each_row&quot;, &quot;sort_each_row&quot;, and &quot;sort_grouped_rows&quot;,</span>
 <span class="sd">    are used to sort each row. For rows without &quot;discontinuity&quot; (&quot;*&quot;), method &#39;sort_each_row&#39; will suffice.</span>
 <span class="sd">    However, complexity arise at discontinuity. For example, if we use &quot;o&quot; to denote a discontinuity, we observe</span>
-<span class="sd">    ^ y               that after apply the rotation matridx, the two &quot;o&quot; will have the nearly identical &#39;yy_rot&#39; value. </span>
-<span class="sd">    |                 Hence, in may cases, sorting of this discontinuity is not straitforward. Fortuanetely, this problem is solved </span>
+<span class="sd">    ^ y               that after apply the rotation matridx, the two &quot;o&quot; will have the nearly identical &#39;yy_rot&#39; value.</span>
+<span class="sd">    |                 Hence, in may cases, sorting of this discontinuity is not straitforward. Fortuanetely, this problem is solved</span>
 <span class="sd">    |---------        if we first treat different segments of the &quot;+&quot; row separately, and for the discontinuity, we use the original</span>
 <span class="sd">    | *    + |        coordinates to sort the discontinuity (o). A implementation of this algorithm is given in &#39;sort_grouped_rows&#39;</span>
-<span class="sd">    |  *    o|     </span>
-<span class="sd">    | o * ...|     </span>
-<span class="sd">    |  + *   |     </span>
+<span class="sd">    |  *    o|</span>
+<span class="sd">    | o * ...|</span>
+<span class="sd">    |  + *   |</span>
 <span class="sd">    ..............</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -879,9 +879,9 @@ document.write(`
         <span class="n">xyz_rot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">xyz</span><span class="p">,</span> <span class="n">rotM</span><span class="p">)</span>
         <span class="n">xx_rot</span><span class="p">,</span> <span class="n">yy_rot</span> <span class="o">=</span> <span class="n">xyz_rot</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">xyz_rot</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">xy_rot</span><span class="p">,</span> <span class="n">yy_rot</span> <span class="o">=</span> <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span>
+        <span class="n">xx_rot</span><span class="p">,</span> <span class="n">yy_rot</span> <span class="o">=</span> <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span>
 
-    <span class="c1"># Second: group the rows </span>
+    <span class="c1"># Second: group the rows</span>
     <span class="k">def</span> <span class="nf">make_groups</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">xx</span><span class="p">):</span>
         <span class="n">dm</span> <span class="o">=</span> <span class="n">distance_matrix</span><span class="p">(</span><span class="n">xx</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">xx</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">groups</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">dm</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -901,7 +901,7 @@ document.write(`
         <span class="n">dm</span> <span class="o">=</span> <span class="n">distance_matrix</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">coords</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">dm_coarse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">dm</span><span class="p">)</span>
         <span class="n">groups</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">dm_coarse</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    
+
         <span class="k">return</span> <span class="n">groups</span>
 
     <span class="c1"># Thrid sort along x axis</span>
@@ -922,11 +922,11 @@ document.write(`
                 <span class="n">first_elements_coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="n">row_ig</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
 
             <span class="n">argsort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">first_elements_coords</span><span class="p">)</span>
-            <span class="n">rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)[</span><span class="n">argsort</span><span class="p">]</span> 
+            <span class="n">rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)[</span><span class="n">argsort</span><span class="p">]</span>
             <span class="n">rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">rows</span>
 
-    <span class="n">idx_sorted_perpendicular_bridge</span> <span class="o">=</span> <span class="n">make_groups</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">xx_rot</span><span class="p">)</span> 
+    <span class="n">idx_sorted_perpendicular_bridge</span> <span class="o">=</span> <span class="n">make_groups</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">xx_rot</span><span class="p">)</span>
     <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">idx_sorted_perpendicular_bridge</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">irow</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_row</span><span class="p">):</span>

@@ -69,7 +69,7 @@ inp_to_try  = list(map(R110Inp, ag_to_try, r110_to_try))
 @pytest.mark.parametrize('inp', inp_to_try,   ids=traj_name_list)
 def test_pair_M5c_n_obr(inp):
     atoms = inp.r110
-    ind = inp.r110.get_indicies()
+    ind = inp.r110.get_indices()
     ind['idx_M5c'][0] = np.flip(ind['idx_M5c'][0], axis=1)
     cn5idx  = ind['idx_M5c'].reshape(2, -1)
     obr_idx = ind['idx_Obr'].reshape(2, -1)
@@ -105,7 +105,7 @@ class TestRutile110Flat():
         ag       = inp.ag
         r110     = inp.r110
         owidx, _ = r110.get_wat()
-        cn5idx   = r110.get_indicies()['idx_M5c']
+        cn5idx   = r110.get_indices()['idx_M5c']
         disdeg   = RutileDisDeg(ag, owidx, cn5idx, nrow=r110.nrow) 
         disdeg.run()
         # test if all output files are dumped correctly
@@ -121,7 +121,7 @@ class TestRutile110Flat():
         r110     = inp.r110
         idx_owat, _ = r110.get_wat()
         atoms = inp.r110
-        ind = inp.r110.get_indicies()
+        ind = inp.r110.get_indices()
         ind['idx_M5c'][0] = np.flip(ind['idx_M5c'][0], axis=1)
         cn5idx  = ind['idx_M5c'].reshape(2, -1)
         obr_idx = ind['idx_Obr'].reshape(2, -1)
@@ -134,13 +134,13 @@ class TestRutile110Flat():
         # test if all output files are dumped correctly
         has_upper_dab  = os.path.isfile(os.path.join(DATA_DIR, "upper-dab.npy"))
         has_lower_dab  = os.path.isfile(os.path.join(DATA_DIR, "lower-dab.npy"))
-        has_ind_Oad    = os.path.isfile(os.path.join(DATA_DIR, "ad_O_indicies.npy"))
+        has_ind_Oad    = os.path.isfile(os.path.join(DATA_DIR, "ad_O_indices.npy"))
         assert (has_upper_dab & has_lower_dab & has_ind_Oad)
 
     def test_dInterLayer(self, inp):
         # test could this ananlysis run normally
         ag   = inp.ag
-        ind = inp.r110.get_indicies()
+        ind = inp.r110.get_indices()
         ind['idx_M5c'][0] = np.flip(ind['idx_M5c'][0], axis=1)
         cn5idx = ind['idx_M5c'].reshape(2, -1)
         n_ti5c = int(cn5idx.shape[1]/2)
@@ -157,7 +157,7 @@ class TestRutile110Flat():
         ag       = inp.ag
         r110     = inp.r110
         idx_owat, _ = r110.get_wat()
-        ind = inp.r110.get_indicies()
+        ind = inp.r110.get_indices()
         ind['idx_M5c'][0] = np.flip(ind['idx_M5c'][0], axis=1)
         ind['idx_Obr'][0] = np.flip(ind['idx_Obr'][0], axis=1)
         idx_cn5  = ind['idx_M5c'].reshape(2, -1)
@@ -169,14 +169,14 @@ class TestRutile110Flat():
         # test if all output files are dumped correctly
         has_Ti_Oad  = os.path.isfile(os.path.join(DATA_DIR, "d_TiOad.npy"))
         has_Ti_Obr  = os.path.isfile(os.path.join(DATA_DIR, "d_TiObr.npy"))
-        has_ind     = os.path.isfile(os.path.join(DATA_DIR, "indicies.dat"))
+        has_ind     = os.path.isfile(os.path.join(DATA_DIR, "indices.dat"))
         assert (has_Ti_Oad & has_Ti_Obr & has_ind)
 
     def test_dObr_NearestH(self, inp):
         ag       = inp.ag
         r110     = inp.r110
         idx_owat, _ = r110.get_wat()
-        ind = inp.r110.get_indicies()
+        ind = inp.r110.get_indices()
         ind['idx_Obr'][0] = np.flip(ind['idx_Obr'][0], axis=1)
         idx_obr  = ind['idx_Obr'].reshape(2, -1)
         doh = dObr_NearestH(ag, idx_obr, nrow=r110.nrow, idx_hobr1=None, idx_hobr2=None, idx_eobr=None)

@@ -31,11 +31,11 @@ class TestRutile110():
     """Test the rutile 110 strucutre identifier
     """
     def test_ind_keys(self, r110):
-        ind = r110.get_indicies()
+        ind = r110.get_indices()
         assert list(ind.keys()) == ['idx_M5c', 'idx_Obr']
     
     def test_shape(self, r110):
-        ind    = r110.get_indicies()
+        ind    = r110.get_indices()
         shape1 = (ind['idx_M5c'].shape[:2] == (2, r110.nrow))
         shape2 = (ind['idx_Obr'].shape[:2] == (2, r110.nrow))
         assert (shape1 & shape2)
@@ -64,7 +64,7 @@ class TestRutile1p11Edge():
     """Test the rutile 110 strucutre identifier
     """
     def test_ind_keys(self, r110_step):
-        ind = r110_step.get_indicies()
+        ind = r110_step.get_indices()
         assert list(ind.keys()) == ['idx_M5c', 
                                     'idx_edge_M5c', 
                                     'idx_edge_M4c', 
@@ -74,7 +74,7 @@ class TestRutile1p11Edge():
                                     'idx_edge_O2']
     
     def test_shape(self, r110_step):
-        ind            = r110_step.get_indicies()
+        ind            = r110_step.get_indices()
         shape_Ti5s     = (ind['idx_M5c'].shape[:2] == (2, r110_step.nrow))
         shape_Obr      = (ind['idx_Obr'].shape[:2] == (2, r110_step.nrow))
         shape_Ti5e     = (ind['idx_edge_M5c'].shape   == (2, r110_step.nrow, 1))

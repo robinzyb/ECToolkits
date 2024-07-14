@@ -1,9 +1,12 @@
-from utils import printtbox
-from ase.io import vasp
 import os
 import glob
-import numpy as np
 
+import numpy as np
+from ase.io import vasp
+
+from ectoolkits.log import get_logger
+
+logger = get_logger(__name__)
 
 def scale_iso_cell(atoms, start, end, step, out_name):
     """
@@ -21,7 +24,7 @@ def scale_iso_cell(atoms, start, end, step, out_name):
         new_atoms.set_cell(old_cell_vector * scale, scale_atoms=True)
         vasp.write_vasp(out_name + "_{0:.3f}".format(scale), new_atoms,
                         direct=True, sort=True)
-        printtbox("create POSCAR for {0:.3f} scaling".format(scale))
+        logger.info("create POSCAR for {0:.3f} scaling".format(scale))
 
 
 def find_outcar(dirpath, filename):
@@ -32,7 +35,7 @@ def find_outcar(dirpath, filename):
     file = os.path.join(dirpath, filename)
     allfile = glob.glob(file)
     for i in allfile:
-        printtbox("The file {0} has been found".format(os.path.basename(i)))
+        logger.info("The file {0} has been found".format(os.path.basename(i)))
     return allfile
 
 
@@ -42,7 +45,7 @@ def exout_vasp(files):
     """
     infos = []
     for file in files:
-        printtbox("Now extract the cell parameter, volume and "
+        logger.info("Now extract the cell parameter, volume and "
                   "energy from {0}".format(os.path.basename(file)))
         info = []
         pos = vasp.read_vasp_out(file)
@@ -51,7 +54,7 @@ def exout_vasp(files):
         info.append(pos.get_volume())
         info.append(pos.get_total_energy())
         infos.append(info)
-        printtbox("extraction finished")
+        logger.info("extraction finished")
     infos = np.array(infos)
 
     # sort the row by volume
@@ -62,5 +65,5 @@ def exout_vasp(files):
     np.savetxt(info_file, infos, fmt='%.8f',
                header="lengthA  lengthB  lengthC  AngleA  AngleB  AngleC"
                "Volume Energy")
-    printtbox("store the file in {0}".format(info_file))
+    logger.info("store the file in {0}".format(info_file))
     return infos

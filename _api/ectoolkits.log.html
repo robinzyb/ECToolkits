@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>ectoolkits.utils.vasp module &#8212; ECToolkits Reference</title>
+    <title>ectoolkits.log module &#8212; ECToolkits Reference</title>
   
   
   
@@ -62,11 +62,10 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '_api/ectoolkits.utils.vasp';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_api/ectoolkits.log';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="ectoolkits.log module" href="ectoolkits.log.html" />
-    <link rel="prev" title="ectoolkits.utils.utils module" href="ectoolkits.utils.utils.html" />
+    <link rel="prev" title="ectoolkits.utils.vasp module" href="ectoolkits.utils.vasp.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -203,14 +202,14 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="ectoolkits.structures.slab.html">ectoolkits.structures.slab module</a></li>
 </ul>
 </li>
-<li class="toctree-l3 current active has-children"><a class="reference internal" href="ectoolkits.utils.html">ectoolkits.utils package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="ectoolkits.utils.html">ectoolkits.utils package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="ectoolkits.utils.math.html">ectoolkits.utils.math module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="ectoolkits.utils.rutile110.html">ectoolkits.utils.rutile110 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="ectoolkits.utils.utils.html">ectoolkits.utils.utils module</a></li>
-<li class="toctree-l4 current active"><a class="current reference internal" href="#">ectoolkits.utils.vasp module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.utils.vasp.html">ectoolkits.utils.vasp module</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="ectoolkits.log.html">ectoolkits.log module</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">ectoolkits.log module</a></li>
 </ul>
 </li>
 </ul>
@@ -286,7 +285,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/robinzyb/ectoolkits/issues/new?title=Issue%20on%20page%20%2F_api/ectoolkits.utils.vasp.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/robinzyb/ectoolkits/issues/new?title=Issue%20on%20page%20%2F_api/ectoolkits.log.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -316,7 +315,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="../_sources/_api/ectoolkits.utils.vasp.rst" target="_blank"
+      <li><a href="../_sources/_api/ectoolkits.log.rst" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -398,7 +397,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>ectoolkits.utils.vasp module</h1>
+    <h1>ectoolkits.log module</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -412,30 +411,12 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="module-ectoolkits.utils.vasp">
-<span id="ectoolkits-utils-vasp-module"></span><h1>ectoolkits.utils.vasp module<a class="headerlink" href="#module-ectoolkits.utils.vasp" title="Permalink to this heading">#</a></h1>
+  <section id="module-ectoolkits.log">
+<span id="ectoolkits-log-module"></span><h1>ectoolkits.log module<a class="headerlink" href="#module-ectoolkits.log" title="Permalink to this heading">#</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="ectoolkits.utils.vasp.exout_vasp">
-<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.vasp.</span></span><span class="sig-name descname"><span class="pre">exout_vasp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/vasp.html#exout_vasp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.vasp.exout_vasp" title="Permalink to this definition">#</a></dt>
-<dd><p>extract the vasp file from filepath</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ectoolkits.utils.vasp.find_outcar">
-<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.vasp.</span></span><span class="sig-name descname"><span class="pre">find_outcar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dirpath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/vasp.html#find_outcar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.vasp.find_outcar" title="Permalink to this definition">#</a></dt>
-<dd><p>find the outcar path with some fancy output</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ectoolkits.utils.vasp.scale_iso_cell">
-<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.vasp.</span></span><span class="sig-name descname"><span class="pre">scale_iso_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/vasp.html#scale_iso_cell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.vasp.scale_iso_cell" title="Permalink to this definition">#</a></dt>
-<dd><p>creat the scaling cell for vasp
-atoms: the Atoms object from ase
-start: starting fraction
-end: ending fraction
-step: the step from start to end
-out_name: the name for out file, it can be a path.</p>
-</dd></dl>
+<dt class="sig sig-object py" id="ectoolkits.log.get_logger">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.log.</span></span><span class="sig-name descname"><span class="pre">get_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/log.html#get_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.log.get_logger" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
 
 </section>
 
@@ -470,22 +451,13 @@ out_name: the name for out file, it can be a path.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="ectoolkits.utils.utils.html"
+       href="ectoolkits.utils.vasp.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">ectoolkits.utils.utils module</p>
+        <p class="prev-next-title">ectoolkits.utils.vasp module</p>
       </div>
-    </a>
-    <a class="right-next"
-       href="ectoolkits.log.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">ectoolkits.log module</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>

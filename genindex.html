@@ -207,6 +207,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="_api/ectoolkits.utils.vasp.html">ectoolkits.utils.vasp module</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="_api/ectoolkits.log.html">ectoolkits.log module</a></li>
 </ul>
 </li>
 </ul>
@@ -392,8 +393,6 @@ document.write(`
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.align_to_slab_cent">align_to_slab_cent() (in module ectoolkits.analysis.band_align)</a>
-</li>
       <li><a href="_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.analysis_run">analysis_run() (in module ectoolkits.analysis.atom_density)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity">AtomDensity (class in ectoolkits.analysis.atom_density)</a>
@@ -404,12 +403,10 @@ document.write(`
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.BandAlign">BandAlign (class in ectoolkits.analysis.band_align)</a>
+      <li><a href="_api/ectoolkits.plots.band_align.html#ectoolkits.plots.band_align.be_data_to_she">be_data_to_she() (in module ectoolkits.plots.band_align)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="_api/ectoolkits.plots.band_align.html#ectoolkits.plots.band_align.be_data_to_she">be_data_to_she() (in module ectoolkits.plots.band_align)</a>
-</li>
       <li><a href="_api/ectoolkits.utils.math.html#ectoolkits.utils.math.birch_murnaghan_equation">birch_murnaghan_equation() (in module ectoolkits.utils.math)</a>
 </li>
   </ul></td>
@@ -445,6 +442,8 @@ document.write(`
       <li><a href="_api/ectoolkits.structures.slab.html#ectoolkits.structures.slab.Slab.del_surf_layer">del_surf_layer() (ectoolkits.structures.slab.Slab method)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.UniformCharge.delta_z">delta_z() (ectoolkits.analysis.finite_size_correction.UniformCharge static method)</a>
+</li>
+      <li><a href="_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.Density">Density (class in ectoolkits.analysis.atom_density)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.DielProfile">DielProfile (class in ectoolkits.analysis.finite_size_correction)</a>
 </li>
@@ -501,13 +500,6 @@ document.write(`
 </li>
       </ul></li>
       <li>
-    ectoolkits.analysis.band_align
-
-      <ul>
-        <li><a href="_api/ectoolkits.analysis.band_align.html#module-ectoolkits.analysis.band_align">module</a>
-</li>
-      </ul></li>
-      <li>
     ectoolkits.analysis.dielectric_constant
 
       <ul>
@@ -536,14 +528,19 @@ document.write(`
 </li>
       </ul></li>
       <li>
+    ectoolkits.log
+
+      <ul>
+        <li><a href="_api/ectoolkits.log.html#module-ectoolkits.log">module</a>
+</li>
+      </ul></li>
+      <li>
     ectoolkits.matplotlibstyle
 
       <ul>
         <li><a href="_api/ectoolkits.matplotlibstyle.html#module-ectoolkits.matplotlibstyle">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     ectoolkits.plots
 
@@ -551,6 +548,8 @@ document.write(`
         <li><a href="_api/ectoolkits.plots.html#module-ectoolkits.plots">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     ectoolkits.plots.band_align
 
@@ -614,7 +613,16 @@ document.write(`
         <li><a href="_api/ectoolkits.utils.utils.html#module-ectoolkits.utils.utils">module</a>
 </li>
       </ul></li>
+      <li>
+    ectoolkits.utils.vasp
+
+      <ul>
+        <li><a href="_api/ectoolkits.utils.vasp.html#module-ectoolkits.utils.vasp">module</a>
+</li>
+      </ul></li>
       <li><a href="_api/ectoolkits.plots.band_align.html#ectoolkits.plots.band_align.enumerate_subplots">enumerate_subplots() (in module ectoolkits.plots.band_align)</a>
+</li>
+      <li><a href="_api/ectoolkits.utils.vasp.html#ectoolkits.utils.vasp.exout_vasp">exout_vasp() (in module ectoolkits.utils.vasp)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -622,17 +630,17 @@ document.write(`
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="_api/ectoolkits.utils.utils.html#ectoolkits.utils.utils.fancy_print">fancy_print() (in module ectoolkits.utils.utils)</a>
-</li>
       <li><a href="_api/ectoolkits.utils.utils.html#ectoolkits.utils.utils.file_content">file_content() (in module ectoolkits.utils.utils)</a>
 </li>
       <li><a href="_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.find_cn_idx">find_cn_idx() (in module ectoolkits.utils.rutile110)</a>
 </li>
       <li><a href="_api/ectoolkits.structures.slab.html#ectoolkits.structures.slab.Slab.find_element_idx_list">find_element_idx_list() (ectoolkits.structures.slab.Slab method)</a>
 </li>
+      <li><a href="_api/ectoolkits.structures.slab.html#ectoolkits.structures.slab.Slab.find_idx_from_range">find_idx_from_range() (ectoolkits.structures.slab.Slab method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="_api/ectoolkits.structures.slab.html#ectoolkits.structures.slab.Slab.find_idx_from_range">find_idx_from_range() (ectoolkits.structures.slab.Slab method)</a>
+      <li><a href="_api/ectoolkits.utils.vasp.html#ectoolkits.utils.vasp.find_outcar">find_outcar() (in module ectoolkits.utils.vasp)</a>
 </li>
       <li><a href="_api/ectoolkits.structures.slab.html#ectoolkits.structures.slab.Slab.find_surf_idx">find_surf_idx() (ectoolkits.structures.slab.Slab method)</a>
 </li>
@@ -658,23 +666,11 @@ document.write(`
 </li>
       <li><a href="_api/ectoolkits.structures.slab.html#ectoolkits.structures.slab.Slab.generate_water_box">generate_water_box() (ectoolkits.structures.slab.Slab method)</a>
 </li>
-      <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.get_alignment">get_alignment() (in module ectoolkits.analysis.band_align)</a>
-</li>
-      <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.get_alignment_vac">get_alignment_vac() (in module ectoolkits.analysis.band_align)</a>
-</li>
-      <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.get_alignment_vac_2">get_alignment_vac_2() (in module ectoolkits.analysis.band_align)</a>
-</li>
-      <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.get_alignment_water">get_alignment_water() (in module ectoolkits.analysis.band_align)</a>
-</li>
-      <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.get_alignment_water_2">get_alignment_water_2() (in module ectoolkits.analysis.band_align)</a>
-</li>
       <li><a href="_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_all_z">get_all_z() (ectoolkits.analysis.atom_density.AtomDensity method)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_atom_density">get_atom_density() (ectoolkits.analysis.atom_density.AtomDensity method)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_ave_density">get_ave_density() (ectoolkits.analysis.atom_density.AtomDensity method)</a>
-</li>
-      <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.BandAlign.get_cent_list">get_cent_list() (ectoolkits.analysis.band_align.BandAlign method)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_cls_vib_fe">get_cls_vib_fe() (in module ectoolkits.analysis.acidity)</a>
 </li>
@@ -718,7 +714,7 @@ document.write(`
 </li>
       <li><a href="_api/ectoolkits.analysis.dielectric_constant.html#ectoolkits.analysis.dielectric_constant.get_integrated_array">get_integrated_array() (in module ectoolkits.analysis.dielectric_constant)</a>
 </li>
-      <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.get_layer_space_list">get_layer_space_list() (in module ectoolkits.analysis.band_align)</a>
+      <li><a href="_api/ectoolkits.log.html#ectoolkits.log.get_logger">get_logger() (in module ectoolkits.log)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.dielectric_constant.html#ectoolkits.analysis.dielectric_constant.get_micro_electric_field">get_micro_electric_field() (in module ectoolkits.analysis.dielectric_constant)</a>
 </li>
@@ -727,8 +723,6 @@ document.write(`
       <li><a href="_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.dObr_NearestH.get_min_OH">get_min_OH() (ectoolkits.analysis.rutile110.dObr_NearestH method)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.dInterLayer.get_n_trilayers">get_n_trilayers() (ectoolkits.analysis.rutile110.dInterLayer static method)</a>
-</li>
-      <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.get_nearest_idx">get_nearest_idx() (in module ectoolkits.analysis.band_align)</a>
 </li>
       <li><a href="_api/ectoolkits.structures.slab.html#ectoolkits.structures.slab.Slab.get_neighbor_list">get_neighbor_list() (ectoolkits.structures.slab.Slab method)</a>
 </li>
@@ -758,10 +752,6 @@ document.write(`
 </li>
       <li><a href="_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_partition_ratio_hydronium">get_partition_ratio_hydronium() (in module ectoolkits.analysis.acidity)</a>
 </li>
-      <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.BandAlign.get_pav_mav_traj_list_from_cube">get_pav_mav_traj_list_from_cube() (ectoolkits.analysis.band_align.BandAlign method)</a>
-</li>
-      <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.BandAlign.get_pav_mav_traj_list_from_file">get_pav_mav_traj_list_from_file() (ectoolkits.analysis.band_align.BandAlign method)</a>
-</li>
       <li><a href="_api/ectoolkits.utils.math.html#ectoolkits.utils.math.get_plane_distance">get_plane_distance() (in module ectoolkits.utils.math)</a>
 </li>
       <li><a href="_api/ectoolkits.utils.math.html#ectoolkits.utils.math.get_plane_eq">get_plane_eq() (in module ectoolkits.utils.math)</a>
@@ -771,8 +761,6 @@ document.write(`
       <li><a href="_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_quantum_correction">get_quantum_correction() (in module ectoolkits.analysis.acidity)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_quantum_correction_hydronium">get_quantum_correction_hydronium() (in module ectoolkits.analysis.acidity)</a>
-</li>
-      <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.get_range_bool">get_range_bool() (in module ectoolkits.analysis.band_align)</a>
 </li>
       <li><a href="_api/ectoolkits.utils.utils.html#ectoolkits.utils.utils.get_rdf">get_rdf() (in module ectoolkits.utils.utils)</a>
 </li>
@@ -788,18 +776,10 @@ document.write(`
 </li>
       <li><a href="_api/ectoolkits.structures.slab.html#ectoolkits.structures.slab.RutileSlab.get_slab">get_slab() (ectoolkits.structures.slab.RutileSlab method)</a>
 </li>
-      <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.get_slab_cent">get_slab_cent() (in module ectoolkits.analysis.band_align)</a>
-</li>
       <li><a href="_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.Rutile110.get_slab_obj">get_slab_obj() (ectoolkits.structures.rutile110.Rutile110 method)</a>
 
       <ul>
         <li><a href="_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.Rutile1p11Edge.get_slab_obj">(ectoolkits.structures.rutile110.Rutile1p11Edge method)</a>
-</li>
-      </ul></li>
-      <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.BandAlign.get_solid_hartree">get_solid_hartree() (ectoolkits.analysis.band_align.BandAlign method)</a>
-
-      <ul>
-        <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.get_solid_hartree">(in module ectoolkits.analysis.band_align)</a>
 </li>
       </ul></li>
       <li><a href="_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_surf1_z_list">get_surf1_z_list() (ectoolkits.analysis.atom_density.AtomDensity method)</a>
@@ -831,7 +811,11 @@ document.write(`
       <li><a href="_api/ectoolkits.analysis.uncertainty.html#ectoolkits.analysis.uncertainty.get_uncertainty">get_uncertainty() (in module ectoolkits.analysis.uncertainty)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_unit_conversion">get_unit_conversion() (ectoolkits.analysis.atom_density.AtomDensity method)</a>
+
+      <ul>
+        <li><a href="_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.Density.get_unit_conversion">(ectoolkits.analysis.atom_density.Density method)</a>
 </li>
+      </ul></li>
       <li><a href="_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_vib_temp">get_vib_temp() (in module ectoolkits.analysis.acidity)</a>
 </li>
       <li><a href="_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.Rutile110.get_wat">get_wat() (ectoolkits.structures.rutile110.Rutile110 method)</a>
@@ -844,14 +828,6 @@ document.write(`
 </li>
       <li><a href="_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_water_cent_list">get_water_cent_list() (ectoolkits.analysis.atom_density.AtomDensity method)</a>
 </li>
-      <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.get_water_center_list">get_water_center_list() (in module ectoolkits.analysis.band_align)</a>
-</li>
-      <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.BandAlign.get_water_hartree">get_water_hartree() (ectoolkits.analysis.band_align.BandAlign method)</a>
-
-      <ul>
-        <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.get_water_hartree">(in module ectoolkits.analysis.band_align)</a>
-</li>
-      </ul></li>
       <li><a href="_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.WatDensity.get_watOidx">get_watOidx() (ectoolkits.analysis.rutile110.WatDensity method)</a>
 
       <ul>
@@ -861,8 +837,6 @@ document.write(`
       <li><a href="_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.WatDensity.get_z_density">get_z_density() (ectoolkits.analysis.rutile110.WatDensity method)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.dInterLayer.get_z_histo">get_z_histo() (ectoolkits.analysis.rutile110.dInterLayer static method)</a>
-</li>
-      <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.get_z_mean">get_z_mean() (in module ectoolkits.analysis.band_align)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -910,8 +884,6 @@ document.write(`
 </li>
         <li><a href="_api/ectoolkits.analysis.atom_density.html#module-ectoolkits.analysis.atom_density">ectoolkits.analysis.atom_density</a>
 </li>
-        <li><a href="_api/ectoolkits.analysis.band_align.html#module-ectoolkits.analysis.band_align">ectoolkits.analysis.band_align</a>
-</li>
         <li><a href="_api/ectoolkits.analysis.dielectric_constant.html#module-ectoolkits.analysis.dielectric_constant">ectoolkits.analysis.dielectric_constant</a>
 </li>
         <li><a href="_api/ectoolkits.analysis.finite_size_correction.html#module-ectoolkits.analysis.finite_size_correction">ectoolkits.analysis.finite_size_correction</a>
@@ -919,6 +891,8 @@ document.write(`
         <li><a href="_api/ectoolkits.analysis.rutile110.html#module-ectoolkits.analysis.rutile110">ectoolkits.analysis.rutile110</a>
 </li>
         <li><a href="_api/ectoolkits.analysis.uncertainty.html#module-ectoolkits.analysis.uncertainty">ectoolkits.analysis.uncertainty</a>
+</li>
+        <li><a href="_api/ectoolkits.log.html#module-ectoolkits.log">ectoolkits.log</a>
 </li>
         <li><a href="_api/ectoolkits.matplotlibstyle.html#module-ectoolkits.matplotlibstyle">ectoolkits.matplotlibstyle</a>
 </li>
@@ -941,6 +915,8 @@ document.write(`
         <li><a href="_api/ectoolkits.utils.rutile110.html#module-ectoolkits.utils.rutile110">ectoolkits.utils.rutile110</a>
 </li>
         <li><a href="_api/ectoolkits.utils.utils.html#module-ectoolkits.utils.utils">ectoolkits.utils.utils</a>
+</li>
+        <li><a href="_api/ectoolkits.utils.vasp.html#module-ectoolkits.utils.vasp">ectoolkits.utils.vasp</a>
 </li>
       </ul></li>
   </ul></td>
@@ -973,13 +949,11 @@ document.write(`
 </li>
       <li><a href="_api/ectoolkits.plots.band_align.html#ectoolkits.plots.band_align.plot_band_alignment">plot_band_alignment() (in module ectoolkits.plots.band_align)</a>
 </li>
-      <li><a href="_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.plot_density">plot_density() (ectoolkits.analysis.atom_density.AtomDensity method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.WatDensity.plot_density_z">plot_density_z() (ectoolkits.analysis.rutile110.WatDensity method)</a>
+      <li><a href="_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.plot_density">plot_density() (ectoolkits.analysis.atom_density.AtomDensity method)</a>
 </li>
-      <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.BandAlign.plot_hartree_per_width">plot_hartree_per_width() (ectoolkits.analysis.band_align.BandAlign method)</a>
+      <li><a href="_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.WatDensity.plot_density_z">plot_density_z() (ectoolkits.analysis.rutile110.WatDensity method)</a>
 </li>
       <li><a href="_api/ectoolkits.plots.band_align.html#ectoolkits.plots.band_align.plot_multiple_ba">plot_multiple_ba() (in module ectoolkits.plots.band_align)</a>
 </li>
@@ -988,8 +962,6 @@ document.write(`
       <li><a href="_api/ectoolkits.plots.band_align.html#ectoolkits.plots.band_align.plot_one_ba_diff">plot_one_ba_diff() (in module ectoolkits.plots.band_align)</a>
 </li>
       <li><a href="_api/ectoolkits.plots.band_align.html#ectoolkits.plots.band_align.plot_one_ba_sc">plot_one_ba_sc() (in module ectoolkits.plots.band_align)</a>
-</li>
-      <li><a href="_api/ectoolkits.utils.utils.html#ectoolkits.utils.utils.printtbox">printtbox() (in module ectoolkits.utils.utils)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1029,6 +1001,8 @@ document.write(`
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_api/ectoolkits.utils.vasp.html#ectoolkits.utils.vasp.scale_iso_cell">scale_iso_cell() (in module ectoolkits.utils.vasp)</a>
+</li>
       <li><a href="_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.SlabRutile1p11Edge.sep_hobr">sep_hobr() (ectoolkits.structures.rutile110.SlabRutile1p11Edge static method)</a>
 </li>
       <li><a href="_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.SlabRutile1p11Edge.sep_ocn2">sep_ocn2() (ectoolkits.structures.rutile110.SlabRutile1p11Edge method)</a>
@@ -1045,10 +1019,10 @@ document.write(`
       </ul></li>
       <li><a href="_api/ectoolkits.utils.utils.html#ectoolkits.utils.utils.set_pbc">set_pbc() (in module ectoolkits.utils.utils)</a>
 </li>
-      <li><a href="_api/ectoolkits.plots.band_align.html#ectoolkits.plots.band_align.she_scale">she_scale() (in module ectoolkits.plots.band_align)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_api/ectoolkits.plots.band_align.html#ectoolkits.plots.band_align.she_scale">she_scale() (in module ectoolkits.plots.band_align)</a>
+</li>
       <li><a href="_api/ectoolkits.structures.slab.html#ectoolkits.structures.slab.Slab">Slab (class in ectoolkits.structures.slab)</a>
 </li>
       <li><a href="_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.SlabRutile110">SlabRutile110 (class in ectoolkits.structures.rutile110)</a>

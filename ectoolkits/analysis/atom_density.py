@@ -1,56 +1,59 @@
-import numpy as np
-import matplotlib.pyplot as plt
 import os
 
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 from ase.io import read, write
 from ase.neighborlist import neighbor_list
+from MDAnalysis.analysis.base import AnalysisBase
 
-from ..utils.utils import fancy_print
-from ..structures.slab import Slab
-import pandas as pd
+from ectoolkits.structures.slab import Slab
+from ectoolkits.log import get_logger
+
+logger = get_logger(__name__)
 
 
 def analysis_run(args):
     if args.CONFIG:
         import json
-        fancy_print("Analysis Start!")
+        logger.info("Analysis Start!")
         with open(args.CONFIG, 'r') as f:
             inp = json.load(f)
         system = AtomDensity(inp)
         system.run()
-        fancy_print("FINISHED")
+        logger.info("FINISHED")
 
 
 class AtomDensity():
     def __init__(self, inp):
-        fancy_print("Perform Atom Density Analysis")
+        logger.info("Perform Atom Density Analysis")
         # print file name
         self.twoD = False
         self.xyz_file = inp.get("xyz_file")
         if not os.path.isfile(self.xyz_file):
             raise FileNotFoundError
 
-        fancy_print("Read Structure File: {0}".format(inp["xyz_file"]))
+        logger.info("Read Structure File: {0}".format(inp["xyz_file"]))
         # print the cell
         self.cell = inp["cell"]
-        fancy_print("Read the Cell Info: {0}".format(inp["cell"]))
+        logger.info("Read the Cell Info: {0}".format(inp["cell"]))
         # print surface 1
         self.surf1 = inp["surf1"]
         self.surf1 = np.array(self.surf1)
-        fancy_print("Read Surface 1 Atoms Index: {0}".format(inp["surf1"]))
+        logger.info("Read Surface 1 Atoms Index: {0}".format(inp["surf1"]))
         # print surface 2
         self.surf2 = inp["surf2"]
         self.surf2 = np.array(self.surf2)
-        fancy_print("Read Surface 2 Atoms Index: {0}".format(inp["surf2"]))
+        logger.info("Read Surface 2 Atoms Index: {0}".format(inp["surf2"]))
 
         if np.all(self.surf1 == self.surf2):
             self.twoD = True
-            fancy_print("Surface 1 and Surface 2 are the same, this is a 2D material.")
+            logger.info("Surface 1 and Surface 2 are the same, this is a 2D material.")
 
         self.atom_density = {}
         self.atom_density_z = {}
 #        self.shift_center = inp["shift_center"]
-#        fancy_print("Density will shift center to water center: {0}".format(self.shift_center))
+#        logger.info("Density will shift center to water center: {0}".format(self.shift_center))
 
         # slice for stucture
         index = inp.get("nframe", ":")
@@ -58,8 +61,8 @@ class AtomDensity():
         self.density_type = inp.get("density_type")
 
         # Start reading structure
-        fancy_print("Now Start Reading Structures")
-        fancy_print("----------------------------")
+        logger.info("Now Start Reading Structures")
+        logger.info("----------------------------")
         self.poses = read(self.xyz_file, index=index)
         self.poses[0] = Slab(self.poses[0])
         for pos in self.poses:
@@ -67,12 +70,12 @@ class AtomDensity():
             pos.set_cell(self.cell)
             pos.set_pbc(True)
             pos.wrap()
-        fancy_print("Reading Structures is Finished")
+        logger.info("Reading Structures is Finished")
 
         self.nframe = len(self.poses)
-        fancy_print("Read Frame Number: {0}".format(self.nframe))
+        logger.info("Read Frame Number: {0}".format(self.nframe))
         self.natom = len(self.poses[0])
-        fancy_print("Read Atom Number: {0}".format(self.natom))
+        logger.info("Read Atom Number: {0}".format(self.natom))
 
     def run(self):
         # read all structure and corresponding z
@@ -95,8 +98,8 @@ class AtomDensity():
         # water center relative to fisrt frame
         # self.water_cent_rel_s = self.water_cent_s - self.water_cent_s[0]
 
-        # fancy_print("Calculated Origin Water Center Position: {0} A".format(self.water_cent))
-        # fancy_print("Water Center will shift to Cell Center: {0} A".format(self.cell[2]/2))
+        # logger.info("Calculated Origin Water Center Position: {0} A".format(self.water_cent))
+        # logger.info("Water Center will shift to Cell Center: {0} A".format(self.cell[2]/2))
 
         for param in self.density_type:
             idx_list = self.get_idx_list(param)
@@ -181,7 +184,7 @@ class AtomDensity():
         elif idx_method == "all":
             idx_list = self.get_idx_list_all(param)
         else:
-            fancy_print("Not implement")
+            logger.info("Not implement")
             raise ValueError
         return idx_list
 
@@ -195,8 +198,8 @@ class AtomDensity():
         return idx_list
 
     def get_atom_density(self, param, idx_list):
-        fancy_print("START GETTING ATOM DENSITY")
-        fancy_print("----------------------------")
+        logger.info("START GETTING ATOM DENSITY")
+        logger.info("----------------------------")
 
         dz = param.get("dz", 0.05)
 
@@ -243,7 +246,7 @@ class AtomDensity():
             np.stack((z, density)).T,
             header="FIELD: z[A], atom_density"
         )
-        fancy_print(f"Density Profile Data Save to {output_file}")
+        logger.info(f"Density Profile Data Save to {output_file}")
 
     def get_unit_conversion(self, param, dz):
         density_unit = param.get("density_unit", "number")
@@ -301,3 +304,114 @@ class AtomDensity():
         ax.set_ylabel("Density")
         ax.set_xlabel("z [A]")
         return fig
+
+
+
+class Density(AnalysisBase):
+    """
+    Calculate the density profile of a group of atoms along the z-axis for interface systems
+    """
+    def __init__(self, atomgroup, **kwargs):
+        super(Density, self).__init__(atomgroup.universe.trajectory,
+                                          **kwargs)
+
+        # Params
+        # selection_area
+        # selection_left_surface
+        # selection_right_surface
+        # solid |(surface left) liquid |(surface_right) solid
+        # dz: default 0.05 resolution for density profile
+
+        #self._param = param
+        self.selection_area = kwargs.get("selection_area")
+        self.selection_left_surface = kwargs.get("selection_left_surface")
+        self.selection_right_surface = kwargs.get("selection_right_surface")
+        self.dz = kwargs.get("dz", 0.05)
+        self.output_file = kwargs.get("output_file", "density.dat")
+        self.density_type = kwargs.get("density_type", "water")
+
+        self._ag = atomgroup
+        self.cellpar = self._ag.dimensions
+        self.volume = self._ag.volume
+        self.xy_area = self.volume/self.cellpar[2]
+
+    def _prepare(self):
+        # OPTIONAL
+        # Called before iteration on the trajectory has begun.
+        # Data structures can be set up at this time
+        self.results.example_result = []
+        self._ag_area = self._ag.select_atoms(self.selection_area)
+        self._ag_left_surface = self._ag.select_atoms(self.selection_left_surface)
+        self._ag_right_surface = self._ag.select_atoms(self.selection_right_surface)
+
+
+        # store the histogram of z area
+        self.z_area = np.zeros(self.n_frames, len(self._ag_area))
+        self.z_left_surface = np.zeros(self.n_frames)
+        self.z_right_surface = np.zeros(self.n_frames)
+
+
+    def _single_frame(self):
+        # REQUIRED
+        # Called after the trajectory is moved onto each new frame.
+        # store an example_result of `some_function` for a single frame
+        # water density at each frame
+        #self.results.example_result.append(some_function(self._ag,
+        #                                                self._parameter))
+
+        # get the z coordinates of atoms along trajectory
+        #self._ag_area =
+        self.z_left_surface[self._frame_index] = self._ag_left_surface.positions.T[2].mean()
+        self.z_right_surface[self._frame_index] = self._ag_right_surface.positions.T[2].mean()
+        self.z_area[self._frame_index] = self._ag_area.positions.T[2]
+
+    def _conclude(self):
+        # OPTIONAL
+        # Called once iteration on the trajectory is finished.
+        # Apply normalisation and averaging to results here.
+
+
+        self.z_area = self.z_area - self.z_left_surface
+
+        cell_z = self.cellpar[2]
+        if (self.z_left_surface > self.z_right_surface) or self.twoD:
+            self.electrolyte_width = self.z_right_surface + cell_z - self.z_left_surface
+        else:
+            self.electrolyte_width = self.z_right_surface - self.z_left_surface
+
+        bins = int(self.electrolyte_widthe/self.dz)
+
+        density, z = np.histogram(
+            self.z_area,
+            bins=bins,
+            range=(0, self.electrolyte_width)
+            )
+
+        # throw the last value and increase the half bin
+        z = z[:-1] + self.dz/2
+
+        unit_conversion = self.get_unit_conversion()
+
+        density = density/self.n_frames * unit_conversion
+
+        # self.atom_density_z[output_file] = z
+        # self.atom_density[output_file] = density
+
+        np.savetxt(
+            self.output_file,
+            np.stack((z, density)).T,
+            header="FIELD: z[A], atom_density"
+        )
+
+        logger.info(f"Density Profile Data Save to {self.output_file}")
+
+    def get_unit_conversion(self):
+        density_type = self.density_type
+        if density_type == "water":
+            bulk_density = 32/9.86**3
+            unit_conversion = self.xy_area*self.dz*bulk_density
+            unit_conversion = 1.0/unit_conversion
+        elif density_type == "number":
+            unit_conversion = 1.0
+
+        return unit_conversion

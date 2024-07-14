@@ -1,13 +1,15 @@
 """
 this script put misc function here.
 """
-import numpy as np
 import os
 import shutil
 from random import random
+
+import numpy as np
 from ase.geometry.analysis import Analysis
 from ase.build import molecule
-from ..structures.slab import Slab
+
+from ectoolkits.structures.slab import Slab
 
 # frequently used unit convertion
 au2eV = 27.211386245988
@@ -85,11 +87,6 @@ def get_cum_mean(array):
     cum_mean_array = np.array(cum_mean_array)
     return cum_mean_array
 
-
-def fancy_print(string):
-    print("ToolKit: {0}".format(string))
-
-
 def set_pbc(pos, cell):
     """set pbc for a list of Atoms object"""
     for single_pos in pos:
@@ -121,15 +118,6 @@ def get_rdf(pos, r, nbin, frames, elements):
     for s_gr in tmp_rdf_list:
         tot_gr += s_gr/frames
     return tot_gr
-
-
-def printtbox(arg):
-    """
-    This function is a print decorated with a few characters so that the
-    print function present a characteristic string. Useful for postprocess.
-    """
-    print("--> Toolkit: {0}".format(arg))
-
 
 def file_content(file, num):
     # read a specific line of file or return the block

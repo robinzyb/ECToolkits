@@ -8,7 +8,7 @@ from ectoolkits.analysis.atom_density import AtomDensity
 
 
 path_prefix = Path("tests/analysis/atom_density/")
-system_list = ["sno2-water"]
+system_list = ["SnO2-water", "P-water"]
 
 @pytest.fixture(params=system_list, ids=system_list, scope='class')
 def analysis_and_answer(request, tmp_path_factory):

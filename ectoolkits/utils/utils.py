@@ -20,6 +20,9 @@ au2A = 0.529177210903
 def mic_1d(array: npt.NDArray[np.float64],
            cell: float
            ):
+    """
+    always refer to the first element of the array
+    """
     _tmp_arr = array - array[0]
     _tmp_arr = _tmp_arr - np.round(_tmp_arr/cell)*cell
     return _tmp_arr + array[0]

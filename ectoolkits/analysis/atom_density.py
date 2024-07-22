@@ -138,6 +138,15 @@ class AtomDensity():
 
         surf1_z_list = self.all_z.T[self.surf1]
         surf1_z_list = surf1_z_list.T
+
+        # wrap the surface atoms
+        new_surf1_z_list = []
+        for surf1_z in surf1_z_list:
+            surf1_z = mic_1d(surf1_z, self.cell[2])
+            new_surf1_z_list.append(surf1_z)
+
+        surf1_z_list = np.stack(new_surf1_z_list)
+
         surf1_z_list = surf1_z_list.mean(axis=1)
         # all the z positions are wrapped to the first frame
         surf1_z_list = mic_1d(surf1_z_list, self.cell[2])
@@ -154,6 +163,14 @@ class AtomDensity():
 
         surf2_z_list = self.all_z.T[self.surf2]
         surf2_z_list = surf2_z_list.T
+
+        # wrap the surface atoms
+        new_surf2_z_list = []
+        for surf2_z in surf2_z_list:
+            surf2_z = mic_1d(surf2_z, self.cell[2])
+            new_surf2_z_list.append(surf2_z)
+        surf2_z_list = np.stack(new_surf2_z_list)
+
         surf2_z_list = surf2_z_list.mean(axis=1)
         # all the z positions are wrapped to the first frame
         surf2_z_list = mic_1d(surf2_z_list, self.cell[2])

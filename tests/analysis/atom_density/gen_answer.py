@@ -3,7 +3,7 @@ from pathlib import Path
 
 from ectoolkits.analysis.atom_density import AtomDensity
 
-system_list = ["sno2-water"]
+system_list = ["P-water"]
 
 for system in system_list:
     system_dir = Path(system)

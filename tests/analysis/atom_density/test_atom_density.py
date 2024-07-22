@@ -8,7 +8,7 @@ from ectoolkits.analysis.atom_density import AtomDensity
 
 
 path_prefix = Path("tests/analysis/atom_density/")
-system_list = ["sno2-water"]
+system_list = ["SnO2-water", "P-water"]
 
 @pytest.fixture(params=system_list, ids=system_list, scope='class')
 def analysis_and_answer(request, tmp_path_factory):
@@ -28,11 +28,10 @@ def analysis_and_answer(request, tmp_path_factory):
     return analysis, water_density_file_ref, water_density_file
 
 class TestAtomDensity():
-    def test_num_atoms(self, analysis_and_answer):
+    def test_water_density(self, analysis_and_answer):
         analysis = analysis_and_answer[0]
         water_density_file_ref = analysis_and_answer[1]
         water_density_file = analysis_and_answer[2]
-        print(water_density_file,   water_density_file_ref)
         analysis.run()
         z, water_density = np.loadtxt(f"{water_density_file}.dat", unpack=True)
         z_ref, water_density_ref = np.loadtxt(water_density_file_ref, unpack=True)

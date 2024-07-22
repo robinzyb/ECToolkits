@@ -6,6 +6,7 @@ import shutil
 from random import random
 
 import numpy as np
+import numpy.typing as npt
 from ase.geometry.analysis import Analysis
 from ase.build import molecule
 
@@ -15,6 +16,16 @@ from ectoolkits.structures.slab import Slab
 au2eV = 27.211386245988
 au2A = 0.529177210903
 
+
+def mic_1d(array: npt.NDArray[np.float64],
+           cell: float
+           ):
+    """
+    always refer to the first element of the array
+    """
+    _tmp_arr = array - array[0]
+    _tmp_arr = _tmp_arr - np.round(_tmp_arr/cell)*cell
+    return _tmp_arr + array[0]
 
 def insert_water(atoms, z1, z2, water_num, model='random', space_x=0.3, space_y=0.3, space_z=0.3):
     # make a copy

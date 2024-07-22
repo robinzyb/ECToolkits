@@ -372,6 +372,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">MDAnalysis.analysis.base</span> <span class="kn">import</span> <span class="n">AnalysisBase</span>
 
 <span class="kn">from</span> <span class="nn">ectoolkits.structures.slab</span> <span class="kn">import</span> <span class="n">Slab</span>
+<span class="kn">from</span> <span class="nn">ectoolkits.utils.utils</span> <span class="kn">import</span> <span class="n">mic_1d</span>
 <span class="kn">from</span> <span class="nn">ectoolkits.log</span> <span class="kn">import</span> <span class="n">get_logger</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -501,7 +502,18 @@ document.write(`
 
         <span class="n">surf1_z_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_z</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">surf1</span><span class="p">]</span>
         <span class="n">surf1_z_list</span> <span class="o">=</span> <span class="n">surf1_z_list</span><span class="o">.</span><span class="n">T</span>
+
+        <span class="c1"># wrap the surface atoms</span>
+        <span class="n">new_surf1_z_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">surf1_z</span> <span class="ow">in</span> <span class="n">surf1_z_list</span><span class="p">:</span>
+            <span class="n">surf1_z</span> <span class="o">=</span> <span class="n">mic_1d</span><span class="p">(</span><span class="n">surf1_z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">new_surf1_z_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">surf1_z</span><span class="p">)</span>
+
+        <span class="n">surf1_z_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">new_surf1_z_list</span><span class="p">)</span>
+
         <span class="n">surf1_z_list</span> <span class="o">=</span> <span class="n">surf1_z_list</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># all the z positions are wrapped to the first frame</span>
+        <span class="n">surf1_z_list</span> <span class="o">=</span> <span class="n">mic_1d</span><span class="p">(</span><span class="n">surf1_z_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">surf1_z_list</span></div>
 
 <div class="viewcode-block" id="AtomDensity.get_surf2_z_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_surf2_z_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_surf2_z_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
@@ -515,7 +527,17 @@ document.write(`
 
         <span class="n">surf2_z_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_z</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">surf2</span><span class="p">]</span>
         <span class="n">surf2_z_list</span> <span class="o">=</span> <span class="n">surf2_z_list</span><span class="o">.</span><span class="n">T</span>
+
+        <span class="c1"># wrap the surface atoms</span>
+        <span class="n">new_surf2_z_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">surf2_z</span> <span class="ow">in</span> <span class="n">surf2_z_list</span><span class="p">:</span>
+            <span class="n">surf2_z</span> <span class="o">=</span> <span class="n">mic_1d</span><span class="p">(</span><span class="n">surf2_z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">new_surf2_z_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">surf2_z</span><span class="p">)</span>
+        <span class="n">surf2_z_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">new_surf2_z_list</span><span class="p">)</span>
+
         <span class="n">surf2_z_list</span> <span class="o">=</span> <span class="n">surf2_z_list</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># all the z positions are wrapped to the first frame</span>
+        <span class="n">surf2_z_list</span> <span class="o">=</span> <span class="n">mic_1d</span><span class="p">(</span><span class="n">surf2_z_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">surf2_z_list</span></div>
 
 <div class="viewcode-block" id="AtomDensity.get_water_cent_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_water_cent_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_water_cent_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>

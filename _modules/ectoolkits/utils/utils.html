@@ -370,6 +370,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">random</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.typing</span> <span class="k">as</span> <span class="nn">npt</span>
 <span class="kn">from</span> <span class="nn">ase.geometry.analysis</span> <span class="kn">import</span> <span class="n">Analysis</span>
 <span class="kn">from</span> <span class="nn">ase.build</span> <span class="kn">import</span> <span class="n">molecule</span>
 
@@ -379,6 +380,16 @@ document.write(`
 <span class="n">au2eV</span> <span class="o">=</span> <span class="mf">27.211386245988</span>
 <span class="n">au2A</span> <span class="o">=</span> <span class="mf">0.529177210903</span>
 
+
+<div class="viewcode-block" id="mic_1d"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.utils.html#ectoolkits.utils.utils.mic_1d">[docs]</a><span class="k">def</span> <span class="nf">mic_1d</span><span class="p">(</span><span class="n">array</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+           <span class="n">cell</span><span class="p">:</span> <span class="nb">float</span>
+           <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    always refer to the first element of the array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_tmp_arr</span> <span class="o">=</span> <span class="n">array</span> <span class="o">-</span> <span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">_tmp_arr</span> <span class="o">=</span> <span class="n">_tmp_arr</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">_tmp_arr</span><span class="o">/</span><span class="n">cell</span><span class="p">)</span><span class="o">*</span><span class="n">cell</span>
+    <span class="k">return</span> <span class="n">_tmp_arr</span> <span class="o">+</span> <span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="insert_water"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.utils.html#ectoolkits.utils.utils.insert_water">[docs]</a><span class="k">def</span> <span class="nf">insert_water</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">water_num</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;random&#39;</span><span class="p">,</span> <span class="n">space_x</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">space_y</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">space_z</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
     <span class="c1"># make a copy</span>

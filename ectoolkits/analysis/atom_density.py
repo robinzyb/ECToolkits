@@ -8,6 +8,7 @@ from ase.neighborlist import neighbor_list
 from MDAnalysis.analysis.base import AnalysisBase
 
 from ectoolkits.structures.slab import Slab
+from ectoolkits.utils.utils import mic_1d
 from ectoolkits.log import get_logger
 
 logger = get_logger(__name__)
@@ -138,6 +139,8 @@ class AtomDensity():
         surf1_z_list = self.all_z.T[self.surf1]
         surf1_z_list = surf1_z_list.T
         surf1_z_list = surf1_z_list.mean(axis=1)
+        # all the z positions are wrapped to the first frame
+        surf1_z_list = mic_1d(surf1_z_list, self.cell[2])
         return surf1_z_list
 
     def get_surf2_z_list(self) -> np.array:
@@ -152,6 +155,8 @@ class AtomDensity():
         surf2_z_list = self.all_z.T[self.surf2]
         surf2_z_list = surf2_z_list.T
         surf2_z_list = surf2_z_list.mean(axis=1)
+        # all the z positions are wrapped to the first frame
+        surf2_z_list = mic_1d(surf2_z_list, self.cell[2])
         return surf2_z_list
 
     def get_water_cent_list(self) -> np.array:

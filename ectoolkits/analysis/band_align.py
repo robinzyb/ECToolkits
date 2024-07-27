@@ -1,14 +1,21 @@
-from sqlite3 import enable_callback_tracebacks
-from tracemalloc import Snapshot
-from cp2kdata import Cp2kCube
-from cp2kdata.units import au2A, au2eV
-import numpy as np
 import os
+
+
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from ase.io import read, write
-from ..utils.utils import get_cum_mean
-from ..utils.utils import fancy_print
+from cp2kdata import Cp2kCube
+from cp2kdata.units import au2A, au2eV
+
+from ectoolkits.utils.utils import get_cum_mean
+from ectoolkits.log import get_logger
+
+logger = get_logger(__name__)
+
+
+
+#from ..utils.utils import fancy_print
 # plt.style.use('./matplotlibstyle/project.mplstyle')
 
 # inp = {
@@ -51,7 +58,7 @@ class BandAlign():
             inp (dict): _description_
         """
         self.input_type = inp.get("input_type")
-        fancy_print("The following is input you have")
+        logger.info("The following is input you have")
         print(inp)
 
         if self.input_type == "cube":

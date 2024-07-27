@@ -1,2 +1,2 @@
-# Redox Potentials
+# Redox potentials
 Under Construction

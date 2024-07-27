@@ -1,13 +1,18 @@
+import os
+import shutil
+from typing import Tuple, List
+
+import numpy as np
 from ase import Atoms
 from ase.neighborlist import neighbor_list
 from ase.io import read, write
 from ase.build import surface
-from ..utils.math import get_plane_eq
-import numpy as np
-import os
-import shutil
-from typing import Tuple, List
 from MDAnalysis.lib.distances import minimize_vectors
+
+from ectoolkits.utils.math import get_plane_eq
+from ectoolkits.log import get_logger
+
+logger = get_logger(__name__)
 
 
 class Slab(Atoms):
@@ -89,7 +94,7 @@ class Slab(Atoms):
         tmp_stc = self.copy()
         if check_cross_boundary:
             while tmp_stc.is_cross_z_boundary(element=element):
-                print(
+                logger.info(
                     f"The slab part is cross z boundary, tranlate {trans_z_dist:3.3f} A!")
                 tmp_stc.translate([0, 0, trans_z_dist])
                 tmp_stc.wrap()
@@ -237,9 +242,9 @@ class Slab(Atoms):
         # find the water box
         if os.path.exists("gen_water/watbox.xyz"):
             water_box = read("gen_water/watbox.xyz")
-            print("Water Box Found")
+            logger.info("Water Box Found")
         else:
-            print("Water Box Not Found")
+            logger.info("Water Box Not Found")
             raise FileNotFoundError(
                 'Water box not found, please install packmol')
 
@@ -262,7 +267,7 @@ class Slab(Atoms):
         tmp.translate([0, 0, -slab_center_z])
         tmp.set_pbc([False, False, True])
         tmp.wrap()
-        print("Merge Water and Slab Box Finished")
+        logger.info("Merge Water and Slab Box Finished")
         return tmp
 
     def generate_water_box(self, water_box_len):
@@ -278,26 +283,26 @@ class Slab(Atoms):
         cell_a = cell[0]
         cell_b = cell[1]
         header = "-"
-        print(header * 50)
-        print("Now Generate Water Box")
+        logger.info(header * 50)
+        logger.info("Now Generate Water Box")
         space_per_water = 9.86 ** 3 / 32
         wat_num = (np.linalg.norm(np.cross(cell_a, cell_b))
                    * water_box_len) / space_per_water
         wat_num = int(wat_num)
-        # print("Read Cell X: {0:03f} A".format(cell_a))
-        # print("Read Cell Y: {0:03f} A".format(cell_b))
-        print("Read Water Box Length: {0:03f} A".format(water_box_len))
-        print("Predict Water Number: {0}".format(wat_num))
+        # logger.info("Read Cell X: {0:03f} A".format(cell_a))
+        # logger.info("Read Cell Y: {0:03f} A".format(cell_b))
+        logger.info("Read Water Box Length: {0:03f} A".format(water_box_len))
+        logger.info("Predict Water Number: {0}".format(wat_num))
 
         n_vec_a, d1_a, d2_a, n_vec_b, d1_b, d2_b = get_plane_eq(cell_a, cell_b)
-        print("Calculate Plane Equation")
+        logger.info("Calculate Plane Equation")
 
         if os.path.exists('gen_water'):
-            print("found gen_water direcotry, now remove it")
+            logger.info("found gen_water direcotry, now remove it")
             shutil.rmtree('gen_water')
-        print("Generate New Directory: gen_water")
+        logger.info("Generate New Directory: gen_water")
         os.mkdir('gen_water')
-        print("Generate Packmol Input: gen_wat_box.inp")
+        logger.info("Generate Packmol Input: gen_wat_box.inp")
         with open(os.path.join("gen_water", "gen_wat_box.inp"), 'w') as f:
             txt = "#packmol input generate by python"
             txt += "\n"
@@ -321,7 +326,7 @@ class Slab(Atoms):
                 0, 0, 1.0, water_box_len)
             txt += "end structure\n"
             f.write(txt)
-        print("Generate A Water Molecule: water.xyz")
+        logger.info("Generate A Water Molecule: water.xyz")
         with open(os.path.join("gen_water", "water.xyz"), 'w') as f:
             txt = '3\n'
             txt += ' water\n'
@@ -329,11 +334,11 @@ class Slab(Atoms):
             txt += ' H            9.625597       8.420323      12.673000\n'
             txt += ' O           10.203012       7.603800      12.673000\n'
             f.write(txt)
-        print("Generate Water Box: watbox.xyz")
+        logger.info("Generate Water Box: watbox.xyz")
         os.chdir("./gen_water")
         os.system("packmol < gen_wat_box.inp")
         os.chdir("../")
-        print("Generate Water Box Finished")
+        logger.info("Generate Water Box Finished")
 
     def remove_cell_vacuum(self, adopt_space=2):
         """remove the vacuum of z direction
@@ -371,7 +376,7 @@ class Slab(Atoms):
 
         vec_minimized = minimize_vectors(vectors=vec_raw, box=cellpar)
 
-        # print(vec_minimized[2], vec_raw[2])
+        # logger.info(vec_minimized[2], vec_raw[2])
         if np.isclose(vec_minimized[2], vec_raw[2], atol=1e-5, rtol=0):
             return False
         else:
@@ -407,7 +412,7 @@ class RutileSlab(Slab):
             slab = method(n_layers=n_layers,
                           lateral_repeat=lateral_repeat, vacuum=vacuum)
         except:
-            print("Current Miller Index has not implemented yet")
+            logger.info("Current Miller Index has not implemented yet")
         # if method is None:
         #     raise ValueError("Current Miller Index has not implemented yet")
 

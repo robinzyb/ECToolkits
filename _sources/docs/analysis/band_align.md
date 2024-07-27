@@ -1,4 +1,4 @@
-# Band Alignment
+# Band alignment
 ## Quick Start
 ```python
 from ectoolkits..analysis.band_align import BandAlign

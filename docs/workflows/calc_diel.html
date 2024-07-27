@@ -67,8 +67,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'docs/workflows/calc_diel';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="ectoolkits" href="../../_api/modules.html" />
-    <link rel="prev" title="Redox Potentials" href="../analysis/redox.html" />
+    <link rel="next" title="Bibliography" href="../references.html" />
+    <link rel="prev" title="Redox potentials" href="../analysis/redox.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -166,18 +166,22 @@ const thebe_selector_output = ".output, .cell_output"
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Analysis</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../analysis/atom_density.html">Atom Density Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../analysis/band_align.html">Band Alignment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../analysis/disdeg.html">Dissociation Degree Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../analysis/atom_density.html">Atom density analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../analysis/band_align.html">Band alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../analysis/disdeg.html">Dissociation degree analysis</a></li>
 
 
-<li class="toctree-l1"><a class="reference internal" href="../analysis/acidity.html">Acidity Calculation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../analysis/redox.html">Redox Potentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../analysis/acidity.html">Acidity calculation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../analysis/finite_size_correction.html">The finite size correction of interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../analysis/redox.html">Redox potentials</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Workflows</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Workflow: Calculation of Dielectric Constant</a></li>
-
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../references.html">Bibliography</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="nav bd-sidenav">
@@ -412,7 +416,6 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Workflow: Calculation of Dielectric Constant</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results">Results</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#global-dielectric-constant">Global Dielectric Constant</a></li>
@@ -421,10 +424,6 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#principle">Principle</a></li>
 </ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#bibliography">Bibliography</a></li>
-</ul>
-
             </nav>
         </div>
     </div>
@@ -528,28 +527,14 @@ document.write(`
 <section id="principle">
 <h2>Principle<a class="headerlink" href="#principle" title="Permalink to this heading">#</a></h2>
 <p>ECToolkits provides the workflow for calculating ab initio dielectric constant using CP2K.</p>
-<p>For detail description, users are referred to this paper <span id="id1">[<a class="reference internal" href="#id4" title="P. Umari and Alfredo Pasquarello. Ab initio Molecular Dynamics in a Finite Homogeneous Electric Field. Physical Review Letters, 89(15):157602, 2002. doi:10.1103/physrevlett.89.157602.">Umari and Pasquarello, 2002</a>]</span> for the calculation of global dielectric constant,
-and this paper <span id="id2">[<a class="reference internal" href="#id5" title="Feliciano Giustino and Alfredo Pasquarello. Theory of atomic-scale dielectric permittivity at insulator interfaces. Physical Review B, 71(14):144104, 2005. doi:10.1103/physrevb.71.144104.">Giustino and Pasquarello, 2005</a>]</span> for the calculation of atomic dielectric constant</p>
+<p>For detail description, users are referred to this paper <span id="id1">[<a class="reference internal" href="../references.html#id9" title="P. Umari and Alfredo Pasquarello. Ab initio Molecular Dynamics in a Finite Homogeneous Electric Field. Physical Review Letters, 89(15):157602, 2002. doi:10.1103/physrevlett.89.157602.">Umari and Pasquarello, 2002</a>]</span> for the calculation of global dielectric constant,
+and this paper <span id="id2">[<a class="reference internal" href="../references.html#id10" title="Feliciano Giustino and Alfredo Pasquarello. Theory of atomic-scale dielectric permittivity at insulator interfaces. Physical Review B, 71(14):144104, 2005. doi:10.1103/physrevb.71.144104.">Giustino and Pasquarello, 2005</a>]</span> for the calculation of atomic dielectric constant</p>
 <p>Basically, we need to calculate dipole moments with varying electric fields. Then, fit the data to the following equation:</p>
 <div class="math notranslate nohighlight">
 \[
 \varepsilon = 4\pi\frac{M}{\Omega E} + 1
 \]</div>
 </section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="bibliography">
-<h1>Bibliography<a class="headerlink" href="#bibliography" title="Permalink to this heading">#</a></h1>
-<div class="docutils container" id="id3">
-<div class="citation" id="id5" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">GP05</a><span class="fn-bracket">]</span></span>
-<p>Feliciano Giustino and Alfredo Pasquarello. Theory of atomic-scale dielectric permittivity at insulator interfaces. <em>Physical Review B</em>, 71(14):144104, 2005. <a class="reference external" href="https://doi.org/10.1103/physrevb.71.144104">doi:10.1103/physrevb.71.144104</a>.</p>
-</div>
-<div class="citation" id="id4" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">UP02</a><span class="fn-bracket">]</span></span>
-<p>P. Umari and Alfredo Pasquarello. Ab initio Molecular Dynamics in a Finite Homogeneous Electric Field. <em>Physical Review Letters</em>, 89(15):157602, 2002. <a class="reference external" href="https://doi.org/10.1103/physrevlett.89.157602">doi:10.1103/physrevlett.89.157602</a>.</p>
-</div>
-</div>
-</div>
 </section>
 
     <script type="text/x-thebe-config">
@@ -588,15 +573,15 @@ and this paper <span id="id2">[<a class="reference internal" href="#id5" title="
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Redox Potentials</p>
+        <p class="prev-next-title">Redox potentials</p>
       </div>
     </a>
     <a class="right-next"
-       href="../../_api/modules.html"
+       href="../references.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">ectoolkits</p>
+        <p class="prev-next-title">Bibliography</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -615,7 +600,6 @@ and this paper <span id="id2">[<a class="reference internal" href="#id5" title="
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Workflow: Calculation of Dielectric Constant</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results">Results</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#global-dielectric-constant">Global Dielectric Constant</a></li>
@@ -624,10 +608,6 @@ and this paper <span id="id2">[<a class="reference internal" href="#id5" title="
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#principle">Principle</a></li>
 </ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#bibliography">Bibliography</a></li>
-</ul>
-
   </nav></div>
 
 </div></div>

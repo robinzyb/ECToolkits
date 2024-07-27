@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Atom Density Analysis &#8212; ECToolkits Reference</title>
+    <title>Atom density analysis &#8212; ECToolkits Reference</title>
   
   
   
@@ -65,7 +65,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'docs/analysis/atom_density';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Band Alignment" href="band_align.html" />
+    <link rel="next" title="Band alignment" href="band_align.html" />
     <link rel="prev" title="Introduction" href="../../intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -164,18 +164,22 @@ const thebe_selector_output = ".output, .cell_output"
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Analysis</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Atom Density Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="band_align.html">Band Alignment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="disdeg.html">Dissociation Degree Analysis</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Atom density analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="band_align.html">Band alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disdeg.html">Dissociation degree analysis</a></li>
 
 
-<li class="toctree-l1"><a class="reference internal" href="acidity.html">Acidity Calculation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="redox.html">Redox Potentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="acidity.html">Acidity calculation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="finite_size_correction.html">The finite size correction of interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="redox.html">Redox potentials</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Workflows</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../workflows/calc_diel.html">Workflow: Calculation of Dielectric Constant</a></li>
-
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../references.html">Bibliography</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="nav bd-sidenav">
@@ -398,7 +402,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Atom Density Analysis</h1>
+    <h1>Atom density analysis</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -413,15 +417,43 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="atom-density-analysis">
-<h1>Atom Density Analysis<a class="headerlink" href="#atom-density-analysis" title="Permalink to this heading">#</a></h1>
+<h1>Atom density analysis<a class="headerlink" href="#atom-density-analysis" title="Permalink to this heading">#</a></h1>
+<p>Density analysis along the direction normal to an interface is very helpful for understanding the interface structure.<span id="id1">[<a class="reference internal" href="../references.html#id4" title="Marcos F. Calegari Andrade, Hsin-Yu Ko, Linfeng Zhang, Roberto Car, and Annabella Selloni. Free energy of proton transfer at the water-TiO2 interface from ab initio deep potential molecular dynamics. Chemical Science, 11(9):2335–2341, 2020. doi:10.1039/c9sc05116c.">Andrade <em>et al.</em>, 2020</a>, <a class="reference internal" href="../references.html#id7" title="Xue-Ting Fan, Xiao-Jian Wen, Yong-Bin Zhuang, and Jun Cheng. Molecular insight into the GaP(110)-water interface using machine learning accelerated molecular dynamics. Journal of Energy Chemistry, 82:239–247, 2023. doi:10.1016/j.jechem.2023.03.013.">Fan <em>et al.</em>, 2023</a>, <a class="reference internal" href="../references.html#id5" title="Zhendong Guo, Francesco Ambrosio, Wei Chen, Patrick Gono, and Alfredo Pasquarello. Alignment of Redox Levels at Semiconductor-Water Interfaces. Chemistry of Materials, 30(1):94–111, 2018. doi:10.1021/acs.chemmater.7b02619.">Guo <em>et al.</em>, 2018</a>, <a class="reference internal" href="../references.html#id8" title="Jiabo Le, Marcella Iannuzzi, Angel Cuesta, and Jun Cheng. Determining Potentials of Zero Charge of Metal Electrodes versus the Standard Hydrogen Electrode from Density-Functional-Theory-Based Molecular Dynamics. Physical Review Letters, 119(1):016801, 2017. doi:10.1103/physrevlett.119.016801.">Le <em>et al.</em>, 2017</a>, <a class="reference internal" href="../references.html#id6" title="Xiaojian Wen, Xue-Ting Fan, Xiangfeng Jin, and Jun Cheng. Band Alignment of 2D Material-Water Interfaces. The Journal of Physical Chemistry C, 127(8):4132–4143, 2023. doi:10.1021/acs.jpcc.3c00220.">Wen <em>et al.</em>, 2023</a>]</span> We can obtain the density by giving the following parameters as written in the <code class="docutils literal notranslate"><span class="pre">inp_dict</span></code>.</p>
+<p>First of all, we need to define where the interfaces are using the surface atom indices.
+These indices can be easily retreived using the class <code class="docutils literal notranslate"><span class="pre">Slab</span></code>.
+Note that the <code class="docutils literal notranslate"><span class="pre">Slab</span></code> class is inherent from <code class="docutils literal notranslate"><span class="pre">Atoms</span></code> class in <code class="docutils literal notranslate"><span class="pre">ase</span></code>.
+In this way, we can either use the methods built in the <code class="docutils literal notranslate"><span class="pre">Atoms</span></code> class or the new methods created in <code class="docutils literal notranslate"><span class="pre">ECToolkits</span></code></p>
+<p>To initialize the <code class="docutils literal notranslate"><span class="pre">Slab</span></code> class, we can simply use <code class="docutils literal notranslate"><span class="pre">Slab</span></code> class in the <code class="docutils literal notranslate"><span class="pre">Atoms</span></code> object.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ectoolkits.structures.slab</span> <span class="kn">import</span> <span class="n">Slab</span>
+<span class="n">stc</span> <span class="o">=</span> <span class="n">Slab</span><span class="p">(</span><span class="n">stc</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>There is a method called <code class="docutils literal notranslate"><span class="pre">find_idx_from_range</span></code> in <code class="docutils literal notranslate"><span class="pre">Slab</span></code> class.
+If the z coordinates of surface atoms are located in the range from 6.2 Angstrom to 7.2 Angstrom,
+we can obtain the indices using the information,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">surf1_idx</span> <span class="o">=</span> <span class="n">stc</span><span class="o">.</span><span class="n">find_idx_from_range</span><span class="p">(</span><span class="n">zmin</span><span class="o">=</span><span class="mf">6.2</span><span class="p">,</span> <span class="n">zmax</span><span class="o">=</span><span class="mf">7.2</span><span class="p">,</span> <span class="n">element</span><span class="o">=</span><span class="s1">&#39;Sn&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here, the <code class="docutils literal notranslate"><span class="pre">zmin</span></code> and <code class="docutils literal notranslate"><span class="pre">zmax</span></code> define the lower and upper bounds of z coordinates.
+The spcification of <code class="docutils literal notranslate"><span class="pre">element</span></code> is optional. If we don’t define the element, the indices of all atoms located within this range will be retrevied. Note that, currently, this method only supports to get the indices according to the z coordinates.</p>
+<p>Now we need to define the <code class="docutils literal notranslate"><span class="pre">surf1</span></code> and <code class="docutils literal notranslate"><span class="pre">surf2</span></code>.</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">surf1</span></code> is the interface on the left, where the solid part is in the left of liquid.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">surf2</span></code> is the interface on the right, where the solid part is in the right of liquid.</p></li>
+</ol>
+<p>The reason two interfaces exist is that the model is symmetric with respect to the center plane of slab, as shown in the following figure.</p>
+<p><img alt="density" src="../../_images/hartree_area.png" /></p>
+<p>Next, we move to the analysis of water density at interfaces.</p>
+<p>To perform the water density analysis, the indices of oxygen atoms located between two interfaces are need to be specified. Again, we can find the indices using the method <code class="docutils literal notranslate"><span class="pre">find_idx_from_range</span></code>. And put these indices (<code class="docutils literal notranslate"><span class="pre">List</span></code>) in the <code class="docutils literal notranslate"><span class="pre">inp_dict[&quot;density_type&quot;][&quot;idx_list&quot;]</span></code>. Here, the <code class="docutils literal notranslate"><span class="pre">density_unit</span></code> should be set to <code class="docutils literal notranslate"><span class="pre">&quot;water&quot;</span></code>, because we treat the coordinates of oxygen atoms as the position of water molecules and covert them to the water density by unit conversion.</p>
+<p>Now, we import the analysis method <code class="docutils literal notranslate"><span class="pre">AtomDensity</span></code> and input the following mentioned parameters.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ectoolkits.analysis.atom_density</span> <span class="kn">import</span> <span class="n">AtomDensity</span>
 
 <span class="c1"># from</span>
 <span class="n">inp_dict</span><span class="o">=</span><span class="p">{</span>
-     <span class="s2">&quot;xyz_file&quot;</span><span class="p">:</span> <span class="s2">&quot;./Hematite-pos-1.xyz&quot;</span><span class="p">,</span>
-     <span class="s2">&quot;cell&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">10.0564</span><span class="p">,</span> <span class="mf">8.7091</span><span class="p">,</span> <span class="mf">38.506</span><span class="p">],</span>
-     <span class="s2">&quot;surf2&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">43</span><span class="p">],</span>
-     <span class="s2">&quot;surf1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">112</span><span class="p">,</span> <span class="mi">113</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">115</span><span class="p">,</span> <span class="mi">116</span><span class="p">,</span> <span class="mi">117</span><span class="p">,</span> <span class="mi">118</span><span class="p">,</span> <span class="mi">119</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">122</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span>
+     <span class="s2">&quot;xyz_file&quot;</span><span class="p">:</span> <span class="s2">&quot;./Hematite-pos-1.xyz&quot;</span><span class="p">,</span> <span class="c1"># the path to the xyz trajecotry.</span>
+     <span class="s2">&quot;cell&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">10.0564</span><span class="p">,</span> <span class="mf">8.7091</span><span class="p">,</span> <span class="mf">38.506</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">],</span> <span class="c1"># the cell parameters</span>
+     <span class="s2">&quot;surf2&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">43</span><span class="p">],</span> <span class="c1"># the interface on the right</span>
+     <span class="s2">&quot;surf1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">112</span><span class="p">,</span> <span class="mi">113</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">115</span><span class="p">,</span> <span class="mi">116</span><span class="p">,</span> <span class="mi">117</span><span class="p">,</span> <span class="mi">118</span><span class="p">,</span> <span class="mi">119</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">122</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span> <span class="c1"># the interface on the left</span>
      <span class="s2">&quot;density_type&quot;</span><span class="p">:[</span>
          <span class="p">{</span>
              <span class="s2">&quot;element&quot;</span><span class="p">:</span> <span class="s2">&quot;O&quot;</span><span class="p">,</span>
@@ -441,6 +473,7 @@ document.write(`
              <span class="p">}</span>
          <span class="p">]</span>
  <span class="p">}</span>
+
 <span class="n">ad</span> <span class="o">=</span> <span class="n">AtomDensity</span><span class="p">(</span><span class="n">inp_dict</span><span class="p">)</span>
 <span class="n">ad</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 
@@ -505,7 +538,7 @@ document.write(`
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Band Alignment</p>
+        <p class="prev-next-title">Band alignment</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

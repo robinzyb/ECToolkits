@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Acidity Calculation &#8212; ECToolkits Reference</title>
+    <title>Acidity calculation &#8212; ECToolkits Reference</title>
   
   
   
@@ -67,8 +67,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'docs/analysis/acidity';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="finite_size_correction.html" />
-    <link rel="prev" title="Dissociation Degree Analysis" href="disdeg.html" />
+    <link rel="next" title="The finite size correction of interfaces" href="finite_size_correction.html" />
+    <link rel="prev" title="Dissociation degree analysis" href="disdeg.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -166,18 +166,22 @@ const thebe_selector_output = ".output, .cell_output"
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Analysis</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="atom_density.html">Atom Density Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="band_align.html">Band Alignment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="disdeg.html">Dissociation Degree Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="atom_density.html">Atom density analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="band_align.html">Band alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disdeg.html">Dissociation degree analysis</a></li>
 
 
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Acidity Calculation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="redox.html">Redox Potentials</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Acidity calculation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="finite_size_correction.html">The finite size correction of interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="redox.html">Redox potentials</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Workflows</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../workflows/calc_diel.html">Workflow: Calculation of Dielectric Constant</a></li>
-
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../references.html">Bibliography</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="nav bd-sidenav">
@@ -402,7 +406,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Acidity Calculation</h1>
+    <h1>Acidity calculation</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -426,39 +430,38 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="acidity-calculation">
-<h1>Acidity Calculation<a class="headerlink" href="#acidity-calculation" title="Permalink to this heading">#</a></h1>
-<p>We refer to paper for detailed description</p>
-<blockquote>
-<div><ol class="arabic simple">
-<li><p>Cheng, J., Sulpizi, M. &amp; Sprik, M. Redox potentials and pKa for benzoquinone from density functional theory based molecular dynamics. J Chem Phys 131, 154504 (2009).</p></li>
-<li><p>Mangold, M. et al. Absolute pK a Values and Solvation Structure of Amino Acids from Density Functional Based Molecular Dynamics Simulation. J Chem Theory Comput 7, 1951–1961 (2011).</p></li>
-</ol>
-</div></blockquote>
-<p>The pKa of a species <span class="math notranslate nohighlight">\(\ce{AH}\)</span> in aqueous solution is defined as
-$<span class="math notranslate nohighlight">\(\ce{AH(aq) -&gt; A^- (aq) + H^+ (aq)}\)</span><span class="math notranslate nohighlight">\(
-\)</span><span class="math notranslate nohighlight">\(\mathrm{p}K_a = -\log{K_a}\)</span><span class="math notranslate nohighlight">\(
-The full expression for \)</span>\mathrm{p}K_a<span class="math notranslate nohighlight">\( is
-\)</span><span class="math notranslate nohighlight">\(2.3 k_{\mathrm{B}} T\mathrm{p}K_a =   (\Delta_{\mathrm{dp}} A_{\ce{AH}} - \Delta_{\mathrm{dp}}  A_{\ce{H3O+}} - \Delta A_{\ce{Ad}} + \Delta A_{\ce{H2Od}} - \Delta A_{\mathrm{qc}} (\ce{AH}) + \Delta A_{\mathrm{qc}}(\ce{H3O+}) +  \Delta A_{\ce{H3O+}})\)</span>$</p>
+<h1>Acidity calculation<a class="headerlink" href="#acidity-calculation" title="Permalink to this heading">#</a></h1>
+<p>(This page is still under construction)
+We refer to paper for detailed description.<span id="id1">[<a class="reference internal" href="../references.html#id3" title="Jun Cheng, Marialore Sulpizi, and Michiel Sprik. Redox potentials and pKa for benzoquinone from density functional theory based molecular dynamics. The Journal of Chemical Physics, 131(15):154504, 2009. doi:10.1063/1.3250438.">Cheng <em>et al.</em>, 2009</a>, <a class="reference internal" href="../references.html#id2" title="Martina Mangold, Leslie Rolland, Francesca Costanzo, Michiel Sprik, Marialore Sulpizi, and Jochen Blumberger. Absolute pK a Values and Solvation Structure of Amino Acids from Density Functional Based Molecular Dynamics Simulation. Journal of Chemical Theory and Computation, 7(6):1951–1961, 2011. doi:10.1021/ct100715x.">Mangold <em>et al.</em>, 2011</a>]</span></p>
+<p>The pKa of a species <span class="math notranslate nohighlight">\(\ce{AH}\)</span> in aqueous solution is defined as</p>
+<div class="math notranslate nohighlight">
+\[\ce{AH(aq) -&gt; A^- (aq) + H^+ (aq)}\]</div>
+<div class="math notranslate nohighlight">
+\[\mathrm{p}K_a = -\log{K_a}\]</div>
+<p>The full expression for <span class="math notranslate nohighlight">\(\mathrm{p}K_a\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[2.3 k_{\mathrm{B}} T\mathrm{p}K_a =   (\Delta_{\mathrm{dp}} A_{\ce{AH}} - \Delta_{\mathrm{dp}}  A_{\ce{H3O+}} - \Delta A_{\ce{Ad}} + \Delta A_{\ce{H2Od}} - \Delta A_{\mathrm{qc}} (\ce{AH}) + \Delta A_{\mathrm{qc}}(\ce{H3O+}) +  \Delta A_{\ce{H3O+}})\]</div>
 <section id="calculate-dummy-insertion-free-energy">
 <h2>Calculate Dummy Insertion Free Energy<a class="headerlink" href="#calculate-dummy-insertion-free-energy" title="Permalink to this heading">#</a></h2>
-<p><span class="math notranslate nohighlight">\(\Delta A_{\ce{Ad}}\)</span> is dummy inerstion free energy corresponding to
-$<span class="math notranslate nohighlight">\(\ce{A^-(aq) + H+(g)-&gt;Ad^-(aq) }\)</span><span class="math notranslate nohighlight">\(
-To calculate \)</span>\Delta A_{\ce{Ad}}<span class="math notranslate nohighlight">\(, you need calculate \)</span>\ce{Ad-}<span class="math notranslate nohighlight">\( the vibrational frequency of mode i for dummy in gas phase. And save the frequncies as numpy array. Note that the unit of frequencies must be \)</span>cm^{-1}$. This function is straightforward implementation using eq.26 in reference[2].</p>
+<p><span class="math notranslate nohighlight">\(\Delta A_{\ce{Ad}}\)</span> is dummy inerstion free energy corresponding to</p>
+<div class="math notranslate nohighlight">
+\[\ce{A^-(aq) + H+(g)-&gt;Ad^-(aq) }\]</div>
+<p>To calculate <span class="math notranslate nohighlight">\(\Delta A_{\ce{Ad}}\)</span>, you need calculate <span class="math notranslate nohighlight">\(\ce{Ad-}\)</span> the vibrational frequency of mode i for dummy in gas phase. And save the frequncies as numpy array. Note that the unit of frequencies must be <span class="math notranslate nohighlight">\(cm^{-1}\)</span>. This function is straightforward implementation using eq.26 in reference.<span id="id2">[<a class="reference internal" href="../references.html#id2" title="Martina Mangold, Leslie Rolland, Francesca Costanzo, Michiel Sprik, Marialore Sulpizi, and Jochen Blumberger. Absolute pK a Values and Solvation Structure of Amino Acids from Density Functional Based Molecular Dynamics Simulation. Journal of Chemical Theory and Computation, 7(6):1951–1961, 2011. doi:10.1021/ct100715x.">Mangold <em>et al.</em>, 2011</a>]</span></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ectoolkits.analysis.acidity</span> <span class="kn">import</span> <span class="n">get_dummy_insert_fe</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="c1"># the frequencies you calculated from gas phase molecules</span>
-<span class="c1"># these frequencies are taken from reference [2] for the arginine molecule.</span>
 <span class="n">frequencies_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">440</span><span class="p">,</span> <span class="mi">1182</span><span class="p">,</span> <span class="mi">2290</span><span class="p">])</span>
 
 <span class="n">get_dummy_insert_fe</span><span class="p">(</span><span class="n">frequencies_list</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">298</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>these frequencies are taken from reference <span id="id3">[<a class="reference internal" href="../references.html#id2" title="Martina Mangold, Leslie Rolland, Francesca Costanzo, Michiel Sprik, Marialore Sulpizi, and Jochen Blumberger. Absolute pK a Values and Solvation Structure of Amino Acids from Density Functional Based Molecular Dynamics Simulation. Journal of Chemical Theory and Computation, 7(6):1951–1961, 2011. doi:10.1021/ct100715x.">Mangold <em>et al.</em>, 2011</a>]</span> for the arginine molecule</p>
 <p>The following output is</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>&gt;<span class="w"> </span><span class="m">0</span>.315428
 </pre></div>
 </div>
-<p>We also implemented function for obtaining <span class="math notranslate nohighlight">\(\Delta A_{\ce{H2Od}}\)</span>, since <span class="math notranslate nohighlight">\(\Delta A_{\ce{H2Od}}\)</span> has a special formula for correction, as described in reference[1]. To obtain the <span class="math notranslate nohighlight">\(\Delta A_{\ce{H2Od}}\)</span>, use the following code,</p>
+<p>We also implemented function for obtaining <span class="math notranslate nohighlight">\(\Delta A_{\ce{H2Od}}\)</span>, since <span class="math notranslate nohighlight">\(\Delta A_{\ce{H2Od}}\)</span> has a special formula for correction, as described in reference.<span id="id4">[<a class="reference internal" href="../references.html#id3" title="Jun Cheng, Marialore Sulpizi, and Michiel Sprik. Redox potentials and pKa for benzoquinone from density functional theory based molecular dynamics. The Journal of Chemical Physics, 131(15):154504, 2009. doi:10.1063/1.3250438.">Cheng <em>et al.</em>, 2009</a>]</span> To obtain the <span class="math notranslate nohighlight">\(\Delta A_{\ce{H2Od}}\)</span>, use the following code,</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ectoolkits.analysis.acidity</span> <span class="kn">import</span> <span class="n">get_dummy_insert_fe_hydronium</span>
 
 <span class="n">get_dummy_insert_fe_hydronium</span><span class="p">()</span>
@@ -481,7 +484,7 @@ To calculate \)</span>\Delta A_{\ce{Ad}}<span class="math notranslate nohighligh
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>&gt;<span class="w"> </span><span class="m">0</span>.175
 </pre></div>
 </div>
-<p>We also implemented function for obtaining <span class="math notranslate nohighlight">\(\Delta A_{\mathrm{qc}}(\ce{H3O+})\)</span>, since <span class="math notranslate nohighlight">\(\Delta A_{\mathrm{qc}}(\ce{H3O+})\)</span> has a special formula for correction, as described in reference[2]. To obtain the <span class="math notranslate nohighlight">\(\Delta A_{\mathrm{qc}}(\ce{H3O+})\)</span>, use the following code,</p>
+<p>We also implemented function for obtaining <span class="math notranslate nohighlight">\(\Delta A_{\mathrm{qc}}(\ce{H3O+})\)</span>, since <span class="math notranslate nohighlight">\(\Delta A_{\mathrm{qc}}(\ce{H3O+})\)</span> has a special formula for correction, as described in reference.<span id="id5">[<a class="reference internal" href="../references.html#id2" title="Martina Mangold, Leslie Rolland, Francesca Costanzo, Michiel Sprik, Marialore Sulpizi, and Jochen Blumberger. Absolute pK a Values and Solvation Structure of Amino Acids from Density Functional Based Molecular Dynamics Simulation. Journal of Chemical Theory and Computation, 7(6):1951–1961, 2011. doi:10.1021/ct100715x.">Mangold <em>et al.</em>, 2011</a>]</span> To obtain the <span class="math notranslate nohighlight">\(\Delta A_{\mathrm{qc}}(\ce{H3O+})\)</span>, use the following code,</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ectoolkits.analysis.acidity</span> <span class="kn">import</span> <span class="n">get_quantum_correction_hydronium</span>
 
 <span class="n">get_quantum_correction_hydronium</span><span class="p">()</span>
@@ -527,7 +530,7 @@ To calculate \)</span>\Delta A_{\ce{Ad}}<span class="math notranslate nohighligh
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Dissociation Degree Analysis</p>
+        <p class="prev-next-title">Dissociation degree analysis</p>
       </div>
     </a>
     <a class="right-next"
@@ -535,7 +538,7 @@ To calculate \)</span>\Delta A_{\ce{Ad}}<span class="math notranslate nohighligh
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">&lt;no title&gt;</p>
+        <p class="prev-next-title">The finite size correction of interfaces</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

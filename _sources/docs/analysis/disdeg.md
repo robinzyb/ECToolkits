@@ -1,4 +1,4 @@
-# Dissociation Degree Analysis
+# Dissociation degree analysis
 Dissociation degree affects the interfacial dipoles, hence, the band alignments of semiconductor-electrolyte interfaces. To calculate the dissociation degree for a given trajectory, we implemented the classes `CNState` and `DisDeg`, which are briefly introduced below.
 
 

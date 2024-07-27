@@ -15,6 +15,9 @@ parts:
   - caption: Workflows
     chapters:
       - file: docs/workflows/calc_diel
+  - caption: References
+    chapters:
+      - file: docs/references
   - caption: API Reference
     maxdepth: 1
     chapters:

@@ -111,6 +111,3 @@ $$
 $$
 
 
-# Bibliography
-```{bibliography}
-```

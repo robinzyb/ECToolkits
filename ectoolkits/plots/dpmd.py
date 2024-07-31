@@ -65,7 +65,7 @@ def plot_error(ax, data, pred, type='energy', title='Energy', return_err=False):
     if return_err:
         return rmse, mae
 
-def plot_dptest(e_file: str, f_file: str, save_name: str="dptest.png"):
+def plot_dptest(e_file: str, f_file: str, save_name: str="dptest.png", return_err=False):
     plt.style.use("cp2kdata.matplotlibstyle.jcp")
     row = 2
     col = 2
@@ -84,5 +84,8 @@ def plot_dptest(e_file: str, f_file: str, save_name: str="dptest.png"):
     rmse_fz, mae_fz = plot_error(ax, fz_data, fz_pred, type='force', title=r'$\mathrm{F_{z}}$', return_err=True)
 
     fig.savefig(save_name, dpi=400)
+
+    if return_err:
+        return rmse_e, mae_e, rmse_fx, mae_fx, rmse_fy, mae_fy, rmse_fz, mae_fz
 
 

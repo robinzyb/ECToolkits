@@ -2,6 +2,7 @@ from pathlib import Path
 import filecmp
 
 import pytest
+import numpy as np
 
 from ectoolkits.plots.dpmd import plot_dptest
 
@@ -19,9 +20,9 @@ class TestPlotDPMD():
         e_file = path_prefix/f"{case}.e.out"
         f_file = path_prefix/f"{case}.f.out"
         save_png = tmp_path/f"{case}.png"
-        plot_dptest(e_file=e_file, f_file=f_file, save_name=save_png)
+        rmse_e, mae_e, rmse_fx, mae_fx, rmse_fy, mae_fy, rmse_fz, mae_fz = \
+            plot_dptest(e_file=e_file, f_file=f_file, save_name=save_png, return_err=True)
         
-        # here I just simply compre the two files.
-        assert filecmp.cmp(save_png, 
-                           path_prefix/f"{case}_ref.png",
-                           )
+        err = np.array([rmse_e, mae_e, rmse_fx, mae_fx, rmse_fy, mae_fy, rmse_fz, mae_fz])
+        ref = np.load(path_prefix/f"{case}_err.npy")
+        np.testing.assert_array_equal(err, ref)

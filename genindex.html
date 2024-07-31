@@ -170,6 +170,10 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="docs/analysis/finite_size_correction.html">The finite size correction of interfaces</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/analysis/redox.html">Redox potentials</a></li>
 </ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Plots</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="docs/plots/dpmd.html">Plot DPMD Test Data</a></li>
+</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Workflows</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="docs/workflows/calc_diel.html">Workflow: Calculation of Dielectric Constant</a></li>
@@ -196,6 +200,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l3"><a class="reference internal" href="_api/ectoolkits.matplotlibstyle.html">ectoolkits.matplotlibstyle package</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="_api/ectoolkits.plots.html">ectoolkits.plots package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="_api/ectoolkits.plots.band_align.html">ectoolkits.plots.band_align module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_api/ectoolkits.plots.dpmd.html">ectoolkits.plots.dpmd module</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="_api/ectoolkits.structures.html">ectoolkits.structures package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -573,6 +578,13 @@ document.write(`
 </li>
       </ul></li>
       <li>
+    ectoolkits.plots.dpmd
+
+      <ul>
+        <li><a href="_api/ectoolkits.plots.dpmd.html#module-ectoolkits.plots.dpmd">module</a>
+</li>
+      </ul></li>
+      <li>
     ectoolkits.structures
 
       <ul>
@@ -713,6 +725,8 @@ document.write(`
 </li>
       <li><a href="_api/ectoolkits.analysis.dielectric_constant.html#ectoolkits.analysis.dielectric_constant.get_dielectric_susceptibility">get_dielectric_susceptibility() (in module ectoolkits.analysis.dielectric_constant)</a>
 </li>
+      <li><a href="_api/ectoolkits.plots.dpmd.html#ectoolkits.plots.dpmd.get_dptest_data">get_dptest_data() (in module ectoolkits.plots.dpmd)</a>
+</li>
       <li><a href="_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.SurfTiOBondLenght.get_dTiOad">get_dTiOad() (ectoolkits.analysis.rutile110.SurfTiOBondLenght method)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.SurfTiOBondLenght.get_dTiObr">get_dTiObr() (ectoolkits.analysis.rutile110.SurfTiOBondLenght method)</a>
@@ -744,6 +758,8 @@ document.write(`
       <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.get_layer_space_list">get_layer_space_list() (in module ectoolkits.analysis.band_align)</a>
 </li>
       <li><a href="_api/ectoolkits.log.html#ectoolkits.log.get_logger">get_logger() (in module ectoolkits.log)</a>
+</li>
+      <li><a href="_api/ectoolkits.plots.dpmd.html#ectoolkits.plots.dpmd.get_mae">get_mae() (in module ectoolkits.plots.dpmd)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.dielectric_constant.html#ectoolkits.analysis.dielectric_constant.get_micro_electric_field">get_micro_electric_field() (in module ectoolkits.analysis.dielectric_constant)</a>
 </li>
@@ -804,6 +820,8 @@ document.write(`
       <li><a href="_api/ectoolkits.utils.utils.html#ectoolkits.utils.utils.get_rdf_list">get_rdf_list() (in module ectoolkits.utils.utils)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.dAdBridge.get_ref">get_ref() (ectoolkits.analysis.rutile110.dAdBridge method)</a>
+</li>
+      <li><a href="_api/ectoolkits.plots.dpmd.html#ectoolkits.plots.dpmd.get_rmse">get_rmse() (in module ectoolkits.plots.dpmd)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_rot_temp">get_rot_temp() (in module ectoolkits.analysis.acidity)</a>
 </li>
@@ -959,6 +977,8 @@ document.write(`
 </li>
         <li><a href="_api/ectoolkits.plots.band_align.html#module-ectoolkits.plots.band_align">ectoolkits.plots.band_align</a>
 </li>
+        <li><a href="_api/ectoolkits.plots.dpmd.html#module-ectoolkits.plots.dpmd">ectoolkits.plots.dpmd</a>
+</li>
         <li><a href="_api/ectoolkits.structures.html#module-ectoolkits.structures">ectoolkits.structures</a>
 </li>
         <li><a href="_api/ectoolkits.structures.interface.html#module-ectoolkits.structures.interface">ectoolkits.structures.interface</a>
@@ -1008,11 +1028,15 @@ document.write(`
 </li>
       <li><a href="_api/ectoolkits.plots.band_align.html#ectoolkits.plots.band_align.plot_band_alignment">plot_band_alignment() (in module ectoolkits.plots.band_align)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.plot_density">plot_density() (ectoolkits.analysis.atom_density.AtomDensity method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.WatDensity.plot_density_z">plot_density_z() (ectoolkits.analysis.rutile110.WatDensity method)</a>
+</li>
+      <li><a href="_api/ectoolkits.plots.dpmd.html#ectoolkits.plots.dpmd.plot_dptest">plot_dptest() (in module ectoolkits.plots.dpmd)</a>
+</li>
+      <li><a href="_api/ectoolkits.plots.dpmd.html#ectoolkits.plots.dpmd.plot_error">plot_error() (in module ectoolkits.plots.dpmd)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.BandAlign.plot_hartree_per_width">plot_hartree_per_width() (ectoolkits.analysis.band_align.BandAlign method)</a>
 </li>

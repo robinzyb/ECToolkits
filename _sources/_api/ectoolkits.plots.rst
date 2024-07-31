@@ -8,6 +8,7 @@ Submodules
    :maxdepth: 4
 
    ectoolkits.plots.band_align
+   ectoolkits.plots.dpmd
 
 Module contents
 ---------------

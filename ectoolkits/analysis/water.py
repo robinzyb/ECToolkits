@@ -2,10 +2,11 @@
 Water analysis
 """
 
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 import numpy as np
 from scipy import constants
+from matplotlib.axes import Axes
 
 from MDAnalysis.analysis.base import AnalysisBase
 from MDAnalysis import Universe
@@ -125,10 +126,12 @@ class WaterOrientation(AnalysisBase):
         universe = Universe(
             xyz,
             transformations=trans.boxdimensions.set_dimensions(cell.cellpar()),
+            dt=kwargs.get("dt"),
         )
 
         # Save required arguments
         self.cell = cell
+        logger.info("Cell: %s", str(cell))
         self.surf1_ag = universe.select_atoms(*[f"index {i}" for i in surf1])
         self.surf2_ag = universe.select_atoms(*[f"index {i}" for i in surf2])
         logger.info("Surface 1 atom indices: %s", str(surf1))
@@ -136,13 +139,15 @@ class WaterOrientation(AnalysisBase):
 
         # Initialize AnalysisBase
         super().__init__(universe.trajectory, verbose=kwargs.get("verbose", None))
-        self.n_frames = len(universe.trajectory)
 
         # Parse optional kwargs
         self.oh_cutoff = kwargs.get("oh_cutoff", 2)
-        # self.reference = kwargs.get("reference", "fixed")
-        # logger.info("Coordinate reference method: %s", self.reference)
-        # BUG: the surfaces might drift, requiring different reference coordinate
+        self.strict = kwargs.get("strict", False)
+        logger.info("Strict handling of water molecules: strict=%s", str(self.strict))
+        self.origin = kwargs.get("origin", "surf1")
+        logger.info("Coordinate system origin: origin=%s", self.origin)
+        self.dz = kwargs.get("dz", 0.1)
+        logger.info("Bin size for density profiles: dz=%.2f", self.dz)
 
         # Define atom groups
         o_indices = kwargs.get("oxygen_indices", None)
@@ -163,24 +168,45 @@ class WaterOrientation(AnalysisBase):
             self.cell,
             oh_cutoff=self.oh_cutoff,
         )
-        self.strict = kwargs.get("strict", False)
 
+        # Define results objects
+        self.n_frames = None
+        self.results.z1 = None
+        self.results.z2 = None
+        self.results.z_water = None
+        self.results.cos_theta = None
+        self.results.dipole = None
+
+    def get_origin(self, z1: float | np.ndarray, z2: float | np.ndarray) -> np.ndarray:
+        """
+        TODO: write
+        """
+        z1 = np.atleast_1d(z1)
+        z2 = np.atleast_1d(z2)
+        if self.origin == "center":
+            return (z1 + z2) / 2
+        if self.origin == "surf1":
+            return z1
+        return np.zeros(z1.shape)
+
+    def _prepare(self):
+        # At this point, n_frames is set by self._setup_frames in the base class
         # Initialize results
+        self.results.z1 = np.zeros(self.n_frames)
+        self.results.z2 = np.zeros(self.n_frames)
         self.results.z_water = np.zeros((self.n_frames, len(self.o_ag)))
         self.results.cos_theta = np.zeros((self.n_frames, len(self.o_ag)))
         self.results.dipole = np.zeros((self.n_frames, len(self.o_ag), 3))
-        self.results.z_surf = np.zeros((self.n_frames, 2))
 
     def _single_frame(self):
         """
         Compute surface position, water density and cos theta for a single frame
         """
         # Surface position
-        z_surf = [
-            np.mean(self.surf1_ag.positions[:, 2]),
-            np.mean(self.surf2_ag.positions[:, 2]),
-        ]
-        np.copyto(self.results.z_surf[self._frame_index, :], z_surf)
+        z1 = np.mean(self.surf1_ag.positions[:, 2])
+        z2 = np.mean(self.surf2_ag.positions[:, 2])
+        self.results.z1[self._frame_index] = z1
+        self.results.z2[self._frame_index] = z2 + self.cell[2][2] * (z1 > z2)
 
         # Oxygen density
         np.copyto(self.results.z_water[self._frame_index], self.o_ag.positions[:, 2])
@@ -209,29 +235,32 @@ class WaterOrientation(AnalysisBase):
         # Surface area
         area = self.cell.area(2)
 
+        # Set coordinate origin
+        origin = self.get_origin(self.results.z1, self.results.z2)
+        z_water = self.results.z_water - origin[:, np.newaxis]
+
         # Surface locations
-        z_surf = self.results.z_surf.mean(axis=0)
-        # BUG: if run(step=N), some elements are zero, leading to wrong z1/z2
-        z1 = min(z_surf)
-        z2 = max(z_surf)
+        z1 = self.results.z1.mean() - origin.mean()
+        z2 = self.results.z2.mean() - origin.mean()
 
         # Water density
         counts, bin_edges = np.histogram(
-            self.results.z_water.flatten(),
-            bins=int((z2 - z1) / 0.1),
+            z_water.flatten(),
+            bins=int((z2 - z1) / self.dz),
             range=(z1, z2),
         )
         n_water = counts / self.n_frames
-        # BUG: if run(step=N), some elements are zero, leading to wrong counts/n_frames ratio
         grid_volume = np.diff(bin_edges) * area
-        rho = water_density(n_water, grid_volume)
-        self.results.density_profile = [bin_edges_to_grid(bin_edges), rho]
+        self.results.density_profile = [
+            bin_edges_to_grid(bin_edges),
+            water_density(n_water, grid_volume),
+        ]
 
         # Water orientation
         valid = ~np.isnan(self.results.cos_theta.flatten())
         counts, bin_edges = np.histogram(
-            self.results.z_water.flatten()[valid],
-            bins=int((z2 - z1) / 0.1),
+            z_water.flatten()[valid],
+            bins=int((z2 - z1) / self.dz),
             range=(z1, z2),
             weights=self.results.cos_theta.flatten()[valid],
         )
@@ -239,3 +268,21 @@ class WaterOrientation(AnalysisBase):
             bin_edges_to_grid(bin_edges),
             counts / self.n_frames,
         ]
+
+    def plot_orientation(self, ax: Optional[Axes] = None, sym: bool = False):
+        """
+        TODO: write
+        """
+        x, y = self.results.orientation_profile
+        if sym:
+            y = (y - y[::-1]) / 2
+        ax.plot(x, y)
+
+    def plot_density(self, ax: Optional[Axes] = None, sym: bool = False):
+        """
+        TODO: write
+        """
+        x, y = self.results.density_profile
+        if sym:
+            y = (y + y[::-1]) / 2
+        ax.plot(x, y)

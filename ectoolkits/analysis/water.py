@@ -2,14 +2,16 @@
 Water analysis
 """
 
+from typing import Dict, List
+
 import numpy as np
 from scipy import constants
 
 from MDAnalysis.analysis.base import AnalysisBase
 from MDAnalysis import Universe
 from MDAnalysis import transformations as trans
+from MDAnalysis.lib.distances import minimize_vectors, capped_distance
 
-from ase.geometry import get_distances
 from ase.cell import Cell
 
 from ectoolkits.log import get_logger
@@ -50,50 +52,58 @@ def bin_edges_to_grid(bin_edges: np.ndarray):
     return bin_edges[:-1] + np.diff(bin_edges) / 2
 
 
-def get_dipoles(
+def identify_water_molecules(
     h_positions: np.ndarray,
     o_positions: np.ndarray,
     cell: Cell,
     oh_cutoff: float,
-) -> np.ndarray:
+) -> Dict[int, List]:
     """
-    TODO: To write
+    TODO: write
     """
-    # Precompute all OH vectors
-    oh_vectors, oh_distances = get_distances(
-        h_positions, o_positions, cell=cell, pbc=True
-    )
+    water_dict = {i: [] for i in range(o_positions.shape[0])}
 
-    # For each H atom, find the indices of the closest O atom
-    closest_o_indices = np.argmin(oh_distances, axis=1)
-    min_oh_vectors = oh_vectors[np.arange(oh_vectors.shape[0]), closest_o_indices]
-    min_oh_distance = oh_distances[np.arange(oh_vectors.shape[0]), closest_o_indices]
-
-    # Find the indices of oxygen atoms corresponding to 2 H's (water) within cutoff
-    unique, counts = np.unique(
-        closest_o_indices[min_oh_distance < oh_cutoff],
-        return_counts=True,
-    )
-    water_oxygen_indices = unique[counts == 2]
-
-    # Boolean array to select H atoms that are in water
-    h_mask = np.isin(closest_o_indices, water_oxygen_indices)
-
-    # Select only O-indices corresponding to water
-    selected_closest_o_indices = closest_o_indices[h_mask]
-
-    # Select only OH vectors corresponding to water molecules
-    water_oh_vectors = min_oh_vectors[h_mask]
-
-    # Calculate dipole vector as the sum of two OH vectors for each water-O
-    dipole_vectors = np.ones(o_positions.shape) * np.nan
-
-    for i in water_oxygen_indices:
-        dipole_vectors[i, :] = np.sum(
-            water_oh_vectors[selected_closest_o_indices == i], axis=0
+    # TODO: get rid of this for-loop
+    for h_idx, hpos in enumerate(h_positions):
+        pairs, distances = capped_distance(
+            hpos,
+            o_positions,
+            max_cutoff=oh_cutoff,
+            box=cell.cellpar(),
+            return_distances=True,
         )
 
-    return dipole_vectors
+        if len(pairs) > 0:
+            closest_o_idx = pairs[np.argmin(distances)][1]
+            water_dict[closest_o_idx].append(h_idx)
+
+    water_dict = {key: value for key, value in water_dict.items() if len(value) == 2}
+    return water_dict
+
+
+def get_dipoles(
+    h_positions: np.ndarray,
+    o_positions: np.ndarray,
+    water_dict: Dict[int, List],
+    cell: Cell,
+) -> np.ndarray:
+    """
+    TODO: write
+    """
+    o_indices = np.array([key for key, _ in water_dict.items()])
+    h_indices = np.array([value for _, value in water_dict.items()])
+
+    oh_1 = minimize_vectors(
+        o_positions[o_indices] - h_positions[h_indices[:, 0]],
+        box=cell.cellpar(),
+    )
+    oh_2 = minimize_vectors(
+        o_positions[o_indices] - h_positions[h_indices[:, 1]],
+        box=cell.cellpar(),
+    )
+    dipoles = np.ones(o_positions.shape) * np.nan
+    dipoles[o_indices, :] = oh_1 + oh_2
+    return dipoles
 
 
 class WaterOrientation(AnalysisBase):
@@ -109,7 +119,7 @@ class WaterOrientation(AnalysisBase):
         surf2: np.ndarray,
         **kwargs,
     ):
-        logger.info("Class for water density and orientation analysis")
+        logger.info("Performing water density and orientation analysis")
 
         # Setup Universe
         universe = Universe(
@@ -125,14 +135,14 @@ class WaterOrientation(AnalysisBase):
         logger.info("Surface 2 atom indices: %s", str(surf2))
 
         # Initialize AnalysisBase
-        super().__init__(universe.trajectory, verbose=kwargs.get("verbose", False))
+        super().__init__(universe.trajectory, verbose=kwargs.get("verbose", None))
         self.n_frames = len(universe.trajectory)
-        logger.info("Number of frames: %d", self.n_frames)
 
         # Parse optional kwargs
         self.oh_cutoff = kwargs.get("oh_cutoff", 2)
         # self.reference = kwargs.get("reference", "fixed")
         # logger.info("Coordinate reference method: %s", self.reference)
+        # BUG: the surfaces might drift, requiring different reference coordinate
 
         # Define atom groups
         o_indices = kwargs.get("oxygen_indices", None)
@@ -146,6 +156,14 @@ class WaterOrientation(AnalysisBase):
             self.h_ag = universe.select_atoms(*[f"index {i}" for i in h_indices])
         else:
             self.h_ag = universe.select_atoms("name H")
+
+        self.water_dict = identify_water_molecules(
+            self.h_ag.positions,
+            self.o_ag.positions,
+            self.cell,
+            oh_cutoff=self.oh_cutoff,
+        )
+        self.strict = kwargs.get("strict", False)
 
         # Initialize results
         self.results.z_water = np.zeros((self.n_frames, len(self.o_ag)))
@@ -168,11 +186,18 @@ class WaterOrientation(AnalysisBase):
         np.copyto(self.results.z_water[self._frame_index], self.o_ag.positions[:, 2])
 
         # Dipoles
+        if self.strict:
+            self.water_dict = identify_water_molecules(
+                self.h_ag.positions,
+                self.o_ag.positions,
+                self.cell,
+                oh_cutoff=self.oh_cutoff,
+            )
         dipole = get_dipoles(
             self.h_ag.positions,
             self.o_ag.positions,
+            self.water_dict,
             cell=self.cell,
-            oh_cutoff=self.oh_cutoff,
         )
         np.copyto(self.results.dipole[self._frame_index], dipole)
 
@@ -186,6 +211,7 @@ class WaterOrientation(AnalysisBase):
 
         # Surface locations
         z_surf = self.results.z_surf.mean(axis=0)
+        # BUG: if run(step=N), some elements are zero, leading to wrong z1/z2
         z1 = min(z_surf)
         z2 = max(z_surf)
 
@@ -196,6 +222,7 @@ class WaterOrientation(AnalysisBase):
             range=(z1, z2),
         )
         n_water = counts / self.n_frames
+        # BUG: if run(step=N), some elements are zero, leading to wrong counts/n_frames ratio
         grid_volume = np.diff(bin_edges) * area
         rho = water_density(n_water, grid_volume)
         self.results.density_profile = [bin_edges_to_grid(bin_edges), rho]

@@ -154,11 +154,11 @@ def get_dipoles(
     h_indices = np.array([value for _, value in water_dict.items()])
 
     oh_1 = minimize_vectors(
-        o_positions[o_indices] - h_positions[h_indices[:, 0]],
+        h_positions[h_indices[:, 0]] - o_positions[o_indices],
         box=cell.cellpar(),
     )
     oh_2 = minimize_vectors(
-        o_positions[o_indices] - h_positions[h_indices[:, 1]],
+        h_positions[h_indices[:, 1]] - o_positions[o_indices],
         box=cell.cellpar(),
     )
     dipoles = np.ones(o_positions.shape) * np.nan

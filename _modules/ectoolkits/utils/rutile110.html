@@ -512,7 +512,7 @@ document.write(`
 <span class="sd">    Args:</span>
 <span class="sd">        tio2_cut (Atoms): any tio2 \\hkl(1-11) edge model (hopefully it will work for all input)</span>
 <span class="sd">        octahedral_bonds_upper_bound (float, optional): The longest length to recogonize an oxygen as a octahedral ligand. Defaults to 2.4.</span>
-<span class="sd">        bridge_along (str, optional): The direction of the bridge oxygens, could be either &quot;x&quot; or &quot;y&quot;. Defaults to &quot;y&quot;. </span>
+<span class="sd">        bridge_along (str, optional): The direction of the bridge oxygens, could be either &quot;x&quot; or &quot;y&quot;. Defaults to &quot;y&quot;.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        np.array: the normal vectors, which could be used as the rotM matrix for the coordinates</span>
@@ -544,7 +544,7 @@ document.write(`
             <span class="c1"># Find the majority sign</span>
             <span class="n">positive_count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">signs</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
             <span class="n">negative_count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">signs</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-            
+
             <span class="k">if</span> <span class="n">positive_count</span> <span class="o">&gt;=</span> <span class="n">negative_count</span><span class="p">:</span>
                 <span class="c1"># If positive signs are the majority, average the positive vectors</span>
                 <span class="n">positive_vectors</span> <span class="o">=</span> <span class="n">v_list</span><span class="p">[</span><span class="n">signs</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
@@ -563,7 +563,7 @@ document.write(`
         <span class="n">v_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">v_list</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">do_average</span><span class="p">(</span><span class="n">v_list</span><span class="p">,</span> <span class="n">ind</span><span class="p">)</span>
 
-   
+
     <span class="n">octahedral_bonds</span> <span class="o">=</span> <span class="n">get_octahedral_bonds</span><span class="p">(</span><span class="n">tio2</span><span class="p">,</span> <span class="n">octahedral_bonds_upper_bound</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">bridge_along</span> <span class="o">==</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span>

@@ -139,7 +139,7 @@ def get_rotM_edged_rutile110(tio2: Atoms, octahedral_bonds_upper_bound: float=2.
     Args:
         tio2_cut (Atoms): any tio2 \\hkl(1-11) edge model (hopefully it will work for all input)
         octahedral_bonds_upper_bound (float, optional): The longest length to recogonize an oxygen as a octahedral ligand. Defaults to 2.4.
-        bridge_along (str, optional): The direction of the bridge oxygens, could be either "x" or "y". Defaults to "y". 
+        bridge_along (str, optional): The direction of the bridge oxygens, could be either "x" or "y". Defaults to "y".
 
     Returns:
         np.array: the normal vectors, which could be used as the rotM matrix for the coordinates
@@ -171,7 +171,7 @@ def get_rotM_edged_rutile110(tio2: Atoms, octahedral_bonds_upper_bound: float=2.
             # Find the majority sign
             positive_count = np.sum(signs > 0)
             negative_count = np.sum(signs < 0)
-            
+
             if positive_count >= negative_count:
                 # If positive signs are the majority, average the positive vectors
                 positive_vectors = v_list[signs > 0]
@@ -190,7 +190,7 @@ def get_rotM_edged_rutile110(tio2: Atoms, octahedral_bonds_upper_bound: float=2.
         v_list = np.array(v_list)
         return do_average(v_list, ind)
 
-   
+
     octahedral_bonds = get_octahedral_bonds(tio2, octahedral_bonds_upper_bound)
 
     if bridge_along == "y":

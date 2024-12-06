@@ -8,6 +8,23 @@ ElectroChemical Toolkits(ECToolkits), the package to calculate electrochemical r
 ![pythonv](https://img.shields.io/pypi/pyversions/ectoolkits)
 ![pypiv](https://img.shields.io/pypi/v/ectoolkits)
 
+# Installation
+## From pip
+```bash
+pip install ectoolkits
+```
+
+## From source
+One can download the source code of cp2kdata by
+```bash
+git clone https://github.com/robinzyb/ECToolkits.git ectoolkits
+```
+then use `pip` to install the module from source
+
+```bash
+cd ectoolkits
+pip install .
+```
 
 
 # Analysis

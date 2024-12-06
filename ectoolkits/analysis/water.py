@@ -169,6 +169,8 @@ def get_dipoles(
 class WaterOrientation(AnalysisBase):
     """
     Analyze water density and orientation near surfaces using MDAnalysis.
+    Inspired by WatAnalysis (github.com/ChiahsinChu/WatAnalysis)
+    -- credit to Jia-Xin Zhu.
 
     Parameters
     ----------
@@ -304,8 +306,9 @@ class WaterOrientation(AnalysisBase):
         Returns
         -------
         np.ndarray
-            Z-coordinate(s) of the origin based on the specified reference (`"center"` or `"surf1"`).
-            Defaults to an array of zeros if the origin is not recognized.
+            Z-coordinate(s) of the origin based on the specified reference (`"center"`
+            or `"surf1"`). Defaults to an array of zeros if the origin is not
+            recognized.
         """
         z1 = np.atleast_1d(z1)
         z2 = np.atleast_1d(z2)

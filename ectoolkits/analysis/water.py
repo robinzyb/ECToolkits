@@ -16,6 +16,7 @@ from MDAnalysis.lib.distances import minimize_vectors, capped_distance
 from ase.cell import Cell
 
 from ectoolkits.log import get_logger
+from ectoolkits.utils.utils import mic_1d
 
 logger = get_logger(__name__)
 
@@ -332,10 +333,12 @@ class WaterOrientation(AnalysisBase):
         Compute surface position, water density and cos theta for a single frame
         """
         # Surface position
-        z1 = np.mean(self.surf1_ag.positions[:, 2])
-        z2 = np.mean(self.surf2_ag.positions[:, 2])
+        # Apply minimum image convention in case part of the layer crosses the
+        # cell z-boundaries
+        z1 = mic_1d(self.surf1_ag.positions[:, 2], cell=self.cell[2][2]).mean()
+        z2 = mic_1d(self.surf2_ag.positions[:, 2], cell=self.cell[2][2]).mean()
         self.results.z1[self._frame_index] = z1
-        self.results.z2[self._frame_index] = z2 + self.cell[2][2] * (z1 > z2)
+        self.results.z2[self._frame_index] = z2
 
         # Oxygen density
         np.copyto(self.results.z_water[self._frame_index], self.o_ag.positions[:, 2])
@@ -364,19 +367,34 @@ class WaterOrientation(AnalysisBase):
         # Surface area
         area = self.cell.area(2)
 
-        # Set coordinate origin
-        origin = self.get_origin(self.results.z1, self.results.z2)
-        z_water = self.results.z_water - origin[:, np.newaxis]
+        # Refer everything to the left surface (z1), then move everything
+        # to be within one cell length positive of z1
+        z1 = np.zeros(self.results.z1.shape)
+        z2 = mic_1d(
+            self.results.z2 - self.results.z1,
+            cell=self.cell[2][2],
+            reference=self.cell[2][2] / 2,
+        )
+        z_water = mic_1d(
+            self.results.z_water - self.results.z1[:, np.newaxis],
+            cell=self.cell[2][2],
+            reference=self.cell[2][2] / 2,
+        )
 
-        # Surface locations
-        z1 = self.results.z1.mean() - origin.mean()
-        z2 = self.results.z2.mean() - origin.mean()
+        # Set coordinate origin
+        origin = self.get_origin(z1, z2)
+        z1 -= origin
+        z2 -= origin
+        z_water -= origin[:, np.newaxis]
+
+        z1_mean = z1.mean()
+        z2_mean = z2.mean()
 
         # Water density
         counts, bin_edges = np.histogram(
             z_water.flatten(),
-            bins=int((z2 - z1) / self.dz),
-            range=(z1, z2),
+            bins=int((z2_mean - z1_mean) / self.dz),
+            range=(z1_mean, z2_mean),
         )
         n_water = counts / self.n_frames
         grid_volume = np.diff(bin_edges) * area
@@ -389,8 +407,8 @@ class WaterOrientation(AnalysisBase):
         valid = ~np.isnan(self.results.cos_theta.flatten())
         counts, bin_edges = np.histogram(
             z_water.flatten()[valid],
-            bins=int((z2 - z1) / self.dz),
-            range=(z1, z2),
+            bins=int((z2_mean - z1_mean) / self.dz),
+            range=(z1_mean, z2_mean),
             weights=self.results.cos_theta.flatten()[valid],
         )
         self.results.orientation_profile = [

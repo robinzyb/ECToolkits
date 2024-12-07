@@ -4,6 +4,7 @@ this script put misc function here.
 import os
 import shutil
 from random import random
+import numbers
 
 import numpy as np
 import numpy.typing as npt
@@ -17,15 +18,46 @@ au2eV = 27.211386245988
 au2A = 0.529177210903
 
 
-def mic_1d(array: npt.NDArray[np.float64],
-           cell: float
-           ):
+def mic_1d(
+    array: npt.NDArray[np.float64],
+    cell: float,
+    reference: str | float = "first",
+) -> npt.NDArray[np.float64]:
     """
-    always refer to the first element of the array
+    Apply the minimum image convention (MIC) to a 1D array.
+
+    This function translates positions in a one-dimensional periodic system to
+    the unit cell centered around a certain reference point.
+    By default, the reference point is the first element of the array.
+
+    Parameters
+    ----------
+    array : numpy.ndarray
+        A 1D array of float values representing positions.
+    cell : float
+        The length of the periodic cell.
+    reference : {'first', float}, optional
+        The reference point for adjustments. Use the first element of `array`
+        if 'first', or a custom numeric value. Defaults to 'first'.
+
+    Returns
+    -------
+    numpy.ndarray
+        The adjusted array of positions within the principal cell.
     """
-    _tmp_arr = array - array[0]
-    _tmp_arr = _tmp_arr - np.round(_tmp_arr/cell)*cell
-    return _tmp_arr + array[0]
+    if reference == "first":
+        _ref = array[0]
+    elif isinstance(reference, numbers.Number):
+        _ref = reference
+    else:
+        raise ValueError(
+            "'reference' must be 'first' or a number, "
+            f"got {reference} of type {type(reference)}"
+        )
+    _tmp_arr = array - _ref
+    _tmp_arr = _tmp_arr - np.round(_tmp_arr / cell) * cell
+    return _tmp_arr + _ref
+
 
 def insert_water(atoms, z1, z2, water_num, model='random', space_x=0.3, space_y=0.3, space_z=0.3):
     # make a copy

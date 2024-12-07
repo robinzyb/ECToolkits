@@ -418,6 +418,23 @@ class WaterOrientation(AnalysisBase):
             counts / self.n_frames,
         ]
 
+    def save_profiles(self, filename: str):
+        """
+        Save the z-axis, water density, and orientation profiles to a text file.
+
+        Parameters
+        ----------
+        filename : str
+            Path to the output file.
+        """
+        z, rho = self.results.density_profile
+        _, cos_theta = self.results.orientation_profile
+        np.savetxt(
+            filename,
+            np.stack((z, rho, cos_theta)).T,
+            header="z [A], water_density [rho/cm3], cos_theta [rho/cm3]",
+        )
+
     def plot_orientation(self, ax: Axes, sym: bool = False) -> None:
         """
         Plot the orientation profile of water molecules.

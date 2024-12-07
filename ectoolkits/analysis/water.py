@@ -108,7 +108,6 @@ def identify_water_molecules(
     """
     water_dict = {i: [] for i in range(o_positions.shape[0])}
 
-    # TODO: get rid of this for-loop
     for h_idx, hpos in enumerate(h_positions):
         pairs, distances = capped_distance(
             hpos,

@@ -43,7 +43,8 @@ def mic_1d(
     Returns
     -------
     numpy.ndarray
-        The adjusted array of positions within the principal cell.
+        The adjusted array of positions within the principal cell centered
+        around the reference point.
     """
     if reference == "first":
         _ref = array[0]

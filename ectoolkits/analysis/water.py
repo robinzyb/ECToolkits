@@ -406,7 +406,6 @@ class WaterOrientation(AnalysisBase):
         ]
 
         # Water orientation
-        valid = ~np.isnan(self.results.cos_theta.flatten())
         counts, bin_edges = np.histogram(
             z_water.flatten()[valid],
             bins=int((z2_mean - z1_mean) / self.dz),

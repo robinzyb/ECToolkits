@@ -390,9 +390,11 @@ class WaterOrientation(AnalysisBase):
         z1_mean = z1.mean()
         z2_mean = z2.mean()
 
-        # Water density
+        # Water density: check valid water molecules (O with 2 H)
+        valid = ~np.isnan(self.results.cos_theta.flatten())
+
         counts, bin_edges = np.histogram(
-            z_water.flatten(),
+            z_water.flatten()[valid],
             bins=int((z2_mean - z1_mean) / self.dz),
             range=(z1_mean, z2_mean),
         )

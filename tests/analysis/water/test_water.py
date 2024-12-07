@@ -9,29 +9,34 @@ from ase.cell import Cell
 from ectoolkits.analysis.water import WaterOrientation
 
 # Define the different test systems and their corresponding files
-# in the format: (name, xyz-file, input-file, reference-file)
 test_systems = [
-    (
-        "P-water",
-        "tests/analysis/atom_density/P-water/P-water.xyz",
-        "tests/analysis/atom_density/P-water/input.json",
-        "tests/analysis/water/P-water.dat",
-    ),
-    (
-        "SnO2-water",
-        "tests/analysis/atom_density/SnO2-water/SnO2-water.xyz",
-        "tests/analysis/atom_density/SnO2-water/input.json",
-        "tests/analysis/water/SnO2-water.dat",
-    ),
+    {
+        "name": "P-water",
+        "xyz-file": "tests/analysis/atom_density/P-water/P-water.xyz",
+        "input-file": "tests/analysis/atom_density/P-water/input.json",
+        "reference-file": "tests/analysis/water/P-water.dat",
+    },
+    {
+        "name": "SnO2-water",
+        "xyz-file": "tests/analysis/atom_density/SnO2-water/SnO2-water.xyz",
+        "input-file": "tests/analysis/atom_density/SnO2-water/input.json",
+        "reference-file": "tests/analysis/water/SnO2-water.dat",
+    },
 ]
 
 
-@pytest.fixture
+@pytest.fixture(
+    params=test_systems,
+    ids=[d["name"] for d in test_systems],
+)
 def name_analysis_answer(request):
     """
     Get water orientation class object
     """
-    name, xyz_file, json_file, reference_file = request.param
+    name = request.param["name"]
+    xyz_file = request.param["xyz-file"]
+    json_file = request.param["input-file"]
+    reference_file = request.param["reference-file"]
 
     with open(json_file, "r", encoding="utf-8") as f:
         input_dict = json.load(f)
@@ -49,7 +54,6 @@ def name_analysis_answer(request):
     )
 
 
-@pytest.mark.parametrize("name_analysis_answer", test_systems, indirect=True)
 def test_water_orientation_profiles(name_analysis_answer, tmp_path):
     """
     Pytest comparing water orientation outputs to the reference .dat files

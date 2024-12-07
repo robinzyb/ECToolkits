@@ -186,7 +186,7 @@ class WaterOrientation(AnalysisBase):
     **kwargs : dict, optional
         Keyword arguments:
         - `dt` : float
-            Time step between frames in the trajectory.
+            Time step between frames in the trajectory. Default is 1.0 ps.
         - `verbose` : bool
             Verbosity level for AnalysisBase.
         - `oh_cutoff` : float
@@ -242,7 +242,7 @@ class WaterOrientation(AnalysisBase):
         universe = Universe(
             xyz,
             transformations=trans.boxdimensions.set_dimensions(cell.cellpar()),
-            dt=kwargs.get("dt"),
+            dt=kwargs.get("dt", 1.0),  # Might be useful in the future (dynamics)
         )
 
         # Save required arguments

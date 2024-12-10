@@ -1,6 +1,8 @@
 """
 this script put misc function here.
 """
+
+from typing import Union
 import os
 import shutil
 from random import random
@@ -21,7 +23,7 @@ au2A = 0.529177210903
 def mic_1d(
     array: npt.NDArray[np.float64],
     cell: float,
-    reference: str | float = "first",
+    reference: Union[str, float] = "first",
 ) -> npt.NDArray[np.float64]:
     """
     Apply the minimum image convention (MIC) to a 1D array.

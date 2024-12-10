@@ -2,7 +2,7 @@
 Water analysis
 """
 
-from typing import Dict, List
+from typing import Dict, List, Union
 
 import numpy as np
 from scipy import constants
@@ -292,7 +292,9 @@ class WaterOrientation(AnalysisBase):
         self.results.cos_theta = None
         self.results.dipole = None
 
-    def get_origin(self, z1: float | np.ndarray, z2: float | np.ndarray) -> np.ndarray:
+    def get_origin(
+        self, z1: Union[float, np.ndarray], z2: Union[float, np.ndarray]
+    ) -> np.ndarray:
         """
         Determine the origin for the coordinate system.
 

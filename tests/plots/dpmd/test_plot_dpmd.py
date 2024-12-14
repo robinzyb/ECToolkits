@@ -20,8 +20,8 @@ class TestPlotDPMD():
         e_file = path_prefix/f"{case}.e.out"
         f_file = path_prefix/f"{case}.f.out"
         save_png = tmp_path/f"{case}.png"
-        rmse_e, mae_e, rmse_fx, mae_fx, rmse_fy, mae_fy, rmse_fz, mae_fz = \
-            plot_dptest(e_file=e_file, f_file=f_file, save_name=save_png, return_err=True)
+        fig, rmse_e, mae_e, rmse_fx, mae_fx, rmse_fy, mae_fy, rmse_fz, mae_fz = \
+            plot_dptest(e_file=e_file, f_file=f_file, save_name=save_png, return_err=True, frc_comp=True)
         
         err = np.array([rmse_e, mae_e, rmse_fx, mae_fx, rmse_fy, mae_fy, rmse_fz, mae_fz])
         ref = np.load(path_prefix/f"{case}_err.npy")

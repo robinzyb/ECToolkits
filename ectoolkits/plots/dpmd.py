@@ -65,7 +65,7 @@ def plot_error(ax, data, pred, type='energy', title='Energy', return_err=False):
     if return_err:
         return rmse, mae
 
-def plot_dptest(e_file: str, f_file: str, save_name: str="dptest.png", return_err: bool=False, frc_comp: bool=True):
+def plot_dptest(e_file: str, f_file: str, save_name: str="dptest.png", return_err: bool=False, frc_comp: bool=False):
 
     plt.style.use("cp2kdata.matplotlibstyle.jcp")
     if frc_comp:

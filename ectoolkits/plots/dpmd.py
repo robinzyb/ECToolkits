@@ -65,27 +65,52 @@ def plot_error(ax, data, pred, type='energy', title='Energy', return_err=False):
     if return_err:
         return rmse, mae
 
-def plot_dptest(e_file: str, f_file: str, save_name: str="dptest.png", return_err=False):
+def plot_dptest(e_file: str, f_file: str, save_name: str="dptest.png", return_err: bool=False, frc_comp: bool=False):
+
     plt.style.use("cp2kdata.matplotlibstyle.jcp")
-    row = 2
-    col = 2
-    fig = plt.figure(figsize=(3.37*col, 2.6*row), dpi=200, facecolor='white')
-    gs = fig.add_gridspec(row,col, hspace=0.5)
-    e_data, e_pred, fx_data, fy_data, fz_data, fx_pred, fy_pred, fz_pred, natom = \
-        get_dptest_data(e_file=e_file, f_file=f_file)
+    if frc_comp:
+        row = 2
+        col = 2
+        fig = plt.figure(figsize=(3.37*col, 2.6*row), dpi=200, facecolor='white')
+        gs = fig.add_gridspec(row,col, hspace=0.5)
+        e_data, e_pred, fx_data, fy_data, fz_data, fx_pred, fy_pred, fz_pred, natom = \
+            get_dptest_data(e_file=e_file, f_file=f_file)
 
-    ax = fig.add_subplot(gs[0])
-    rmse_e, mae_e = plot_error(ax, e_data/natom, e_pred/natom, type='energy', title='Energy', return_err=True)
-    ax  = fig.add_subplot(gs[1])
-    rmse_fx, mae_fx = plot_error(ax, fx_data, fx_pred, type='force', title=r'$\mathrm{F_{x}}$', return_err=True)
-    ax = fig.add_subplot(gs[2])
-    rmse_fy, mae_fy = plot_error(ax, fy_data, fy_pred, type='force', title=r'$\mathrm{F_{y}}$', return_err=True)
-    ax = fig.add_subplot(gs[3])
-    rmse_fz, mae_fz = plot_error(ax, fz_data, fz_pred, type='force', title=r'$\mathrm{F_{z}}$', return_err=True)
+        ax = fig.add_subplot(gs[0])
+        rmse_e, mae_e = plot_error(ax, e_data/natom, e_pred/natom, type='energy', title='Energy', return_err=True)
+        ax  = fig.add_subplot(gs[1])
+        rmse_fx, mae_fx = plot_error(ax, fx_data, fx_pred, type='force', title=r'$\mathrm{F_{x}}$', return_err=True)
+        ax = fig.add_subplot(gs[2])
+        rmse_fy, mae_fy = plot_error(ax, fy_data, fy_pred, type='force', title=r'$\mathrm{F_{y}}$', return_err=True)
+        ax = fig.add_subplot(gs[3])
+        rmse_fz, mae_fz = plot_error(ax, fz_data, fz_pred, type='force', title=r'$\mathrm{F_{z}}$', return_err=True)
+    else:
+        row = 1
+        col = 2
+        fig = plt.figure(figsize=(3.37*col, 2.6*row), dpi=200, facecolor='white')
+        gs = fig.add_gridspec(row,col, hspace=0.5)
+        e_data, e_pred, fx_data, fy_data, fz_data, fx_pred, fy_pred, fz_pred, natom = \
+            get_dptest_data(e_file=e_file, f_file=f_file)
 
-    fig.savefig(save_name, dpi=400)
+        f_data = np.array([fx_data, fy_data, fz_data])
+        f_pred = np.array([fx_pred, fy_pred, fz_pred])
+
+        ax = fig.add_subplot(gs[0])
+        rmse_e, mae_e = plot_error(ax, e_data/natom, e_pred/natom, type='energy', title='Energy', return_err=True)
+        ax  = fig.add_subplot(gs[1])
+        rmse_f, mae_f = plot_error(ax, f_data, f_pred, type='force', title=r'Force', return_err=True)
+
+
+    if save_name:
+        fig.savefig(save_name, dpi=300)
 
     if return_err:
-        return rmse_e, mae_e, rmse_fx, mae_fx, rmse_fy, mae_fy, rmse_fz, mae_fz
+        if frc_comp:
+            return fig, rmse_e, mae_e, rmse_fx, mae_fx, rmse_fy, mae_fy, rmse_fz, mae_fz
+        else:
+            return fig, rmse_e, mae_e, rmse_f, mae_f
+
+    else:
+        return fig
 
 

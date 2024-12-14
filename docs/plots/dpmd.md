@@ -13,7 +13,11 @@ e_file = "./dptest.e.out"
 f_file = "./dptest.f.out"
 save_png = "dptest.png"
 
-plot_dptest(e_file=e_file, f_file=f_file, save_name=save_png)
+
+fig = plot_dptest(e_file=e_file, f_file=f_file, save_name=save_png, frc_comp=True, return_err=False)
+
+fig, rmse_e, mae_e, rmse_fx, mae_fx, rmse_fy, mae_fy, rmse_fz, mae_fz = plot_dptest(e_file=e_file, f_file=f_file, save_name=save_png, frc_comp=True, return_err=True)
+fig, rmse_e, mae_e, rmse_f, mae_f = plot_dptest(e_file=e_file, f_file=f_file, save_name=save_png, frc_comp=False, return_err=True)
 ```
 With the above codes, users can get the plot of the test results.
 

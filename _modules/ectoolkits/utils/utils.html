@@ -195,6 +195,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.rutile110.html">ectoolkits.analysis.rutile110 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.uncertainty.html">ectoolkits.analysis.uncertainty module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.water.html">ectoolkits.analysis.water module</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../_api/ectoolkits.matplotlibstyle.html">ectoolkits.matplotlibstyle package</a></li>
@@ -374,9 +375,12 @@ document.write(`
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">this script put misc function here.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">random</span>
+<span class="kn">import</span> <span class="nn">numbers</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">numpy.typing</span> <span class="k">as</span> <span class="nn">npt</span>
@@ -390,15 +394,47 @@ document.write(`
 <span class="n">au2A</span> <span class="o">=</span> <span class="mf">0.529177210903</span>
 
 
-<div class="viewcode-block" id="mic_1d"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.utils.html#ectoolkits.utils.utils.mic_1d">[docs]</a><span class="k">def</span> <span class="nf">mic_1d</span><span class="p">(</span><span class="n">array</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
-           <span class="n">cell</span><span class="p">:</span> <span class="nb">float</span>
-           <span class="p">):</span>
+<div class="viewcode-block" id="mic_1d"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.utils.html#ectoolkits.utils.utils.mic_1d">[docs]</a><span class="k">def</span> <span class="nf">mic_1d</span><span class="p">(</span>
+    <span class="n">array</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+    <span class="n">cell</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">reference</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;first&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    always refer to the first element of the array</span>
+<span class="sd">    Apply the minimum image convention (MIC) to a 1D array.</span>
+
+<span class="sd">    This function translates positions in a one-dimensional periodic system to</span>
+<span class="sd">    the unit cell centered around a certain reference point.</span>
+<span class="sd">    By default, the reference point is the first element of the array.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    array : numpy.ndarray</span>
+<span class="sd">        A 1D array of float values representing positions.</span>
+<span class="sd">    cell : float</span>
+<span class="sd">        The length of the periodic cell.</span>
+<span class="sd">    reference : {&#39;first&#39;, float}, optional</span>
+<span class="sd">        The reference point for adjustments. Use the first element of `array`</span>
+<span class="sd">        if &#39;first&#39;, or a custom numeric value. Defaults to &#39;first&#39;.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    numpy.ndarray</span>
+<span class="sd">        The adjusted array of positions within the principal cell centered</span>
+<span class="sd">        around the reference point.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">_tmp_arr</span> <span class="o">=</span> <span class="n">array</span> <span class="o">-</span> <span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">_tmp_arr</span> <span class="o">=</span> <span class="n">_tmp_arr</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">_tmp_arr</span><span class="o">/</span><span class="n">cell</span><span class="p">)</span><span class="o">*</span><span class="n">cell</span>
-    <span class="k">return</span> <span class="n">_tmp_arr</span> <span class="o">+</span> <span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+    <span class="k">if</span> <span class="n">reference</span> <span class="o">==</span> <span class="s2">&quot;first&quot;</span><span class="p">:</span>
+        <span class="n">_ref</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">):</span>
+        <span class="n">_ref</span> <span class="o">=</span> <span class="n">reference</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;&#39;reference&#39; must be &#39;first&#39; or a number, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="n">reference</span><span class="si">}</span><span class="s2"> of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="n">_tmp_arr</span> <span class="o">=</span> <span class="n">array</span> <span class="o">-</span> <span class="n">_ref</span>
+    <span class="n">_tmp_arr</span> <span class="o">=</span> <span class="n">_tmp_arr</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">_tmp_arr</span> <span class="o">/</span> <span class="n">cell</span><span class="p">)</span> <span class="o">*</span> <span class="n">cell</span>
+    <span class="k">return</span> <span class="n">_tmp_arr</span> <span class="o">+</span> <span class="n">_ref</span></div>
+
 
 <div class="viewcode-block" id="insert_water"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.utils.html#ectoolkits.utils.utils.insert_water">[docs]</a><span class="k">def</span> <span class="nf">insert_water</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">water_num</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;random&#39;</span><span class="p">,</span> <span class="n">space_x</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">space_y</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">space_z</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
     <span class="c1"># make a copy</span>

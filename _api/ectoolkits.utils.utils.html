@@ -198,6 +198,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.rutile110.html">ectoolkits.analysis.rutile110 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.uncertainty.html">ectoolkits.analysis.uncertainty module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.analysis.water.html">ectoolkits.analysis.water module</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="ectoolkits.matplotlibstyle.html">ectoolkits.matplotlibstyle package</a></li>
@@ -474,8 +475,28 @@ elements: the atom pair</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="ectoolkits.utils.utils.mic_1d">
-<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.utils.</span></span><span class="sig-name descname"><span class="pre">mic_1d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/utils/utils.html#mic_1d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.utils.mic_1d" title="Permalink to this definition">#</a></dt>
-<dd><p>always refer to the first element of the array</p>
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.utils.utils.</span></span><span class="sig-name descname"><span class="pre">mic_1d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'first'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ectoolkits/utils/utils.html#mic_1d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.utils.utils.mic_1d" title="Permalink to this definition">#</a></dt>
+<dd><p>Apply the minimum image convention (MIC) to a 1D array.</p>
+<p>This function translates positions in a one-dimensional periodic system to
+the unit cell centered around a certain reference point.
+By default, the reference point is the first element of the array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<em>numpy.ndarray</em>) – A 1D array of float values representing positions.</p></li>
+<li><p><strong>cell</strong> (<em>float</em>) – The length of the periodic cell.</p></li>
+<li><p><strong>reference</strong> (<em>{'first'</em><em>, </em><em>float}</em><em>, </em><em>optional</em>) – The reference point for adjustments. Use the first element of <cite>array</cite>
+if ‘first’, or a custom numeric value. Defaults to ‘first’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The adjusted array of positions within the principal cell centered
+around the reference point.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">

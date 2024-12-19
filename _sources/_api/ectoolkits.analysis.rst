@@ -15,6 +15,7 @@ Submodules
    ectoolkits.analysis.finite_size_correction
    ectoolkits.analysis.rutile110
    ectoolkits.analysis.uncertainty
+   ectoolkits.analysis.water
 
 Module contents
 ---------------

@@ -195,6 +195,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="_api/ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="_api/ectoolkits.analysis.rutile110.html">ectoolkits.analysis.rutile110 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="_api/ectoolkits.analysis.uncertainty.html">ectoolkits.analysis.uncertainty module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_api/ectoolkits.analysis.water.html">ectoolkits.analysis.water module</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="_api/ectoolkits.matplotlibstyle.html">ectoolkits.matplotlibstyle package</a></li>
@@ -381,9 +382,11 @@ document.write(`
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
@@ -416,9 +419,11 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.BandAlign">BandAlign (class in ectoolkits.analysis.band_align)</a>
 </li>
+      <li><a href="_api/ectoolkits.plots.band_align.html#ectoolkits.plots.band_align.be_data_to_she">be_data_to_she() (in module ectoolkits.plots.band_align)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="_api/ectoolkits.plots.band_align.html#ectoolkits.plots.band_align.be_data_to_she">be_data_to_she() (in module ectoolkits.plots.band_align)</a>
+      <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.bin_edges_to_grid">bin_edges_to_grid() (in module ectoolkits.analysis.water)</a>
 </li>
       <li><a href="_api/ectoolkits.utils.math.html#ectoolkits.utils.math.birch_murnaghan_equation">birch_murnaghan_equation() (in module ectoolkits.utils.math)</a>
 </li>
@@ -428,6 +433,8 @@ document.write(`
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.cell">cell (ectoolkits.analysis.water.WaterOrientation attribute)</a>
+</li>
       <li><a href="_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.cellpar2volume">cellpar2volume() (in module ectoolkits.utils.rutile110)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.RutileDisDeg.cn2disdeg">cn2disdeg() (ectoolkits.analysis.rutile110.RutileDisDeg static method)</a>
@@ -458,6 +465,8 @@ document.write(`
 </li>
       <li><a href="_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.Density">Density (class in ectoolkits.analysis.atom_density)</a>
 </li>
+      <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.density">density() (in module ectoolkits.analysis.water)</a>
+</li>
       <li><a href="_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.DielProfile">DielProfile (class in ectoolkits.analysis.finite_size_correction)</a>
 </li>
   </ul></td>
@@ -477,6 +486,8 @@ document.write(`
       <li><a href="_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.dObr_NearestH">dObr_NearestH (class in ectoolkits.analysis.rutile110)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.dObr_NearH">dObr_NearH (class in ectoolkits.analysis.rutile110)</a>
+</li>
+      <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.dz">dz (ectoolkits.analysis.water.WaterOrientation attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -545,6 +556,13 @@ document.write(`
 
       <ul>
         <li><a href="_api/ectoolkits.analysis.uncertainty.html#module-ectoolkits.analysis.uncertainty">module</a>
+</li>
+      </ul></li>
+      <li>
+    ectoolkits.analysis.water
+
+      <ul>
+        <li><a href="_api/ectoolkits.analysis.water.html#module-ectoolkits.analysis.water">module</a>
 </li>
       </ul></li>
       <li>
@@ -725,6 +743,8 @@ document.write(`
 </li>
       <li><a href="_api/ectoolkits.analysis.dielectric_constant.html#ectoolkits.analysis.dielectric_constant.get_dielectric_susceptibility">get_dielectric_susceptibility() (in module ectoolkits.analysis.dielectric_constant)</a>
 </li>
+      <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.get_dipoles">get_dipoles() (in module ectoolkits.analysis.water)</a>
+</li>
       <li><a href="_api/ectoolkits.plots.dpmd.html#ectoolkits.plots.dpmd.get_dptest_data">get_dptest_data() (in module ectoolkits.plots.dpmd)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.SurfTiOBondLenght.get_dTiOad">get_dTiOad() (ectoolkits.analysis.rutile110.SurfTiOBondLenght method)</a>
@@ -793,6 +813,8 @@ document.write(`
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.get_origin">get_origin() (ectoolkits.analysis.water.WaterOrientation method)</a>
+</li>
       <li><a href="_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.get_pair">get_pair() (in module ectoolkits.utils.rutile110)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_partition_ratio">get_partition_ratio() (in module ectoolkits.analysis.acidity)</a>
@@ -914,9 +936,19 @@ document.write(`
   </ul></td>
 </tr></table>
 
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.h_ag">h_ag (ectoolkits.analysis.water.WaterOrientation attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.identify_water_molecules">identify_water_molecules() (in module ectoolkits.analysis.water)</a>
+</li>
       <li><a href="_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.Rutile110.idxslab2idxatoms">idxslab2idxatoms() (ectoolkits.structures.rutile110.Rutile110 static method)</a>
 
       <ul>
@@ -925,10 +957,10 @@ document.write(`
       </ul></li>
       <li><a href="_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.DielProfile.ifmodel">ifmodel() (ectoolkits.analysis.finite_size_correction.DielProfile static method)</a>
 </li>
-      <li><a href="_api/ectoolkits.utils.utils.html#ectoolkits.utils.utils.insert_water">insert_water() (in module ectoolkits.utils.utils)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_api/ectoolkits.utils.utils.html#ectoolkits.utils.utils.insert_water">insert_water() (in module ectoolkits.utils.utils)</a>
+</li>
       <li><a href="_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.integer3D">integer3D() (in module ectoolkits.analysis.finite_size_correction)</a>
 </li>
       <li><a href="_api/ectoolkits.structures.interface.html#ectoolkits.structures.interface.Interface">Interface (class in ectoolkits.structures.interface)</a>
@@ -968,6 +1000,8 @@ document.write(`
         <li><a href="_api/ectoolkits.analysis.rutile110.html#module-ectoolkits.analysis.rutile110">ectoolkits.analysis.rutile110</a>
 </li>
         <li><a href="_api/ectoolkits.analysis.uncertainty.html#module-ectoolkits.analysis.uncertainty">ectoolkits.analysis.uncertainty</a>
+</li>
+        <li><a href="_api/ectoolkits.analysis.water.html#module-ectoolkits.analysis.water">ectoolkits.analysis.water</a>
 </li>
         <li><a href="_api/ectoolkits.log.html#module-ectoolkits.log">ectoolkits.log</a>
 </li>
@@ -1013,6 +1047,20 @@ document.write(`
   </ul></td>
 </tr></table>
 
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.o_ag">o_ag (ectoolkits.analysis.water.WaterOrientation attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.oh_cutoff">oh_cutoff (ectoolkits.analysis.water.WaterOrientation attribute)</a>
+</li>
+      <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.origin">origin (ectoolkits.analysis.water.WaterOrientation attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -1029,7 +1077,11 @@ document.write(`
       <li><a href="_api/ectoolkits.plots.band_align.html#ectoolkits.plots.band_align.plot_band_alignment">plot_band_alignment() (in module ectoolkits.plots.band_align)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.plot_density">plot_density() (ectoolkits.analysis.atom_density.AtomDensity method)</a>
+
+      <ul>
+        <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.plot_density">(ectoolkits.analysis.water.WaterOrientation method)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.WatDensity.plot_density_z">plot_density_z() (ectoolkits.analysis.rutile110.WatDensity method)</a>
@@ -1047,6 +1099,8 @@ document.write(`
       <li><a href="_api/ectoolkits.plots.band_align.html#ectoolkits.plots.band_align.plot_one_ba_diff">plot_one_ba_diff() (in module ectoolkits.plots.band_align)</a>
 </li>
       <li><a href="_api/ectoolkits.plots.band_align.html#ectoolkits.plots.band_align.plot_one_ba_sc">plot_one_ba_sc() (in module ectoolkits.plots.band_align)</a>
+</li>
+      <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.plot_orientation">plot_orientation() (ectoolkits.analysis.water.WaterOrientation method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1086,6 +1140,8 @@ document.write(`
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.save_profiles">save_profiles() (ectoolkits.analysis.water.WaterOrientation method)</a>
+</li>
       <li><a href="_api/ectoolkits.utils.vasp.html#ectoolkits.utils.vasp.scale_iso_cell">scale_iso_cell() (in module ectoolkits.utils.vasp)</a>
 </li>
       <li><a href="_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.SlabRutile1p11Edge.sep_hobr">sep_hobr() (ectoolkits.structures.rutile110.SlabRutile1p11Edge static method)</a>
@@ -1104,10 +1160,10 @@ document.write(`
       </ul></li>
       <li><a href="_api/ectoolkits.utils.utils.html#ectoolkits.utils.utils.set_pbc">set_pbc() (in module ectoolkits.utils.utils)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_api/ectoolkits.plots.band_align.html#ectoolkits.plots.band_align.she_scale">she_scale() (in module ectoolkits.plots.band_align)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_api/ectoolkits.structures.slab.html#ectoolkits.structures.slab.Slab">Slab (class in ectoolkits.structures.slab)</a>
 </li>
       <li><a href="_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.SlabRutile110">SlabRutile110 (class in ectoolkits.structures.rutile110)</a>
@@ -1123,6 +1179,12 @@ document.write(`
 </li>
       </ul></li>
       <li><a href="_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.staleRutileDisDeg">staleRutileDisDeg (class in ectoolkits.analysis.rutile110)</a>
+</li>
+      <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.strict">strict (ectoolkits.analysis.water.WaterOrientation attribute)</a>
+</li>
+      <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.surf1_ag">surf1_ag (ectoolkits.analysis.water.WaterOrientation attribute)</a>
+</li>
+      <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.surf2_ag">surf2_ag (ectoolkits.analysis.water.WaterOrientation attribute)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.SurfTiOBondLenght">SurfTiOBondLenght (class in ectoolkits.analysis.rutile110)</a>
 </li>
@@ -1166,9 +1228,15 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.WatDensity">WatDensity (class in ectoolkits.analysis.rutile110)</a>
 </li>
+      <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.water_density">water_density() (in module ectoolkits.analysis.water)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.water_dict">water_dict (ectoolkits.analysis.water.WaterOrientation attribute)</a>
+</li>
       <li><a href="_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.water_O_idx">water_O_idx() (ectoolkits.analysis.atom_density.AtomDensity method)</a>
+</li>
+      <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation">WaterOrientation (class in ectoolkits.analysis.water)</a>
 </li>
   </ul></td>
 </tr></table>

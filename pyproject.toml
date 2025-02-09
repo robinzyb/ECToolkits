@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ECToolkits"
-version = "0.2.6"
+version = "0.3.1"
 authors = [
 {name = "Yong-Bin Zhuang", email = "robinzhuang@outlook.com"}
 ]

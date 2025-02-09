@@ -169,6 +169,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/acidity.html">Acidity calculation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/finite_size_correction.html">The finite size correction of interfaces</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/redox.html">Redox potentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/reweight.html">Construct free energy surface through reweighting</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Plots</span></p>
 <ul class="nav bd-sidenav">
@@ -193,6 +194,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.dielectric_constant.html">ectoolkits.analysis.dielectric_constant module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.disdeg.html">ectoolkits.analysis.disdeg module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.get_Surface_Indirect_PT.html">ectoolkits.analysis.get_Surface_Indirect_PT module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.get_Surface_PT_CV.html">ectoolkits.analysis.get_Surface_PT_CV module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.reweight.html">ectoolkits.analysis.reweight module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.rutile110.html">ectoolkits.analysis.rutile110 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.uncertainty.html">ectoolkits.analysis.uncertainty module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.water.html">ectoolkits.analysis.water module</a></li>
@@ -374,14 +378,14 @@ document.write(`
   <h1>Source code for ectoolkits.analysis.acidity</h1><div class="highlight"><pre>
 <span></span><span class="c1"># this module collect acidity calculation functions</span>
 <span class="c1">#</span>
-<span class="kn">from</span> <span class="nn">cp2kdata.units</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cp2kdata.units</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 
 <span class="c1"># see reference</span>
 
 <span class="c1"># quantum correction term Delta A qc</span>
-<div class="viewcode-block" id="get_quantum_correction_hydronium"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_quantum_correction_hydronium">[docs]</a><span class="k">def</span> <span class="nf">get_quantum_correction_hydronium</span><span class="p">(</span><span class="n">T</span><span class="o">=</span><span class="mi">298</span><span class="p">):</span>
+<div class="viewcode-block" id="get_quantum_correction_hydronium"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_quantum_correction_hydronium">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_quantum_correction_hydronium</span><span class="p">(</span><span class="n">T</span><span class="o">=</span><span class="mi">298</span><span class="p">):</span>
 
     <span class="n">H3O_frequencies_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1032</span><span class="p">,</span> <span class="mi">1668</span><span class="p">,</span> <span class="mi">1692</span><span class="p">,</span> <span class="mi">3449</span><span class="p">,</span> <span class="mi">3523</span><span class="p">,</span> <span class="mi">3540</span><span class="p">])</span>
     <span class="n">H2O_frequencies_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1610</span><span class="p">,</span> <span class="mi">3710</span><span class="p">,</span> <span class="mi">3820</span><span class="p">])</span>
@@ -392,7 +396,7 @@ document.write(`
     <span class="k">return</span> <span class="n">quant_corr_hydronium</span></div>
 
 
-<div class="viewcode-block" id="get_quantum_correction"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_quantum_correction">[docs]</a><span class="k">def</span> <span class="nf">get_quantum_correction</span><span class="p">(</span><span class="n">frequencies_list</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
+<div class="viewcode-block" id="get_quantum_correction"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_quantum_correction">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_quantum_correction</span><span class="p">(</span><span class="n">frequencies_list</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
     <span class="c1"># frequencies in cm-1</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;get quantum correction acidity calculation</span>
 
@@ -404,13 +408,13 @@ document.write(`
     <span class="k">return</span> <span class="n">quant_corr</span></div>
 
 
-<div class="viewcode-block" id="get_quant_vib_fe"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_quant_vib_fe">[docs]</a><span class="k">def</span> <span class="nf">get_quant_vib_fe</span><span class="p">(</span><span class="n">frequencies_list</span><span class="p">):</span>
+<div class="viewcode-block" id="get_quant_vib_fe"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_quant_vib_fe">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_quant_vib_fe</span><span class="p">(</span><span class="n">frequencies_list</span><span class="p">):</span>
 
     <span class="n">quant_vib_fe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">frequencies_list</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">WaveNumber2eV</span>
     <span class="k">return</span> <span class="n">quant_vib_fe</span></div>
 
 
-<div class="viewcode-block" id="get_cls_vib_fe"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_cls_vib_fe">[docs]</a><span class="k">def</span> <span class="nf">get_cls_vib_fe</span><span class="p">(</span><span class="n">frequencies_list</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
+<div class="viewcode-block" id="get_cls_vib_fe"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_cls_vib_fe">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_cls_vib_fe</span><span class="p">(</span><span class="n">frequencies_list</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
 
     <span class="n">cls_vib_fe</span> <span class="o">=</span> <span class="o">-</span><span class="n">kB</span> <span class="o">*</span> <span class="n">T</span> <span class="o">*</span> \
         <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">((</span><span class="n">kB</span><span class="o">*</span><span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">frequencies_list</span> <span class="o">*</span> <span class="n">WaveNumber2eV</span><span class="p">)))</span>
@@ -419,19 +423,19 @@ document.write(`
 <span class="c1"># dummy insertion free energy</span>
 
 
-<div class="viewcode-block" id="get_dummy_insert_fe"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_dummy_insert_fe">[docs]</a><span class="k">def</span> <span class="nf">get_dummy_insert_fe</span><span class="p">(</span><span class="n">frequencies_list</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
+<div class="viewcode-block" id="get_dummy_insert_fe"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_dummy_insert_fe">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_dummy_insert_fe</span><span class="p">(</span><span class="n">frequencies_list</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
     <span class="n">fAd</span> <span class="o">=</span> <span class="n">get_partition_ratio</span><span class="p">(</span><span class="n">frequencies_list</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="n">T</span><span class="p">)</span>
     <span class="n">Delta_A_Ad</span> <span class="o">=</span> <span class="n">_get_dummy_insert_fe</span><span class="p">(</span><span class="n">fAd</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">Delta_A_Ad</span></div>
 
 
-<div class="viewcode-block" id="get_dummy_insert_fe_hydronium"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_dummy_insert_fe_hydronium">[docs]</a><span class="k">def</span> <span class="nf">get_dummy_insert_fe_hydronium</span><span class="p">(</span><span class="n">T</span><span class="o">=</span><span class="mi">298</span><span class="p">):</span>
+<div class="viewcode-block" id="get_dummy_insert_fe_hydronium"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_dummy_insert_fe_hydronium">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_dummy_insert_fe_hydronium</span><span class="p">(</span><span class="n">T</span><span class="o">=</span><span class="mi">298</span><span class="p">):</span>
     <span class="n">fH2Od</span> <span class="o">=</span> <span class="n">get_partition_ratio_hydronium</span><span class="p">(</span><span class="n">T</span><span class="o">=</span><span class="n">T</span><span class="p">)</span>
     <span class="n">Delta_A_H2Od</span> <span class="o">=</span> <span class="n">_get_dummy_insert_fe</span><span class="p">(</span><span class="n">fH2Od</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="n">T</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">Delta_A_H2Od</span></div>
 
 
-<span class="k">def</span> <span class="nf">_get_dummy_insert_fe</span><span class="p">(</span><span class="n">fAd</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_dummy_insert_fe</span><span class="p">(</span><span class="n">fAd</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;get dummy insertion free energy</span>
 <span class="sd">     \Delta A_{Ad} = -kBT ln(c0 \Lambda_{\ce{H+}}^{3} f_{Ad})</span>
 <span class="sd">    _extended_summary_</span>
@@ -448,14 +452,14 @@ document.write(`
     <span class="k">return</span> <span class="n">Delta_A_Ad</span>
 
 
-<div class="viewcode-block" id="get_partition_ratio"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_partition_ratio">[docs]</a><span class="k">def</span> <span class="nf">get_partition_ratio</span><span class="p">(</span><span class="n">frequencies_list</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">298</span><span class="p">):</span>
+<div class="viewcode-block" id="get_partition_ratio"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_partition_ratio">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_partition_ratio</span><span class="p">(</span><span class="n">frequencies_list</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">298</span><span class="p">):</span>
     <span class="n">prod_theta_vib</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">get_vib_temp</span><span class="p">(</span><span class="n">frequencies_list</span><span class="p">))</span>
     <span class="n">Tpow3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
     <span class="n">fAd</span> <span class="o">=</span> <span class="n">Tpow3</span> <span class="o">/</span> <span class="n">prod_theta_vib</span>
     <span class="k">return</span> <span class="n">fAd</span></div>
 
 
-<div class="viewcode-block" id="get_partition_ratio_hydronium"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_partition_ratio_hydronium">[docs]</a><span class="k">def</span> <span class="nf">get_partition_ratio_hydronium</span><span class="p">(</span><span class="n">T</span><span class="o">=</span><span class="mi">298</span><span class="p">):</span>
+<div class="viewcode-block" id="get_partition_ratio_hydronium"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_partition_ratio_hydronium">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_partition_ratio_hydronium</span><span class="p">(</span><span class="n">T</span><span class="o">=</span><span class="mi">298</span><span class="p">):</span>
     <span class="c1"># moment of inertia (I) in atomic unit</span>
     <span class="c1"># frequency of a vibration mode in cm-1</span>
 
@@ -472,7 +476,7 @@ document.write(`
     <span class="k">return</span> <span class="n">fH2Od</span></div>
 
 
-<div class="viewcode-block" id="get_gas_partition"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_gas_partition">[docs]</a><span class="k">def</span> <span class="nf">get_gas_partition</span><span class="p">(</span><span class="n">frequencies_list</span><span class="p">,</span> <span class="n">I_list</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+<div class="viewcode-block" id="get_gas_partition"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_gas_partition">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_gas_partition</span><span class="p">(</span><span class="n">frequencies_list</span><span class="p">,</span> <span class="n">I_list</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;only used for H2Od and H2O gas partition function.</span>
 <span class="sd">    In high temperature limit</span>
 
@@ -503,7 +507,7 @@ document.write(`
     <span class="k">return</span> <span class="n">partition</span></div>
 
 
-<div class="viewcode-block" id="get_vib_temp"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_vib_temp">[docs]</a><span class="k">def</span> <span class="nf">get_vib_temp</span><span class="p">(</span><span class="n">frequency</span><span class="p">):</span>
+<div class="viewcode-block" id="get_vib_temp"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_vib_temp">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_vib_temp</span><span class="p">(</span><span class="n">frequency</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;frequency in cm-1</span>
 
 <span class="sd">    _extended_summary_</span>
@@ -518,7 +522,7 @@ document.write(`
     <span class="k">return</span> <span class="n">vib_temp</span></div>
 
 
-<div class="viewcode-block" id="get_rot_temp"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_rot_temp">[docs]</a><span class="k">def</span> <span class="nf">get_rot_temp</span><span class="p">(</span><span class="n">I</span><span class="p">):</span>
+<div class="viewcode-block" id="get_rot_temp"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_rot_temp">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_rot_temp</span><span class="p">(</span><span class="n">I</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;moment of inertia (I) in atomic unit</span>
 
 <span class="sd">    see ref eq</span>

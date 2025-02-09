@@ -169,6 +169,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/acidity.html">Acidity calculation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/finite_size_correction.html">The finite size correction of interfaces</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/redox.html">Redox potentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/reweight.html">Construct free energy surface through reweighting</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Plots</span></p>
 <ul class="nav bd-sidenav">
@@ -193,6 +194,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.dielectric_constant.html">ectoolkits.analysis.dielectric_constant module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.disdeg.html">ectoolkits.analysis.disdeg module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.get_Surface_Indirect_PT.html">ectoolkits.analysis.get_Surface_Indirect_PT module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.get_Surface_PT_CV.html">ectoolkits.analysis.get_Surface_PT_CV module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.reweight.html">ectoolkits.analysis.reweight module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.rutile110.html">ectoolkits.analysis.rutile110 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.uncertainty.html">ectoolkits.analysis.uncertainty module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.water.html">ectoolkits.analysis.water module</a></li>
@@ -376,26 +380,26 @@ document.write(`
 <span class="sd">Water analysis</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">constants</span>
-<span class="kn">from</span> <span class="nn">matplotlib.axes</span> <span class="kn">import</span> <span class="n">Axes</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">constants</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.axes</span><span class="w"> </span><span class="kn">import</span> <span class="n">Axes</span>
 
-<span class="kn">from</span> <span class="nn">MDAnalysis.analysis.base</span> <span class="kn">import</span> <span class="n">AnalysisBase</span>
-<span class="kn">from</span> <span class="nn">MDAnalysis</span> <span class="kn">import</span> <span class="n">Universe</span>
-<span class="kn">from</span> <span class="nn">MDAnalysis</span> <span class="kn">import</span> <span class="n">transformations</span> <span class="k">as</span> <span class="n">trans</span>
-<span class="kn">from</span> <span class="nn">MDAnalysis.lib.distances</span> <span class="kn">import</span> <span class="n">minimize_vectors</span><span class="p">,</span> <span class="n">capped_distance</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">MDAnalysis.analysis.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnalysisBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">MDAnalysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">Universe</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">MDAnalysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">transformations</span> <span class="k">as</span> <span class="n">trans</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">MDAnalysis.lib.distances</span><span class="w"> </span><span class="kn">import</span> <span class="n">minimize_vectors</span><span class="p">,</span> <span class="n">capped_distance</span>
 
-<span class="kn">from</span> <span class="nn">ase.cell</span> <span class="kn">import</span> <span class="n">Cell</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ase.cell</span><span class="w"> </span><span class="kn">import</span> <span class="n">Cell</span>
 
-<span class="kn">from</span> <span class="nn">ectoolkits.log</span> <span class="kn">import</span> <span class="n">get_logger</span>
-<span class="kn">from</span> <span class="nn">ectoolkits.utils.utils</span> <span class="kn">import</span> <span class="n">mic_1d</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.utils.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">mic_1d</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.density">[docs]</a><span class="k">def</span> <span class="nf">density</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">mol_mass</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<div class="viewcode-block" id="density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.density">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">density</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">mol_mass</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate density in g/cm³ from the number of particles.</span>
 
@@ -419,7 +423,7 @@ document.write(`
     <span class="k">return</span> <span class="n">rho</span></div>
 
 
-<div class="viewcode-block" id="water_density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.water_density">[docs]</a><span class="k">def</span> <span class="nf">water_density</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<div class="viewcode-block" id="water_density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.water_density">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">water_density</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the density of water in g/cm³.</span>
 
@@ -438,7 +442,7 @@ document.write(`
     <span class="k">return</span> <span class="n">density</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="mf">18.015</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="bin_edges_to_grid"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.bin_edges_to_grid">[docs]</a><span class="k">def</span> <span class="nf">bin_edges_to_grid</span><span class="p">(</span><span class="n">bin_edges</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+<div class="viewcode-block" id="bin_edges_to_grid"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.bin_edges_to_grid">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">bin_edges_to_grid</span><span class="p">(</span><span class="n">bin_edges</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert bin edges to grid points at bin centers.</span>
 
@@ -455,7 +459,7 @@ document.write(`
     <span class="k">return</span> <span class="n">bin_edges</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">bin_edges</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span></div>
 
 
-<div class="viewcode-block" id="identify_water_molecules"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.identify_water_molecules">[docs]</a><span class="k">def</span> <span class="nf">identify_water_molecules</span><span class="p">(</span>
+<div class="viewcode-block" id="identify_water_molecules"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.identify_water_molecules">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">identify_water_molecules</span><span class="p">(</span>
     <span class="n">h_positions</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">o_positions</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">cell</span><span class="p">:</span> <span class="n">Cell</span><span class="p">,</span>
@@ -499,7 +503,7 @@ document.write(`
     <span class="k">return</span> <span class="n">water_dict</span></div>
 
 
-<div class="viewcode-block" id="get_dipoles"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.get_dipoles">[docs]</a><span class="k">def</span> <span class="nf">get_dipoles</span><span class="p">(</span>
+<div class="viewcode-block" id="get_dipoles"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.get_dipoles">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_dipoles</span><span class="p">(</span>
     <span class="n">h_positions</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">o_positions</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">water_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
@@ -540,7 +544,7 @@ document.write(`
     <span class="k">return</span> <span class="n">dipoles</span></div>
 
 
-<div class="viewcode-block" id="WaterOrientation"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation">[docs]</a><span class="k">class</span> <span class="nc">WaterOrientation</span><span class="p">(</span><span class="n">AnalysisBase</span><span class="p">):</span>
+<div class="viewcode-block" id="WaterOrientation"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">WaterOrientation</span><span class="p">(</span><span class="n">AnalysisBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Analyze water density and orientation near surfaces using MDAnalysis.</span>
 <span class="sd">    Inspired by WatAnalysis (github.com/ChiahsinChu/WatAnalysis)</span>
@@ -601,7 +605,7 @@ document.write(`
 <span class="sd">        Mapping of oxygen atom indices to two bonded hydrogen atom indices.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">xyz</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">cell</span><span class="p">:</span> <span class="n">Cell</span><span class="p">,</span>
@@ -666,7 +670,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">cos_theta</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">dipole</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="WaterOrientation.get_origin"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.get_origin">[docs]</a>    <span class="k">def</span> <span class="nf">get_origin</span><span class="p">(</span>
+<div class="viewcode-block" id="WaterOrientation.get_origin"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.get_origin">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_origin</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">z1</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">z2</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -694,7 +698,7 @@ document.write(`
             <span class="k">return</span> <span class="n">z1</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">z1</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">_prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># At this point, n_frames is set by self._setup_frames in the base class</span>
         <span class="c1"># Initialize results</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">z1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span><span class="p">)</span>
@@ -703,7 +707,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">cos_theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">o_ag</span><span class="p">)))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">dipole</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">o_ag</span><span class="p">),</span> <span class="mi">3</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">_single_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_single_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute surface position, water density and cos theta for a single frame</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -738,7 +742,7 @@ document.write(`
         <span class="n">cos_theta</span> <span class="o">=</span> <span class="p">(</span><span class="n">dipole</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">dipole</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">np</span><span class="o">.</span><span class="n">copyto</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">cos_theta</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_index</span><span class="p">],</span> <span class="n">cos_theta</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_conclude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_conclude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Surface area</span>
         <span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">area</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 
@@ -792,7 +796,7 @@ document.write(`
             <span class="n">counts</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span><span class="p">,</span>
         <span class="p">]</span>
 
-<div class="viewcode-block" id="WaterOrientation.save_profiles"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.save_profiles">[docs]</a>    <span class="k">def</span> <span class="nf">save_profiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<div class="viewcode-block" id="WaterOrientation.save_profiles"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.save_profiles">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">save_profiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Save the z-axis, water density, and orientation profiles to a text file.</span>
 
@@ -809,7 +813,7 @@ document.write(`
             <span class="n">header</span><span class="o">=</span><span class="s2">&quot;z [A], water_density [rho/cm3], cos_theta [rho/cm3]&quot;</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="WaterOrientation.plot_orientation"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.plot_orientation">[docs]</a>    <span class="k">def</span> <span class="nf">plot_orientation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">:</span> <span class="n">Axes</span><span class="p">,</span> <span class="n">sym</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="WaterOrientation.plot_orientation"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.plot_orientation">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_orientation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">:</span> <span class="n">Axes</span><span class="p">,</span> <span class="n">sym</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot the orientation profile of water molecules.</span>
 
@@ -832,7 +836,7 @@ document.write(`
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\rho \langle \cos \theta \rangle$ / g cm$^{-3}$&quot;</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$z$ / Å&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="WaterOrientation.plot_density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.plot_density">[docs]</a>    <span class="k">def</span> <span class="nf">plot_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">:</span> <span class="n">Axes</span><span class="p">,</span> <span class="n">sym</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="WaterOrientation.plot_density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.plot_density">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">:</span> <span class="n">Axes</span><span class="p">,</span> <span class="n">sym</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot the density profile of water molecules.</span>
 

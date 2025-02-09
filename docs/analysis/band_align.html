@@ -174,6 +174,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="acidity.html">Acidity calculation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="finite_size_correction.html">The finite size correction of interfaces</a></li>
 <li class="toctree-l1"><a class="reference internal" href="redox.html">Redox potentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reweight.html">Construct free energy surface through reweighting</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Plots</span></p>
 <ul class="nav bd-sidenav">
@@ -198,6 +199,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.dielectric_constant.html">ectoolkits.analysis.dielectric_constant module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.disdeg.html">ectoolkits.analysis.disdeg module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.get_Surface_Indirect_PT.html">ectoolkits.analysis.get_Surface_Indirect_PT module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.get_Surface_PT_CV.html">ectoolkits.analysis.get_Surface_PT_CV module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.reweight.html">ectoolkits.analysis.reweight module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.rutile110.html">ectoolkits.analysis.rutile110 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.uncertainty.html">ectoolkits.analysis.uncertainty module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.water.html">ectoolkits.analysis.water module</a></li>
@@ -441,7 +445,7 @@ document.write(`
 <h1>Band alignment<a class="headerlink" href="#band-alignment" title="Permalink to this heading">#</a></h1>
 <section id="quick-start">
 <h2>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this heading">#</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ectoolkits..analysis.band_align</span> <span class="kn">import</span> <span class="n">BandAlign</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits..analysis.band_align</span><span class="w"> </span><span class="kn">import</span> <span class="n">BandAlign</span>
 <span class="n">inp</span> <span class="o">=</span> <span class="p">{</span>
      <span class="s2">&quot;input_type&quot;</span><span class="p">:</span> <span class="s2">&quot;cube&quot;</span><span class="p">,</span>
      <span class="s2">&quot;ave_param&quot;</span><span class="p">:{</span>
@@ -498,7 +502,7 @@ For example, in directory <code class="docutils literal notranslate"><span class
 <section id="plot-band-alignment-data">
 <h2>Plot Band Alignment Data<a class="headerlink" href="#plot-band-alignment-data" title="Permalink to this heading">#</a></h2>
 <p>After Obtain band positions from post processing, you can plot these data using <code class="docutils literal notranslate"><span class="pre">plot_band_alignment</span></code></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ectoolkits.plots.band_align</span> <span class="kn">import</span> <span class="n">plot_band_alignment</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.plots.band_align</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_band_alignment</span>
 
 <span class="c1">#prepare your band positions data in dictionary format</span>
 <span class="n">ba_data</span> <span class="o">=</span> <span class="p">{</span>

@@ -169,6 +169,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/acidity.html">Acidity calculation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/finite_size_correction.html">The finite size correction of interfaces</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/redox.html">Redox potentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/reweight.html">Construct free energy surface through reweighting</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Plots</span></p>
 <ul class="nav bd-sidenav">
@@ -193,6 +194,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.dielectric_constant.html">ectoolkits.analysis.dielectric_constant module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.disdeg.html">ectoolkits.analysis.disdeg module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.get_Surface_Indirect_PT.html">ectoolkits.analysis.get_Surface_Indirect_PT module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.get_Surface_PT_CV.html">ectoolkits.analysis.get_Surface_PT_CV module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.reweight.html">ectoolkits.analysis.reweight module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.rutile110.html">ectoolkits.analysis.rutile110 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.uncertainty.html">ectoolkits.analysis.uncertainty module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.water.html">ectoolkits.analysis.water module</a></li>
@@ -372,11 +376,11 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <h1>Source code for ectoolkits.analysis.finite_size_correction</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">erf</span>
-<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">toeplitz</span>
-<span class="kn">from</span> <span class="nn">cp2kdata.units</span> <span class="kn">import</span> <span class="n">au2A</span><span class="p">,</span> <span class="n">au2eV</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.special</span><span class="w"> </span><span class="kn">import</span> <span class="n">erf</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.linalg</span><span class="w"> </span><span class="kn">import</span> <span class="n">toeplitz</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cp2kdata.units</span><span class="w"> </span><span class="kn">import</span> <span class="n">au2A</span><span class="p">,</span> <span class="n">au2eV</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
 
 
 <span class="c1"># these codes are adapted from the original codes of komsa</span>
@@ -384,7 +388,7 @@ document.write(`
 <span class="c1"># reference:</span>
 <span class="c1"># Komsa, H.-P. &amp; Pasquarello, A. Finite-Size Supercell Correction for Charged Defects at Surfaces and Interfaces. Phys. Rev. Lett. 110, 095505 (2013).</span>
 
-<div class="viewcode-block" id="integer3D"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.integer3D">[docs]</a><span class="k">def</span> <span class="nf">integer3D</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">paramcell</span><span class="p">):</span>
+<div class="viewcode-block" id="integer3D"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.integer3D">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">integer3D</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">paramcell</span><span class="p">):</span>
     <span class="n">dv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">paramcell</span><span class="o">.</span><span class="n">h</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">*</span><span class="n">dv</span>
     <span class="k">return</span> <span class="n">x</span></div>
@@ -392,8 +396,8 @@ document.write(`
 <span class="c1"># write cell</span>
 
 
-<div class="viewcode-block" id="Paramcell"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.Paramcell">[docs]</a><span class="k">class</span> <span class="nc">Paramcell</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">divi</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+<div class="viewcode-block" id="Paramcell"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.Paramcell">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Paramcell</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">divi</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The documentation of Paramcell class</span>
 <span class="sd">        Parameters</span>
@@ -423,8 +427,8 @@ document.write(`
 <span class="c1"># write charge</span>
 
 
-<div class="viewcode-block" id="GaussCharge"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.GaussCharge">[docs]</a><span class="k">class</span> <span class="nc">GaussCharge</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">paramcell</span><span class="p">,</span> <span class="n">recip</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="GaussCharge"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.GaussCharge">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">GaussCharge</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">paramcell</span><span class="p">,</span> <span class="n">recip</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The documentation of GaussCharge class</span>
 <span class="sd">        Parameters</span>
@@ -500,8 +504,8 @@ document.write(`
             <span class="c1"># print(rhocc.max())</span>
 
 
-<div class="viewcode-block" id="DielProfile"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.DielProfile">[docs]</a><span class="k">class</span> <span class="nc">DielProfile</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="DielProfile"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.DielProfile">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">DielProfile</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">z_interface_list</span><span class="p">,</span>
                  <span class="n">diel_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
                  <span class="n">beta_list</span><span class="p">,</span>
@@ -546,7 +550,7 @@ document.write(`
 
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generate dielectric profile finished&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="DielProfile.gen_diel_profile"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.DielProfile.gen_diel_profile">[docs]</a>    <span class="k">def</span> <span class="nf">gen_diel_profile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diel_list</span><span class="p">):</span>
+<div class="viewcode-block" id="DielProfile.gen_diel_profile"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.DielProfile.gen_diel_profile">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">gen_diel_profile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diel_list</span><span class="p">):</span>
         <span class="n">len_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">paramcell</span><span class="o">.</span><span class="n">length</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
         <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">paramcell</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
         <span class="n">z_gridpoints</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">paramcell</span><span class="o">.</span><span class="n">divi</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
@@ -573,14 +577,14 @@ document.write(`
         <span class="k">return</span> <span class="n">dielz</span></div>
 
 <div class="viewcode-block" id="DielProfile.ifmodel"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.DielProfile.ifmodel">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">ifmodel</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">diel1</span><span class="p">,</span> <span class="n">diel2</span><span class="p">,</span> <span class="n">beta</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ifmodel</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">diel1</span><span class="p">,</span> <span class="n">diel2</span><span class="p">,</span> <span class="n">beta</span><span class="p">):</span>
         <span class="n">a</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">diel2</span> <span class="o">-</span> <span class="n">diel1</span><span class="p">)</span>
         <span class="n">b</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">diel2</span> <span class="o">+</span> <span class="n">diel1</span><span class="p">)</span>
         <span class="n">diel</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">erf</span><span class="p">(</span><span class="n">z</span><span class="o">/</span><span class="n">beta</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span>
         <span class="k">return</span> <span class="n">diel</span></div>
 
 <div class="viewcode-block" id="DielProfile.perdz"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.DielProfile.perdz">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">perdz</span><span class="p">(</span><span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">len_z</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">perdz</span><span class="p">(</span><span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">len_z</span><span class="p">):</span>
         <span class="n">dz</span> <span class="o">=</span> <span class="n">z1</span><span class="o">-</span><span class="n">z2</span>
         <span class="k">if</span> <span class="n">dz</span> <span class="o">&gt;</span> <span class="n">len_z</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span>
             <span class="n">dz</span> <span class="o">=</span> <span class="n">dz</span> <span class="o">-</span> <span class="n">len_z</span>
@@ -589,8 +593,8 @@ document.write(`
         <span class="k">return</span> <span class="n">dz</span></div></div>
 
 
-<div class="viewcode-block" id="PBCPoissonSolver"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.PBCPoissonSolver">[docs]</a><span class="k">class</span> <span class="nc">PBCPoissonSolver</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gauss_charge</span><span class="p">:</span> <span class="n">GaussCharge</span><span class="p">,</span> <span class="n">diel_profile</span><span class="p">:</span> <span class="n">DielProfile</span><span class="p">,</span> <span class="n">paramcell</span><span class="p">:</span> <span class="n">Paramcell</span><span class="p">):</span>
+<div class="viewcode-block" id="PBCPoissonSolver"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.PBCPoissonSolver">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">PBCPoissonSolver</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gauss_charge</span><span class="p">:</span> <span class="n">GaussCharge</span><span class="p">,</span> <span class="n">diel_profile</span><span class="p">:</span> <span class="n">DielProfile</span><span class="p">,</span> <span class="n">paramcell</span><span class="p">:</span> <span class="n">Paramcell</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gauss_charge</span> <span class="o">=</span> <span class="n">gauss_charge</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">diel_profile</span> <span class="o">=</span> <span class="n">diel_profile</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">paramcell</span> <span class="o">=</span> <span class="n">paramcell</span>
@@ -649,9 +653,9 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifftn</span><span class="p">(</span><span class="n">Vk</span><span class="p">)</span><span class="o">.</span><span class="n">real</span></div>
 
 
-<div class="viewcode-block" id="UniformCharge"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.UniformCharge">[docs]</a><span class="k">class</span> <span class="nc">UniformCharge</span><span class="p">:</span>
+<div class="viewcode-block" id="UniformCharge"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.UniformCharge">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">UniformCharge</span><span class="p">:</span>
     <span class="c1"># adapted from gono&#39;s code</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">interface_position</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">paramcell</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">interface_position</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">paramcell</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The documentation of GaussCharge class</span>
 <span class="sd">        Parameters</span>
@@ -712,13 +716,13 @@ document.write(`
         <span class="c1"># self.rhocc = self.rhocc.astype(complex)</span>
 
 <div class="viewcode-block" id="UniformCharge.counter_charge_model"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.UniformCharge.counter_charge_model">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">counter_charge_model</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">charge_1</span><span class="p">,</span> <span class="n">charge_2</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">counter_charge_model</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">charge_1</span><span class="p">,</span> <span class="n">charge_2</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
         <span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="n">charge_2</span> <span class="o">-</span> <span class="n">charge_1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
         <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">charge_2</span> <span class="o">+</span> <span class="n">charge_1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
         <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">erf</span><span class="p">(</span><span class="n">z</span> <span class="o">/</span> <span class="n">width</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span></div>
 
 <div class="viewcode-block" id="UniformCharge.delta_z"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.UniformCharge.delta_z">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">delta_z</span><span class="p">(</span><span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">periodic_cell_height</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">delta_z</span><span class="p">(</span><span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">periodic_cell_height</span><span class="p">):</span>
         <span class="n">dz</span> <span class="o">=</span> <span class="n">z1</span> <span class="o">-</span> <span class="n">z2</span>
         <span class="k">if</span> <span class="n">dz</span> <span class="o">&gt;</span> <span class="n">periodic_cell_height</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">:</span>
             <span class="n">dz</span> <span class="o">-=</span> <span class="n">periodic_cell_height</span>

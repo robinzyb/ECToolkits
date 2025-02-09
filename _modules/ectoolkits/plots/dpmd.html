@@ -169,6 +169,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/acidity.html">Acidity calculation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/finite_size_correction.html">The finite size correction of interfaces</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/redox.html">Redox potentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/reweight.html">Construct free energy surface through reweighting</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Plots</span></p>
 <ul class="nav bd-sidenav">
@@ -193,6 +194,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.dielectric_constant.html">ectoolkits.analysis.dielectric_constant module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.disdeg.html">ectoolkits.analysis.disdeg module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.get_Surface_Indirect_PT.html">ectoolkits.analysis.get_Surface_Indirect_PT module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.get_Surface_PT_CV.html">ectoolkits.analysis.get_Surface_PT_CV module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.reweight.html">ectoolkits.analysis.reweight module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.rutile110.html">ectoolkits.analysis.rutile110 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.uncertainty.html">ectoolkits.analysis.uncertainty module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.water.html">ectoolkits.analysis.water module</a></li>
@@ -372,22 +376,22 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <h1>Source code for ectoolkits.plots.dpmd</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy.typing</span> <span class="k">as</span> <span class="nn">npt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">npt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
 
-<div class="viewcode-block" id="get_mae"><a class="viewcode-back" href="../../../_api/ectoolkits.plots.dpmd.html#ectoolkits.plots.dpmd.get_mae">[docs]</a><span class="k">def</span> <span class="nf">get_mae</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+<div class="viewcode-block" id="get_mae"><a class="viewcode-back" href="../../../_api/ectoolkits.plots.dpmd.html#ectoolkits.plots.dpmd.get_mae">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_mae</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
             <span class="n">ref</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]</span>
             <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">data</span> <span class="o">-</span> <span class="n">ref</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="get_rmse"><a class="viewcode-back" href="../../../_api/ectoolkits.plots.dpmd.html#ectoolkits.plots.dpmd.get_rmse">[docs]</a><span class="k">def</span> <span class="nf">get_rmse</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+<div class="viewcode-block" id="get_rmse"><a class="viewcode-back" href="../../../_api/ectoolkits.plots.dpmd.html#ectoolkits.plots.dpmd.get_rmse">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_rmse</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
             <span class="n">ref</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]</span>
             <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">data</span> <span class="o">-</span> <span class="n">ref</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="get_dptest_data"><a class="viewcode-back" href="../../../_api/ectoolkits.plots.dpmd.html#ectoolkits.plots.dpmd.get_dptest_data">[docs]</a><span class="k">def</span> <span class="nf">get_dptest_data</span><span class="p">(</span><span class="n">e_file</span><span class="p">,</span> <span class="n">f_file</span><span class="p">):</span>
+<div class="viewcode-block" id="get_dptest_data"><a class="viewcode-back" href="../../../_api/ectoolkits.plots.dpmd.html#ectoolkits.plots.dpmd.get_dptest_data">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_dptest_data</span><span class="p">(</span><span class="n">e_file</span><span class="p">,</span> <span class="n">f_file</span><span class="p">):</span>
     <span class="n">e_data</span><span class="p">,</span> <span class="n">e_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">e_file</span><span class="p">,</span> <span class="n">unpack</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">e_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">e_data</span><span class="p">)</span>
     <span class="n">e_data</span> <span class="o">-=</span> <span class="n">e_mean</span>
@@ -407,7 +411,7 @@ document.write(`
 
 
 
-<div class="viewcode-block" id="plot_error"><a class="viewcode-back" href="../../../_api/ectoolkits.plots.dpmd.html#ectoolkits.plots.dpmd.plot_error">[docs]</a><span class="k">def</span> <span class="nf">plot_error</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;energy&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Energy&#39;</span><span class="p">,</span> <span class="n">return_err</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="plot_error"><a class="viewcode-back" href="../../../_api/ectoolkits.plots.dpmd.html#ectoolkits.plots.dpmd.plot_error">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">plot_error</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;energy&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Energy&#39;</span><span class="p">,</span> <span class="n">return_err</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 
 
     <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
@@ -439,7 +443,7 @@ document.write(`
     <span class="k">if</span> <span class="n">return_err</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">rmse</span><span class="p">,</span> <span class="n">mae</span></div>
 
-<div class="viewcode-block" id="plot_dptest"><a class="viewcode-back" href="../../../_api/ectoolkits.plots.dpmd.html#ectoolkits.plots.dpmd.plot_dptest">[docs]</a><span class="k">def</span> <span class="nf">plot_dptest</span><span class="p">(</span><span class="n">e_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">f_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">save_name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;dptest.png&quot;</span><span class="p">,</span> <span class="n">return_err</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">frc_comp</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="plot_dptest"><a class="viewcode-back" href="../../../_api/ectoolkits.plots.dpmd.html#ectoolkits.plots.dpmd.plot_dptest">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">plot_dptest</span><span class="p">(</span><span class="n">e_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">f_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">save_name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;dptest.png&quot;</span><span class="p">,</span> <span class="n">return_err</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">frc_comp</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 
     <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;cp2kdata.matplotlibstyle.jcp&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">frc_comp</span><span class="p">:</span>

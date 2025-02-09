@@ -172,6 +172,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="acidity.html">Acidity calculation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="finite_size_correction.html">The finite size correction of interfaces</a></li>
 <li class="toctree-l1"><a class="reference internal" href="redox.html">Redox potentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reweight.html">Construct free energy surface through reweighting</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Plots</span></p>
 <ul class="nav bd-sidenav">
@@ -196,6 +197,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.dielectric_constant.html">ectoolkits.analysis.dielectric_constant module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.disdeg.html">ectoolkits.analysis.disdeg module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.get_Surface_Indirect_PT.html">ectoolkits.analysis.get_Surface_Indirect_PT module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.get_Surface_PT_CV.html">ectoolkits.analysis.get_Surface_PT_CV module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.reweight.html">ectoolkits.analysis.reweight module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.rutile110.html">ectoolkits.analysis.rutile110 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.uncertainty.html">ectoolkits.analysis.uncertainty module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.water.html">ectoolkits.analysis.water module</a></li>
@@ -432,12 +436,12 @@ Note that the <code class="docutils literal notranslate"><span class="pre">Slab<
 In this way, we can either use the methods built in the <code class="docutils literal notranslate"><span class="pre">Atoms</span></code> class or the new methods created in <code class="docutils literal notranslate"><span class="pre">ECToolkits</span></code></p>
 <p>To initialize the <code class="docutils literal notranslate"><span class="pre">Slab</span></code> class, we can simply use <code class="docutils literal notranslate"><span class="pre">Slab</span></code> class in the <code class="docutils literal notranslate"><span class="pre">Atoms</span></code> object.</p>
 <p>For example, you can substantialize a <code class="docutils literal notranslate"><span class="pre">Atoms</span></code> object by <code class="docutils literal notranslate"><span class="pre">ase.io.read</span></code></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ase.io</span> <span class="kn">import</span> <span class="n">read</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ase.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">read</span>
 <span class="n">stc</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="s2">&quot;rutile-interface.cif&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Then, you can pass the <code class="docutils literal notranslate"><span class="pre">Atoms</span></code> object <code class="docutils literal notranslate"><span class="pre">stc</span></code> to the <code class="docutils literal notranslate"><span class="pre">Slab</span></code> class method.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ectoolkits.structures.slab</span> <span class="kn">import</span> <span class="n">Slab</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.structures.slab</span><span class="w"> </span><span class="kn">import</span> <span class="n">Slab</span>
 <span class="n">stc</span> <span class="o">=</span> <span class="n">Slab</span><span class="p">(</span><span class="n">stc</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -460,7 +464,7 @@ The reason two interfaces exist is that the model is symmetric with respect to t
 <p>Next, we move to the analysis of water density at interfaces.</p>
 <p>To perform the water density analysis, the indices of oxygen atoms between two interfaces are need to be specified, as shown in the <code class="docutils literal notranslate"><span class="pre">O_idx</span></code> of the above figure. Again, you can find the indices using the method <code class="docutils literal notranslate"><span class="pre">find_idx_from_range</span></code>, and put these indices (<code class="docutils literal notranslate"><span class="pre">List</span></code>) in the <code class="docutils literal notranslate"><span class="pre">inp_dict[&quot;density_type&quot;][&quot;idx_list&quot;]</span></code>. Here, the <code class="docutils literal notranslate"><span class="pre">density_unit</span></code> should be set to <code class="docutils literal notranslate"><span class="pre">&quot;water&quot;</span></code> because the coordinates of oxygen atoms are treated as the positions of water molecules and are converted to water density through unit conversion.</p>
 <p>Now, we import the analysis class <code class="docutils literal notranslate"><span class="pre">AtomDensity</span></code> and gather the following mentioned parameters.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ectoolkits.analysis.atom_density</span> <span class="kn">import</span> <span class="n">AtomDensity</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.analysis.atom_density</span><span class="w"> </span><span class="kn">import</span> <span class="n">AtomDensity</span>
 
 <span class="c1"># from</span>
 <span class="n">inp_dict</span><span class="o">=</span><span class="p">{</span>

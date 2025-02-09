@@ -169,6 +169,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/acidity.html">Acidity calculation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/finite_size_correction.html">The finite size correction of interfaces</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/redox.html">Redox potentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/reweight.html">Construct free energy surface through reweighting</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Plots</span></p>
 <ul class="nav bd-sidenav">
@@ -193,6 +194,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.dielectric_constant.html">ectoolkits.analysis.dielectric_constant module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.disdeg.html">ectoolkits.analysis.disdeg module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.get_Surface_Indirect_PT.html">ectoolkits.analysis.get_Surface_Indirect_PT module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.get_Surface_PT_CV.html">ectoolkits.analysis.get_Surface_PT_CV module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.reweight.html">ectoolkits.analysis.reweight module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.rutile110.html">ectoolkits.analysis.rutile110 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.uncertainty.html">ectoolkits.analysis.uncertainty module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.water.html">ectoolkits.analysis.water module</a></li>
@@ -378,16 +382,16 @@ document.write(`
 <span class="c1"># 2021-2024</span>
 
 <span class="c1"># general modules</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">glob</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">ase.geometry</span> <span class="kn">import</span> <span class="n">cellpar_to_cell</span>
-<span class="kn">from</span> <span class="nn">ase</span> <span class="kn">import</span> <span class="n">Atoms</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ase.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">cellpar_to_cell</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ase</span><span class="w"> </span><span class="kn">import</span> <span class="n">Atoms</span>
 <span class="c1"># distance caculation library functions</span>
-<span class="kn">from</span> <span class="nn">MDAnalysis.lib.distances</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">MDAnalysis.lib.c_distances</span> <span class="kn">import</span> <span class="n">_minimize_vectors_triclinic</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">MDAnalysis.lib.distances</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">MDAnalysis.lib.c_distances</span><span class="w"> </span><span class="kn">import</span> <span class="n">_minimize_vectors_triclinic</span>
 
-<div class="viewcode-block" id="get_pair"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.get_pair">[docs]</a><span class="k">def</span> <span class="nf">get_pair</span><span class="p">(</span><span class="n">xyz</span><span class="p">,</span> <span class="n">idx1</span><span class="p">,</span> <span class="n">idx2</span><span class="p">,</span> <span class="n">cutoff_hi</span><span class="p">,</span> <span class="n">cutoff_lo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="get_pair"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.get_pair">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_pair</span><span class="p">(</span><span class="n">xyz</span><span class="p">,</span> <span class="n">idx1</span><span class="p">,</span> <span class="n">idx2</span><span class="p">,</span> <span class="n">cutoff_hi</span><span class="p">,</span> <span class="n">cutoff_lo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    search possible pairs between idx1 and idx2,</span>
@@ -403,7 +407,7 @@ document.write(`
 
 
 
-<div class="viewcode-block" id="minimize_vectors_triclinic"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.minimize_vectors_triclinic">[docs]</a><span class="k">def</span> <span class="nf">minimize_vectors_triclinic</span><span class="p">(</span><span class="n">v</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">box</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="p">):</span>
+<div class="viewcode-block" id="minimize_vectors_triclinic"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.minimize_vectors_triclinic">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">minimize_vectors_triclinic</span><span class="p">(</span><span class="n">v</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">box</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    computes the mic vector</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -414,7 +418,7 @@ document.write(`
 
     <span class="k">return</span> <span class="n">res</span></div>
 
-<div class="viewcode-block" id="normalized_vector"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.normalized_vector">[docs]</a><span class="k">def</span> <span class="nf">normalized_vector</span><span class="p">(</span><span class="n">v</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+<div class="viewcode-block" id="normalized_vector"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.normalized_vector">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">normalized_vector</span><span class="p">(</span><span class="n">v</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;calculate the normalized vector</span>
 
 <span class="sd">    Args:</span>
@@ -425,7 +429,7 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">v</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="d_unique_vecs"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.d_unique_vecs">[docs]</a><span class="k">def</span> <span class="nf">d_unique_vecs</span><span class="p">(</span><span class="n">vecs</span><span class="p">):</span>
+<div class="viewcode-block" id="d_unique_vecs"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.d_unique_vecs">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">d_unique_vecs</span><span class="p">(</span><span class="n">vecs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;get the unique distance vectors</span>
 
 <span class="sd">    Args:</span>
@@ -451,7 +455,7 @@ document.write(`
                 <span class="n">u</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">count</span><span class="p">:</span> <span class="p">[</span><span class="n">vec</span><span class="p">]})</span>
     <span class="k">return</span> <span class="n">u</span></div>
 
-<div class="viewcode-block" id="g_unique_vecs"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.g_unique_vecs">[docs]</a><span class="k">def</span> <span class="nf">g_unique_vecs</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<div class="viewcode-block" id="g_unique_vecs"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.g_unique_vecs">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">g_unique_vecs</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;ensures the unique vectors calculated by `d_unique_vecs`.</span>
 
 <span class="sd">    Handles the case when the each key in the `d` dictonary has multiple numerically close values. Take the average of these vectors as the &quot;bond&quot; vector.</span>
@@ -473,7 +477,7 @@ document.write(`
         <span class="n">count</span><span class="o">+=</span><span class="mi">1</span>
     <span class="k">return</span> <span class="n">vecs</span></div>
 
-<div class="viewcode-block" id="get_octahedral_bonds"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.get_octahedral_bonds">[docs]</a><span class="k">def</span> <span class="nf">get_octahedral_bonds</span><span class="p">(</span><span class="n">tio2_cut</span><span class="p">:</span> <span class="n">Atoms</span><span class="p">,</span> <span class="n">octahedral_bonds_upper_bound</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">2.4</span><span class="p">):</span>
+<div class="viewcode-block" id="get_octahedral_bonds"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.get_octahedral_bonds">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_octahedral_bonds</span><span class="p">(</span><span class="n">tio2_cut</span><span class="p">:</span> <span class="n">Atoms</span><span class="p">,</span> <span class="n">octahedral_bonds_upper_bound</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">2.4</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;calculate the octahedral bonds (vectors) in an \\hkl(1-11) edge model</span>
 
 <span class="sd">    Args:</span>
@@ -497,7 +501,7 @@ document.write(`
     <span class="n">octahedral_bonds</span> <span class="o">=</span> <span class="n">g_unique_vecs</span><span class="p">(</span><span class="n">uniqe_dist_vec</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">octahedral_bonds</span></div>
 
-<div class="viewcode-block" id="get_rotM_edged_rutile110"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.get_rotM_edged_rutile110">[docs]</a><span class="k">def</span> <span class="nf">get_rotM_edged_rutile110</span><span class="p">(</span><span class="n">tio2</span><span class="p">:</span> <span class="n">Atoms</span><span class="p">,</span> <span class="n">octahedral_bonds_upper_bound</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">2.4</span><span class="p">,</span> <span class="n">bridge_along</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="get_rotM_edged_rutile110"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.get_rotM_edged_rutile110">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_rotM_edged_rutile110</span><span class="p">(</span><span class="n">tio2</span><span class="p">:</span> <span class="n">Atoms</span><span class="p">,</span> <span class="n">octahedral_bonds_upper_bound</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">2.4</span><span class="p">,</span> <span class="n">bridge_along</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;compute the unit xyz vectors for a slab of \\hkl(1-11) edged tio2.</span>
 
 <span class="sd">    !!!!! TODO ---&gt; This method is currently very adhoc and prone to failure</span>
@@ -519,7 +523,7 @@ document.write(`
 <span class="sd">        np.array: the normal vectors, which could be used as the rotM matrix for the coordinates</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">is_v_dominant</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_v_dominant</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
         <span class="n">abs_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">abs_val</span><span class="p">)</span> <span class="o">==</span> <span class="n">abs_val</span><span class="p">[</span><span class="n">ind</span><span class="p">]:</span>
             <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
@@ -528,7 +532,7 @@ document.write(`
                 <span class="k">return</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="kc">False</span>
 
-    <span class="k">def</span> <span class="nf">do_average</span><span class="p">(</span><span class="n">v_list</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">do_average</span><span class="p">(</span><span class="n">v_list</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
         <span class="n">abs_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">v_list</span><span class="p">)</span>
         <span class="n">avg_amplitude</span> <span class="o">=</span> <span class="n">abs_val</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
@@ -555,7 +559,7 @@ document.write(`
                 <span class="n">negative_vectors</span> <span class="o">=</span> <span class="n">v_list</span><span class="p">[</span><span class="n">signs</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span>
                 <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">negative_vectors</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">negative_vectors</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">negative_vectors</span>
 
-    <span class="k">def</span> <span class="nf">get_averaged</span><span class="p">(</span><span class="n">octahedral_bonds</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_averaged</span><span class="p">(</span><span class="n">octahedral_bonds</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
         <span class="n">v_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">octahedral_bonds</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">is_v_dominant</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
@@ -578,7 +582,7 @@ document.write(`
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_up</span><span class="p">,</span> <span class="n">y_up</span><span class="p">,</span> <span class="n">z_up</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="find_cn_idx"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.find_cn_idx">[docs]</a><span class="k">def</span> <span class="nf">find_cn_idx</span><span class="p">(</span><span class="n">atoms1</span><span class="p">,</span> <span class="n">atoms2</span><span class="p">,</span> <span class="n">cutoff_hi</span><span class="p">,</span> <span class="n">cutoff_lo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="find_cn_idx"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.find_cn_idx">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">find_cn_idx</span><span class="p">(</span><span class="n">atoms1</span><span class="p">,</span> <span class="n">atoms2</span><span class="p">,</span> <span class="n">cutoff_hi</span><span class="p">,</span> <span class="n">cutoff_lo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;count the coordination number(CN) for atoms1 (center atoms), where atoms2 are coordinate atom.</span>
 <span class="sd">    This function will calculate CN within range cutoff_lo &lt; d &lt; cutoff_lo, where d is the distance</span>
 <span class="sd">    between atoms1 and atoms2. Minimum image convention is applied if cell is not `None`</span>
@@ -616,7 +620,7 @@ document.write(`
     <span class="k">return</span> <span class="n">cn_idx</span></div>
 
 
-<div class="viewcode-block" id="count_cn"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.count_cn">[docs]</a><span class="k">def</span> <span class="nf">count_cn</span><span class="p">(</span><span class="n">atoms1</span><span class="p">,</span> <span class="n">atoms2</span><span class="p">,</span> <span class="n">cutoff_hi</span><span class="p">,</span> <span class="n">cutoff_lo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="count_cn"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.count_cn">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">count_cn</span><span class="p">(</span><span class="n">atoms1</span><span class="p">,</span> <span class="n">atoms2</span><span class="p">,</span> <span class="n">cutoff_hi</span><span class="p">,</span> <span class="n">cutoff_lo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;count the coordination number(CN) for atoms1 (center atoms), where atoms2 are coordinate atom.</span>
 <span class="sd">    This function will calculate CN within range cutoff_lo &lt; d &lt; cutoff_lo, where d is the distance</span>
 <span class="sd">    between atoms1 and atoms2. Minimum image convention is applied if cell is not `None`</span>
@@ -654,12 +658,12 @@ document.write(`
     <span class="k">return</span> <span class="n">results</span></div>
 
 
-<div class="viewcode-block" id="cellpar2volume"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.cellpar2volume">[docs]</a><span class="k">def</span> <span class="nf">cellpar2volume</span><span class="p">(</span><span class="n">cellpar</span><span class="p">):</span>
+<div class="viewcode-block" id="cellpar2volume"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.cellpar2volume">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">cellpar2volume</span><span class="p">(</span><span class="n">cellpar</span><span class="p">):</span>
     <span class="n">cell</span> <span class="o">=</span> <span class="n">cellpar_to_cell</span><span class="p">(</span><span class="n">cellpar</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">cell</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cell</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">cell</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span></div>
 
 
-<div class="viewcode-block" id="get_watOidx"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.get_watOidx">[docs]</a><span class="k">def</span> <span class="nf">get_watOidx</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s2">&quot;Ti&quot;</span><span class="p">,</span> <span class="n">d_OH_cutoff</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">d_MO_cutoff</span><span class="o">=</span><span class="mf">2.8</span><span class="p">,</span> <span class="n">cn_M_cutoff</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="get_watOidx"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.get_watOidx">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_watOidx</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s2">&quot;Ti&quot;</span><span class="p">,</span> <span class="n">d_OH_cutoff</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">d_MO_cutoff</span><span class="o">=</span><span class="mf">2.8</span><span class="p">,</span> <span class="n">cn_M_cutoff</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;gets all the water oxygen indices in rutile (110)-water interface</span>
 
 <span class="sd">    Args:</span>
@@ -687,7 +691,7 @@ document.write(`
     <span class="k">return</span> <span class="n">watOidx</span><span class="p">,</span> <span class="n">watHidx</span></div>
 
 
-<div class="viewcode-block" id="interface_2_slab"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.interface_2_slab">[docs]</a><span class="k">def</span> <span class="nf">interface_2_slab</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s2">&quot;Ti&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="interface_2_slab"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.interface_2_slab">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">interface_2_slab</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s2">&quot;Ti&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;transform rutile (110)-water interface model to only the slab, i.e., deleting all the</span>
 <span class="sd">    water molecules.</span>
 
@@ -711,7 +715,7 @@ document.write(`
     <span class="k">return</span> <span class="n">idx_slab</span><span class="p">,</span> <span class="n">atoms_slab</span></div>
 
 
-<div class="viewcode-block" id="get_rotM"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.get_rotM">[docs]</a><span class="k">def</span> <span class="nf">get_rotM</span><span class="p">(</span><span class="n">vecy</span><span class="p">,</span> <span class="n">vecz</span><span class="p">):</span>
+<div class="viewcode-block" id="get_rotM"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.get_rotM">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_rotM</span><span class="p">(</span><span class="n">vecy</span><span class="p">,</span> <span class="n">vecz</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;get the rotation matrix for rotating a rutile model. Specifically, rotating a step</span>
 <span class="sd">    edge model s.t x is parrallel to [001], y is parrallel to [1-10], and z is parallel</span>
 <span class="sd">    to \hkl&lt;110&gt;.</span>
@@ -728,7 +732,7 @@ document.write(`
 <span class="sd">            Array with shape (3, ). This direction parallels to the [110] of the original</span>
 <span class="sd">            simulation cell.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">e_vec</span><span class="p">(</span><span class="n">vec</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">e_vec</span><span class="p">(</span><span class="n">vec</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">vec</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
     <span class="n">vecx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">vecz</span><span class="p">,</span> <span class="n">vecy</span><span class="p">)</span>
     <span class="n">vecx</span><span class="p">,</span> <span class="n">vecy</span><span class="p">,</span> <span class="n">vecz</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">e_vec</span><span class="p">,</span> <span class="p">[</span><span class="n">vecx</span><span class="p">,</span> <span class="n">vecy</span><span class="p">,</span> <span class="n">vecz</span><span class="p">]))</span>
@@ -739,7 +743,7 @@ document.write(`
     <span class="n">rotM</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">rotM</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
-    <span class="k">def</span> <span class="nf">get_cos</span><span class="p">(</span><span class="n">vec1</span><span class="p">,</span> <span class="n">vec2</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_cos</span><span class="p">(</span><span class="n">vec1</span><span class="p">,</span> <span class="n">vec2</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vec1</span><span class="p">,</span> <span class="n">vec2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vec1</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vec2</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
@@ -747,7 +751,7 @@ document.write(`
     <span class="k">return</span> <span class="n">rotM</span></div>
 
 
-<div class="viewcode-block" id="sep_upper_lower"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.sep_upper_lower">[docs]</a><span class="k">def</span> <span class="nf">sep_upper_lower</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
+<div class="viewcode-block" id="sep_upper_lower"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.sep_upper_lower">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">sep_upper_lower</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;given indices, seperate them to upper and lower. More specifically, from</span>
 <span class="sd">    [&lt;indices&gt;] to [[&lt;idx_upper&gt;], [&lt;idx_lower&gt;]]</span>
 
@@ -767,7 +771,7 @@ document.write(`
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">i1</span><span class="p">,</span> <span class="n">i2</span><span class="p">])</span></div>
 
 
-<div class="viewcode-block" id="pair_M5c_n_obr"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.pair_M5c_n_obr">[docs]</a><span class="k">def</span> <span class="nf">pair_M5c_n_obr</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">idx_cn5</span><span class="p">,</span> <span class="n">idx_obrs</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s2">&quot;Ti&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="pair_M5c_n_obr"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.pair_M5c_n_obr">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">pair_M5c_n_obr</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">idx_cn5</span><span class="p">,</span> <span class="n">idx_obrs</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="s2">&quot;Ti&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;This methods will find the Ti5c&#39;s neighboring Obr atoms.</span>
 
 <span class="sd">    Args:</span>
@@ -877,7 +881,7 @@ document.write(`
 
 
 <span class="c1"># tricks</span>
-<div class="viewcode-block" id="get_sym_edge"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.get_sym_edge">[docs]</a><span class="k">def</span> <span class="nf">get_sym_edge</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">idx_l_edge4</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="get_sym_edge"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.get_sym_edge">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_sym_edge</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">idx_l_edge4</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Translate the rutile &lt;1-11&gt; edge-water interface model s.t. it looks</span>
 <span class="sd">    pretty and symmetric.</span>
 

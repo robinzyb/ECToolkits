@@ -169,6 +169,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/acidity.html">Acidity calculation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/finite_size_correction.html">The finite size correction of interfaces</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/redox.html">Redox potentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/reweight.html">Construct free energy surface through reweighting</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Plots</span></p>
 <ul class="nav bd-sidenav">
@@ -193,6 +194,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.dielectric_constant.html">ectoolkits.analysis.dielectric_constant module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.disdeg.html">ectoolkits.analysis.disdeg module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.get_Surface_Indirect_PT.html">ectoolkits.analysis.get_Surface_Indirect_PT module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.get_Surface_PT_CV.html">ectoolkits.analysis.get_Surface_PT_CV module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.reweight.html">ectoolkits.analysis.reweight module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.rutile110.html">ectoolkits.analysis.rutile110 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.uncertainty.html">ectoolkits.analysis.uncertainty module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.water.html">ectoolkits.analysis.water module</a></li>
@@ -372,17 +376,17 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <h1>Source code for ectoolkits.utils.math</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 
-<div class="viewcode-block" id="birch_murnaghan_equation"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.math.html#ectoolkits.utils.math.birch_murnaghan_equation">[docs]</a><span class="k">def</span> <span class="nf">birch_murnaghan_equation</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">V0</span><span class="p">,</span> <span class="n">E0</span><span class="p">,</span> <span class="n">B0</span><span class="p">,</span> <span class="n">B0_prime</span><span class="p">):</span>
+<div class="viewcode-block" id="birch_murnaghan_equation"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.math.html#ectoolkits.utils.math.birch_murnaghan_equation">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">birch_murnaghan_equation</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">V0</span><span class="p">,</span> <span class="n">E0</span><span class="p">,</span> <span class="n">B0</span><span class="p">,</span> <span class="n">B0_prime</span><span class="p">):</span>
     <span class="n">V_ratio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">V0</span><span class="p">,</span> <span class="n">V</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
     <span class="n">E</span> <span class="o">=</span> <span class="n">E0</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">((</span><span class="mi">9</span> <span class="o">*</span> <span class="n">V0</span> <span class="o">*</span> <span class="n">B0</span><span class="p">),</span> <span class="mi">16</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">V_ratio</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="n">B0_prime</span>
                                              <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">((</span><span class="n">V_ratio</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">6</span> <span class="o">-</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">V_ratio</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">E</span></div>
 
 
-<div class="viewcode-block" id="fit_plane_normal"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.math.html#ectoolkits.utils.math.fit_plane_normal">[docs]</a><span class="k">def</span> <span class="nf">fit_plane_normal</span><span class="p">(</span><span class="n">xyz</span><span class="p">):</span>
+<div class="viewcode-block" id="fit_plane_normal"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.math.html#ectoolkits.utils.math.fit_plane_normal">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">fit_plane_normal</span><span class="p">(</span><span class="n">xyz</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Three dimensional plane fitting for a group of points</span>
 
 <span class="sd">    Args:</span>
@@ -408,7 +412,7 @@ document.write(`
     <span class="k">return</span> <span class="o">-</span><span class="n">normal_z</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">normal_z</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="fit_line_vec"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.math.html#ectoolkits.utils.math.fit_line_vec">[docs]</a><span class="k">def</span> <span class="nf">fit_line_vec</span><span class="p">(</span><span class="n">xyz</span><span class="p">):</span>
+<div class="viewcode-block" id="fit_line_vec"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.math.html#ectoolkits.utils.math.fit_line_vec">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">fit_line_vec</span><span class="p">(</span><span class="n">xyz</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fit the direction vector for a group of sampling points.</span>
 <span class="sd">    Use PCA algorithm find the direction vector for a group of points.</span>
 <span class="sd">    The PCA method reference:</span>
@@ -429,7 +433,7 @@ document.write(`
     <span class="k">return</span> <span class="n">line_vec</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">line_vec</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_norm_vector"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.math.html#ectoolkits.utils.math.get_norm_vector">[docs]</a><span class="k">def</span> <span class="nf">get_norm_vector</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<div class="viewcode-block" id="get_norm_vector"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.math.html#ectoolkits.utils.math.get_norm_vector">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_norm_vector</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    obtain normal vector of a plane contain vectors a and b</span>
 
@@ -459,7 +463,7 @@ document.write(`
     <span class="k">return</span> <span class="n">nv_a</span></div>
 
 
-<div class="viewcode-block" id="get_plane_distance"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.math.html#ectoolkits.utils.math.get_plane_distance">[docs]</a><span class="k">def</span> <span class="nf">get_plane_distance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<div class="viewcode-block" id="get_plane_distance"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.math.html#ectoolkits.utils.math.get_plane_distance">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_plane_distance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
 
     <span class="c1"># \</span>
     <span class="c1">#    \</span>
@@ -471,7 +475,7 @@ document.write(`
     <span class="k">return</span> <span class="n">plane_d</span></div>
 
 
-<div class="viewcode-block" id="get_plane_eq"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.math.html#ectoolkits.utils.math.get_plane_eq">[docs]</a><span class="k">def</span> <span class="nf">get_plane_eq</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])):</span>
+<div class="viewcode-block" id="get_plane_eq"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.math.html#ectoolkits.utils.math.get_plane_eq">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_plane_eq</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    obtain plane equation</span>
 

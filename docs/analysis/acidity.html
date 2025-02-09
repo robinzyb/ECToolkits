@@ -174,6 +174,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Acidity calculation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="finite_size_correction.html">The finite size correction of interfaces</a></li>
 <li class="toctree-l1"><a class="reference internal" href="redox.html">Redox potentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reweight.html">Construct free energy surface through reweighting</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Plots</span></p>
 <ul class="nav bd-sidenav">
@@ -198,6 +199,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.dielectric_constant.html">ectoolkits.analysis.dielectric_constant module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.disdeg.html">ectoolkits.analysis.disdeg module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.get_Surface_Indirect_PT.html">ectoolkits.analysis.get_Surface_Indirect_PT module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.get_Surface_PT_CV.html">ectoolkits.analysis.get_Surface_PT_CV module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.reweight.html">ectoolkits.analysis.reweight module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.rutile110.html">ectoolkits.analysis.rutile110 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.uncertainty.html">ectoolkits.analysis.uncertainty module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.water.html">ectoolkits.analysis.water module</a></li>
@@ -453,8 +457,8 @@ We refer to paper for detailed description.<span id="id1">[<a class="reference i
 <div class="math notranslate nohighlight">
 \[\ce{A^-(aq) + H+(g)-&gt;Ad^-(aq) }\]</div>
 <p>To calculate <span class="math notranslate nohighlight">\(\Delta A_{\ce{Ad}}\)</span>, you need calculate <span class="math notranslate nohighlight">\(\ce{Ad-}\)</span> the vibrational frequency of mode i for dummy in gas phase. And save the frequncies as numpy array. Note that the unit of frequencies must be <span class="math notranslate nohighlight">\(cm^{-1}\)</span>. This function is straightforward implementation using eq.26 in reference.<span id="id2">[<a class="reference internal" href="../references.html#id2" title="Martina Mangold, Leslie Rolland, Francesca Costanzo, Michiel Sprik, Marialore Sulpizi, and Jochen Blumberger. Absolute pK a Values and Solvation Structure of Amino Acids from Density Functional Based Molecular Dynamics Simulation. Journal of Chemical Theory and Computation, 7(6):1951–1961, 2011. doi:10.1021/ct100715x.">Mangold <em>et al.</em>, 2011</a>]</span></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ectoolkits.analysis.acidity</span> <span class="kn">import</span> <span class="n">get_dummy_insert_fe</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.analysis.acidity</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_dummy_insert_fe</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="c1"># the frequencies you calculated from gas phase molecules</span>
 <span class="n">frequencies_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">440</span><span class="p">,</span> <span class="mi">1182</span><span class="p">,</span> <span class="mi">2290</span><span class="p">])</span>
@@ -468,7 +472,7 @@ We refer to paper for detailed description.<span id="id1">[<a class="reference i
 </pre></div>
 </div>
 <p>We also implemented function for obtaining <span class="math notranslate nohighlight">\(\Delta A_{\ce{H2Od}}\)</span>, since <span class="math notranslate nohighlight">\(\Delta A_{\ce{H2Od}}\)</span> has a special formula for correction, as described in reference.<span id="id4">[<a class="reference internal" href="../references.html#id3" title="Jun Cheng, Marialore Sulpizi, and Michiel Sprik. Redox potentials and pKa for benzoquinone from density functional theory based molecular dynamics. The Journal of Chemical Physics, 131(15):154504, 2009. doi:10.1063/1.3250438.">Cheng <em>et al.</em>, 2009</a>]</span> To obtain the <span class="math notranslate nohighlight">\(\Delta A_{\ce{H2Od}}\)</span>, use the following code,</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ectoolkits.analysis.acidity</span> <span class="kn">import</span> <span class="n">get_dummy_insert_fe_hydronium</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.analysis.acidity</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_dummy_insert_fe_hydronium</span>
 
 <span class="n">get_dummy_insert_fe_hydronium</span><span class="p">()</span>
 </pre></div>
@@ -478,8 +482,8 @@ We refer to paper for detailed description.<span id="id1">[<a class="reference i
 <section id="calculate-quantum-correction-free-energy">
 <h2>Calculate Quantum Correction Free Energy<a class="headerlink" href="#calculate-quantum-correction-free-energy" title="Permalink to this heading">#</a></h2>
 <p><span class="math notranslate nohighlight">\(\Delta A_{\mathrm{qc}} (\ce{AH})\)</span> is Nuclear Quantum Effects which are expected to be significant for proton. To calculate it, one need calculate vibrational frequencies for a gas phase molecule <span class="math notranslate nohighlight">\(\ce{AH}\)</span>. The units of frequencies must be <span class="math notranslate nohighlight">\(cm^{-1}\)</span></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ectoolkits.analysis.acidity</span> <span class="kn">import</span> <span class="n">get_quantum_correction</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.analysis.acidity</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_quantum_correction</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="c1"># the frequencies you calculated from gas phase molecules</span>
 <span class="c1"># these frequencies are taken from reference [2] for the arginine molecule.</span>
 <span class="n">frequencies_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">263</span><span class="p">,</span> <span class="mi">1204</span><span class="p">,</span> <span class="mi">3340</span><span class="p">])</span>
@@ -491,7 +495,7 @@ We refer to paper for detailed description.<span id="id1">[<a class="reference i
 </pre></div>
 </div>
 <p>We also implemented function for obtaining <span class="math notranslate nohighlight">\(\Delta A_{\mathrm{qc}}(\ce{H3O+})\)</span>, since <span class="math notranslate nohighlight">\(\Delta A_{\mathrm{qc}}(\ce{H3O+})\)</span> has a special formula for correction, as described in reference.<span id="id5">[<a class="reference internal" href="../references.html#id2" title="Martina Mangold, Leslie Rolland, Francesca Costanzo, Michiel Sprik, Marialore Sulpizi, and Jochen Blumberger. Absolute pK a Values and Solvation Structure of Amino Acids from Density Functional Based Molecular Dynamics Simulation. Journal of Chemical Theory and Computation, 7(6):1951–1961, 2011. doi:10.1021/ct100715x.">Mangold <em>et al.</em>, 2011</a>]</span> To obtain the <span class="math notranslate nohighlight">\(\Delta A_{\mathrm{qc}}(\ce{H3O+})\)</span>, use the following code,</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ectoolkits.analysis.acidity</span> <span class="kn">import</span> <span class="n">get_quantum_correction_hydronium</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.analysis.acidity</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_quantum_correction_hydronium</span>
 
 <span class="n">get_quantum_correction_hydronium</span><span class="p">()</span>
 </pre></div>

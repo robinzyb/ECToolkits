@@ -169,6 +169,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/acidity.html">Acidity calculation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/finite_size_correction.html">The finite size correction of interfaces</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/redox.html">Redox potentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/reweight.html">Construct free energy surface through reweighting</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Plots</span></p>
 <ul class="nav bd-sidenav">
@@ -193,6 +194,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.dielectric_constant.html">ectoolkits.analysis.dielectric_constant module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.disdeg.html">ectoolkits.analysis.disdeg module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.get_Surface_Indirect_PT.html">ectoolkits.analysis.get_Surface_Indirect_PT module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.get_Surface_PT_CV.html">ectoolkits.analysis.get_Surface_PT_CV module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.reweight.html">ectoolkits.analysis.reweight module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.rutile110.html">ectoolkits.analysis.rutile110 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.uncertainty.html">ectoolkits.analysis.uncertainty module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.water.html">ectoolkits.analysis.water module</a></li>
@@ -372,25 +376,25 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <h1>Source code for ectoolkits.analysis.atom_density</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">ase.io</span> <span class="kn">import</span> <span class="n">read</span><span class="p">,</span> <span class="n">write</span>
-<span class="kn">from</span> <span class="nn">ase.neighborlist</span> <span class="kn">import</span> <span class="n">neighbor_list</span>
-<span class="kn">from</span> <span class="nn">MDAnalysis.analysis.base</span> <span class="kn">import</span> <span class="n">AnalysisBase</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ase.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">read</span><span class="p">,</span> <span class="n">write</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ase.neighborlist</span><span class="w"> </span><span class="kn">import</span> <span class="n">neighbor_list</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">MDAnalysis.analysis.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnalysisBase</span>
 
-<span class="kn">from</span> <span class="nn">ectoolkits.structures.slab</span> <span class="kn">import</span> <span class="n">Slab</span>
-<span class="kn">from</span> <span class="nn">ectoolkits.utils.utils</span> <span class="kn">import</span> <span class="n">mic_1d</span>
-<span class="kn">from</span> <span class="nn">ectoolkits.log</span> <span class="kn">import</span> <span class="n">get_logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.structures.slab</span><span class="w"> </span><span class="kn">import</span> <span class="n">Slab</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.utils.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">mic_1d</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_logger</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="analysis_run"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.analysis_run">[docs]</a><span class="k">def</span> <span class="nf">analysis_run</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="analysis_run"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.analysis_run">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">analysis_run</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">CONFIG</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">json</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Analysis Start!&quot;</span><span class="p">)</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">CONFIG</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">inp</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
@@ -399,8 +403,8 @@ document.write(`
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;FINISHED&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="AtomDensity"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity">[docs]</a><span class="k">class</span> <span class="nc">AtomDensity</span><span class="p">():</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inp</span><span class="p">):</span>
+<div class="viewcode-block" id="AtomDensity"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">AtomDensity</span><span class="p">():</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inp</span><span class="p">):</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Perform Atom Density Analysis&quot;</span><span class="p">)</span>
         <span class="c1"># print file name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">twoD</span> <span class="o">=</span> <span class="kc">False</span>
@@ -452,7 +456,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">natom</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Read Atom Number: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">natom</span><span class="p">))</span>
 
-<div class="viewcode-block" id="AtomDensity.run"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AtomDensity.run"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.run">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># read all structure and corresponding z</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">all_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_z</span><span class="p">()</span>
 
@@ -485,7 +489,7 @@ document.write(`
         <span class="c1"># self.get_o_density()</span>
         <span class="c1"># self.dump_o_density()</span>
 
-<div class="viewcode-block" id="AtomDensity.get_all_z"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_all_z">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_z</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<div class="viewcode-block" id="AtomDensity.get_all_z"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_all_z">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_all_z</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;get the z coordinates of atoms along trajectory</span>
 
 <span class="sd">        _extended_summary_</span>
@@ -501,7 +505,7 @@ document.write(`
         <span class="n">all_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">all_z</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">all_z</span></div>
 
-<div class="viewcode-block" id="AtomDensity.get_surf1_z_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_surf1_z_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_surf1_z_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<div class="viewcode-block" id="AtomDensity.get_surf1_z_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_surf1_z_list">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_surf1_z_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;calculate the surface 1 average position</span>
 
 <span class="sd">        _extended_summary_</span>
@@ -526,7 +530,7 @@ document.write(`
         <span class="n">surf1_z_list</span> <span class="o">=</span> <span class="n">mic_1d</span><span class="p">(</span><span class="n">surf1_z_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">surf1_z_list</span></div>
 
-<div class="viewcode-block" id="AtomDensity.get_surf2_z_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_surf2_z_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_surf2_z_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<div class="viewcode-block" id="AtomDensity.get_surf2_z_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_surf2_z_list">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_surf2_z_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;calculate the surface 2 average position</span>
 
 <span class="sd">        _extended_summary_</span>
@@ -550,7 +554,7 @@ document.write(`
         <span class="n">surf2_z_list</span> <span class="o">=</span> <span class="n">mic_1d</span><span class="p">(</span><span class="n">surf2_z_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">surf2_z_list</span></div>
 
-<div class="viewcode-block" id="AtomDensity.get_water_cent_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_water_cent_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_water_cent_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<div class="viewcode-block" id="AtomDensity.get_water_cent_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_water_cent_list">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_water_cent_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
         <span class="n">water_cent_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">surf1_z</span><span class="p">,</span> <span class="n">surf2_z</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surf1_z_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf2_z_list</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">surf2_z</span> <span class="o">&lt;</span> <span class="n">surf1_z</span><span class="p">:</span>
@@ -560,7 +564,7 @@ document.write(`
         <span class="n">water_cent_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">water_cent_list</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">water_cent_list</span></div>
 
-<div class="viewcode-block" id="AtomDensity.water_O_idx"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.water_O_idx">[docs]</a>    <span class="k">def</span> <span class="nf">water_O_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AtomDensity.water_O_idx"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.water_O_idx">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">water_O_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># guess the o index of water</span>
         <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">neighbor_list</span><span class="p">(</span><span class="s1">&#39;ij&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">{(</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">):</span> <span class="mf">1.3</span><span class="p">})</span>
         <span class="n">cn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
@@ -571,7 +575,7 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">xyz_file</span><span class="p">),</span> <span class="s2">&quot;Ow_idx.dat&quot;</span><span class="p">),</span> <span class="n">Ow_idx</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Ow_idx</span></div>
 
-<div class="viewcode-block" id="AtomDensity.get_idx_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_idx_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_idx_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+<div class="viewcode-block" id="AtomDensity.get_idx_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_idx_list">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_idx_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
         <span class="c1"># get the idx from external input</span>
 
         <span class="n">idx_method</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;idx_method&quot;</span><span class="p">)</span>
@@ -584,16 +588,16 @@ document.write(`
             <span class="k">raise</span> <span class="ne">ValueError</span>
         <span class="k">return</span> <span class="n">idx_list</span></div>
 
-<div class="viewcode-block" id="AtomDensity.get_idx_list_manual"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_idx_list_manual">[docs]</a>    <span class="k">def</span> <span class="nf">get_idx_list_manual</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+<div class="viewcode-block" id="AtomDensity.get_idx_list_manual"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_idx_list_manual">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_idx_list_manual</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
         <span class="n">idx_list</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;idx_list&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">idx_list</span></div>
 
-<div class="viewcode-block" id="AtomDensity.get_idx_list_all"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_idx_list_all">[docs]</a>    <span class="k">def</span> <span class="nf">get_idx_list_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+<div class="viewcode-block" id="AtomDensity.get_idx_list_all"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_idx_list_all">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_idx_list_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
         <span class="n">element</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;element&quot;</span><span class="p">)</span>
         <span class="n">idx_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">find_element_idx_list</span><span class="p">(</span><span class="n">element</span><span class="o">=</span><span class="n">element</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">idx_list</span></div>
 
-<div class="viewcode-block" id="AtomDensity.get_atom_density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_atom_density">[docs]</a>    <span class="k">def</span> <span class="nf">get_atom_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">idx_list</span><span class="p">):</span>
+<div class="viewcode-block" id="AtomDensity.get_atom_density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_atom_density">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_atom_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">idx_list</span><span class="p">):</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;START GETTING ATOM DENSITY&quot;</span><span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;----------------------------&quot;</span><span class="p">)</span>
 
@@ -644,7 +648,7 @@ document.write(`
         <span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Density Profile Data Save to </span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="AtomDensity.get_unit_conversion"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_unit_conversion">[docs]</a>    <span class="k">def</span> <span class="nf">get_unit_conversion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">dz</span><span class="p">):</span>
+<div class="viewcode-block" id="AtomDensity.get_unit_conversion"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_unit_conversion">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_unit_conversion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">dz</span><span class="p">):</span>
         <span class="n">density_unit</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;density_unit&quot;</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">density_unit</span> <span class="o">==</span> <span class="s2">&quot;water&quot;</span><span class="p">:</span>
             <span class="n">bulk_density</span> <span class="o">=</span> <span class="mi">32</span><span class="o">/</span><span class="mf">9.86</span><span class="o">**</span><span class="mi">3</span>
@@ -655,7 +659,7 @@ document.write(`
 
         <span class="k">return</span> <span class="n">unit_conversion</span></div>
 
-<div class="viewcode-block" id="AtomDensity.get_ave_density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_ave_density">[docs]</a>    <span class="k">def</span> <span class="nf">get_ave_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width_list</span><span class="p">):</span>
+<div class="viewcode-block" id="AtomDensity.get_ave_density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_ave_density">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_ave_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width_list</span><span class="p">):</span>
         <span class="n">all_cent_density</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">all_cent_density</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;width&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">width_list</span>
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">density</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">atom_density</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -674,7 +678,7 @@ document.write(`
 
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">all_cent_density</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="AtomDensity.plot_density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.plot_density">[docs]</a>    <span class="k">def</span> <span class="nf">plot_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="AtomDensity.plot_density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.plot_density">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;font&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>  <span class="c1"># controls default text size</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">titlesize</span><span class="o">=</span><span class="mi">23</span><span class="p">)</span>  <span class="c1"># fontsize of the title</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>  <span class="c1"># fontsize of the x and y labels</span>
@@ -703,11 +707,11 @@ document.write(`
 
 
 
-<div class="viewcode-block" id="Density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.Density">[docs]</a><span class="k">class</span> <span class="nc">Density</span><span class="p">(</span><span class="n">AnalysisBase</span><span class="p">):</span>
+<div class="viewcode-block" id="Density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.Density">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Density</span><span class="p">(</span><span class="n">AnalysisBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the density profile of a group of atoms along the z-axis for interface systems</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atomgroup</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atomgroup</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Density</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">atomgroup</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">trajectory</span><span class="p">,</span>
                                           <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -731,7 +735,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ag</span><span class="o">.</span><span class="n">volume</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">xy_area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">_prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># OPTIONAL</span>
         <span class="c1"># Called before iteration on the trajectory has begun.</span>
         <span class="c1"># Data structures can be set up at this time</span>
@@ -747,7 +751,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">z_right_surface</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span><span class="p">)</span>
 
 
-    <span class="k">def</span> <span class="nf">_single_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_single_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># REQUIRED</span>
         <span class="c1"># Called after the trajectory is moved onto each new frame.</span>
         <span class="c1"># store an example_result of `some_function` for a single frame</span>
@@ -761,7 +765,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">z_right_surface</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ag_right_surface</span><span class="o">.</span><span class="n">positions</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">z_area</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ag_area</span><span class="o">.</span><span class="n">positions</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">_conclude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_conclude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># OPTIONAL</span>
         <span class="c1"># Called once iteration on the trajectory is finished.</span>
         <span class="c1"># Apply normalisation and averaging to results here.</span>
@@ -801,7 +805,7 @@ document.write(`
 
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Density Profile Data Save to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Density.get_unit_conversion"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.Density.get_unit_conversion">[docs]</a>    <span class="k">def</span> <span class="nf">get_unit_conversion</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Density.get_unit_conversion"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.Density.get_unit_conversion">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_unit_conversion</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">density_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">density_type</span>
         <span class="k">if</span> <span class="n">density_type</span> <span class="o">==</span> <span class="s2">&quot;water&quot;</span><span class="p">:</span>
             <span class="n">bulk_density</span> <span class="o">=</span> <span class="mi">32</span><span class="o">/</span><span class="mf">9.86</span><span class="o">**</span><span class="mi">3</span>

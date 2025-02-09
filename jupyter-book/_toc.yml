@@ -12,6 +12,7 @@ parts:
       - file: docs/analysis/acidity
       - file: docs/analysis/finite_size_correction
       - file: docs/analysis/redox
+      - file: docs/analysis/reweight
   - caption: Plots
     chapters:
       - file: docs/plots/dpmd

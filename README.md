@@ -34,4 +34,7 @@ pip install .
 - [Redox Potential Calculation](./docs/analysis/redox.md)
 - [Finite Size Correction](./docs/analysis/finite_size_correction.md)
 
+# Development
 
+- [Development Guide](./DEVEL.md)
+- [To-do list](./TODO.md)

@@ -28,10 +28,13 @@ pip install .
 
 
 # Analysis
-- [Atomic/Water Density](./docs/analysis/atom_density.md)
-- [Band Alignment](./docs/analysis/band_align.md)
-- [Acidity Calculation](./docs/analysis/acidity.md)
-- [Redox Potential Calculation](./docs/analysis/redox.md)
-- [Finite Size Correction](./docs/analysis/finite_size_correction.md)
+- [Atomic/water density](./docs/analysis/atom_density.md)
+- [Band alignment](./docs/analysis/band_align.md)
+- [Acidity calculation](./docs/analysis/acidity.md)
+- [Redox potential calculation](./docs/analysis/redox.md)
+- [Finite size correction](./docs/analysis/finite_size_correction.md)
 
+# Development
 
+- [Development guide](./DEVEL.md)
+- [To-do list](./TODO.md)

@@ -70,16 +70,19 @@ def read_fes(file_fes: str,
     Read the free energy surface (FES) data from PLUMED fes files.
     """
 
-    bins_x = kwargs.get('bins_x', 101)
-    bins_y = kwargs.get('bins_y', None)
+    if dim == 2:
+        if 'num_grid_points_x' not in kwargs or 'num_grid_points_y' not in kwargs:
+            raise ValueError("For 2D FES, 'num_grid_points_x' and 'num_grid_points_y' must be provided in kwargs.")
+    num_grid_points_x = kwargs.get('num_grid_points_x', None)
+    num_grid_points_y = kwargs.get('num_grid_points_y', None)
     if dim == 2:
         print("Reading 2D FES")
         X = np.loadtxt(file_fes, usecols=0)
         Y = np.loadtxt(file_fes, usecols=1)
         Z = np.loadtxt(file_fes, usecols=2)
-        X = X.reshape(bins_x, bins_y)
-        Y = Y.reshape(bins_x, bins_y)
-        Z = Z.reshape(bins_x, bins_y)
+        X = X.reshape(num_grid_points_x, num_grid_points_y)
+        Y = Y.reshape(num_grid_points_x, num_grid_points_y)
+        Z = Z.reshape(num_grid_points_x, num_grid_points_y)
         Z = Z*0.0103636  # to eV
         Z_min = np.min(Z)
         Z = Z - Z_min

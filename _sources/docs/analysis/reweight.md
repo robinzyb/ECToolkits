@@ -18,7 +18,6 @@ kbT = T*0.0083144621 # to kJ/mol, which is a PLUMED internal unit
 bias_factor = 44.67259179984373 # the bias factor in an OPES simulation, you can find it in the head of a STATE_WFILE file
 
 bias = np.loadtxt(colvar_file, usecols=3) # usually, bias is in the third column of a colvar file.
-bias = bias/kbT # to dimensionless
 
 ptcv = np.loadtxt(f"path_to_cv_files") # load CV data, which can be loaded from a PLUMED COLVAR file.
 cv1 = ptcv[:,1]

@@ -456,7 +456,6 @@ document.write(`
 <span class="n">bias_factor</span> <span class="o">=</span> <span class="mf">44.67259179984373</span> <span class="c1"># the bias factor in an OPES simulation, you can find it in the head of a STATE_WFILE file</span>
 
 <span class="n">bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">colvar_file</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># usually, bias is in the third column of a colvar file.</span>
-<span class="n">bias</span> <span class="o">=</span> <span class="n">bias</span><span class="o">/</span><span class="n">kbT</span> <span class="c1"># to dimensionless</span>
 
 <span class="n">ptcv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;path_to_cv_files&quot;</span><span class="p">)</span> <span class="c1"># load CV data, which can be loaded from a PLUMED COLVAR file.</span>
 <span class="n">cv1</span> <span class="o">=</span> <span class="n">ptcv</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>

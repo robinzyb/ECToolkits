@@ -31,6 +31,7 @@ With the above codes, users can get the plot of the test results.
 function for plotting many model_devi.out files together.
 
 ```python
+from ectoolkits.plots.dpmd import plot_model_devi
 trust_lo = 0.30
 trust_hi = 0.80
 prefix = Path("path_to_model_devi_files/")

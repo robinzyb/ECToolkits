@@ -1,5 +1,3 @@
-
-# TODO: refactor to an analysis module
 # test example: tests/analysis/pt
 # https://userguide.mdanalysis.org/stable/examples/analysis/custom_trajectory_analysis.html
 from pathlib import Path
@@ -15,6 +13,8 @@ from MDAnalysis.lib.distances import distance_array, calc_angles, calc_bonds
 from ase.io import read
 
 
+# TODO: refactor the indirect transfer together.
+# TODO: pytest
 class ProtonTransferCV(AnalysisBase):
     def __init__(self,
                  atomgroup,

@@ -20,9 +20,12 @@ class ProtonTransferCV(AnalysisBase):
                  atomgroup,
                  idxs_type1_o: List[int],
                  idxs_type2_o: List[int],
+                 num_bridge: int = 0,
                  verbose=True,
                  **kwargs):
         """
+        num_bridge: int
+            The number of bridge water molecules between the donor and acceptor.
         Set up the initial analysis parameters.
         I don't know the reason why the offical example always put atomgroup as the first argument.
         Universe class can also access the atomgroup and trajectory classes.
@@ -38,7 +41,7 @@ class ProtonTransferCV(AnalysisBase):
 
 
         # How should I select atoms inside AnalysisBase?
-        # Now I just use the Universe class to select atoms.
+        # Now I just use the Universe object to select atoms.
         self.ag_O = self.u.select_atoms('type O')
         self.ag_H = self.u.select_atoms('type H')
 
@@ -173,6 +176,10 @@ class ProtonTransferCV(AnalysisBase):
                 tmp_info[:, 7] = dOaHd
                 tmp_info[:, 8] = bonds
                 tmp_info[:, 9] = angles
+
+                # TODO: change the sign of delta_cv
+                # the delta is always negative here because it is dOdHd - dOaHd.
+                # for donor in type2, acceptor in type1, the delta should be positive.
 
                 info = tmp_info[np.argmin(tmp_info, axis=0)[1]]
 

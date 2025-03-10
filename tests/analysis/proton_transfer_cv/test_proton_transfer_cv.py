@@ -43,14 +43,6 @@ def analysis_and_reference(request):
         "idxs_water_o": idxs_water_o
     }
 
-    # analysis = ProtonTransferCV(atomgroup=atomgroup, 
-    #                             idxs_type1_o=idxs_type1_o, 
-    #                             idxs_type2_o=idxs_type2_o,
-    #                             num_bridge=num_bridge,
-    #                             idxs_water_o=idxs_water_o
-    #                             )
-    # analysis.run()
-    # reference
     reference_file = system_dir/"cv_reference.npy"
     reference = np.load(reference_file)
     return input_dict, reference

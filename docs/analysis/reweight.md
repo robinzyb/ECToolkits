@@ -4,7 +4,7 @@
 
 TBC
 
-## Quick start
+## Usage
 
 ```python
 from ectoolkits.analysis.reweight import calc_FES, compute_bw_silverman

@@ -11,8 +11,9 @@ parts:
       - file: docs/analysis/disdeg
       - file: docs/analysis/acidity
       - file: docs/analysis/finite_size_correction
-      - file: docs/analysis/redox
+      - file: docs/analysis/proton_transfer_cv
       - file: docs/analysis/reweight
+      - file: docs/analysis/redox
   - caption: Plots
     chapters:
       - file: docs/plots/dpmd

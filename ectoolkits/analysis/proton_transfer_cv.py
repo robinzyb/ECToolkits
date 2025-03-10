@@ -6,12 +6,9 @@ from itertools import product, permutations
 
 import numpy as np
 import numpy.typing as npt
-import matplotlib.pyplot as plt
 import pandas as pd
 from MDAnalysis.analysis.base import AnalysisBase
-from MDAnalysis import Universe
 from MDAnalysis.lib.distances import distance_array, calc_angles, calc_bonds
-from ase.io import read
 
 from ectoolkits.log import get_logger
 

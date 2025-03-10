@@ -13,8 +13,7 @@ Submodules
    ectoolkits.analysis.dielectric_constant
    ectoolkits.analysis.disdeg
    ectoolkits.analysis.finite_size_correction
-   ectoolkits.analysis.get_Surface_Indirect_PT
-   ectoolkits.analysis.get_Surface_PT_CV
+   ectoolkits.analysis.proton_transfer_cv
    ectoolkits.analysis.reweight
    ectoolkits.analysis.rutile110
    ectoolkits.analysis.uncertainty

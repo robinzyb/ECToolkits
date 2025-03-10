@@ -1,0 +1,836 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Calculate collective variables of proton transfer reactions &#8212; ECToolkits Reference</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'docs/analysis/proton_transfer_cv';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Construct free energy surface through reweighting" href="reweight.html" />
+    <link rel="prev" title="The finite size correction of interfaces" href="finite_size_correction.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">ECToolkits Reference</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Analysis</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="atom_density.html">Atom density analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="band_align.html">Band alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disdeg.html">Dissociation degree analysis</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="acidity.html">Acidity calculation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="finite_size_correction.html">The finite size correction of interfaces</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Calculate collective variables of proton transfer reactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reweight.html">Construct free energy surface through reweighting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="redox.html">Redox potentials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Plots</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../plots/dpmd.html">Plot DPMD data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Workflows</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../workflows/calc_diel.html">Workflow: Calculation of Dielectric Constant</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../references.html">Bibliography</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../_api/modules.html">ectoolkits</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../_api/ectoolkits.html">ectoolkits package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../_api/ectoolkits.analysis.html">ectoolkits.analysis package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.acidity.html">ectoolkits.analysis.acidity module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.atom_density.html">ectoolkits.analysis.atom_density module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.band_align.html">ectoolkits.analysis.band_align module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.dielectric_constant.html">ectoolkits.analysis.dielectric_constant module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.disdeg.html">ectoolkits.analysis.disdeg module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.proton_transfer_cv.html">ectoolkits.analysis.proton_transfer_cv module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.reweight.html">ectoolkits.analysis.reweight module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.rutile110.html">ectoolkits.analysis.rutile110 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.uncertainty.html">ectoolkits.analysis.uncertainty module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.water.html">ectoolkits.analysis.water module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../_api/ectoolkits.matplotlibstyle.html">ectoolkits.matplotlibstyle package</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../_api/ectoolkits.plots.html">ectoolkits.plots package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.plots.band_align.html">ectoolkits.plots.band_align module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.plots.dpmd.html">ectoolkits.plots.dpmd module</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../_api/ectoolkits.structures.html">ectoolkits.structures package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.structures.interface.html">ectoolkits.structures.interface module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.structures.rutile110.html">ectoolkits.structures.rutile110 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.structures.slab.html">ectoolkits.structures.slab module</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../_api/ectoolkits.utils.html">ectoolkits.utils package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.utils.math.html">ectoolkits.utils.math module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.utils.rutile110.html">ectoolkits.utils.rutile110 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.utils.utils.html">ectoolkits.utils.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.utils.vasp.html">ectoolkits.utils.vasp module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../_api/ectoolkits.log.html">ectoolkits.log module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/robinzyb/ectoolkits" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/robinzyb/ectoolkits/issues/new?title=Issue%20on%20page%20%2Fdocs/analysis/proton_transfer_cv.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/docs/analysis/proton_transfer_cv.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Calculate collective variables of proton transfer reactions</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct-proton-transfer">Direct proton transfer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#indirect-proton-transfer">Indirect proton transfer</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="calculate-collective-variables-of-proton-transfer-reactions">
+<h1>Calculate collective variables of proton transfer reactions<a class="headerlink" href="#calculate-collective-variables-of-proton-transfer-reactions" title="Permalink to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
+<p>References (angelos JPCL, Quaranta JPCL, Marcos Chem. Sci., Jia Precise Chemistry)</p>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">ProtonTransferCV</span></code> class is able to compute the collective variables for proton transfer reactions, that is, <span class="math notranslate nohighlight">\(\delta\)</span> and <span class="math notranslate nohighlight">\(d\)</span>.</p>
+<ol class="arabic simple">
+<li><p>load a MDAnalysis <code class="docutils literal notranslate"><span class="pre">Universe</span></code> class from your trajectory files. It also requires the information of chemical symbols. Add the chemical symbols to topology attributes as <code class="docutils literal notranslate"><span class="pre">types</span></code>.</p></li>
+<li><p>provide the indices (0-based) of atoms belonging to two different groups, <code class="docutils literal notranslate"><span class="pre">idxs_type1_o</span></code>, <code class="docutils literal notranslate"><span class="pre">idxs_type2_o</span></code>. The atoms can either be hydrogen donor or be hydrogen acceptor during proton transfer reactions. The groups are customized by users depending on specific contexts.</p></li>
+<li><p>provide the number of bridge water molecules <code class="docutils literal notranslate"><span class="pre">num_bridge</span></code>. In some cases, proton transfer may involve other water molecules. These molecules are called bridge molecules. The mechanism of this type of proton transfer is called <code class="docutils literal notranslate"><span class="pre">Grotthuss</span> <span class="pre">Mechanism</span></code>. You can defined the <code class="docutils literal notranslate"><span class="pre">num_bridge=1</span></code> to calculate collective variables of <code class="docutils literal notranslate"><span class="pre">Grotthuss</span></code>-type proton transfer. By default, <code class="docutils literal notranslate"><span class="pre">num_bridge</span></code> is <code class="docutils literal notranslate"><span class="pre">0</span></code>. For the moment being, <code class="docutils literal notranslate"><span class="pre">num_bridge</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> is not supported. Thus, the <code class="docutils literal notranslate"><span class="pre">num_bridge</span></code> should either be <code class="docutils literal notranslate"><span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
+<li><p>provide the indices (0-based) of oxygen atoms in potential bridge water molecules. If you set <code class="docutils literal notranslate"><span class="pre">num_bridge</span> <span class="pre">=</span> <span class="pre">1</span></code>, you should provide the indices of potential bridge water molecules. The indices should not be overlaped with that in <code class="docutils literal notranslate"><span class="pre">idxs_type1_o</span></code> and <code class="docutils literal notranslate"><span class="pre">idxs_type2_o</span></code>.</p></li>
+</ol>
+<section id="direct-proton-transfer">
+<h3>Direct proton transfer<a class="headerlink" href="#direct-proton-transfer" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">MDAnalysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">Universe</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ase.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">read</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.analysis.proton_transfer_cv</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProtonTransferCV</span>
+
+<span class="c1"># load Universe from lammps-dump-text (lammps trajectory)</span>
+<span class="n">lammpstrj</span> <span class="o">=</span> <span class="s2">&quot;clip.lammpstrj&quot;</span>
+<span class="n">stc</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">lammpstrj</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;lammps-dump-text&quot;</span><span class="p">,</span> <span class="n">specorder</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Bi&quot;</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="s2">&quot;O&quot;</span><span class="p">,</span> <span class="s2">&quot;V&quot;</span><span class="p">])</span>
+<span class="n">chemical_symbols</span> <span class="o">=</span> <span class="n">stc</span><span class="o">.</span><span class="n">get_chemical_symbols</span><span class="p">()</span>
+<span class="n">u</span><span class="o">=</span> <span class="n">Universe</span><span class="p">(</span><span class="n">lammpstrj</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;LAMMPSDUMP&quot;</span><span class="p">)</span>
+<span class="n">u</span><span class="o">.</span><span class="n">add_TopologyAttr</span><span class="p">(</span><span class="s2">&quot;types&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">chemical_symbols</span><span class="p">))</span>
+
+
+<span class="n">atomgroup</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">atoms</span>
+<span class="c1"># donor/acceptor of type 1 atoms</span>
+<span class="n">idxs_type1_o</span> <span class="o">=</span> <span class="p">[</span><span class="mi">150</span><span class="p">]</span>
+<span class="c1"># donor/acceptor of type 2 atoms</span>
+<span class="n">idxs_type2_o</span> <span class="o">=</span> <span class="p">[</span><span class="mi">130</span><span class="p">,</span> <span class="mi">241</span><span class="p">,</span> <span class="mi">136</span><span class="p">,</span> <span class="mi">139</span><span class="p">,</span> <span class="mi">129</span><span class="p">]</span>
+
+<span class="n">ptcv</span> <span class="o">=</span> <span class="n">ProtonTransferCV</span><span class="p">(</span><span class="n">atomgroup</span><span class="o">=</span><span class="n">atomgroup</span><span class="p">,</span> <span class="n">idxs_type1_o</span><span class="o">=</span><span class="n">idxs_type1_o</span><span class="p">,</span> <span class="n">idxs_type2_o</span><span class="o">=</span><span class="n">idxs_type2_o</span><span class="p">,</span> <span class="n">extra_detail</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">ptcv</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+</pre></div>
+</div>
+<p>The results of the analysis can be accessed through the <code class="docutils literal notranslate"><span class="pre">results</span></code> or <code class="docutils literal notranslate"><span class="pre">df</span></code> attributes. <code class="docutils literal notranslate"><span class="pre">ProtonTransferCV.results</span></code> provides results in the Numpy Array format while <code class="docutils literal notranslate"><span class="pre">ProtonTransferCV.df</span></code> in the DataFrames format.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># in Numpy Array</span>
+<span class="n">ptcv</span><span class="o">.</span><span class="n">results</span>
+<span class="c1"># in DataFrame</span>
+<span class="n">ptcv</span><span class="o">.</span><span class="n">df</span>
+</pre></div>
+</div>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-right"><p></p></th>
+<th class="head text-right"><p>Frame</p></th>
+<th class="head text-right"><p>Delta_CV</p></th>
+<th class="head text-right"><p>Distance_CV</p></th>
+<th class="head text-right"><p>Index of donor0</p></th>
+<th class="head text-right"><p>Index of hydrogen0</p></th>
+<th class="head text-right"><p>Index of acceptor</p></th>
+<th class="head text-right"><p>Distance (Donor0-Hydrogen0)</p></th>
+<th class="head text-right"><p>Distance (Acceptor0-Hydrogen0)</p></th>
+<th class="head text-right"><p>Interatomic distance (Donor0-Aceeptor0)</p></th>
+<th class="head text-right"><p>Angle (Donor0-Aceeptor0-Hydrogen0)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-right"><p>0</p></td>
+<td class="text-right"><p>0</p></td>
+<td class="text-right"><p>-0.814423</p></td>
+<td class="text-right"><p>2.66147</p></td>
+<td class="text-right"><p>150</p></td>
+<td class="text-right"><p>153</p></td>
+<td class="text-right"><p>130</p></td>
+<td class="text-right"><p>0.97808</p></td>
+<td class="text-right"><p>1.7925</p></td>
+<td class="text-right"><p>2.66147</p></td>
+<td class="text-right"><p>22.0054</p></td>
+</tr>
+<tr class="row-odd"><td class="text-right"><p>1</p></td>
+<td class="text-right"><p>1</p></td>
+<td class="text-right"><p>-0.677237</p></td>
+<td class="text-right"><p>2.65874</p></td>
+<td class="text-right"><p>150</p></td>
+<td class="text-right"><p>153</p></td>
+<td class="text-right"><p>130</p></td>
+<td class="text-right"><p>1.00409</p></td>
+<td class="text-right"><p>1.68133</p></td>
+<td class="text-right"><p>2.65874</p></td>
+<td class="text-right"><p>10.4766</p></td>
+</tr>
+<tr class="row-even"><td class="text-right"><p>2</p></td>
+<td class="text-right"><p>2</p></td>
+<td class="text-right"><p>-0.682127</p></td>
+<td class="text-right"><p>2.63129</p></td>
+<td class="text-right"><p>150</p></td>
+<td class="text-right"><p>153</p></td>
+<td class="text-right"><p>130</p></td>
+<td class="text-right"><p>1.0112</p></td>
+<td class="text-right"><p>1.69333</p></td>
+<td class="text-right"><p>2.63129</p></td>
+<td class="text-right"><p>17.37</p></td>
+</tr>
+<tr class="row-odd"><td class="text-right"><p>3</p></td>
+<td class="text-right"><p>3</p></td>
+<td class="text-right"><p>-0.918069</p></td>
+<td class="text-right"><p>2.71045</p></td>
+<td class="text-right"><p>150</p></td>
+<td class="text-right"><p>153</p></td>
+<td class="text-right"><p>130</p></td>
+<td class="text-right"><p>0.970081</p></td>
+<td class="text-right"><p>1.88815</p></td>
+<td class="text-right"><p>2.71045</p></td>
+<td class="text-right"><p>26.0992</p></td>
+</tr>
+<tr class="row-even"><td class="text-right"><p>4</p></td>
+<td class="text-right"><p>4</p></td>
+<td class="text-right"><p>nan</p></td>
+<td class="text-right"><p>nan</p></td>
+<td class="text-right"><p>nan</p></td>
+<td class="text-right"><p>nan</p></td>
+<td class="text-right"><p>nan</p></td>
+<td class="text-right"><p>nan</p></td>
+<td class="text-right"><p>nan</p></td>
+<td class="text-right"><p>nan</p></td>
+<td class="text-right"><p>nan</p></td>
+</tr>
+<tr class="row-odd"><td class="text-right"><p>5</p></td>
+<td class="text-right"><p>5</p></td>
+<td class="text-right"><p>0.255239</p></td>
+<td class="text-right"><p>2.4176</p></td>
+<td class="text-right"><p>136</p></td>
+<td class="text-right"><p>293</p></td>
+<td class="text-right"><p>150</p></td>
+<td class="text-right"><p>1.08379</p></td>
+<td class="text-right"><p>1.33903</p></td>
+<td class="text-right"><p>2.4176</p></td>
+<td class="text-right"><p>4.17919</p></td>
+</tr>
+</tbody>
+</table>
+<p>if the <code class="docutils literal notranslate"><span class="pre">extra_detail</span></code> keyword is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, only the frame index and collective variables are shown.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ptcv</span> <span class="o">=</span> <span class="n">ProtonTransferCV</span><span class="p">(</span><span class="n">atomgroup</span><span class="o">=</span><span class="n">atomgroup</span><span class="p">,</span> <span class="n">idxs_type1_o</span><span class="o">=</span><span class="n">idxs_type1_o</span><span class="p">,</span> <span class="n">idxs_type2_o</span><span class="o">=</span><span class="n">idxs_type2_o</span><span class="p">,</span> <span class="n">extra_detail</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">ptcv</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="n">ptcv</span><span class="o">.</span><span class="n">df</span>
+</pre></div>
+</div>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-right"><p></p></th>
+<th class="head text-right"><p>Frame</p></th>
+<th class="head text-right"><p>Delta_CV</p></th>
+<th class="head text-right"><p>Distance_CV</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-right"><p>0</p></td>
+<td class="text-right"><p>0</p></td>
+<td class="text-right"><p>-0.814423</p></td>
+<td class="text-right"><p>2.66147</p></td>
+</tr>
+<tr class="row-odd"><td class="text-right"><p>1</p></td>
+<td class="text-right"><p>1</p></td>
+<td class="text-right"><p>-0.677237</p></td>
+<td class="text-right"><p>2.65874</p></td>
+</tr>
+<tr class="row-even"><td class="text-right"><p>2</p></td>
+<td class="text-right"><p>2</p></td>
+<td class="text-right"><p>-0.682127</p></td>
+<td class="text-right"><p>2.63129</p></td>
+</tr>
+<tr class="row-odd"><td class="text-right"><p>3</p></td>
+<td class="text-right"><p>3</p></td>
+<td class="text-right"><p>-0.918069</p></td>
+<td class="text-right"><p>2.71045</p></td>
+</tr>
+<tr class="row-even"><td class="text-right"><p>4</p></td>
+<td class="text-right"><p>4</p></td>
+<td class="text-right"><p>nan</p></td>
+<td class="text-right"><p>nan</p></td>
+</tr>
+<tr class="row-odd"><td class="text-right"><p>5</p></td>
+<td class="text-right"><p>5</p></td>
+<td class="text-right"><p>0.255239</p></td>
+<td class="text-right"><p>2.4176</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="indirect-proton-transfer">
+<h3>Indirect proton transfer<a class="headerlink" href="#indirect-proton-transfer" title="Permalink to this heading">#</a></h3>
+<p>The analysis for indirect proton transfer is similar to direct proton transfer. In addition to the parameters, you have to set <code class="docutils literal notranslate"><span class="pre">num_bridge=1</span></code> and provide the indices of oxygen atoms of potential bridge water molecules. The following is an example.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="n">atomgroup</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">atoms</span>
+<span class="n">idxs_type1_o</span> <span class="o">=</span> <span class="p">[</span><span class="mi">150</span><span class="p">]</span>
+<span class="n">idxs_type2_o</span> <span class="o">=</span> <span class="p">[</span><span class="mi">130</span><span class="p">,</span> <span class="mi">241</span><span class="p">,</span> <span class="mi">136</span><span class="p">,</span> <span class="mi">139</span><span class="p">,</span> <span class="mi">129</span><span class="p">]</span>
+<span class="n">idxs_water</span> <span class="o">=</span> <span class="p">[</span><span class="mi">144</span><span class="p">,</span> <span class="mi">151</span><span class="p">,</span> <span class="mi">157</span><span class="p">,</span> <span class="mi">162</span><span class="p">,</span> <span class="mi">168</span><span class="p">,</span> <span class="mi">169</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">183</span><span class="p">,</span> <span class="mi">185</span><span class="p">,</span> <span class="mi">186</span><span class="p">,</span> <span class="mi">187</span><span class="p">,</span> <span class="mi">188</span><span class="p">,</span> <span class="mi">189</span><span class="p">,</span> <span class="mi">191</span><span class="p">,</span> <span class="mi">216</span><span class="p">,</span> <span class="mi">217</span><span class="p">,</span> <span class="mi">222</span><span class="p">,</span> <span class="mi">223</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">226</span><span class="p">,</span> <span class="mi">227</span><span class="p">,</span> <span class="mi">228</span><span class="p">,</span> <span class="mi">229</span><span class="p">,</span> <span class="mi">232</span><span class="p">,</span> <span class="mi">233</span><span class="p">,</span> <span class="mi">234</span><span class="p">,</span> <span class="mi">235</span><span class="p">,</span> <span class="mi">236</span><span class="p">,</span> <span class="mi">239</span><span class="p">,</span> <span class="mi">240</span><span class="p">,</span> <span class="mi">242</span><span class="p">,</span> <span class="mi">243</span><span class="p">,</span> <span class="mi">244</span><span class="p">,</span> <span class="mi">247</span><span class="p">,</span> <span class="mi">315</span><span class="p">,</span> <span class="mi">321</span><span class="p">,</span> <span class="mi">324</span><span class="p">,</span> <span class="mi">327</span><span class="p">,</span> <span class="mi">330</span><span class="p">,</span> <span class="mi">339</span><span class="p">,</span> <span class="mi">342</span><span class="p">,</span> <span class="mi">345</span><span class="p">,</span> <span class="mi">348</span><span class="p">,</span> <span class="mi">351</span><span class="p">,</span> <span class="mi">354</span><span class="p">,</span> <span class="mi">130</span><span class="p">,</span> <span class="mi">145</span><span class="p">,</span> <span class="mi">156</span><span class="p">,</span> <span class="mi">163</span><span class="p">,</span> <span class="mi">174</span><span class="p">,</span> <span class="mi">175</span><span class="p">,</span> <span class="mi">181</span><span class="p">,</span> <span class="mi">182</span><span class="p">,</span> <span class="mi">184</span><span class="p">,</span> <span class="mi">190</span><span class="p">,</span> <span class="mi">218</span><span class="p">,</span> <span class="mi">219</span><span class="p">,</span> <span class="mi">220</span><span class="p">,</span> <span class="mi">221</span><span class="p">,</span> <span class="mi">225</span><span class="p">,</span> <span class="mi">230</span><span class="p">,</span> <span class="mi">231</span><span class="p">,</span> <span class="mi">237</span><span class="p">,</span> <span class="mi">238</span><span class="p">,</span> <span class="mi">245</span><span class="p">,</span> <span class="mi">246</span><span class="p">,</span> <span class="mi">312</span><span class="p">,</span> <span class="mi">318</span><span class="p">,</span> <span class="mi">333</span><span class="p">,</span> <span class="mi">336</span><span class="p">,</span> <span class="mi">357</span><span class="p">]</span>
+
+<span class="n">ptcv</span> <span class="o">=</span> <span class="n">ProtonTransferCV</span><span class="p">(</span><span class="n">atomgroup</span><span class="o">=</span><span class="n">atomgroup</span><span class="p">,</span> <span class="n">idxs_type1_o</span><span class="o">=</span><span class="n">idxs_type1_o</span><span class="p">,</span> <span class="n">idxs_type2_o</span><span class="o">=</span><span class="n">idxs_type2_o</span><span class="p">,</span> <span class="n">num_bridge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">idxs_water_o</span><span class="o">=</span><span class="n">idxs_water</span><span class="p">,</span> <span class="n">extra_detail</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ptcv</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+</pre></div>
+</div>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-right"><p></p></th>
+<th class="head text-right"><p>Frame</p></th>
+<th class="head text-right"><p>Delta_CV</p></th>
+<th class="head text-right"><p>Distance_CV</p></th>
+<th class="head text-right"><p>Index of donor0</p></th>
+<th class="head text-right"><p>Index of hydrogen0</p></th>
+<th class="head text-right"><p>Index of donor1</p></th>
+<th class="head text-right"><p>Index of hydrogen1</p></th>
+<th class="head text-right"><p>Index of acceptor</p></th>
+<th class="head text-right"><p>Distance (Donor0-Hydrogen0)</p></th>
+<th class="head text-right"><p>Distance (Donor1-Hydrogen1)</p></th>
+<th class="head text-right"><p>Distance (Acceptor0-Hydrogen0)</p></th>
+<th class="head text-right"><p>Distance (Acceptor1-Hydrogen1)</p></th>
+<th class="head text-right"><p>Interatomic distance (Donor0-Aceeptor0)</p></th>
+<th class="head text-right"><p>Interatomic distance (Donor1-Aceeptor1)</p></th>
+<th class="head text-right"><p>Angle (Donor0-Aceeptor0-Hydrogen0)</p></th>
+<th class="head text-right"><p>Angle (Donor1-Aceeptor1-Hydrogen1)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-right"><p>0</p></td>
+<td class="text-right"><p>0</p></td>
+<td class="text-right"><p>nan</p></td>
+<td class="text-right"><p>nan</p></td>
+<td class="text-right"><p>nan</p></td>
+<td class="text-right"><p>nan</p></td>
+<td class="text-right"><p>nan</p></td>
+<td class="text-right"><p>nan</p></td>
+<td class="text-right"><p>nan</p></td>
+<td class="text-right"><p>nan</p></td>
+<td class="text-right"><p>nan</p></td>
+<td class="text-right"><p>nan</p></td>
+<td class="text-right"><p>nan</p></td>
+<td class="text-right"><p>nan</p></td>
+<td class="text-right"><p>nan</p></td>
+<td class="text-right"><p>nan</p></td>
+<td class="text-right"><p>nan</p></td>
+</tr>
+<tr class="row-odd"><td class="text-right"><p>1</p></td>
+<td class="text-right"><p>1</p></td>
+<td class="text-right"><p>-0.923249</p></td>
+<td class="text-right"><p>2.84656</p></td>
+<td class="text-right"><p>150</p></td>
+<td class="text-right"><p>257</p></td>
+<td class="text-right"><p>233</p></td>
+<td class="text-right"><p>252</p></td>
+<td class="text-right"><p>129</p></td>
+<td class="text-right"><p>0.931612</p></td>
+<td class="text-right"><p>1.0139</p></td>
+<td class="text-right"><p>2.03899</p></td>
+<td class="text-right"><p>1.75302</p></td>
+<td class="text-right"><p>2.94252</p></td>
+<td class="text-right"><p>2.75059</p></td>
+<td class="text-right"><p>11.6913</p></td>
+<td class="text-right"><p>8.19724</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./docs/analysis"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="finite_size_correction.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">The finite size correction of interfaces</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="reweight.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Construct free energy surface through reweighting</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct-proton-transfer">Direct proton transfer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#indirect-proton-transfer">Indirect proton transfer</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Yong-Bin Zhuang
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

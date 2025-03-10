@@ -1,0 +1,790 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ectoolkits.analysis.proton_transfer_cv &#8212; ECToolkits Reference</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/ectoolkits/analysis/proton_transfer_cv';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../../../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">ECToolkits Reference</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Analysis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/atom_density.html">Atom density analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/band_align.html">Band alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/disdeg.html">Dissociation degree analysis</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/acidity.html">Acidity calculation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/finite_size_correction.html">The finite size correction of interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/proton_transfer_cv.html">Calculate collective variables of proton transfer reactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/reweight.html">Construct free energy surface through reweighting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/redox.html">Redox potentials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Plots</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/plots/dpmd.html">Plot DPMD data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Workflows</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/workflows/calc_diel.html">Workflow: Calculation of Dielectric Constant</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/references.html">Bibliography</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../_api/modules.html">ectoolkits</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../_api/ectoolkits.html">ectoolkits package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../_api/ectoolkits.analysis.html">ectoolkits.analysis package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.acidity.html">ectoolkits.analysis.acidity module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.atom_density.html">ectoolkits.analysis.atom_density module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.band_align.html">ectoolkits.analysis.band_align module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.dielectric_constant.html">ectoolkits.analysis.dielectric_constant module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.disdeg.html">ectoolkits.analysis.disdeg module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.proton_transfer_cv.html">ectoolkits.analysis.proton_transfer_cv module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.reweight.html">ectoolkits.analysis.reweight module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.rutile110.html">ectoolkits.analysis.rutile110 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.uncertainty.html">ectoolkits.analysis.uncertainty module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.analysis.water.html">ectoolkits.analysis.water module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_api/ectoolkits.matplotlibstyle.html">ectoolkits.matplotlibstyle package</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../_api/ectoolkits.plots.html">ectoolkits.plots package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.plots.band_align.html">ectoolkits.plots.band_align module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.plots.dpmd.html">ectoolkits.plots.dpmd module</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../_api/ectoolkits.structures.html">ectoolkits.structures package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.structures.interface.html">ectoolkits.structures.interface module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.structures.rutile110.html">ectoolkits.structures.rutile110 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.structures.slab.html">ectoolkits.structures.slab module</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../_api/ectoolkits.utils.html">ectoolkits.utils package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.utils.math.html">ectoolkits.utils.math module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.utils.rutile110.html">ectoolkits.utils.rutile110 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.utils.utils.html">ectoolkits.utils.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_api/ectoolkits.utils.vasp.html">ectoolkits.utils.vasp module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../_api/ectoolkits.log.html">ectoolkits.log module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/robinzyb/ectoolkits" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/robinzyb/ectoolkits/issues/new?title=Issue%20on%20page%20%2F_modules/ectoolkits/analysis/proton_transfer_cv.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for ectoolkits.analysis.proton_transfer_cv</h1><div class="highlight"><pre>
+<span></span><span class="c1"># test example: tests/analysis/proton_transfer_cv</span>
+<span class="c1"># https://userguide.mdanalysis.org/stable/examples/analysis/custom_trajectory_analysis.html</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">product</span><span class="p">,</span> <span class="n">permutations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">npt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">MDAnalysis.analysis.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnalysisBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">MDAnalysis.lib.distances</span><span class="w"> </span><span class="kn">import</span> <span class="n">distance_array</span><span class="p">,</span> <span class="n">calc_angles</span><span class="p">,</span> <span class="n">calc_bonds</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_logger</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ProtonTransferCV"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">ProtonTransferCV</span><span class="p">(</span><span class="n">AnalysisBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class for analyzing Proton Transfer Collective Variables (CVs) in molecular dynamics simulations.</span>
+
+<span class="sd">    This class extends the MDAnalysis `AnalysisBase` class and provides methods to analyze proton transfer</span>
+<span class="sd">    events between donor and acceptor atoms, potentially mediated by bridge water molecules.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        u (Universe): The MDAnalysis Universe object containing the atomgroup and trajectory.</span>
+<span class="sd">        idxs_type1_o (List[int]): List of indices for type 1 oxygen atoms (donors).</span>
+<span class="sd">        idxs_type2_o (List[int]): List of indices for type 2 oxygen atoms (acceptors).</span>
+<span class="sd">        num_bridge (int): The number of bridge water molecules between the donor and acceptor.</span>
+<span class="sd">        idxs_water_o (List[int]): List of indices for bridge water oxygen atoms.</span>
+<span class="sd">        ag_O (AtomGroup): AtomGroup of oxygen atoms.</span>
+<span class="sd">        ag_H (AtomGroup): AtomGroup of hydrogen atoms.</span>
+<span class="sd">        n_results (int): Number of results to store for each frame.</span>
+<span class="sd">        results (ndarray): Array to store the results of the analysis.</span>
+<span class="sd">        extra_detail (bool): Whether to include detailed results in the analysis. Defaults to True.</span>
+
+<span class="sd">    Methods:</span>
+<span class="sd">        _prepare(): Prepares the results array for storing analysis results.</span>
+<span class="sd">        _single_frame(): Analyzes a single frame of the trajectory.</span>
+<span class="sd">        _conclude(): Finalizes the analysis by calculating averages and transforming results into a DataFrame.</span>
+<span class="sd">        _gen_connectivity(): Generates the connectivity between oxygen and hydrogen atoms.</span>
+<span class="sd">        _get_candidates_hbonds(): Identifies candidate hydrogen bonds based on donor, acceptor, and bridge atoms.</span>
+<span class="sd">        _get_proton_transfer_cv(): Calculates the proton transfer collective variables for candidate hydrogen bonds.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">atomgroup</span><span class="p">,</span>
+                 <span class="n">idxs_type1_o</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+                 <span class="n">idxs_type2_o</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+                 <span class="n">num_bridge</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                 <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the ProtonTransferCV analysis.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            atomgroup (AtomGroup): The atomgroup to analyze.</span>
+<span class="sd">            idxs_type1_o (List[int]): List of indices for type 1 oxygen atoms (donors).</span>
+<span class="sd">            idxs_type2_o (List[int]): List of indices for type 2 oxygen atoms (acceptors).</span>
+<span class="sd">            num_bridge (int): The number of bridge water molecules between the donor and acceptor. Defaults to 0.</span>
+<span class="sd">            verbose (bool): Whether to print verbose output. Defaults to True.</span>
+<span class="sd">            **kwargs: Additional keyword arguments.</span>
+
+
+<span class="sd">        Set up the initial analysis parameters.</span>
+<span class="sd">        I don&#39;t know the reason why the offical example always put atomgroup as the first argument.</span>
+<span class="sd">        Universe class can also access the atomgroup and trajectory classes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">trajectory</span> <span class="o">=</span> <span class="n">atomgroup</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">trajectory</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ProtonTransferCV</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">trajectory</span><span class="p">,</span>
+                                               <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Analysis of Proton Transfer Collective Variables&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">atomgroup</span><span class="o">.</span><span class="n">universe</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">idxs_type1_o</span> <span class="o">=</span> <span class="n">idxs_type1_o</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idxs_type2_o</span> <span class="o">=</span> <span class="n">idxs_type2_o</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_bridge</span> <span class="o">=</span> <span class="n">num_bridge</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of bridge water molecules: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bridge</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bridge</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">idxs_water_o</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;idxs_water_o&quot;</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idxs_water_o</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;You set number of bridge water larger than 0, but no bridge water molecule is defined.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_bridge</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">idxs_water_o</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The number of bridge water molecules should be 0 or 1.&quot;</span><span class="p">)</span>
+
+
+
+        <span class="c1"># How should I select atoms inside AnalysisBase?</span>
+        <span class="c1"># Now I just use the Universe object to select atoms.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ag_O</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="s1">&#39;type O&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ag_H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="s1">&#39;type H&#39;</span><span class="p">)</span>
+
+
+        <span class="c1"># number of results to store</span>
+        <span class="c1"># frame, delta_cv distance_cv [3]</span>
+        <span class="c1"># donor_index_0, hydrogen_index_0, donor_index_1, hydrogen_index_1,</span>
+        <span class="c1"># ..., donor_index_num_bridge, hydrogen_index_num_bridge,</span>
+        <span class="c1"># acceptor_index [(num_bridge+1)*2]</span>
+        <span class="c1"># dOdHd_0, dOdHd_1, ..., dOdHd_num_bridge, [(num_bridge+1)]</span>
+        <span class="c1"># dOaOd_0, dOaOd_1, ..., dOaOd_num_bridge [(num_bridge+1)]</span>
+        <span class="c1"># DA_distance_0, DA_distance_1, ..., DA_distance_num_bridge [(num_bridge+1)]</span>
+        <span class="c1"># DAH_angle_0, DAH_angle_1, ..., DAH_angle_num_bridge [(num_bridge+1)]</span>
+        <span class="c1"># in total</span>
+        <span class="c1"># 3 + (num_bridge+1)*2+1 + (num_bridge+1)*2 + (num_bridge+1) + (num_bridge+1)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">extra_detail</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;extra_detail&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;You have set extra_detail to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">extra_detail</span><span class="si">}</span><span class="s2">, the results will only contain the collective variables.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra_detail</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_results</span> <span class="o">=</span> <span class="mi">4</span><span class="o">+</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bridge</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mi">6</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_results</span> <span class="o">=</span> <span class="mi">3</span>
+
+
+<div class="viewcode-block" id="ProtonTransferCV._prepare"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV._prepare">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">_prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_results</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="ProtonTransferCV._single_frame"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV._single_frame">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">_single_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">idxs_OH_pair</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gen_connectivity</span><span class="p">()</span>
+        <span class="c1"># filter bridge water</span>
+        <span class="c1"># type1 as donor and type2 as acceptor</span>
+        <span class="c1"># candidates_hbonds = [ (donor_idx, hydrogen_idx, acceptor_idx..)]</span>
+        <span class="n">candidates_hbonds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_candidates_hbonds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idxs_type1_o</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">idxs_type2_o</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">idxs_water_o</span><span class="p">,</span> <span class="n">idxs_OH_pair</span><span class="p">,</span> <span class="n">num_bridge</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bridge</span><span class="p">)</span>
+
+        <span class="c1"># type2 as donor and type1 as acceptor</span>
+        <span class="c1"># candidates_hbonds = [ (donor_idx, hydrogen_idx, acceptor_idx..)]</span>
+        <span class="n">candidates_hbonds_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_candidates_hbonds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idxs_type2_o</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">idxs_type1_o</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">idxs_water_o</span><span class="p">,</span> <span class="n">idxs_OH_pair</span><span class="p">,</span> <span class="n">num_bridge</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bridge</span><span class="p">)</span>
+
+        <span class="c1"># merge the two found candidates_hbonds</span>
+        <span class="k">if</span> <span class="n">candidates_hbonds</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">candidates_hbonds</span> <span class="o">=</span> <span class="n">candidates_hbonds_2</span>
+        <span class="k">elif</span> <span class="n">candidates_hbonds_2</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">candidates_hbonds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">candidates_hbonds</span><span class="p">,</span> <span class="n">candidates_hbonds_2</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_proton_transfer_cv</span><span class="p">(</span><span class="n">candidates_hbonds</span><span class="p">,</span> <span class="n">num_bridge</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bridge</span><span class="p">)</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span></div>
+
+
+
+<div class="viewcode-block" id="ProtonTransferCV._conclude"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV._conclude">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">_conclude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Finish up by calculating an average and transforming our</span>
+<span class="sd">        results into a DataFrame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># by now self.result is fully populated</span>
+        <span class="c1"># [frame, delta_cv, distance_cv, donor_index, hydrogen_index, acceptor_index, dOdHd, dOaHd, DA_distance, DAH_angle ]</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Frame&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;Delta_CV&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;Distance_CV&#39;</span><span class="p">,</span>
+                   <span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra_detail</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bridge</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">columns</span> <span class="o">+=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Index of donor</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Index of hydrogen</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span>
+            <span class="n">columns</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;Index of acceptor&#39;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bridge</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">columns</span> <span class="o">+=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Distance (Donor</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">-Hydrogen</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bridge</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">columns</span> <span class="o">+=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Distance (Acceptor</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">-Hydrogen</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bridge</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">columns</span> <span class="o">+=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Interatomic distance (Donor</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">-Aceeptor</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bridge</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">columns</span> <span class="o">+=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Angle (Donor</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">-Aceeptor</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">-Hydrogen</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span></div>
+
+    <span class="c1"># helper functions</span>
+<div class="viewcode-block" id="ProtonTransferCV._gen_connectivity"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV._gen_connectivity">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">_gen_connectivity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate the connectivity between O and H atoms.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">poses_O</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ag_O</span><span class="o">.</span><span class="n">positions</span>
+        <span class="n">idxs_O</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ag_O</span><span class="o">.</span><span class="n">indices</span>
+        <span class="n">poses_H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ag_H</span><span class="o">.</span><span class="n">positions</span>
+        <span class="n">idxs_H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ag_H</span><span class="o">.</span><span class="n">indices</span>
+        <span class="c1"># We define each H atom to be “covalently bound” to its nearest O atom.</span>
+        <span class="c1"># See 10.1021/acs.jpclett.7b00358</span>
+        <span class="n">dist_array</span> <span class="o">=</span> <span class="n">distance_array</span><span class="p">(</span><span class="n">poses_H</span><span class="p">,</span> <span class="n">poses_O</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">dimensions</span><span class="p">)</span>
+        <span class="n">idxs_O_pair</span> <span class="o">=</span> <span class="n">idxs_O</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">dist_array</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="n">idxs_H_pair</span> <span class="o">=</span> <span class="n">idxs_H</span>
+        <span class="n">idxs_OH_pair</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">idxs_O_pair</span><span class="p">,</span> <span class="n">idxs_H_pair</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">idxs_OH_pair</span></div>
+
+<div class="viewcode-block" id="ProtonTransferCV._get_candidates_hbonds"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV._get_candidates_hbonds">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">_get_candidates_hbonds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                               <span class="n">idxs_donor</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+                               <span class="n">idxs_acceptor</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+                               <span class="n">idxs_bridge_candidate</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+                               <span class="n">idxs_OH_pair</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">,</span>
+                               <span class="n">num_bridge</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                               <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the candidates of hydrogen bonds.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">idxs_O_pair</span> <span class="o">=</span> <span class="n">idxs_OH_pair</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">idxs_H_pair</span> <span class="o">=</span> <span class="n">idxs_OH_pair</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># fisrt make product of donor and acceptor</span>
+        <span class="c1"># insert the permuation of bridge water oxygen.</span>
+        <span class="c1"># and make the candidates_hbonds_list in the order of donor0, hydrogen0, donor1, hydrogen1, ..., acceptor</span>
+        <span class="n">candidates_hbonds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">num_bridge</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="k">for</span> <span class="n">idx_donor</span><span class="p">,</span> <span class="n">idx_acceptor</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="n">idxs_donor</span><span class="p">,</span> <span class="n">idxs_acceptor</span><span class="p">):</span>
+                <span class="n">idxs_bonded_H</span> <span class="o">=</span> <span class="n">idxs_H_pair</span><span class="p">[</span><span class="n">idxs_O_pair</span> <span class="o">==</span> <span class="n">idx_donor</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">idx_bonded_H</span> <span class="ow">in</span> <span class="n">idxs_bonded_H</span><span class="p">:</span>
+                    <span class="n">candidates_hbonds</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">idx_donor</span><span class="p">,</span> <span class="n">idx_bonded_H</span><span class="p">,</span> <span class="n">idx_acceptor</span><span class="p">])</span>
+
+        <span class="c1"># TODO: generalize to arbitrary number of bridge water molecules, I should consider how to make a list of attached hydrogen atoms,</span>
+        <span class="c1"># now I only refactor old indirect transfer code to here..</span>
+        <span class="k">elif</span> <span class="n">num_bridge</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">idx_donor</span><span class="p">,</span> <span class="n">idx_acceptor</span><span class="p">,</span> <span class="n">idxs_bridge</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="n">idxs_donor</span><span class="p">,</span> <span class="n">idxs_acceptor</span><span class="p">,</span> <span class="n">permutations</span><span class="p">(</span><span class="n">idxs_bridge_candidate</span><span class="p">,</span> <span class="n">num_bridge</span><span class="p">)):</span>
+
+                <span class="n">candidates_donor</span> <span class="o">=</span> <span class="p">[</span><span class="n">idx_donor</span><span class="p">]</span><span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="n">idxs_bridge</span><span class="p">)</span>
+                <span class="c1"># candidates_donor should be 2 elements</span>
+                <span class="c1"># donor O , H1, bridge O , H2, acceptor O</span>
+                <span class="n">idx_type1</span> <span class="o">=</span> <span class="n">candidates_donor</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">idxs_bonded_H1</span> <span class="o">=</span> <span class="n">idxs_H_pair</span><span class="p">[</span><span class="n">idxs_O_pair</span> <span class="o">==</span> <span class="n">idx_type1</span><span class="p">]</span>
+                <span class="n">idx_bridge</span> <span class="o">=</span> <span class="n">candidates_donor</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">idxs_bonded_H2</span> <span class="o">=</span> <span class="n">idxs_H_pair</span><span class="p">[</span><span class="n">idxs_O_pair</span> <span class="o">==</span> <span class="n">idx_bridge</span><span class="p">]</span>
+                <span class="c1"># type1 is donor and type 2 is acceptor</span>
+                <span class="c1"># the following can be refactored to permuation..</span>
+                <span class="k">for</span> <span class="n">idx_bonded_H1</span> <span class="ow">in</span> <span class="n">idxs_bonded_H1</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">idx_bonded_H2</span> <span class="ow">in</span> <span class="n">idxs_bonded_H2</span><span class="p">:</span>
+                        <span class="n">candidates_hbonds</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">idx_type1</span><span class="p">,</span> <span class="n">idx_bonded_H1</span><span class="p">,</span> <span class="n">idx_bridge</span><span class="p">,</span> <span class="n">idx_bonded_H2</span><span class="p">,</span> <span class="n">idx_acceptor</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The number of bridge water molecules should be 0 or 1.&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">candidates_hbonds</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ProtonTransferCV._get_proton_transfer_cv"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV._get_proton_transfer_cv">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">_get_proton_transfer_cv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">candidates_hbonds</span><span class="p">,</span> <span class="n">num_bridge</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+
+        <span class="c1"># hbond standard</span>
+        <span class="n">hbond_dOO</span> <span class="o">=</span> <span class="mf">3.5</span>
+        <span class="n">hbond_OaOdH_angle</span> <span class="o">=</span> <span class="mi">30</span>
+
+        <span class="n">n_all_results</span> <span class="o">=</span> <span class="mi">4</span><span class="o">+</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bridge</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mi">6</span>
+        <span class="c1"># this info includes everything and will be tailored at the return statement.</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_all_results</span><span class="p">))</span>
+        <span class="n">info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ts</span><span class="o">.</span><span class="n">frame</span>
+
+        <span class="k">if</span> <span class="n">candidates_hbonds</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># check if the h bond forms</span>
+            <span class="c1"># check hbond distance first</span>
+            <span class="c1"># donor_index_0, hydrogen_index_0, donor_index_1, hydrogen_index_1,</span>
+            <span class="c1"># ..., donor_index_num_bridge, hydrogen_index_num_bridge, acceptor_index</span>
+            <span class="n">num_candidates</span> <span class="o">=</span> <span class="n">candidates_hbonds</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">num_candidates</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_bridge</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+                <span class="n">poses_donor_o</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">candidates_hbonds</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+                <span class="n">poses_acceptor_o</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">candidates_hbonds</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">]]</span>
+                <span class="n">bonds</span> <span class="o">=</span> <span class="n">calc_bonds</span><span class="p">(</span><span class="n">poses_acceptor_o</span><span class="p">,</span> <span class="n">poses_donor_o</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">dimensions</span><span class="p">)</span>
+                <span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">bonds</span> <span class="o">&lt;</span> <span class="n">hbond_dOO</span><span class="p">)</span>
+
+            <span class="n">candidates_hbonds</span> <span class="o">=</span> <span class="n">candidates_hbonds</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+
+
+            <span class="c1"># then check the angle</span>
+            <span class="n">num_candidates</span> <span class="o">=</span> <span class="n">candidates_hbonds</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">num_candidates</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_bridge</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+                <span class="n">poses_donor_o</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">candidates_hbonds</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+                <span class="n">poses_bonded_H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">candidates_hbonds</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]]</span>
+                <span class="n">poses_acceptor_o</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">candidates_hbonds</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">]]</span>
+                <span class="n">angles</span> <span class="o">=</span> <span class="n">calc_angles</span><span class="p">(</span><span class="n">poses_acceptor_o</span><span class="p">,</span> <span class="n">poses_donor_o</span><span class="p">,</span> <span class="n">poses_bonded_H</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">dimensions</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mi">180</span>
+                <span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">angles</span> <span class="o">&lt;=</span> <span class="n">hbond_OaOdH_angle</span><span class="p">)</span>
+
+            <span class="c1"># All the candidates have hydrogen bond formed.</span>
+            <span class="n">hbonds</span> <span class="o">=</span> <span class="n">candidates_hbonds</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+            <span class="n">all_dOdHd</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">all_dOaHd</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">all_bonds</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">all_angles</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_bridge</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+                <span class="n">poses_donor_o</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">hbonds</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+                <span class="n">poses_bonded_H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">hbonds</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]]</span>
+                <span class="n">poses_acceptor_o</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">hbonds</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">]]</span>
+                <span class="c1"># calculate delta</span>
+                <span class="n">dOdHd</span> <span class="o">=</span> <span class="n">calc_bonds</span><span class="p">(</span><span class="n">poses_donor_o</span><span class="p">,</span> <span class="n">poses_bonded_H</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">dimensions</span><span class="p">)</span>
+                <span class="n">dOaHd</span> <span class="o">=</span> <span class="n">calc_bonds</span><span class="p">(</span><span class="n">poses_acceptor_o</span><span class="p">,</span> <span class="n">poses_bonded_H</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">dimensions</span><span class="p">)</span>
+                <span class="n">bonds</span> <span class="o">=</span> <span class="n">calc_bonds</span><span class="p">(</span><span class="n">poses_acceptor_o</span><span class="p">,</span> <span class="n">poses_donor_o</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">dimensions</span><span class="p">)</span>
+                <span class="n">angles</span> <span class="o">=</span> <span class="n">calc_angles</span><span class="p">(</span><span class="n">poses_acceptor_o</span><span class="p">,</span> <span class="n">poses_donor_o</span><span class="p">,</span> <span class="n">poses_bonded_H</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">dimensions</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mi">180</span>
+
+                <span class="c1"># the shape of following is  (num_bridge+1, len(hbonds)</span>
+                <span class="n">all_dOdHd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dOdHd</span><span class="p">)</span>
+                <span class="n">all_dOaHd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dOaHd</span><span class="p">)</span>
+                <span class="n">all_bonds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bonds</span><span class="p">)</span>
+                <span class="n">all_angles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">angles</span><span class="p">)</span>
+
+            <span class="n">all_dOdHd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_dOdHd</span><span class="p">)</span>
+            <span class="n">all_dOaHd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_dOaHd</span><span class="p">)</span>
+            <span class="n">all_bonds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_bonds</span><span class="p">)</span>
+            <span class="n">all_angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_angles</span><span class="p">)</span>
+
+            <span class="n">delta_cv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">all_dOdHd</span> <span class="o">-</span> <span class="n">all_dOaHd</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">distance_cv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">all_bonds</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="c1"># information</span>
+            <span class="c1"># [frame, delta_cv, distance_cv, donor_index, hydrogen_index, acceptor_index, dOdHd, dOaHd, DA_distance, DAH_angle ]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">hbonds</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tmp_info</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">hbonds</span><span class="p">),</span> <span class="n">n_all_results</span><span class="p">))</span>
+                <span class="n">tmp_info</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ts</span><span class="o">.</span><span class="n">frame</span>
+                <span class="n">tmp_info</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">delta_cv</span>
+                <span class="n">tmp_info</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">distance_cv</span>
+
+                <span class="c1"># store the hbond indexs</span>
+                <span class="n">tmp_info</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">:(</span><span class="mi">6</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">num_bridge</span><span class="p">)]</span> <span class="o">=</span> <span class="n">hbonds</span>
+
+                <span class="c1"># store the dOdHd, info</span>
+
+                <span class="n">tmp_info</span><span class="p">[:,</span> <span class="p">(</span><span class="mi">6</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">num_bridge</span><span class="p">):(</span><span class="mi">7</span><span class="o">+</span><span class="mi">3</span><span class="o">*</span><span class="n">num_bridge</span><span class="p">)]</span> <span class="o">=</span> <span class="n">all_dOdHd</span><span class="o">.</span><span class="n">T</span>
+                <span class="n">tmp_info</span><span class="p">[:,</span> <span class="p">(</span><span class="mi">7</span><span class="o">+</span><span class="mi">3</span><span class="o">*</span><span class="n">num_bridge</span><span class="p">):(</span><span class="mi">8</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="n">num_bridge</span><span class="p">)]</span> <span class="o">=</span> <span class="n">all_dOaHd</span><span class="o">.</span><span class="n">T</span>
+                <span class="n">tmp_info</span><span class="p">[:,</span> <span class="p">(</span><span class="mi">8</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="n">num_bridge</span><span class="p">):(</span><span class="mi">9</span><span class="o">+</span><span class="mi">5</span><span class="o">*</span><span class="n">num_bridge</span><span class="p">)]</span> <span class="o">=</span> <span class="n">all_bonds</span><span class="o">.</span><span class="n">T</span>
+                <span class="n">tmp_info</span><span class="p">[:,</span> <span class="p">(</span><span class="mi">9</span><span class="o">+</span><span class="mi">5</span><span class="o">*</span><span class="n">num_bridge</span><span class="p">):(</span><span class="mi">10</span><span class="o">+</span><span class="mi">6</span><span class="o">*</span><span class="n">num_bridge</span><span class="p">)]</span> <span class="o">=</span> <span class="n">all_angles</span><span class="o">.</span><span class="n">T</span>
+
+                <span class="c1"># 3 + (n_bridge+1)*2+1 + (n_bridge+1)*2 + (n_bridge+1)*2</span>
+                <span class="c1"># because delta_cv is negative here, the minimum is the most negative delta_cv.</span>
+                <span class="c1"># TODO: is this definition really ok? or should I use the minimum of absolute value of delta_cv?</span>
+                <span class="n">info</span> <span class="o">=</span> <span class="n">tmp_info</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">tmp_info</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="mi">1</span><span class="p">]]</span>
+                <span class="c1"># the delta_cv is always negative here because it is dOdHd - dOaHd.</span>
+                <span class="c1"># for donor in type2, acceptor in type1, the delta should be positive.</span>
+                <span class="c1"># here I just check the donor index.</span>
+                <span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">idxs_type2_o</span><span class="p">:</span>
+                    <span class="n">info</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">info</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra_detail</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">info</span> <span class="o">=</span> <span class="n">info</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">info</span></div></div>
+
+
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Yong-Bin Zhuang
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

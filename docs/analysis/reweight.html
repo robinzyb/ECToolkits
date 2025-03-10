@@ -65,8 +65,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'docs/analysis/reweight';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Plot DPMD data" href="../plots/dpmd.html" />
-    <link rel="prev" title="Redox potentials" href="redox.html" />
+    <link rel="next" title="Redox potentials" href="redox.html" />
+    <link rel="prev" title="Calculate collective variables of proton transfer reactions" href="proton_transfer_cv.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -171,8 +171,9 @@ const thebe_selector_output = ".output, .cell_output"
 
 <li class="toctree-l1"><a class="reference internal" href="acidity.html">Acidity calculation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="finite_size_correction.html">The finite size correction of interfaces</a></li>
-<li class="toctree-l1"><a class="reference internal" href="redox.html">Redox potentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proton_transfer_cv.html">Calculate collective variables of proton transfer reactions</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Construct free energy surface through reweighting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="redox.html">Redox potentials</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Plots</span></p>
 <ul class="nav bd-sidenav">
@@ -197,8 +198,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.dielectric_constant.html">ectoolkits.analysis.dielectric_constant module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.disdeg.html">ectoolkits.analysis.disdeg module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.get_Surface_Indirect_PT.html">ectoolkits.analysis.get_Surface_Indirect_PT module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.get_Surface_PT_CV.html">ectoolkits.analysis.get_Surface_PT_CV module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.proton_transfer_cv.html">ectoolkits.analysis.proton_transfer_cv module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.reweight.html">ectoolkits.analysis.reweight module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.rutile110.html">ectoolkits.analysis.rutile110 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.analysis.uncertainty.html">ectoolkits.analysis.uncertainty module</a></li>
@@ -425,7 +425,7 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick start</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
 </ul>
             </nav>
         </div>
@@ -443,8 +443,8 @@ document.write(`
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
 <p>TBC</p>
 </section>
-<section id="quick-start">
-<h2>Quick start<a class="headerlink" href="#quick-start" title="Permalink to this heading">#</a></h2>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.analysis.reweight</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_FES</span><span class="p">,</span> <span class="n">compute_bw_silverman</span>
 
 <span class="c1"># compute bandwidths of CVs using Silverman&#39;s rule</span>
@@ -538,20 +538,20 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="redox.html"
+       href="proton_transfer_cv.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Redox potentials</p>
+        <p class="prev-next-title">Calculate collective variables of proton transfer reactions</p>
       </div>
     </a>
     <a class="right-next"
-       href="../plots/dpmd.html"
+       href="redox.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Plot DPMD data</p>
+        <p class="prev-next-title">Redox potentials</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -571,7 +571,7 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick start</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
 </ul>
   </nav></div>
 

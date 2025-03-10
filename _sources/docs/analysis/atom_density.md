@@ -1,5 +1,6 @@
 # Atom density analysis
 
+## Introduction
 Density analysis along the normal to an interface is very helpful for understanding the interface structure.{cite}`Fan.2023.10.1016/j.jechem.2023.03.013,Le.2017.10.1103/physrevlett.119.016801,Wen.2023.10.1021/acs.jpcc.3c00220,Guo.2018.10.1021/acs.chemmater.7b02619,Andrade.2020.10.1039/c9sc05116c` The density can be obtained using the `AtomDensity` class.
 The following gives the introduction of the parameters used in the `inp_dict`, which is the input dictionary of the `AtomDensity` class.
 
@@ -42,7 +43,7 @@ Next, we move to the analysis of water density at interfaces.
 
 To perform the water density analysis, the indices of oxygen atoms between two interfaces are need to be specified, as shown in the `O_idx` of the above figure. Again, you can find the indices using the method `find_idx_from_range`, and put these indices (`List`) in the `inp_dict["density_type"]["idx_list"]`. Here, the `density_unit` should be set to `"water"` because the coordinates of oxygen atoms are treated as the positions of water molecules and are converted to water density through unit conversion.
 
-
+## Usage
 Now, we import the analysis class `AtomDensity` and gather the following mentioned parameters.
 ```python
 from ectoolkits.analysis.atom_density import AtomDensity

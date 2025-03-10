@@ -168,8 +168,9 @@ const thebe_selector_output = ".output, .cell_output"
 
 <li class="toctree-l1"><a class="reference internal" href="docs/analysis/acidity.html">Acidity calculation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/analysis/finite_size_correction.html">The finite size correction of interfaces</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs/analysis/redox.html">Redox potentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docs/analysis/proton_transfer_cv.html">Calculate collective variables of proton transfer reactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/analysis/reweight.html">Construct free energy surface through reweighting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docs/analysis/redox.html">Redox potentials</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Plots</span></p>
 <ul class="nav bd-sidenav">
@@ -194,8 +195,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="_api/ectoolkits.analysis.dielectric_constant.html">ectoolkits.analysis.dielectric_constant module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="_api/ectoolkits.analysis.disdeg.html">ectoolkits.analysis.disdeg module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="_api/ectoolkits.analysis.finite_size_correction.html">ectoolkits.analysis.finite_size_correction module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="_api/ectoolkits.analysis.get_Surface_Indirect_PT.html">ectoolkits.analysis.get_Surface_Indirect_PT module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="_api/ectoolkits.analysis.get_Surface_PT_CV.html">ectoolkits.analysis.get_Surface_PT_CV module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_api/ectoolkits.analysis.proton_transfer_cv.html">ectoolkits.analysis.proton_transfer_cv module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="_api/ectoolkits.analysis.reweight.html">ectoolkits.analysis.reweight module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="_api/ectoolkits.analysis.rutile110.html">ectoolkits.analysis.rutile110 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="_api/ectoolkits.analysis.uncertainty.html">ectoolkits.analysis.uncertainty module</a></li>
@@ -379,7 +379,8 @@ document.write(`
 <h1 id="index">Index</h1>
 
 <div class="genindex-jumpbox">
- <a href="#A"><strong>A</strong></a>
+ <a href="#_"><strong>_</strong></a>
+ | <a href="#A"><strong>A</strong></a>
  | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
@@ -400,6 +401,26 @@ document.write(`
  | <a href="#W"><strong>W</strong></a>
  
 </div>
+<h2 id="_">_</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV._conclude">_conclude() (ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV method)</a>
+</li>
+      <li><a href="_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV._gen_connectivity">_gen_connectivity() (ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV method)</a>
+</li>
+      <li><a href="_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV._get_candidates_hbonds">_get_candidates_hbonds() (ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV._get_proton_transfer_cv">_get_proton_transfer_cv() (ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV method)</a>
+</li>
+      <li><a href="_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV._prepare">_prepare() (ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV method)</a>
+</li>
+      <li><a href="_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV._single_frame">_single_frame() (ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -407,8 +428,12 @@ document.write(`
 </li>
       <li><a href="_api/ectoolkits.structures.slab.html#ectoolkits.structures.slab.Slab.add_adsorbates">add_adsorbates() (ectoolkits.structures.slab.Slab method)</a>
 </li>
+      <li><a href="_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV.ag_H">ag_H (ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV.ag_O">ag_O (ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV attribute)</a>
+</li>
       <li><a href="_api/ectoolkits.analysis.band_align.html#ectoolkits.analysis.band_align.align_to_slab_cent">align_to_slab_cent() (in module ectoolkits.analysis.band_align)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.analysis_run">analysis_run() (in module ectoolkits.analysis.atom_density)</a>
@@ -555,6 +580,13 @@ document.write(`
 </li>
       </ul></li>
       <li>
+    ectoolkits.analysis.proton_transfer_cv
+
+      <ul>
+        <li><a href="_api/ectoolkits.analysis.proton_transfer_cv.html#module-ectoolkits.analysis.proton_transfer_cv">module</a>
+</li>
+      </ul></li>
+      <li>
     ectoolkits.analysis.reweight
 
       <ul>
@@ -685,6 +717,8 @@ document.write(`
       <li><a href="_api/ectoolkits.plots.band_align.html#ectoolkits.plots.band_align.enumerate_subplots">enumerate_subplots() (in module ectoolkits.plots.band_align)</a>
 </li>
       <li><a href="_api/ectoolkits.utils.vasp.html#ectoolkits.utils.vasp.exout_vasp">exout_vasp() (in module ectoolkits.utils.vasp)</a>
+</li>
+      <li><a href="_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV.extra_detail">extra_detail (ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -966,16 +1000,22 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.identify_water_molecules">identify_water_molecules() (in module ectoolkits.analysis.water)</a>
 </li>
+      <li><a href="_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV.idxs_type1_o">idxs_type1_o (ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV attribute)</a>
+</li>
+      <li><a href="_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV.idxs_type2_o">idxs_type2_o (ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV attribute)</a>
+</li>
+      <li><a href="_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV.idxs_water_o">idxs_water_o (ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV attribute)</a>
+</li>
       <li><a href="_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.Rutile110.idxslab2idxatoms">idxslab2idxatoms() (ectoolkits.structures.rutile110.Rutile110 static method)</a>
 
       <ul>
         <li><a href="_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.Rutile1p11Edge.idxslab2idxatoms">(ectoolkits.structures.rutile110.Rutile1p11Edge static method)</a>
 </li>
       </ul></li>
-      <li><a href="_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.DielProfile.ifmodel">ifmodel() (ectoolkits.analysis.finite_size_correction.DielProfile static method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.DielProfile.ifmodel">ifmodel() (ectoolkits.analysis.finite_size_correction.DielProfile static method)</a>
+</li>
       <li><a href="_api/ectoolkits.utils.utils.html#ectoolkits.utils.utils.insert_water">insert_water() (in module ectoolkits.utils.utils)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.integer3D">integer3D() (in module ectoolkits.analysis.finite_size_correction)</a>
@@ -1015,6 +1055,8 @@ document.write(`
         <li><a href="_api/ectoolkits.analysis.dielectric_constant.html#module-ectoolkits.analysis.dielectric_constant">ectoolkits.analysis.dielectric_constant</a>
 </li>
         <li><a href="_api/ectoolkits.analysis.finite_size_correction.html#module-ectoolkits.analysis.finite_size_correction">ectoolkits.analysis.finite_size_correction</a>
+</li>
+        <li><a href="_api/ectoolkits.analysis.proton_transfer_cv.html#module-ectoolkits.analysis.proton_transfer_cv">ectoolkits.analysis.proton_transfer_cv</a>
 </li>
         <li><a href="_api/ectoolkits.analysis.reweight.html#module-ectoolkits.analysis.reweight">ectoolkits.analysis.reweight</a>
 </li>
@@ -1059,10 +1101,14 @@ document.write(`
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV.n_results">n_results (ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV attribute)</a>
+</li>
       <li><a href="_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.normalized_vector">normalized_vector() (in module ectoolkits.utils.rutile110)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV.num_bridge">num_bridge (ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV attribute)</a>
+</li>
       <li><a href="_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.WatDensity.number_density2watdensity">number_density2watdensity() (ectoolkits.analysis.rutile110.WatDensity static method)</a>
 </li>
   </ul></td>
@@ -1125,6 +1171,8 @@ document.write(`
 </li>
       <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.plot_orientation">plot_orientation() (ectoolkits.analysis.water.WaterOrientation method)</a>
 </li>
+      <li><a href="_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV">ProtonTransferCV (class in ectoolkits.analysis.proton_transfer_cv)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -1142,6 +1190,8 @@ document.write(`
       <li><a href="_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.Rutile1p11Edge.refine_rotM">refine_rotM() (ectoolkits.structures.rutile110.Rutile1p11Edge method)</a>
 </li>
       <li><a href="_api/ectoolkits.structures.slab.html#ectoolkits.structures.slab.Slab.remove_cell_vacuum">remove_cell_vacuum() (ectoolkits.structures.slab.Slab method)</a>
+</li>
+      <li><a href="_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV.results">results (ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV attribute)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.run">run() (ectoolkits.analysis.atom_density.AtomDensity method)</a>
 </li>
@@ -1231,6 +1281,8 @@ document.write(`
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV.u">u (ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV attribute)</a>
+</li>
       <li><a href="_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.UniformCharge">UniformCharge (class in ectoolkits.analysis.finite_size_correction)</a>
 </li>
   </ul></td>

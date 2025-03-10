@@ -1,7 +1,7 @@
-ectoolkits.analysis.get\_Surface\_PT\_CV module
+ectoolkits.analysis.proton\_transfer\_cv module
 ===============================================
 
-.. automodule:: ectoolkits.analysis.get_Surface_PT_CV
+.. automodule:: ectoolkits.analysis.proton_transfer_cv
    :members:
    :undoc-members:
    :show-inheritance:

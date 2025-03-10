@@ -18,6 +18,32 @@ from ectoolkits.log import get_logger
 logger = get_logger(__name__)
 
 class ProtonTransferCV(AnalysisBase):
+    """
+    Class for analyzing Proton Transfer Collective Variables (CVs) in molecular dynamics simulations.
+
+    This class extends the MDAnalysis `AnalysisBase` class and provides methods to analyze proton transfer
+    events between donor and acceptor atoms, potentially mediated by bridge water molecules.
+
+    Attributes:
+        u (Universe): The MDAnalysis Universe object containing the atomgroup and trajectory.
+        idxs_type1_o (List[int]): List of indices for type 1 oxygen atoms (donors).
+        idxs_type2_o (List[int]): List of indices for type 2 oxygen atoms (acceptors).
+        num_bridge (int): The number of bridge water molecules between the donor and acceptor.
+        idxs_water_o (List[int]): List of indices for bridge water oxygen atoms.
+        ag_O (AtomGroup): AtomGroup of oxygen atoms.
+        ag_H (AtomGroup): AtomGroup of hydrogen atoms.
+        n_results (int): Number of results to store for each frame.
+        results (ndarray): Array to store the results of the analysis.
+        extra_detail (bool): Whether to include detailed results in the analysis. Defaults to True.
+
+    Methods:
+        _prepare(): Prepares the results array for storing analysis results.
+        _single_frame(): Analyzes a single frame of the trajectory.
+        _conclude(): Finalizes the analysis by calculating averages and transforming results into a DataFrame.
+        _gen_connectivity(): Generates the connectivity between oxygen and hydrogen atoms.
+        _get_candidates_hbonds(): Identifies candidate hydrogen bonds based on donor, acceptor, and bridge atoms.
+        _get_proton_transfer_cv(): Calculates the proton transfer collective variables for candidate hydrogen bonds.
+    """
     def __init__(self,
                  atomgroup,
                  idxs_type1_o: List[int],
@@ -26,9 +52,16 @@ class ProtonTransferCV(AnalysisBase):
                  verbose=True,
                  **kwargs):
         """
+        Initialize the ProtonTransferCV analysis.
 
-        num_bridge: int
-            The number of bridge water molecules between the donor and acceptor.
+        Parameters:
+            atomgroup (AtomGroup): The atomgroup to analyze.
+            idxs_type1_o (List[int]): List of indices for type 1 oxygen atoms (donors).
+            idxs_type2_o (List[int]): List of indices for type 2 oxygen atoms (acceptors).
+            num_bridge (int): The number of bridge water molecules between the donor and acceptor. Defaults to 0.
+            verbose (bool): Whether to print verbose output. Defaults to True.
+            **kwargs: Additional keyword arguments.
+
 
         Set up the initial analysis parameters.
         I don't know the reason why the offical example always put atomgroup as the first argument.
@@ -46,7 +79,6 @@ class ProtonTransferCV(AnalysisBase):
         self.idxs_type2_o = idxs_type2_o
 
         self.num_bridge = num_bridge
-
         logger.info(f"Number of bridge water molecules: {self.num_bridge}")
         if self.num_bridge == 1:
             self.idxs_water_o = kwargs.get("idxs_water_o", [])
@@ -76,7 +108,15 @@ class ProtonTransferCV(AnalysisBase):
         # DAH_angle_0, DAH_angle_1, ..., DAH_angle_num_bridge [(num_bridge+1)]
         # in total
         # 3 + (num_bridge+1)*2+1 + (num_bridge+1)*2 + (num_bridge+1) + (num_bridge+1)
-        self.n_results = 4+(self.num_bridge+1)*6
+
+        self.extra_detail = kwargs.get("extra_detail", True)
+        logger.info(f"You have set extra_detail to {self.extra_detail}, the results will only contain the collective variables.")
+
+        if self.extra_detail:
+            self.n_results = 4+(self.num_bridge+1)*6
+        else:
+            self.n_results = 3
+
 
     def _prepare(self):
         self.results = np.zeros((self.n_frames, self.n_results))
@@ -99,7 +139,10 @@ class ProtonTransferCV(AnalysisBase):
             candidates_hbonds = np.concatenate((candidates_hbonds, candidates_hbonds_2), axis=0)
 
         info = self._get_proton_transfer_cv(candidates_hbonds, num_bridge=self.num_bridge)
+
+
         self.results[self._frame_index] = info
+
 
 
     def _conclude(self):
@@ -114,17 +157,18 @@ class ProtonTransferCV(AnalysisBase):
                    'Distance_CV',
                    ]
 
-        for i in range(self.num_bridge+1):
-            columns += [f'Index of donor{i}', f'Index of hydrogen{i}']
-        columns += ['Index of acceptor']
-        for i in range(self.num_bridge+1):
-            columns += [f'Distance (Donor{i}-Hydrogen{i})']
-        for i in range(self.num_bridge+1):
-            columns += [f'Distance (Acceptor{i}-Hydrogen{i})']
-        for i in range(self.num_bridge+1):
-            columns += [f'Interatomic distance (Donor{i}-Aceeptor{i})']
-        for i in range(self.num_bridge+1):
-            columns += [f'Angle (Donor{i}-Aceeptor{i}-Hydrogen{i})']
+        if self.extra_detail:
+            for i in range(self.num_bridge+1):
+                columns += [f'Index of donor{i}', f'Index of hydrogen{i}']
+            columns += ['Index of acceptor']
+            for i in range(self.num_bridge+1):
+                columns += [f'Distance (Donor{i}-Hydrogen{i})']
+            for i in range(self.num_bridge+1):
+                columns += [f'Distance (Acceptor{i}-Hydrogen{i})']
+            for i in range(self.num_bridge+1):
+                columns += [f'Interatomic distance (Donor{i}-Aceeptor{i})']
+            for i in range(self.num_bridge+1):
+                columns += [f'Angle (Donor{i}-Aceeptor{i}-Hydrogen{i})']
 
         self.df = pd.DataFrame(self.results, columns=columns)
 
@@ -198,8 +242,11 @@ class ProtonTransferCV(AnalysisBase):
         hbond_dOO = 3.5
         hbond_OaOdH_angle = 30
 
-        info = np.zeros((self.n_results))
+        n_all_results = 4+(self.num_bridge+1)*6
+        # this info includes everything and will be tailored at the return statement.
+        info = np.zeros((n_all_results))
         info[0] = self._ts.frame
+
         if candidates_hbonds.shape[0] == 0:
             info[1:] = np.nan
         else:
@@ -263,7 +310,7 @@ class ProtonTransferCV(AnalysisBase):
             if len(hbonds) == 0:
                 info[1:] = np.nan
             else:
-                tmp_info = np.zeros((len(hbonds), self.n_results))
+                tmp_info = np.zeros((len(hbonds), n_all_results))
                 tmp_info[:, 0] = self._ts.frame
                 tmp_info[:, 1] = delta_cv
                 tmp_info[:, 2] = distance_cv
@@ -277,8 +324,8 @@ class ProtonTransferCV(AnalysisBase):
                 tmp_info[:, (7+3*num_bridge):(8+4*num_bridge)] = all_dOaHd.T
                 tmp_info[:, (8+4*num_bridge):(9+5*num_bridge)] = all_bonds.T
                 tmp_info[:, (9+5*num_bridge):(10+6*num_bridge)] = all_angles.T
-                # 3 + (n_bridge+1)*2+1 + (n_bridge+1)*2 + (n_bridge+1)*2
 
+                # 3 + (n_bridge+1)*2+1 + (n_bridge+1)*2 + (n_bridge+1)*2
                 # because delta_cv is negative here, the minimum is the most negative delta_cv.
                 # TODO: is this definition really ok? or should I use the minimum of absolute value of delta_cv?
                 info = tmp_info[np.argmin(tmp_info, axis=0)[1]]
@@ -288,7 +335,12 @@ class ProtonTransferCV(AnalysisBase):
                 if info[3] in self.idxs_type2_o:
                     info[1] = -info[1]
 
-            return info
+
+
+        if self.extra_detail is False:
+            info = info[:3]
+
+        return info
 
 
 

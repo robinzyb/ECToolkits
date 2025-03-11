@@ -107,7 +107,10 @@ class ProtonTransferCV(AnalysisBase):
         # 3 + (num_bridge+1)*2+1 + (num_bridge+1)*2 + (num_bridge+1) + (num_bridge+1)
 
         self.extra_detail = kwargs.get("extra_detail", True)
-        logger.info(f"You have set extra_detail to {self.extra_detail}, the results will only contain the collective variables.")
+        if self.extra_detail:
+            logger.info(f"You have set extra_detail to {self.extra_detail}, the results will include the detailed information.")
+        else:
+            logger.info(f"You have set extra_detail to {self.extra_detail}, the results will only include the collective variables.")
 
         if self.extra_detail:
             self.n_results = 4+(self.num_bridge+1)*6

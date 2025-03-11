@@ -332,3 +332,74 @@ SET num_grid_points_${name_cv_y} ${num_grid_points_y}"""
 
     else:
         raise ValueError("dim should be either 1 or 2")
+
+
+#TODO: just copy from my jupyter notebook, need to revise.
+def calc_one_property_point(cv_x, cv_y, bias, prop, point_x, point_y, sigma_x, sigma_y, kbT, mode='direct'):
+
+    if mode == 'direct':
+        dist_x = (point_x - cv_x) / sigma_x
+        dist_y = (point_y - cv_y) / sigma_y
+        bias = bias/kbT
+        arg = bias - 0.5*dist_x*dist_x - 0.5*dist_y*dist_y
+        arg = np.exp(arg)
+        #fes = -kbT*np.log(np.sum(np.exp(arg)))
+        #TODO: log proper then logaddexp?
+        denominator = np.sum(arg)
+        numerator = np.sum(prop*arg)
+        reweighted_prop = numerator / denominator
+
+        return reweighted_prop
+
+    else:
+        raise ValueError("reweight mode must be'direct'")
+
+def calc_property_surface(cv_x: npt.NDArray[np.float64],
+                          cv_y: npt.NDArray[np.float64],
+                          bias: npt.NDArray[np.float64],
+                          prop_data: npt.NDArray,
+                          sigma_x: float,
+                          sigma_y: float,
+                          kbT: float,
+                          grid_bin_x: int,
+                          grid_bin_y: int,
+                          mode: str='direct',
+                          ):
+    """
+    Calculates the property surface based on the given input parameters.
+
+    Parameters:
+    - cv_x (npt.NDArray[np.float64]): Array of x-values for the collective variable.
+    - cv_y (npt.NDArray[np.float64]): Array of y-values for the collective variable.
+    - bias (npt.NDArray[np.float64]): Array of bias values.
+    - prop_data (npt.NDArray): Array of property data.
+    - sigma_x (float): Standard deviation for the x-direction.
+    - sigma_y (float): Standard deviation for the y-direction.
+    - kbT (float): Boltzmann constant times temperature.
+    - grid_bin_x (int): Number of bins in the x-direction.
+    - grid_bin_y (int): Number of bins in the y-direction.
+    - mode (str, optional): Calculation mode. Defaults to 'direct'.
+
+    Returns:
+    - fes_x (npt.NDArray[np.float64]): Array of x-values for the free energy surface.
+    - fes_y (npt.NDArray[np.float64]): Array of y-values for the free energy surface.
+    - prop (np.ndarray): Array of calculated property values.
+
+    Raises:
+    - ValueError: If the shapes of cv and prop_data do not match.
+
+    """
+    if cv_x.shape != prop_data.shape and cv_y.shape != prop_data.shape:
+        raise ValueError(f"cv and prop_data must have the same shape, the shape of cv is {cv_x.shape} and the shape of prop_data is {prop_data.shape}")
+
+    fes_x, fes_y = make_grid(cv_x, cv_y, grid_bin_x, grid_bin_y)
+    prop = np.zeros((grid_bin_x, grid_bin_y))
+
+
+
+
+    for i in range(grid_bin_x):
+        print(f'   working...  {(i/grid_bin_x):.0%}', end='\r')
+        for j in range(grid_bin_y):
+            prop[i, j] = calc_one_property_point(cv_x, cv_y, bias, prop_data, fes_x[i, j], fes_y[i, j], sigma_x, sigma_y, kbT, mode=mode)
+    return fes_x, fes_y, prop

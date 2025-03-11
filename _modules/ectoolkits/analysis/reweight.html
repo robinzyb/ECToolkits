@@ -710,6 +710,77 @@ document.write(`
 
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;dim should be either 1 or 2&quot;</span><span class="p">)</span></div>
+
+
+<span class="c1">#TODO: just copy from my jupyter notebook, need to revise.</span>
+<div class="viewcode-block" id="calc_one_property_point"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.reweight.html#ectoolkits.analysis.reweight.calc_one_property_point">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">calc_one_property_point</span><span class="p">(</span><span class="n">cv_x</span><span class="p">,</span> <span class="n">cv_y</span><span class="p">,</span> <span class="n">bias</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">point_x</span><span class="p">,</span> <span class="n">point_y</span><span class="p">,</span> <span class="n">sigma_x</span><span class="p">,</span> <span class="n">sigma_y</span><span class="p">,</span> <span class="n">kbT</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;direct&#39;</span><span class="p">):</span>
+
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;direct&#39;</span><span class="p">:</span>
+        <span class="n">dist_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">point_x</span> <span class="o">-</span> <span class="n">cv_x</span><span class="p">)</span> <span class="o">/</span> <span class="n">sigma_x</span>
+        <span class="n">dist_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">point_y</span> <span class="o">-</span> <span class="n">cv_y</span><span class="p">)</span> <span class="o">/</span> <span class="n">sigma_y</span>
+        <span class="n">bias</span> <span class="o">=</span> <span class="n">bias</span><span class="o">/</span><span class="n">kbT</span>
+        <span class="n">arg</span> <span class="o">=</span> <span class="n">bias</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dist_x</span><span class="o">*</span><span class="n">dist_x</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dist_y</span><span class="o">*</span><span class="n">dist_y</span>
+        <span class="n">arg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+        <span class="c1">#fes = -kbT*np.log(np.sum(np.exp(arg)))</span>
+        <span class="c1">#TODO: log proper then logaddexp?</span>
+        <span class="n">denominator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+        <span class="n">numerator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">prop</span><span class="o">*</span><span class="n">arg</span><span class="p">)</span>
+        <span class="n">reweighted_prop</span> <span class="o">=</span> <span class="n">numerator</span> <span class="o">/</span> <span class="n">denominator</span>
+
+        <span class="k">return</span> <span class="n">reweighted_prop</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;reweight mode must be&#39;direct&#39;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="calc_property_surface"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.reweight.html#ectoolkits.analysis.reweight.calc_property_surface">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">calc_property_surface</span><span class="p">(</span><span class="n">cv_x</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+                          <span class="n">cv_y</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+                          <span class="n">bias</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
+                          <span class="n">prop_data</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">,</span>
+                          <span class="n">sigma_x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                          <span class="n">sigma_y</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                          <span class="n">kbT</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                          <span class="n">grid_bin_x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                          <span class="n">grid_bin_y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                          <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;direct&#39;</span><span class="p">,</span>
+                          <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the property surface based on the given input parameters.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    - cv_x (npt.NDArray[np.float64]): Array of x-values for the collective variable.</span>
+<span class="sd">    - cv_y (npt.NDArray[np.float64]): Array of y-values for the collective variable.</span>
+<span class="sd">    - bias (npt.NDArray[np.float64]): Array of bias values.</span>
+<span class="sd">    - prop_data (npt.NDArray): Array of property data.</span>
+<span class="sd">    - sigma_x (float): Standard deviation for the x-direction.</span>
+<span class="sd">    - sigma_y (float): Standard deviation for the y-direction.</span>
+<span class="sd">    - kbT (float): Boltzmann constant times temperature.</span>
+<span class="sd">    - grid_bin_x (int): Number of bins in the x-direction.</span>
+<span class="sd">    - grid_bin_y (int): Number of bins in the y-direction.</span>
+<span class="sd">    - mode (str, optional): Calculation mode. Defaults to &#39;direct&#39;.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    - fes_x (npt.NDArray[np.float64]): Array of x-values for the free energy surface.</span>
+<span class="sd">    - fes_y (npt.NDArray[np.float64]): Array of y-values for the free energy surface.</span>
+<span class="sd">    - prop (np.ndarray): Array of calculated property values.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">    - ValueError: If the shapes of cv and prop_data do not match.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">cv_x</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">prop_data</span><span class="o">.</span><span class="n">shape</span> <span class="ow">and</span> <span class="n">cv_y</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">prop_data</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cv and prop_data must have the same shape, the shape of cv is </span><span class="si">{</span><span class="n">cv_x</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> and the shape of prop_data is </span><span class="si">{</span><span class="n">prop_data</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">fes_x</span><span class="p">,</span> <span class="n">fes_y</span> <span class="o">=</span> <span class="n">make_grid</span><span class="p">(</span><span class="n">cv_x</span><span class="p">,</span> <span class="n">cv_y</span><span class="p">,</span> <span class="n">grid_bin_x</span><span class="p">,</span> <span class="n">grid_bin_y</span><span class="p">)</span>
+    <span class="n">prop</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">grid_bin_x</span><span class="p">,</span> <span class="n">grid_bin_y</span><span class="p">))</span>
+
+
+
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">grid_bin_x</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;   working...  </span><span class="si">{</span><span class="p">(</span><span class="n">i</span><span class="o">/</span><span class="n">grid_bin_x</span><span class="p">)</span><span class="si">:</span><span class="s1">.0%</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">grid_bin_y</span><span class="p">):</span>
+            <span class="n">prop</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc_one_property_point</span><span class="p">(</span><span class="n">cv_x</span><span class="p">,</span> <span class="n">cv_y</span><span class="p">,</span> <span class="n">bias</span><span class="p">,</span> <span class="n">prop_data</span><span class="p">,</span> <span class="n">fes_x</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">fes_y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">sigma_x</span><span class="p">,</span> <span class="n">sigma_y</span><span class="p">,</span> <span class="n">kbT</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fes_x</span><span class="p">,</span> <span class="n">fes_y</span><span class="p">,</span> <span class="n">prop</span></div>
 </pre></div>
 
                 </article>

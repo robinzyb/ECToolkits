@@ -163,13 +163,11 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/atom_density.html">Atom density analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/band_align.html">Band alignment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/disdeg.html">Dissociation degree analysis</a></li>
-
-
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/disdeg.html">Dissociation degree</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/acidity.html">Acidity calculation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/finite_size_correction.html">The finite size correction of interfaces</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/proton_transfer_cv.html">Calculate collective variables of proton transfer reactions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/reweight.html">Construct free energy surface through reweighting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/finite_size_correction.html">Finite size correction of interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/proton_transfer_cv.html">Collective variables of proton transfer reactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/reweight.html">Reweight for free energies and properties</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/analysis/redox.html">Redox potentials</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Plots</span></p>
@@ -378,8 +376,15 @@ document.write(`
   <h1>Source code for ectoolkits.analysis.reweight</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">string</span><span class="w"> </span><span class="kn">import</span> <span class="n">Template</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">npt</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_logger</span>
+
+<span class="c1"># adapted from FES_from_Reweighting.py that written by Michele Invernizzi</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <div class="viewcode-block" id="read_cv"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.reweight.html#ectoolkits.analysis.reweight.read_cv">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">read_cv</span><span class="p">(</span><span class="n">colvar_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
             <span class="n">usecols</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -406,7 +411,7 @@ document.write(`
                          <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
                          <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Compute the bandwidth using Silverman&#39;s rule of thumb.</span>
+<span class="sd">    Compute bandwidths using Silverman&#39;s rule of thumb.</span>
 
 <span class="sd">    Parameters:</span>
 <span class="sd">    cv_array (npt.NDArray): The input array for which the bandwidth is to be computed.</span>
@@ -435,7 +440,7 @@ document.write(`
     <span class="n">sigma_0</span> <span class="o">=</span> <span class="n">cv_array</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
     <span class="c1">#sigma_0 = sigma_0/</span>
     <span class="n">bw</span> <span class="o">=</span> <span class="n">sigma_0</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">bias_factor</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">((</span><span class="n">neff</span> <span class="o">*</span><span class="p">(</span><span class="n">dim</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mf">4.0</span><span class="p">),</span> <span class="o">-</span><span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="n">dim</span><span class="o">+</span><span class="mf">4.0</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;sigma_0 </span><span class="si">{</span><span class="n">sigma_0</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> nconf: </span><span class="si">{</span><span class="n">cv_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> neff: </span><span class="si">{</span><span class="n">neff</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> bw: </span><span class="si">{</span><span class="n">bw</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;sigma_0 </span><span class="si">{</span><span class="n">sigma_0</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> nconf: </span><span class="si">{</span><span class="n">cv_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> neff: </span><span class="si">{</span><span class="n">neff</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> bw: </span><span class="si">{</span><span class="n">bw</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">bw</span></div>
 
 <div class="viewcode-block" id="read_fes"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.reweight.html#ectoolkits.analysis.reweight.read_fes">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">read_fes</span><span class="p">(</span><span class="n">file_fes</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -618,7 +623,7 @@ document.write(`
 <span class="sd">SET num_grid_points_${name_cv_y} ${num_grid_points_y}&quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calculating 1D FES&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Calculating 1D FES&quot;</span><span class="p">)</span>
 
         <span class="n">fes_x</span> <span class="o">=</span> <span class="n">make_grid</span><span class="p">(</span><span class="n">grid_bin_cv_x</span><span class="o">=</span><span class="n">nbins_x</span><span class="p">,</span>
                           <span class="n">cv_x_min</span><span class="o">=</span><span class="n">min_cv_x</span><span class="p">,</span>
@@ -630,7 +635,7 @@ document.write(`
         <span class="n">fes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_grid_points_x</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_grid_points_x</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;   working...  </span><span class="si">{</span><span class="p">(</span><span class="n">i</span><span class="o">/</span><span class="n">num_grid_points_x</span><span class="p">)</span><span class="si">:</span><span class="s1">.0%</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;   working...  </span><span class="si">{</span><span class="p">(</span><span class="n">i</span><span class="o">/</span><span class="n">num_grid_points_x</span><span class="p">)</span><span class="si">:</span><span class="s1">.0%</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
             <span class="n">fes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc_one_FES_point</span><span class="p">(</span><span class="n">cv_x</span><span class="o">=</span><span class="n">cv_x</span><span class="p">,</span>
                                         <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">,</span>
                                         <span class="n">point_x</span><span class="o">=</span><span class="n">fes_x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
@@ -653,7 +658,7 @@ document.write(`
         <span class="k">return</span> <span class="n">fes</span>
 
     <span class="k">elif</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calculating 2D FES&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Calculating 2D FES&quot;</span><span class="p">)</span>
 
         <span class="n">name_cv_y</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name_cv_y&quot;</span><span class="p">,</span> <span class="s2">&quot;cv_y&quot;</span><span class="p">)</span>
         <span class="n">cv_y</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cv_y&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
@@ -677,7 +682,7 @@ document.write(`
         <span class="n">fes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_grid_points_x</span><span class="p">,</span> <span class="n">num_grid_points_y</span><span class="p">))</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_grid_points_x</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;   working...  </span><span class="si">{</span><span class="p">(</span><span class="n">i</span><span class="o">/</span><span class="n">num_grid_points_x</span><span class="p">)</span><span class="si">:</span><span class="s1">.0%</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;   working...  </span><span class="si">{</span><span class="p">(</span><span class="n">i</span><span class="o">/</span><span class="n">num_grid_points_x</span><span class="p">)</span><span class="si">:</span><span class="s1">.0%</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_grid_points_y</span><span class="p">):</span>
                 <span class="n">fes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc_one_FES_point</span><span class="p">(</span><span class="n">cv_x</span><span class="o">=</span><span class="n">cv_x</span><span class="p">,</span>
                                                <span class="n">cv_y</span><span class="o">=</span><span class="n">cv_y</span><span class="p">,</span>
@@ -712,75 +717,180 @@ document.write(`
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;dim should be either 1 or 2&quot;</span><span class="p">)</span></div>
 
 
-<span class="c1">#TODO: just copy from my jupyter notebook, need to revise.</span>
-<div class="viewcode-block" id="calc_one_property_point"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.reweight.html#ectoolkits.analysis.reweight.calc_one_property_point">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">calc_one_property_point</span><span class="p">(</span><span class="n">cv_x</span><span class="p">,</span> <span class="n">cv_y</span><span class="p">,</span> <span class="n">bias</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">point_x</span><span class="p">,</span> <span class="n">point_y</span><span class="p">,</span> <span class="n">sigma_x</span><span class="p">,</span> <span class="n">sigma_y</span><span class="p">,</span> <span class="n">kbT</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;direct&#39;</span><span class="p">):</span>
+<span class="c1">#TODO: add pytest for this function</span>
+<div class="viewcode-block" id="calc_one_property_point"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.reweight.html#ectoolkits.analysis.reweight.calc_one_property_point">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">calc_one_property_point</span><span class="p">(</span><span class="n">cv_x</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">,</span>
+                            <span class="n">bias</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">,</span>
+                            <span class="n">point_x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                            <span class="n">bandwidth_x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                            <span class="n">kbT</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                            <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                            <span class="n">prop</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">,</span>
+                            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+                            <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 
-    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;direct&#39;</span><span class="p">:</span>
-        <span class="n">dist_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">point_x</span> <span class="o">-</span> <span class="n">cv_x</span><span class="p">)</span> <span class="o">/</span> <span class="n">sigma_x</span>
-        <span class="n">dist_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">point_y</span> <span class="o">-</span> <span class="n">cv_y</span><span class="p">)</span> <span class="o">/</span> <span class="n">sigma_y</span>
-        <span class="n">bias</span> <span class="o">=</span> <span class="n">bias</span><span class="o">/</span><span class="n">kbT</span>
+
+    <span class="n">cv_y</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cv_y&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">point_y</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;point_y&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">bandwidth_y</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bandwidth_y&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">bias</span> <span class="o">=</span> <span class="n">bias</span><span class="o">/</span><span class="n">kbT</span>
+
+    <span class="n">dist_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">point_x</span> <span class="o">-</span> <span class="n">cv_x</span><span class="p">)</span> <span class="o">/</span> <span class="n">bandwidth_x</span>
+    <span class="k">if</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">arg</span> <span class="o">=</span> <span class="n">bias</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dist_x</span><span class="o">*</span><span class="n">dist_x</span>
+    <span class="k">elif</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">dist_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">point_y</span> <span class="o">-</span> <span class="n">cv_y</span><span class="p">)</span> <span class="o">/</span> <span class="n">bandwidth_y</span>
         <span class="n">arg</span> <span class="o">=</span> <span class="n">bias</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dist_x</span><span class="o">*</span><span class="n">dist_x</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dist_y</span><span class="o">*</span><span class="n">dist_y</span>
-        <span class="n">arg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
-        <span class="c1">#fes = -kbT*np.log(np.sum(np.exp(arg)))</span>
-        <span class="c1">#TODO: log proper then logaddexp?</span>
-        <span class="n">denominator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
-        <span class="n">numerator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">prop</span><span class="o">*</span><span class="n">arg</span><span class="p">)</span>
-        <span class="n">reweighted_prop</span> <span class="o">=</span> <span class="n">numerator</span> <span class="o">/</span> <span class="n">denominator</span>
 
-        <span class="k">return</span> <span class="n">reweighted_prop</span>
+    <span class="n">arg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+    <span class="c1">#fes = -kbT*np.log(np.sum(np.exp(arg)))</span>
+    <span class="c1">#TODO: log proper then logaddexp?</span>
+    <span class="n">denominator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+    <span class="n">numerator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">prop</span><span class="o">*</span><span class="n">arg</span><span class="p">)</span>
+    <span class="n">reweighted_prop</span> <span class="o">=</span> <span class="n">numerator</span> <span class="o">/</span> <span class="n">denominator</span>
 
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;reweight mode must be&#39;direct&#39;&quot;</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">reweighted_prop</span></div>
 
-<div class="viewcode-block" id="calc_property_surface"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.reweight.html#ectoolkits.analysis.reweight.calc_property_surface">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">calc_property_surface</span><span class="p">(</span><span class="n">cv_x</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
-                          <span class="n">cv_y</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
-                          <span class="n">bias</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">],</span>
-                          <span class="n">prop_data</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">,</span>
-                          <span class="n">sigma_x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-                          <span class="n">sigma_y</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+
+
+<div class="viewcode-block" id="calc_property_surface"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.reweight.html#ectoolkits.analysis.reweight.calc_property_surface">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">calc_property_surface</span><span class="p">(</span><span class="n">cv_x</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">,</span>
+                          <span class="n">bias</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">,</span>
+                          <span class="n">prop</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">,</span>
+                          <span class="n">bandwidth_x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                           <span class="n">kbT</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-                          <span class="n">grid_bin_x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-                          <span class="n">grid_bin_y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-                          <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;direct&#39;</span><span class="p">,</span>
+                          <span class="n">nbins_x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                          <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+                          <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
                           <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the property surface based on the given input parameters.</span>
 
 <span class="sd">    Parameters:</span>
-<span class="sd">    - cv_x (npt.NDArray[np.float64]): Array of x-values for the collective variable.</span>
-<span class="sd">    - cv_y (npt.NDArray[np.float64]): Array of y-values for the collective variable.</span>
-<span class="sd">    - bias (npt.NDArray[np.float64]): Array of bias values.</span>
-<span class="sd">    - prop_data (npt.NDArray): Array of property data.</span>
-<span class="sd">    - sigma_x (float): Standard deviation for the x-direction.</span>
-<span class="sd">    - sigma_y (float): Standard deviation for the y-direction.</span>
-<span class="sd">    - kbT (float): Boltzmann constant times temperature.</span>
-<span class="sd">    - grid_bin_x (int): Number of bins in the x-direction.</span>
-<span class="sd">    - grid_bin_y (int): Number of bins in the y-direction.</span>
-<span class="sd">    - mode (str, optional): Calculation mode. Defaults to &#39;direct&#39;.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">    - fes_x (npt.NDArray[np.float64]): Array of x-values for the free energy surface.</span>
-<span class="sd">    - fes_y (npt.NDArray[np.float64]): Array of y-values for the free energy surface.</span>
-<span class="sd">    - prop (np.ndarray): Array of calculated property values.</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">    - ValueError: If the shapes of cv and prop_data do not match.</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">cv_x</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">prop_data</span><span class="o">.</span><span class="n">shape</span> <span class="ow">and</span> <span class="n">cv_y</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">prop_data</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cv and prop_data must have the same shape, the shape of cv is </span><span class="si">{</span><span class="n">cv_x</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> and the shape of prop_data is </span><span class="si">{</span><span class="n">prop_data</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">save_file</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;save_file&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">name_file</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name_file&quot;</span><span class="p">,</span> <span class="s2">&quot;prop_surface.dat&quot;</span><span class="p">)</span>
 
-    <span class="n">fes_x</span><span class="p">,</span> <span class="n">fes_y</span> <span class="o">=</span> <span class="n">make_grid</span><span class="p">(</span><span class="n">cv_x</span><span class="p">,</span> <span class="n">cv_y</span><span class="p">,</span> <span class="n">grid_bin_x</span><span class="p">,</span> <span class="n">grid_bin_y</span><span class="p">)</span>
-    <span class="n">prop</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">grid_bin_x</span><span class="p">,</span> <span class="n">grid_bin_y</span><span class="p">))</span>
+    <span class="n">name_cv_x</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name_cv_x&quot;</span><span class="p">,</span> <span class="s2">&quot;cv_x&quot;</span><span class="p">)</span>
+
+    <span class="n">min_cv_x</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;min_cv_x&quot;</span><span class="p">,</span> <span class="n">cv_x</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+    <span class="n">max_cv_x</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_cv_x&quot;</span><span class="p">,</span> <span class="n">cv_x</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+
+    <span class="c1"># the syntax is ugly.. any better way to do this?</span>
+    <span class="n">template_header_1d</span> <span class="o">=</span> \
+<span class="sd">&quot;&quot;&quot;Free energy surface generated by ECToolkits</span>
+<span class="sd">FIELDS ${name_cv_x} () Property ()</span>
+<span class="sd">SET min_${name_cv_x} ${min_cv_x}</span>
+<span class="sd">SET max_${name_cv_x} ${max_cv_x}</span>
+<span class="sd">SET num_grid_points_${name_cv_x} ${num_grid_points_x}&quot;&quot;&quot;</span>
+
+    <span class="n">template_header_2d</span> <span class="o">=</span> \
+<span class="sd">&quot;&quot;&quot;Free energy surface generated by ECToolkits</span>
+<span class="sd">FIELDS ${name_cv_x} () ${name_cv_y} () Property ()</span>
+<span class="sd">SET min_${name_cv_x} ${min_cv_x}</span>
+<span class="sd">SET max_${name_cv_x} ${max_cv_x}</span>
+<span class="sd">SET num_grid_points_${name_cv_x} ${num_grid_points_x}</span>
+<span class="sd">SET min_${name_cv_y} ${min_cv_y}</span>
+<span class="sd">SET max_${name_cv_y} ${max_cv_y}</span>
+<span class="sd">SET num_grid_points_${name_cv_y} ${num_grid_points_y}&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Calculating 1D property surface&quot;</span><span class="p">)</span>
+
+        <span class="n">fes_x</span> <span class="o">=</span> <span class="n">make_grid</span><span class="p">(</span><span class="n">grid_bin_cv_x</span><span class="o">=</span><span class="n">nbins_x</span><span class="p">,</span>
+                          <span class="n">cv_x_min</span><span class="o">=</span><span class="n">min_cv_x</span><span class="p">,</span>
+                          <span class="n">cv_x_max</span><span class="o">=</span><span class="n">max_cv_x</span><span class="p">,</span>
+                          <span class="n">dim</span><span class="o">=</span><span class="n">dim</span>
+                          <span class="p">)</span>
+        <span class="n">num_grid_points_x</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fes_x</span><span class="p">)</span>
+        <span class="n">prop_surface</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_grid_points_x</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_grid_points_x</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;   working...  </span><span class="si">{</span><span class="p">(</span><span class="n">i</span><span class="o">/</span><span class="n">num_grid_points_x</span><span class="p">)</span><span class="si">:</span><span class="s1">.0%</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">prop_surface</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc_one_property_point</span><span class="p">(</span><span class="n">cv_x</span><span class="o">=</span><span class="n">cv_x</span><span class="p">,</span>
+                                                      <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">,</span>
+                                                      <span class="n">point_x</span><span class="o">=</span><span class="n">fes_x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                                      <span class="n">bandwidth_x</span><span class="o">=</span><span class="n">bandwidth_x</span><span class="p">,</span>
+                                                      <span class="n">kbT</span><span class="o">=</span><span class="n">kbT</span><span class="p">,</span>
+                                                      <span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">,</span>
+                                                      <span class="n">prop</span><span class="o">=</span><span class="n">prop</span><span class="p">,</span>
+                                                      <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">save_file</span><span class="p">:</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">template_header_1d</span><span class="p">)</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">name_cv_x</span><span class="o">=</span><span class="n">name_cv_x</span><span class="p">,</span>
+                                                             <span class="n">min_cv_x</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">min_cv_x</span><span class="si">:</span><span class="s2">10.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                                             <span class="n">max_cv_x</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">max_cv_x</span><span class="si">:</span><span class="s2">10.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                                             <span class="n">num_grid_points_x</span><span class="o">=</span><span class="n">num_grid_points_x</span><span class="p">,</span>
+                                                             <span class="p">)</span>
+
+            <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">name_file</span><span class="p">,</span>
+                       <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">fes_x</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">prop_surface</span><span class="o">.</span><span class="n">flatten</span><span class="p">()])</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+                       <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.6f</span><span class="s2">&quot;</span><span class="p">,</span>
+                       <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span>
+                       <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">prop_surface</span>
+
+    <span class="k">elif</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Calculating 2D property surface&quot;</span><span class="p">)</span>
+
+        <span class="n">name_cv_y</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name_cv_y&quot;</span><span class="p">,</span> <span class="s2">&quot;cv_y&quot;</span><span class="p">)</span>
+        <span class="n">cv_y</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cv_y&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">bandwidth_y</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bandwidth_y&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">nbins_y</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;nbins_y&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">min_cv_y</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;min_cv_y&quot;</span><span class="p">,</span> <span class="n">cv_y</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+        <span class="n">max_cv_y</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_cv_y&quot;</span><span class="p">,</span> <span class="n">cv_y</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+
+        <span class="n">fes_x</span><span class="p">,</span> <span class="n">fes_y</span> <span class="o">=</span> <span class="n">make_grid</span><span class="p">(</span><span class="n">grid_bin_cv_x</span><span class="o">=</span><span class="n">nbins_x</span><span class="p">,</span>
+                                <span class="n">grid_bin_cv_y</span><span class="o">=</span><span class="n">nbins_y</span><span class="p">,</span>
+                                <span class="n">cv_x_min</span><span class="o">=</span><span class="n">min_cv_x</span><span class="p">,</span>
+                                <span class="n">cv_x_max</span><span class="o">=</span><span class="n">max_cv_x</span><span class="p">,</span>
+                                <span class="n">cv_y_min</span><span class="o">=</span><span class="n">min_cv_y</span><span class="p">,</span>
+                                <span class="n">cv_y_max</span><span class="o">=</span><span class="n">max_cv_y</span><span class="p">,</span>
+                                <span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">,</span>
+                                <span class="p">)</span>
+
+        <span class="c1"># Note the num_grid_points_x and num_grid_points_y are nbins_x+1 and nbins_y+1</span>
+        <span class="n">num_grid_points_x</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fes_x</span><span class="p">)</span>
+        <span class="n">num_grid_points_y</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fes_y</span><span class="p">)</span>
+
+        <span class="n">prop_surface</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_grid_points_x</span><span class="p">,</span> <span class="n">num_grid_points_y</span><span class="p">))</span>
 
 
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_grid_points_x</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;   working...  </span><span class="si">{</span><span class="p">(</span><span class="n">i</span><span class="o">/</span><span class="n">num_grid_points_x</span><span class="p">)</span><span class="si">:</span><span class="s1">.0%</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_grid_points_y</span><span class="p">):</span>
+                <span class="n">prop_surface</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc_one_property_point</span><span class="p">(</span><span class="n">cv_x</span><span class="o">=</span><span class="n">cv_x</span><span class="p">,</span>
+                                                             <span class="n">cv_y</span><span class="o">=</span><span class="n">cv_y</span><span class="p">,</span>
+                                                             <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">,</span>
+                                                             <span class="n">point_x</span><span class="o">=</span><span class="n">fes_x</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span>
+                                                             <span class="n">point_y</span><span class="o">=</span><span class="n">fes_y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span>
+                                                             <span class="n">bandwidth_x</span><span class="o">=</span><span class="n">bandwidth_x</span><span class="p">,</span>
+                                                             <span class="n">bandwidth_y</span><span class="o">=</span><span class="n">bandwidth_y</span><span class="p">,</span>
+                                                             <span class="n">kbT</span><span class="o">=</span><span class="n">kbT</span><span class="p">,</span>
+                                                             <span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">,</span>
+                                                             <span class="n">prop</span><span class="o">=</span><span class="n">prop</span><span class="p">,</span>
+                                                             <span class="p">)</span>
 
+        <span class="k">if</span> <span class="n">save_file</span><span class="p">:</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">template_header_2d</span><span class="p">)</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">name_cv_x</span><span class="o">=</span><span class="n">name_cv_x</span><span class="p">,</span>
+                                                             <span class="n">name_cv_y</span><span class="o">=</span><span class="n">name_cv_y</span><span class="p">,</span>
+                                                             <span class="n">min_cv_x</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">min_cv_x</span><span class="si">:</span><span class="s2">10.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                                             <span class="n">max_cv_x</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">max_cv_x</span><span class="si">:</span><span class="s2">10.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                                             <span class="n">num_grid_points_x</span><span class="o">=</span><span class="n">num_grid_points_x</span><span class="p">,</span>
+                                                             <span class="n">min_cv_y</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">min_cv_y</span><span class="si">:</span><span class="s2">10.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                                             <span class="n">max_cv_y</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">max_cv_y</span><span class="si">:</span><span class="s2">10.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                                             <span class="n">num_grid_points_y</span><span class="o">=</span><span class="n">num_grid_points_y</span><span class="p">,</span>
+                                                             <span class="p">)</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">name_file</span><span class="p">,</span>
+                       <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">fes_x</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">fes_y</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">prop_surface</span><span class="o">.</span><span class="n">flatten</span><span class="p">()])</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+                       <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.6f</span><span class="s2">&quot;</span><span class="p">,</span>
+                       <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span>
+                       <span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">grid_bin_x</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;   working...  </span><span class="si">{</span><span class="p">(</span><span class="n">i</span><span class="o">/</span><span class="n">grid_bin_x</span><span class="p">)</span><span class="si">:</span><span class="s1">.0%</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">grid_bin_y</span><span class="p">):</span>
-            <span class="n">prop</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc_one_property_point</span><span class="p">(</span><span class="n">cv_x</span><span class="p">,</span> <span class="n">cv_y</span><span class="p">,</span> <span class="n">bias</span><span class="p">,</span> <span class="n">prop_data</span><span class="p">,</span> <span class="n">fes_x</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">fes_y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">sigma_x</span><span class="p">,</span> <span class="n">sigma_y</span><span class="p">,</span> <span class="n">kbT</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">fes_x</span><span class="p">,</span> <span class="n">fes_y</span><span class="p">,</span> <span class="n">prop</span></div>
+        <span class="k">return</span> <span class="n">prop_surface</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;dim should be either 1 or 2&quot;</span><span class="p">)</span></div>
 </pre></div>
 
                 </article>

@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Dissociation degree analysis &#8212; ECToolkits Reference</title>
+    <title>Dissociation degree &#8212; ECToolkits Reference</title>
   
   
   
@@ -166,13 +166,11 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="atom_density.html">Atom density analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="band_align.html">Band alignment</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Dissociation degree analysis</a></li>
-
-
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Dissociation degree</a></li>
 <li class="toctree-l1"><a class="reference internal" href="acidity.html">Acidity calculation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="finite_size_correction.html">The finite size correction of interfaces</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proton_transfer_cv.html">Calculate collective variables of proton transfer reactions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reweight.html">Construct free energy surface through reweighting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="finite_size_correction.html">Finite size correction of interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proton_transfer_cv.html">Collective variables of proton transfer reactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reweight.html">Reweight for free energies and properties</a></li>
 <li class="toctree-l1"><a class="reference internal" href="redox.html">Redox potentials</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Plots</span></p>
@@ -414,7 +412,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Dissociation degree analysis</h1>
+    <h1>Dissociation degree</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -424,22 +422,19 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Dissociation degree analysis</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-cnstate-class">The CNState Class</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis">Analysis</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-cnstates">Plot CNStates</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-cnstates">Save CNStates</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#restore-the-analysis">Restore the Analysis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-cnstate-class">The CNState Class</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-cnstates">Plot CNStates</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#save-cnstates">Save CNStates</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#restore-the-analysis">Restore the Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-disdeg-class">The DisDeg Class</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis">Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-disdeg">Plot DisDeg</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#save-disdeg">Save DisDeg</a></li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-disdeg-class">The DisDeg Class</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Analysis</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-disdeg">Plot DisDeg</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-disdeg">Save DisDeg</a></li>
 </ul>
-</li>
-</ul>
-
             </nav>
         </div>
     </div>
@@ -450,14 +445,16 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="dissociation-degree-analysis">
-<h1>Dissociation degree analysis<a class="headerlink" href="#dissociation-degree-analysis" title="Permalink to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="dissociation-degree">
+<h1>Dissociation degree<a class="headerlink" href="#dissociation-degree" title="Permalink to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
 <p>Dissociation degree affects the interfacial dipoles, hence, the band alignments of semiconductor-electrolyte interfaces. To calculate the dissociation degree for a given trajectory, we implemented the classes <code class="docutils literal notranslate"><span class="pre">CNState</span></code> and <code class="docutils literal notranslate"><span class="pre">DisDeg</span></code>, which are briefly introduced below.</p>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="the-cnstate-class">
-<h1>The CNState Class<a class="headerlink" href="#the-cnstate-class" title="Permalink to this heading">#</a></h1>
-<section id="analysis">
-<h2>Analysis<a class="headerlink" href="#analysis" title="Permalink to this heading">#</a></h2>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
+<section id="the-cnstate-class">
+<h3>The CNState Class<a class="headerlink" href="#the-cnstate-class" title="Permalink to this heading">#</a></h3>
 <p>The necessity of dissociation degree is the coordination number of atoms. For example, the dissociation degree of interfacial water molecules is the ratio of the number of adsorbed water molecules to the dissociated water molecules(usually the adsorbed OH groups). Therefore, one needs to count the coordination number of the adsorbed oxygen atoms for identifying the OH groups, then calculates the dissociation degrees. To this end, the <code class="docutils literal notranslate"><span class="pre">CNState</span></code> class calculates the coordination number of a list of atoms for a given trajectory.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># First, read a trajectory using Universe. Do not forget add dimensions.</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span><span class="w"> </span><span class="nn">MDAnalysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">Universe</span>
@@ -486,24 +483,24 @@ document.write(`
 <p>The result is an array with shape of (num_frames, num_center_atom_idx). Each row of the array is the coordination numbers of center_atoms with respect to Hydrogen atoms. If one would like to calculate coordination numbers with respect to other elements, such as, “C”, “N”, one can set <code class="docutils literal notranslate"><span class="pre">coordinated_elements</span></code> as <code class="docutils literal notranslate"><span class="pre">[&quot;C&quot;,</span> <span class="pre">&quot;N&quot;]</span></code> etc.</p>
 </section>
 <section id="plot-cnstates">
-<h2>Plot CNStates<a class="headerlink" href="#plot-cnstates" title="Permalink to this heading">#</a></h2>
+<h3>Plot CNStates<a class="headerlink" href="#plot-cnstates" title="Permalink to this heading">#</a></h3>
 <p>After finishing the analysis, the method <code class="docutils literal notranslate"><span class="pre">cnstate.plot(cn_list=[0,</span> <span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">3])</span></code> could quickly plot the percentages of all coordination number states.</p>
 </section>
 <section id="save-cnstates">
-<h2>Save CNStates<a class="headerlink" href="#save-cnstates" title="Permalink to this heading">#</a></h2>
+<h3>Save CNStates<a class="headerlink" href="#save-cnstates" title="Permalink to this heading">#</a></h3>
 <p>The results are saved to npy files using the method <code class="docutils literal notranslate"><span class="pre">cnstate.save_cnstate(filename='cn.npy')</span></code></p>
 </section>
 <section id="restore-the-analysis">
-<h2>Restore the Analysis<a class="headerlink" href="#restore-the-analysis" title="Permalink to this heading">#</a></h2>
+<h3>Restore the Analysis<a class="headerlink" href="#restore-the-analysis" title="Permalink to this heading">#</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">CNState</span></code> Class could also be restored from the <code class="docutils literal notranslate"><span class="pre">cn.npy</span></code> file using the method <code class="docutils literal notranslate"><span class="pre">CNState.read_cnstate_from(npyfile='cn.npy')</span></code></p>
 </section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="the-disdeg-class">
-<h1>The DisDeg Class<a class="headerlink" href="#the-disdeg-class" title="Permalink to this heading">#</a></h1>
+<section id="the-disdeg-class">
+<h3>The DisDeg Class<a class="headerlink" href="#the-disdeg-class" title="Permalink to this heading">#</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">DisDeg</span></code> class adds extra features to calculate dissociation degree, such as, <code class="docutils literal notranslate"><span class="pre">get_disdeg</span></code>,<code class="docutils literal notranslate"><span class="pre">save_disdeg</span></code>, and <code class="docutils literal notranslate"><span class="pre">plot_disdeg</span></code>.
 The <code class="docutils literal notranslate"><span class="pre">DisDeg</span></code> is inherited from the <code class="docutils literal notranslate"><span class="pre">CNState</span></code> class, which means that the initialization is the same as <code class="docutils literal notranslate"><span class="pre">CNState</span></code>.</p>
-<section id="id1">
-<h2>Analysis<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="analysis">
+<h3>Analysis<a class="headerlink" href="#analysis" title="Permalink to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># First, read a trajectory using Universe. Do not forget add dimensions.</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span><span class="w"> </span><span class="nn">MDAnalysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">Universe</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">xyzfile</span> <span class="o">=</span> <span class="s2">&quot;./tio2-water.xyz&quot;</span>
@@ -529,12 +526,13 @@ The <code class="docutils literal notranslate"><span class="pre">DisDeg</span></
 </div>
 </section>
 <section id="plot-disdeg">
-<h2>Plot DisDeg<a class="headerlink" href="#plot-disdeg" title="Permalink to this heading">#</a></h2>
+<h3>Plot DisDeg<a class="headerlink" href="#plot-disdeg" title="Permalink to this heading">#</a></h3>
 <p>After finishing the analysis, the method <code class="docutils literal notranslate"><span class="pre">disdeg.plot_disdeg()</span></code> could quickly plot the percentages of non-dissociated and dissociated degree.</p>
 </section>
 <section id="save-disdeg">
-<h2>Save DisDeg<a class="headerlink" href="#save-disdeg" title="Permalink to this heading">#</a></h2>
+<h3>Save DisDeg<a class="headerlink" href="#save-disdeg" title="Permalink to this heading">#</a></h3>
 <p>The results are saved to npy files using the method <code class="docutils literal notranslate"><span class="pre">disdeg.save_disdeg(filename='disdeg.npy')</span></code></p>
+</section>
 </section>
 </section>
 
@@ -601,22 +599,19 @@ The <code class="docutils literal notranslate"><span class="pre">DisDeg</span></
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Dissociation degree analysis</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-cnstate-class">The CNState Class</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis">Analysis</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-cnstates">Plot CNStates</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-cnstates">Save CNStates</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#restore-the-analysis">Restore the Analysis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-cnstate-class">The CNState Class</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-cnstates">Plot CNStates</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#save-cnstates">Save CNStates</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#restore-the-analysis">Restore the Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-disdeg-class">The DisDeg Class</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis">Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-disdeg">Plot DisDeg</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#save-disdeg">Save DisDeg</a></li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-disdeg-class">The DisDeg Class</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Analysis</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-disdeg">Plot DisDeg</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-disdeg">Save DisDeg</a></li>
 </ul>
-</li>
-</ul>
-
   </nav></div>
 
 </div></div>

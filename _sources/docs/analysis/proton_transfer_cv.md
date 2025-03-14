@@ -1,4 +1,4 @@
-# Calculate collective variables of proton transfer reactions
+# Collective variables of proton transfer reactions
 
 ## Introduction
 

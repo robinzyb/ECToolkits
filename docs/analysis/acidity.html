@@ -67,8 +67,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'docs/analysis/acidity';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="The finite size correction of interfaces" href="finite_size_correction.html" />
-    <link rel="prev" title="Dissociation degree analysis" href="disdeg.html" />
+    <link rel="next" title="Finite size correction of interfaces" href="finite_size_correction.html" />
+    <link rel="prev" title="Dissociation degree" href="disdeg.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -168,13 +168,11 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="atom_density.html">Atom density analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="band_align.html">Band alignment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="disdeg.html">Dissociation degree analysis</a></li>
-
-
+<li class="toctree-l1"><a class="reference internal" href="disdeg.html">Dissociation degree</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Acidity calculation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="finite_size_correction.html">The finite size correction of interfaces</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proton_transfer_cv.html">Calculate collective variables of proton transfer reactions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reweight.html">Construct free energy surface through reweighting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="finite_size_correction.html">Finite size correction of interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proton_transfer_cv.html">Collective variables of proton transfer reactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reweight.html">Reweight for free energies and properties</a></li>
 <li class="toctree-l1"><a class="reference internal" href="redox.html">Redox potentials</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Plots</span></p>
@@ -426,8 +424,12 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-dummy-insertion-free-energy">Calculate Dummy Insertion Free Energy</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-quantum-correction-free-energy">Calculate Quantum Correction Free Energy</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-dummy-insertion-free-energy">Calculate Dummy Insertion Free Energy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-quantum-correction-free-energy">Calculate Quantum Correction Free Energy</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -441,6 +443,8 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="acidity-calculation">
 <h1>Acidity calculation<a class="headerlink" href="#acidity-calculation" title="Permalink to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
 <p>(This page is still under construction)
 We refer to paper for detailed description.<span id="id1">[<a class="reference internal" href="../references.html#id3" title="Jun Cheng, Marialore Sulpizi, and Michiel Sprik. Redox potentials and pKa for benzoquinone from density functional theory based molecular dynamics. The Journal of Chemical Physics, 131(15):154504, 2009. doi:10.1063/1.3250438.">Cheng <em>et al.</em>, 2009</a>, <a class="reference internal" href="../references.html#id2" title="Martina Mangold, Leslie Rolland, Francesca Costanzo, Michiel Sprik, Marialore Sulpizi, and Jochen Blumberger. Absolute pK a Values and Solvation Structure of Amino Acids from Density Functional Based Molecular Dynamics Simulation. Journal of Chemical Theory and Computation, 7(6):1951–1961, 2011. doi:10.1021/ct100715x.">Mangold <em>et al.</em>, 2011</a>]</span></p>
 <p>The pKa of a species <span class="math notranslate nohighlight">\(\ce{AH}\)</span> in aqueous solution is defined as</p>
@@ -451,8 +455,11 @@ We refer to paper for detailed description.<span id="id1">[<a class="reference i
 <p>The full expression for <span class="math notranslate nohighlight">\(\mathrm{p}K_a\)</span> is</p>
 <div class="math notranslate nohighlight">
 \[2.3 k_{\mathrm{B}} T\mathrm{p}K_a =   (\Delta_{\mathrm{dp}} A_{\ce{AH}} - \Delta_{\mathrm{dp}}  A_{\ce{H3O+}} - \Delta A_{\ce{Ad}} + \Delta A_{\ce{H2Od}} - \Delta A_{\mathrm{qc}} (\ce{AH}) + \Delta A_{\mathrm{qc}}(\ce{H3O+}) +  \Delta A_{\ce{H3O+}})\]</div>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
 <section id="calculate-dummy-insertion-free-energy">
-<h2>Calculate Dummy Insertion Free Energy<a class="headerlink" href="#calculate-dummy-insertion-free-energy" title="Permalink to this heading">#</a></h2>
+<h3>Calculate Dummy Insertion Free Energy<a class="headerlink" href="#calculate-dummy-insertion-free-energy" title="Permalink to this heading">#</a></h3>
 <p><span class="math notranslate nohighlight">\(\Delta A_{\ce{Ad}}\)</span> is dummy inerstion free energy corresponding to</p>
 <div class="math notranslate nohighlight">
 \[\ce{A^-(aq) + H+(g)-&gt;Ad^-(aq) }\]</div>
@@ -480,7 +487,7 @@ We refer to paper for detailed description.<span id="id1">[<a class="reference i
 <p>You will obtain <code class="docutils literal notranslate"><span class="pre">0.334</span></code> eV as the result, which is actually a constant.</p>
 </section>
 <section id="calculate-quantum-correction-free-energy">
-<h2>Calculate Quantum Correction Free Energy<a class="headerlink" href="#calculate-quantum-correction-free-energy" title="Permalink to this heading">#</a></h2>
+<h3>Calculate Quantum Correction Free Energy<a class="headerlink" href="#calculate-quantum-correction-free-energy" title="Permalink to this heading">#</a></h3>
 <p><span class="math notranslate nohighlight">\(\Delta A_{\mathrm{qc}} (\ce{AH})\)</span> is Nuclear Quantum Effects which are expected to be significant for proton. To calculate it, one need calculate vibrational frequencies for a gas phase molecule <span class="math notranslate nohighlight">\(\ce{AH}\)</span>. The units of frequencies must be <span class="math notranslate nohighlight">\(cm^{-1}\)</span></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.analysis.acidity</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_quantum_correction</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
@@ -501,6 +508,7 @@ We refer to paper for detailed description.<span id="id1">[<a class="reference i
 </pre></div>
 </div>
 <p>You will obtain <code class="docutils literal notranslate"><span class="pre">0.192</span></code> eV as the result, which is actually a constant.</p>
+</section>
 </section>
 </section>
 
@@ -540,7 +548,7 @@ We refer to paper for detailed description.<span id="id1">[<a class="reference i
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Dissociation degree analysis</p>
+        <p class="prev-next-title">Dissociation degree</p>
       </div>
     </a>
     <a class="right-next"
@@ -548,7 +556,7 @@ We refer to paper for detailed description.<span id="id1">[<a class="reference i
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">The finite size correction of interfaces</p>
+        <p class="prev-next-title">Finite size correction of interfaces</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -567,8 +575,12 @@ We refer to paper for detailed description.<span id="id1">[<a class="reference i
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-dummy-insertion-free-energy">Calculate Dummy Insertion Free Energy</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-quantum-correction-free-energy">Calculate Quantum Correction Free Energy</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-dummy-insertion-free-energy">Calculate Dummy Insertion Free Energy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-quantum-correction-free-energy">Calculate Quantum Correction Free Energy</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 

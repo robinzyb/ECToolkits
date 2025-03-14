@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Construct free energy surface through reweighting &#8212; ECToolkits Reference</title>
+    <title>Reweight for free energies and properties &#8212; ECToolkits Reference</title>
   
   
   
@@ -66,7 +66,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Redox potentials" href="redox.html" />
-    <link rel="prev" title="Calculate collective variables of proton transfer reactions" href="proton_transfer_cv.html" />
+    <link rel="prev" title="Collective variables of proton transfer reactions" href="proton_transfer_cv.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -166,13 +166,11 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="atom_density.html">Atom density analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="band_align.html">Band alignment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="disdeg.html">Dissociation degree analysis</a></li>
-
-
+<li class="toctree-l1"><a class="reference internal" href="disdeg.html">Dissociation degree</a></li>
 <li class="toctree-l1"><a class="reference internal" href="acidity.html">Acidity calculation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="finite_size_correction.html">The finite size correction of interfaces</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proton_transfer_cv.html">Calculate collective variables of proton transfer reactions</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Construct free energy surface through reweighting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="finite_size_correction.html">Finite size correction of interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proton_transfer_cv.html">Collective variables of proton transfer reactions</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Reweight for free energies and properties</a></li>
 <li class="toctree-l1"><a class="reference internal" href="redox.html">Redox potentials</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Plots</span></p>
@@ -414,7 +412,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Construct free energy surface through reweighting</h1>
+    <h1>Reweight for free energies and properties</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -425,7 +423,11 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reweight-to-a-new-collective-varaible-space">Reweight to a new collective-varaible space</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reweight-to-a-new-property">Reweight to a new property</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -437,14 +439,16 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="construct-free-energy-surface-through-reweighting">
-<h1>Construct free energy surface through reweighting<a class="headerlink" href="#construct-free-energy-surface-through-reweighting" title="Permalink to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="reweight-for-free-energies-and-properties">
+<h1>Reweight for free energies and properties<a class="headerlink" href="#reweight-for-free-energies-and-properties" title="Permalink to this heading">#</a></h1>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
 <p>TBC</p>
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
+<section id="reweight-to-a-new-collective-varaible-space">
+<h3>Reweight to a new collective-varaible space<a class="headerlink" href="#reweight-to-a-new-collective-varaible-space" title="Permalink to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.analysis.reweight</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_FES</span><span class="p">,</span> <span class="n">compute_bw_silverman</span>
 
 <span class="c1"># compute bandwidths of CVs using Silverman&#39;s rule</span>
@@ -505,6 +509,52 @@ document.write(`
 </pre></div>
 </div>
 </section>
+<section id="reweight-to-a-new-property">
+<h3>Reweight to a new property<a class="headerlink" href="#reweight-to-a-new-property" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.analysis.reweight</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_property_surface</span>
+<span class="c1"># compute fes</span>
+<span class="n">nbins_x</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">nbins_y</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">sigma_x</span> <span class="o">=</span> <span class="mf">0.008</span>
+<span class="n">sigma_y</span> <span class="o">=</span> <span class="mf">0.008</span>
+<span class="n">T</span> <span class="o">=</span> <span class="mi">350</span>
+
+<span class="c1"># kbT and bias must have the same unit</span>
+<span class="n">kbT</span> <span class="o">=</span> <span class="n">T</span><span class="o">*</span><span class="mf">0.0083144621</span> <span class="c1"># kJ/mol</span>
+<span class="n">bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">colvar_file</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># kJ/mol</span>
+
+<span class="n">ptcv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;path_to_cv_files&quot;</span><span class="p">)</span> <span class="c1"># load CV data, which can be loaded from a PLUMED COLVAR file.</span>
+<span class="n">cv1</span> <span class="o">=</span> <span class="n">ptcv</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">cv2</span> <span class="o">=</span> <span class="n">ptcv</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="n">prop_dat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;path_to_property_files&quot;</span><span class="p">)</span>
+
+<span class="n">cv1_min</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.5</span>
+<span class="n">cv1_max</span> <span class="o">=</span> <span class="mf">1.5</span>
+<span class="n">cv2_min</span> <span class="o">=</span> <span class="mf">2.3</span>
+<span class="n">cv2_max</span> <span class="o">=</span> <span class="mf">3.3</span>
+
+<span class="n">prop</span> <span class="o">=</span> <span class="n">calc_property_surface</span><span class="p">(</span><span class="n">cv_x</span><span class="o">=</span><span class="n">cv1</span><span class="p">,</span>
+                             <span class="n">cv_y</span><span class="o">=</span><span class="n">cv2</span><span class="p">,</span>
+                             <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">,</span>
+                             <span class="n">prop</span><span class="o">=</span><span class="n">prop_dat</span>
+                             <span class="n">bandwidth_x</span><span class="o">=</span><span class="n">bw_cv1</span><span class="p">,</span>
+                             <span class="n">bandwidth_y</span><span class="o">=</span><span class="n">bw_cv2</span><span class="p">,</span>
+                             <span class="n">nbins_x</span><span class="o">=</span><span class="n">nbins_x</span><span class="p">,</span>
+                             <span class="n">nbins_y</span><span class="o">=</span><span class="n">nbins_y</span><span class="p">,</span>
+                             <span class="n">kbT</span><span class="o">=</span><span class="n">kbT</span><span class="p">,</span>
+                             <span class="n">save_file</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                             <span class="n">name_file</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;property_surface.dat&quot;</span><span class="p">,</span>
+                             <span class="n">min_cv_x</span><span class="o">=</span><span class="n">cv1_min</span><span class="p">,</span>
+                             <span class="n">max_cv_x</span><span class="o">=</span><span class="n">cv1_max</span><span class="p">,</span>
+                             <span class="n">min_cv_y</span><span class="o">=</span><span class="n">cv2_min</span><span class="p">,</span>
+                             <span class="n">max_cv_y</span><span class="o">=</span><span class="n">cv2_max</span><span class="p">,</span>
+                             <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</section>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -543,7 +593,7 @@ document.write(`
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Calculate collective variables of proton transfer reactions</p>
+        <p class="prev-next-title">Collective variables of proton transfer reactions</p>
       </div>
     </a>
     <a class="right-next"
@@ -571,7 +621,11 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reweight-to-a-new-collective-varaible-space">Reweight to a new collective-varaible space</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reweight-to-a-new-property">Reweight to a new property</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 

@@ -67,7 +67,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'docs/analysis/band_align';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Dissociation degree analysis" href="disdeg.html" />
+    <link rel="next" title="Dissociation degree" href="disdeg.html" />
     <link rel="prev" title="Atom density analysis" href="atom_density.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -168,13 +168,11 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="atom_density.html">Atom density analysis</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Band alignment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="disdeg.html">Dissociation degree analysis</a></li>
-
-
+<li class="toctree-l1"><a class="reference internal" href="disdeg.html">Dissociation degree</a></li>
 <li class="toctree-l1"><a class="reference internal" href="acidity.html">Acidity calculation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="finite_size_correction.html">The finite size correction of interfaces</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proton_transfer_cv.html">Calculate collective variables of proton transfer reactions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reweight.html">Construct free energy surface through reweighting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="finite_size_correction.html">Finite size correction of interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proton_transfer_cv.html">Collective variables of proton transfer reactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reweight.html">Reweight for free energies and properties</a></li>
 <li class="toctree-l1"><a class="reference internal" href="redox.html">Redox potentials</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Plots</span></p>
@@ -426,10 +424,13 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick Start</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prepare-input-data">Prepare Input Data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#explanation-for-parameters">Explanation for Parameters</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-band-alignment-data">Plot Band Alignment Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prepare-input-data">Prepare Input Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explanation-for-parameters">Explanation for Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-band-alignment-data">Plot Band Alignment Data</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -443,8 +444,11 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="band-alignment">
 <h1>Band alignment<a class="headerlink" href="#band-alignment" title="Permalink to this heading">#</a></h1>
-<section id="quick-start">
-<h2>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this heading">#</a></h2>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits..analysis.band_align</span><span class="w"> </span><span class="kn">import</span> <span class="n">BandAlign</span>
 <span class="n">inp</span> <span class="o">=</span> <span class="p">{</span>
      <span class="s2">&quot;input_type&quot;</span><span class="p">:</span> <span class="s2">&quot;cube&quot;</span><span class="p">,</span>
@@ -475,14 +479,13 @@ document.write(`
 <span class="n">ba</span><span class="o">.</span><span class="n">solid_hartree_list</span>
 </pre></div>
 </div>
-</section>
 <section id="prepare-input-data">
-<h2>Prepare Input Data<a class="headerlink" href="#prepare-input-data" title="Permalink to this heading">#</a></h2>
+<h3>Prepare Input Data<a class="headerlink" href="#prepare-input-data" title="Permalink to this heading">#</a></h3>
 <p>One has to collect all hartree cube files from continuous MD simulations in one directory with same prefix and suffix of <code class="docutils literal notranslate"><span class="pre">.cube</span></code>.
 For example, in directory <code class="docutils literal notranslate"><span class="pre">./00.interface/hartree/</span></code>, one should prepare cube file named <code class="docutils literal notranslate"><span class="pre">Hematite-v_hartree-1_1.cube</span></code>, <code class="docutils literal notranslate"><span class="pre">Hematite-v_hartree-1_2.cube</span></code>, …, <code class="docutils literal notranslate"><span class="pre">Hematite-v_hartree-1_501.cube</span></code>.</p>
 </section>
 <section id="explanation-for-parameters">
-<h2>Explanation for Parameters<a class="headerlink" href="#explanation-for-parameters" title="Permalink to this heading">#</a></h2>
+<h3>Explanation for Parameters<a class="headerlink" href="#explanation-for-parameters" title="Permalink to this heading">#</a></h3>
 <p><img alt="density" src="../../_images/hartree_area.png" /></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">input_type</span></code>: <code class="docutils literal notranslate"><span class="pre">cube</span></code> for cp2k cube files</p></li>
@@ -500,7 +503,7 @@ For example, in directory <code class="docutils literal notranslate"><span class
 </ul>
 </section>
 <section id="plot-band-alignment-data">
-<h2>Plot Band Alignment Data<a class="headerlink" href="#plot-band-alignment-data" title="Permalink to this heading">#</a></h2>
+<h3>Plot Band Alignment Data<a class="headerlink" href="#plot-band-alignment-data" title="Permalink to this heading">#</a></h3>
 <p>After Obtain band positions from post processing, you can plot these data using <code class="docutils literal notranslate"><span class="pre">plot_band_alignment</span></code></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.plots.band_align</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_band_alignment</span>
 
@@ -522,6 +525,7 @@ For example, in directory <code class="docutils literal notranslate"><span class
 </div>
 <p>We assume the vbm and cbm values are in SHE scale. If the vbm and cbm values are referred to Vacuum scale, set <code class="docutils literal notranslate"><span class="pre">vac_value=True</span></code>. If you want to plot the difference between band position of first system and other systems, set <code class="docutils literal notranslate"><span class="pre">show_diff=True</span></code>.
 <img alt="density" src="../../_images/bandalign.jpg" /></p>
+</section>
 </section>
 </section>
 
@@ -569,7 +573,7 @@ For example, in directory <code class="docutils literal notranslate"><span class
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Dissociation degree analysis</p>
+        <p class="prev-next-title">Dissociation degree</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -588,10 +592,13 @@ For example, in directory <code class="docutils literal notranslate"><span class
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick Start</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prepare-input-data">Prepare Input Data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#explanation-for-parameters">Explanation for Parameters</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-band-alignment-data">Plot Band Alignment Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prepare-input-data">Prepare Input Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explanation-for-parameters">Explanation for Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-band-alignment-data">Plot Band Alignment Data</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 

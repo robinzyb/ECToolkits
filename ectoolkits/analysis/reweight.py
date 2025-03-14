@@ -1,7 +1,12 @@
 from string import Template
 from typing import Tuple, Union
+
 import numpy as np
 import numpy.typing as npt
+
+from ectoolkits.log import get_logger
+
+logger = get_logger(__name__)
 
 def read_cv(colvar_file: str,
             usecols: int,
@@ -28,7 +33,7 @@ def compute_bw_silverman(cv_array: npt.NDArray,
                          **kwargs,
                          ) -> float:
     """
-    Compute the bandwidth using Silverman's rule of thumb.
+    Compute bandwidths using Silverman's rule of thumb.
 
     Parameters:
     cv_array (npt.NDArray): The input array for which the bandwidth is to be computed.
@@ -57,7 +62,7 @@ def compute_bw_silverman(cv_array: npt.NDArray,
     sigma_0 = cv_array.std()
     #sigma_0 = sigma_0/
     bw = sigma_0/(np.sqrt(bias_factor))*np.power((neff *(dim+2)/4.0), -1.0/(dim+4.0))
-    print(f"sigma_0 {sigma_0:.3f} nconf: {cv_array.shape[0]} neff: {neff:.3f} bw: {bw:.3f}")
+    logger.info(f"sigma_0 {sigma_0:.3f} nconf: {cv_array.shape[0]} neff: {neff:.3f} bw: {bw:.3f}")
     return bw
 
 def read_fes(file_fes: str,
@@ -240,7 +245,7 @@ SET max_${name_cv_y} ${max_cv_y}
 SET num_grid_points_${name_cv_y} ${num_grid_points_y}"""
 
     if dim == 1:
-        print("Calculating 1D FES")
+        logger.info("Calculating 1D FES")
 
         fes_x = make_grid(grid_bin_cv_x=nbins_x,
                           cv_x_min=min_cv_x,
@@ -252,7 +257,7 @@ SET num_grid_points_${name_cv_y} ${num_grid_points_y}"""
         fes = np.zeros(num_grid_points_x)
 
         for i in range(num_grid_points_x):
-            print(f'   working...  {(i/num_grid_points_x):.0%}', end='\r')
+            logger.info(f'   working...  {(i/num_grid_points_x):.0%}', end='\r')
             fes[i] = calc_one_FES_point(cv_x=cv_x,
                                         bias=bias,
                                         point_x=fes_x[i],
@@ -275,7 +280,7 @@ SET num_grid_points_${name_cv_y} ${num_grid_points_y}"""
         return fes
 
     elif dim == 2:
-        print("Calculating 2D FES")
+        logger.info("Calculating 2D FES")
 
         name_cv_y = kwargs.get("name_cv_y", "cv_y")
         cv_y = kwargs.get("cv_y", None)
@@ -299,7 +304,7 @@ SET num_grid_points_${name_cv_y} ${num_grid_points_y}"""
         fes = np.zeros((num_grid_points_x, num_grid_points_y))
 
         for i in range(num_grid_points_x):
-            print(f'   working...  {(i/num_grid_points_x):.0%}', end='\r')
+            logger.info(f'   working...  {(i/num_grid_points_x):.0%}', end='\r')
             for j in range(num_grid_points_y):
                 fes[i, j] = calc_one_FES_point(cv_x=cv_x,
                                                cv_y=cv_y,
@@ -335,71 +340,128 @@ SET num_grid_points_${name_cv_y} ${num_grid_points_y}"""
 
 
 #TODO: just copy from my jupyter notebook, need to revise.
-def calc_one_property_point(cv_x, cv_y, bias, prop, point_x, point_y, sigma_x, sigma_y, kbT, mode='direct'):
+def calc_one_property_point(cv_x: npt.NDArray,
+                            bias: npt.NDArray,
+                            point_x: float,
+                            bandwidth_x: float,
+                            kbT: float,
+                            dim: int,
+                            prop: npt.NDArray,
+                            **kwargs,
+                            ) -> float:
 
-    if mode == 'direct':
-        dist_x = (point_x - cv_x) / sigma_x
-        dist_y = (point_y - cv_y) / sigma_y
-        bias = bias/kbT
+
+    cv_y = kwargs.get("cv_y", None)
+    point_y = kwargs.get("point_y", None)
+    bandwidth_y = kwargs.get("bandwidth_y", None)
+
+    bias = bias/kbT
+
+    dist_x = (point_x - cv_x) / bandwidth_x
+    if dim == 1:
+        arg = bias - 0.5*dist_x*dist_x
+    elif dim == 2:
+        dist_y = (point_y - cv_y) / bandwidth_y
         arg = bias - 0.5*dist_x*dist_x - 0.5*dist_y*dist_y
-        arg = np.exp(arg)
-        #fes = -kbT*np.log(np.sum(np.exp(arg)))
-        #TODO: log proper then logaddexp?
-        denominator = np.sum(arg)
-        numerator = np.sum(prop*arg)
-        reweighted_prop = numerator / denominator
 
-        return reweighted_prop
+    arg = np.exp(arg)
+    #fes = -kbT*np.log(np.sum(np.exp(arg)))
+    #TODO: log proper then logaddexp?
+    denominator = np.sum(arg)
+    numerator = np.sum(prop*arg)
+    reweighted_prop = numerator / denominator
 
-    else:
-        raise ValueError("reweight mode must be'direct'")
+    return reweighted_prop
 
-def calc_property_surface(cv_x: npt.NDArray[np.float64],
-                          cv_y: npt.NDArray[np.float64],
-                          bias: npt.NDArray[np.float64],
-                          prop_data: npt.NDArray,
-                          sigma_x: float,
-                          sigma_y: float,
+
+
+def calc_property_surface(cv_x: npt.NDArray,
+                          bias: npt.NDArray,
+                          prop: npt.NDArray,
+                          bandwidth_x: float,
                           kbT: float,
-                          grid_bin_x: int,
-                          grid_bin_y: int,
-                          mode: str='direct',
+                          nbins_x: int,
+                          dim: int = 2,
+                          **kwargs,
                           ):
     """
     Calculates the property surface based on the given input parameters.
 
     Parameters:
-    - cv_x (npt.NDArray[np.float64]): Array of x-values for the collective variable.
-    - cv_y (npt.NDArray[np.float64]): Array of y-values for the collective variable.
-    - bias (npt.NDArray[np.float64]): Array of bias values.
-    - prop_data (npt.NDArray): Array of property data.
-    - sigma_x (float): Standard deviation for the x-direction.
-    - sigma_y (float): Standard deviation for the y-direction.
-    - kbT (float): Boltzmann constant times temperature.
-    - grid_bin_x (int): Number of bins in the x-direction.
-    - grid_bin_y (int): Number of bins in the y-direction.
-    - mode (str, optional): Calculation mode. Defaults to 'direct'.
-
-    Returns:
-    - fes_x (npt.NDArray[np.float64]): Array of x-values for the free energy surface.
-    - fes_y (npt.NDArray[np.float64]): Array of y-values for the free energy surface.
-    - prop (np.ndarray): Array of calculated property values.
-
-    Raises:
-    - ValueError: If the shapes of cv and prop_data do not match.
-
     """
-    if cv_x.shape != prop_data.shape and cv_y.shape != prop_data.shape:
-        raise ValueError(f"cv and prop_data must have the same shape, the shape of cv is {cv_x.shape} and the shape of prop_data is {prop_data.shape}")
+    save_file = kwargs.get("save_file", True)
+    name_file = kwargs.get("name_file", "prop_surface.dat")
 
-    fes_x, fes_y = make_grid(cv_x, cv_y, grid_bin_x, grid_bin_y)
-    prop = np.zeros((grid_bin_x, grid_bin_y))
+    name_cv_x = kwargs.get("name_cv_x", "cv_x")
+
+    min_cv_x = kwargs.get("min_cv_x", cv_x.min())
+    max_cv_x = kwargs.get("max_cv_x", cv_x.max())
+
+    if dim == 1:
+        logger.info("Calculating 1D property surface")
+
+        fes_x = make_grid(grid_bin_cv_x=nbins_x,
+                          cv_x_min=min_cv_x,
+                          cv_x_max=max_cv_x,
+                          dim=dim
+                          )
+        num_grid_points_x = len(fes_x)
+        prop_surface = np.zeros(num_grid_points_x)
+
+        for i in range(num_grid_points_x):
+            logger.info(f'   working...  {(i/num_grid_points_x):.0%}', end='\r')
+            prop_surface[i] = calc_one_property_point(cv_x=cv_x,
+                                                      bias=bias,
+                                                      point_x=fes_x[i],
+                                                      bandwidth_x=bandwidth_x,
+                                                      kbT=kbT,
+                                                      dim=dim,
+                                                      prop=prop,
+                                                      )
+
+        return prop_surface
+
+    elif dim == 2:
+        logger.info("Calculating 2D property surface")
+
+        name_cv_y = kwargs.get("name_cv_y", "cv_y")
+        cv_y = kwargs.get("cv_y", None)
+        bandwidth_y = kwargs.get("bandwidth_y", None)
+        nbins_y = kwargs.get("nbins_y", None)
+        min_cv_y = kwargs.get("min_cv_y", cv_y.min())
+        max_cv_y = kwargs.get("max_cv_y", cv_y.max())
+
+        fes_x, fes_y = make_grid(grid_bin_cv_x=nbins_x,
+                                grid_bin_cv_y=nbins_y,
+                                cv_x_min=min_cv_x,
+                                cv_x_max=max_cv_x,
+                                cv_y_min=min_cv_y,
+                                cv_y_max=max_cv_y,
+                                dim=dim,
+                                )
+
+        # Note the num_grid_points_x and num_grid_points_y are nbins_x+1 and nbins_y+1
+        num_grid_points_x = len(fes_x)
+        num_grid_points_y = len(fes_y)
+
+        prop_surface = np.zeros((num_grid_points_x, num_grid_points_y))
 
 
+        for i in range(num_grid_points_x):
+            logger.info(f'   working...  {(i/num_grid_points_x):.0%}', end='\r')
+            for j in range(num_grid_points_y):
+                prop_surface[i, j] = calc_one_property_point(cv_x=cv_x,
+                                                             cv_y=cv_y,
+                                                             bias=bias,
+                                                             point_x=fes_x[i, j],
+                                                             point_y=fes_y[i, j],
+                                                             bandwidth_x=bandwidth_x,
+                                                             bandwidth_y=bandwidth_y,
+                                                             kbT=kbT,
+                                                             dim=dim,
+                                                             prop=prop,
+                                                             )
+        return prop_surface
 
-
-    for i in range(grid_bin_x):
-        print(f'   working...  {(i/grid_bin_x):.0%}', end='\r')
-        for j in range(grid_bin_y):
-            prop[i, j] = calc_one_property_point(cv_x, cv_y, bias, prop_data, fes_x[i, j], fes_y[i, j], sigma_x, sigma_y, kbT, mode=mode)
-    return fes_x, fes_y, prop
+    else:
+        raise ValueError("dim should be either 1 or 2")

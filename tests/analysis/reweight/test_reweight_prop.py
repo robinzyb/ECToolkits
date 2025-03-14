@@ -41,7 +41,7 @@ class TestReweightFES():
         bw_cv1 = 0.008
         bw_cv2 = 0.008
 
-        fes = calc_property_surface(cv_x=cv1,
+        prop = calc_property_surface(cv_x=cv1,
                                     cv_y=cv2,
                                     bias=bias,
                                     prop=prop_data, 
@@ -59,4 +59,4 @@ class TestReweightFES():
 
         
         prop_ref = np.loadtxt(prop_ref_file, usecols=(2), unpack=True)
-        np.testing.assert_array_almost_equal(fes.flatten(), prop_ref, decimal=6)
+        np.testing.assert_array_almost_equal(prop.flatten(), prop_ref, decimal=6)

@@ -1,5 +1,11 @@
 # Band alignment
-## Quick Start
+
+## Introduction
+
+
+## Usage
+
+
 ```python
 from ectoolkits..analysis.band_align import BandAlign
 inp = {
@@ -30,11 +36,11 @@ fig = ba.plot_hartree_per_width('solid')
 ba.water_hartree_list
 ba.solid_hartree_list
 ```
-## Prepare Input Data
+### Prepare Input Data
 One has to collect all hartree cube files from continuous MD simulations in one directory with same prefix and suffix of `.cube`.
 For example, in directory `./00.interface/hartree/`, one should prepare cube file named `Hematite-v_hartree-1_1.cube`, `Hematite-v_hartree-1_2.cube`, ..., `Hematite-v_hartree-1_501.cube`.
 
-## Explanation for Parameters
+### Explanation for Parameters
 ![density](./figures/hartree_area.png)
 - `input_type`: `cube` for cp2k cube files
 - `prefix`: define prefix for cube files
@@ -49,7 +55,7 @@ For example, in directory `./00.interface/hartree/`, one should prepare cube fil
 - `water_width_list`: Width for bulk water. Bulk Water Width is plotted in above figure. Since one has to test multiple width value, the width is input as a list.
 -  `solid_width_list`: Width for Bulk Solid. Bulk Solid Width is plotted in above figure. Since one has to test multiple width value, the width is input as a list.
 
-## Plot Band Alignment Data
+### Plot Band Alignment Data
 After Obtain band positions from post processing, you can plot these data using `plot_band_alignment`
 ```python
 from ectoolkits.plots.band_align import plot_band_alignment

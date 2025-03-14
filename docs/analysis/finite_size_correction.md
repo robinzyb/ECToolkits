@@ -1,5 +1,9 @@
-# The finite size correction of interfaces
+# Finite size correction of interfaces
 
+## Introduction
+
+
+## Usage
 ```python
 # Usage exmaple
 cell = Paramcell(length=[19.63424, 19.237425, 68.35131], divi=[80, 75, 270], h=0)

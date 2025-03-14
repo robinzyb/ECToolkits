@@ -1,4 +1,4 @@
-# Construct free energy surface through reweighting
+# Reweight for free energies and properties
 
 ## Introduction
 

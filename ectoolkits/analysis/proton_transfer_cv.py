@@ -16,7 +16,7 @@ logger = get_logger(__name__)
 
 class ProtonTransferCV(AnalysisBase):
     """
-    Class for analyzing Proton Transfer Collective Variables (CVs) in molecular dynamics simulations.
+    Class for analyzing Proton Transfer Collective Variables (CVs) from molecular dynamics simulations.
 
     This class extends the MDAnalysis `AnalysisBase` class and provides methods to analyze proton transfer
     events between donor and acceptor atoms, potentially mediated by bridge water molecules.
@@ -326,9 +326,12 @@ class ProtonTransferCV(AnalysisBase):
                 tmp_info[:, (9+5*num_bridge):(10+6*num_bridge)] = all_angles.T
 
                 # 3 + (n_bridge+1)*2+1 + (n_bridge+1)*2 + (n_bridge+1)*2
-                # because delta_cv is negative here, the minimum is the most negative delta_cv.
-                # TODO: is this definition really ok? or should I use the minimum of absolute value of delta_cv?
-                info = tmp_info[np.argmin(tmp_info, axis=0)[1]]
+                #
+                # I take the one with a minimum value of |delta|.
+                # It means the most reactive proton is chosen
+                # refdoi: 10.1038/17579
+
+                info = tmp_info[np.argmin(np.abs(tmp_info), axis=0)[1]]
                 # the delta_cv is always negative here because it is dOdHd - dOaHd.
                 # for donor in type2, acceptor in type1, the delta should be positive.
                 # here I just check the donor index.

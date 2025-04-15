@@ -392,7 +392,7 @@ document.write(`
 
 <div class="viewcode-block" id="ProtonTransferCV"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.proton_transfer_cv.html#ectoolkits.analysis.proton_transfer_cv.ProtonTransferCV">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">ProtonTransferCV</span><span class="p">(</span><span class="n">AnalysisBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Class for analyzing Proton Transfer Collective Variables (CVs) in molecular dynamics simulations.</span>
+<span class="sd">    Class for analyzing Proton Transfer Collective Variables (CVs) from molecular dynamics simulations.</span>
 
 <span class="sd">    This class extends the MDAnalysis `AnalysisBase` class and provides methods to analyze proton transfer</span>
 <span class="sd">    events between donor and acceptor atoms, potentially mediated by bridge water molecules.</span>
@@ -702,9 +702,12 @@ document.write(`
                 <span class="n">tmp_info</span><span class="p">[:,</span> <span class="p">(</span><span class="mi">9</span><span class="o">+</span><span class="mi">5</span><span class="o">*</span><span class="n">num_bridge</span><span class="p">):(</span><span class="mi">10</span><span class="o">+</span><span class="mi">6</span><span class="o">*</span><span class="n">num_bridge</span><span class="p">)]</span> <span class="o">=</span> <span class="n">all_angles</span><span class="o">.</span><span class="n">T</span>
 
                 <span class="c1"># 3 + (n_bridge+1)*2+1 + (n_bridge+1)*2 + (n_bridge+1)*2</span>
-                <span class="c1"># because delta_cv is negative here, the minimum is the most negative delta_cv.</span>
-                <span class="c1"># TODO: is this definition really ok? or should I use the minimum of absolute value of delta_cv?</span>
-                <span class="n">info</span> <span class="o">=</span> <span class="n">tmp_info</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">tmp_info</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="mi">1</span><span class="p">]]</span>
+                <span class="c1">#</span>
+                <span class="c1"># I take the one with a minimum value of |delta|.</span>
+                <span class="c1"># It means the most reactive proton is chosen</span>
+                <span class="c1"># refdoi: 10.1038/17579</span>
+
+                <span class="n">info</span> <span class="o">=</span> <span class="n">tmp_info</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">tmp_info</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="mi">1</span><span class="p">]]</span>
                 <span class="c1"># the delta_cv is always negative here because it is dOdHd - dOaHd.</span>
                 <span class="c1"># for donor in type2, acceptor in type1, the delta should be positive.</span>
                 <span class="c1"># here I just check the donor index.</span>

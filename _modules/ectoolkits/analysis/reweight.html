@@ -749,7 +749,8 @@ document.write(`
     <span class="n">numerator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">prop</span><span class="o">*</span><span class="n">arg</span><span class="p">)</span>
     <span class="n">reweighted_prop</span> <span class="o">=</span> <span class="n">numerator</span> <span class="o">/</span> <span class="n">denominator</span>
 
-    <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;save_weights&quot;</span><span class="p">]:</span>
+    <span class="n">save_weights</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;save_weights&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">save_weights</span><span class="p">:</span>
         <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cv_x_</span><span class="si">{</span><span class="n">point_x</span><span class="si">:</span><span class="s2">0.3f</span><span class="si">}</span><span class="s2">-cv_y_</span><span class="si">{</span><span class="n">point_y</span><span class="si">:</span><span class="s2">0.3f</span><span class="si">}</span><span class="s2">-weights.npy&quot;</span><span class="p">,</span> <span class="n">arg</span><span class="o">/</span><span class="n">denominator</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">reweighted_prop</span></div>

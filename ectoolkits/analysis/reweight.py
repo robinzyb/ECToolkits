@@ -373,7 +373,8 @@ def calc_one_property_point(cv_x: npt.NDArray,
     numerator = np.sum(prop*arg)
     reweighted_prop = numerator / denominator
 
-    if kwargs["save_weights"]:
+    save_weights = kwargs.get("save_weights", False)
+    if save_weights:
         np.save(f"cv_x_{point_x:0.3f}-cv_y_{point_y:0.3f}-weights.npy", arg/denominator)
 
     return reweighted_prop

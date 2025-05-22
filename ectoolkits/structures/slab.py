@@ -1,7 +1,6 @@
 import os
 import shutil
 from typing import Tuple, List
-from itertools import product
 
 import numpy as np
 from ase import Atoms

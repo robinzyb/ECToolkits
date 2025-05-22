@@ -228,3 +228,4 @@ def create_path(path, bk=False):
                 "Target path '{0}' exsists. No backup for this path.".format(path))
     else:
         os.makedirs(path)
+

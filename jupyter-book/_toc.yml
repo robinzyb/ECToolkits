@@ -5,7 +5,9 @@ format: jb-book
 root: intro
 parts:
   - caption: Structures
+    chapters:
       - file: docs/structures/slab
+      
   - caption: Analysis
     chapters:
       - file: docs/analysis/atom_density
@@ -16,9 +18,11 @@ parts:
       - file: docs/analysis/proton_transfer_cv
       - file: docs/analysis/reweight
       - file: docs/analysis/redox
+      
   - caption: Plots
     chapters:
       - file: docs/plots/dpmd
+      
   - caption: Workflows
     chapters:
       - file: docs/workflows/calc_diel

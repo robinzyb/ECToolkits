@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ectoolkits.utils.vasp &#8212; ECToolkits Reference</title>
+    <title>ectoolkits.structures.tools &#8212; ECToolkits Reference</title>
   
   
   
@@ -61,7 +61,7 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../../../_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/ectoolkits/utils/vasp';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/ectoolkits/structures/tools';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -296,7 +296,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/robinzyb/ectoolkits/issues/new?title=Issue%20on%20page%20%2F_modules/ectoolkits/utils/vasp.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/robinzyb/ectoolkits/issues/new?title=Issue%20on%20page%20%2F_modules/ectoolkits/structures/tools.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -374,76 +374,123 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <h1>Source code for ectoolkits.utils.vasp</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+  <h1>Source code for ectoolkits.structures.tools</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ase</span><span class="w"> </span><span class="kn">import</span> <span class="n">Atoms</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ase.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">Chem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdkit.Chem</span><span class="w"> </span><span class="kn">import</span> <span class="n">AllChem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdkit.Chem</span><span class="w"> </span><span class="kn">import</span> <span class="n">rdMolAlign</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdkit.Chem</span><span class="w"> </span><span class="kn">import</span> <span class="n">rdMolTransforms</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdkit.Chem</span><span class="w"> </span><span class="kn">import</span> <span class="n">rdMolDescriptors</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ase.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">vasp</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_logger</span>
-
-<span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-
-<div class="viewcode-block" id="scale_iso_cell"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.vasp.html#ectoolkits.utils.vasp.scale_iso_cell">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">scale_iso_cell</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">out_name</span><span class="p">):</span>
+<div class="viewcode-block" id="smiles2xyz"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.tools.html#ectoolkits.structures.tools.smiles2xyz">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">smiles2xyz</span><span class="p">(</span><span class="n">smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    creat the scaling cell for vasp</span>
-<span class="sd">    atoms: the Atoms object from ase</span>
-<span class="sd">    start: starting fraction</span>
-<span class="sd">    end: ending fraction</span>
-<span class="sd">    step: the step from start to end</span>
-<span class="sd">    out_name: the name for out file, it can be a path.</span>
+<span class="sd">    Convert a SMILES string to a 3D XYZ structure using RDKit and ASE.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        smiles (str): SMILES representation of the molecule.</span>
+<span class="sd">        filename (str): Output filename in XYZ format.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        smiles2xyz(&quot;CCO&quot;, &quot;ethanol.xyz&quot;)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">cell_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span>
-    <span class="n">old_cell_vector</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">get_cell</span><span class="p">()</span>
-    <span class="n">new_atoms</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">scale</span> <span class="ow">in</span> <span class="n">cell_list</span><span class="p">:</span>
-        <span class="n">new_atoms</span><span class="o">.</span><span class="n">set_cell</span><span class="p">(</span><span class="n">old_cell_vector</span> <span class="o">*</span> <span class="n">scale</span><span class="p">,</span> <span class="n">scale_atoms</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">vasp</span><span class="o">.</span><span class="n">write_vasp</span><span class="p">(</span><span class="n">out_name</span> <span class="o">+</span> <span class="s2">&quot;_</span><span class="si">{0:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">scale</span><span class="p">),</span> <span class="n">new_atoms</span><span class="p">,</span>
-                        <span class="n">direct</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;create POSCAR for </span><span class="si">{0:.3f}</span><span class="s2"> scaling&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">scale</span><span class="p">))</span></div>
-
-
-<div class="viewcode-block" id="find_outcar"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.vasp.html#ectoolkits.utils.vasp.find_outcar">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">find_outcar</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smiles</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">AllChem</span><span class="o">.</span><span class="n">EmbedMolecule</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">AllChem</span><span class="o">.</span><span class="n">ETKDG</span><span class="p">())</span>
+    <span class="n">AllChem</span><span class="o">.</span><span class="n">UFFOptimizeMolecule</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">conf</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetConformer</span><span class="p">()</span>
+    <span class="n">atoms</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">positions</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">GetAtomPosition</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">())</span>
+        <span class="n">positions</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">pos</span><span class="o">.</span><span class="n">z</span><span class="p">])</span>
+        <span class="n">atoms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetSymbol</span><span class="p">())</span>
+    <span class="n">molecule</span> <span class="o">=</span> <span class="n">Atoms</span><span class="p">(</span><span class="n">symbols</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">positions</span><span class="o">=</span><span class="n">positions</span><span class="p">)</span>
+    <span class="n">write</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">molecule</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="get_packmol_inp"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.tools.html#ectoolkits.structures.tools.get_packmol_inp">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_packmol_inp</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_vec_a</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">n_vec_b</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> 
+                    <span class="n">d1_a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">d2_a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">d1_b</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">d2_b</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                    <span class="n">low_z</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">up_z</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    find the outcar path with some fancy output</span>
+<span class="sd">    Generate PACKMOL input structure block for a molecule.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename (str): Path to the XYZ file.</span>
+<span class="sd">        count (int): Number of molecules to place.</span>
+<span class="sd">        n_vec_a (list): Normal vector A [x, y, z].</span>
+<span class="sd">        n_vec_b (list): Normal vector B [x, y, z].</span>
+<span class="sd">        d1_a, d2_a (float): Distance range for vector A.</span>
+<span class="sd">        d1_b, d2_b (float): Distance range for vector B.</span>
+<span class="sd">        low_z, up_z (float): Z direction limits.</span>
+<span class="sd">        radius (float): Minimum distance between molecules.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: A string block to be written in a PACKMOL input file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">dirpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">dirpath</span><span class="p">)</span>
-    <span class="n">file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
-    <span class="n">allfile</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">allfile</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;The file </span><span class="si">{0}</span><span class="s2"> has been found&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">i</span><span class="p">)))</span>
-    <span class="k">return</span> <span class="n">allfile</span></div>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">structure </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span>
+<span class="s2">  number </span><span class="si">{</span><span class="n">count</span><span class="si">}</span>
+<span class="s2">  above plane </span><span class="si">{</span><span class="n">n_vec_a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">n_vec_a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">n_vec_a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">d1_a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.5</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span>
+<span class="s2">  below plane </span><span class="si">{</span><span class="n">n_vec_a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">n_vec_a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">n_vec_a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">d2_a</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">0.5</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span>
+<span class="s2">  above plane </span><span class="si">{</span><span class="n">n_vec_b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">n_vec_b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">n_vec_b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">d1_b</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.5</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span>
+<span class="s2">  below plane </span><span class="si">{</span><span class="n">n_vec_b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">n_vec_b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">n_vec_b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">d2_b</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">0.5</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span>
+<span class="s2">  above plane 0.0000 0.0000 1.0000 </span><span class="si">{</span><span class="n">low_z</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span>
+<span class="s2">  below plane 0.0000 0.0000 1.0000 </span><span class="si">{</span><span class="n">up_z</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span>
+<span class="s2">  radius </span><span class="si">{</span><span class="n">radius</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span>
+<span class="s2">end structure</span>
+<span class="s2">&quot;&quot;&quot;</span></div>
 
-
-<div class="viewcode-block" id="exout_vasp"><a class="viewcode-back" href="../../../_api/ectoolkits.utils.vasp.html#ectoolkits.utils.vasp.exout_vasp">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">exout_vasp</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
+<div class="viewcode-block" id="count_heavy_atoms"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.tools.html#ectoolkits.structures.tools.count_heavy_atoms">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">count_heavy_atoms</span><span class="p">(</span><span class="n">smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    extract the vasp file from filepath</span>
+<span class="sd">    Count the number of heavy atoms (non-hydrogen) in a SMILES string.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        smiles (str): SMILES string.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: Number of heavy atoms.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If the SMILES string is invalid.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        count_heavy_atoms(&quot;CCO&quot;)  # returns 3</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">infos</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Now extract the cell parameter, volume and &quot;</span>
-                  <span class="s2">&quot;energy from </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file</span><span class="p">)))</span>
-        <span class="n">info</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">pos</span> <span class="o">=</span> <span class="n">vasp</span><span class="o">.</span><span class="n">read_vasp_out</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pos</span><span class="o">.</span><span class="n">get_cell_lengths_and_angles</span><span class="p">():</span>
-            <span class="n">info</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-        <span class="n">info</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">get_volume</span><span class="p">())</span>
-        <span class="n">info</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">get_total_energy</span><span class="p">())</span>
-        <span class="n">infos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;extraction finished&quot;</span><span class="p">)</span>
-    <span class="n">infos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">infos</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smiles</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">mol</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid SMILES string&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()</span> <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span></div>
 
-    <span class="c1"># sort the row by volume</span>
-    <span class="n">infos</span> <span class="o">=</span> <span class="n">infos</span><span class="p">[</span><span class="n">infos</span><span class="p">[:,</span> <span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">argsort</span><span class="p">()]</span>
-    <span class="n">dirname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="n">info_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="s2">&quot;v-e.dat&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="get_exclude_water_count"><a class="viewcode-back" href="../../../_api/ectoolkits.structures.tools.html#ectoolkits.structures.tools.get_exclude_water_count">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_exclude_water_count</span><span class="p">(</span>
+        <span class="n">ads_smiles</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">ads_counts</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+        <span class="n">bulk_smiles</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">bulk_counts</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+        <span class="n">water_heavy_atom_equiv</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Estimate the number of equivalent water molecules to be excluded based on heavy atom count.</span>
 
-    <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">info_file</span><span class="p">,</span> <span class="n">infos</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%.8f</span><span class="s1">&#39;</span><span class="p">,</span>
-               <span class="n">header</span><span class="o">=</span><span class="s2">&quot;lengthA  lengthB  lengthC  AngleA  AngleB  AngleC&quot;</span>
-               <span class="s2">&quot;Volume Energy&quot;</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;store the file in </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">info_file</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">infos</span></div>
+<span class="sd">    Args:</span>
+<span class="sd">        ads_smiles (list): List of adsorbate SMILES strings.</span>
+<span class="sd">        ads_counts (list): List of adsorbate molecule counts.</span>
+<span class="sd">        bulk_smiles (list): List of bulk molecule SMILES strings.</span>
+<span class="sd">        bulk_counts (list): List of bulk molecule counts.</span>
+<span class="sd">        water_heavy_atom_equiv (int): Number of heavy atoms equivalent to one water molecule.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: Estimated number of water molecules to exclude.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        get_exclude_water_count([&quot;CCO&quot;], [2], [&quot;O=C=O&quot;], [1], 3)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">total_heavy_atoms</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">smiles</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ads_smiles</span><span class="p">,</span> <span class="n">ads_counts</span><span class="p">):</span>
+        <span class="n">total_heavy_atoms</span> <span class="o">+=</span> <span class="n">count</span> <span class="o">*</span> <span class="n">count_heavy_atoms</span><span class="p">(</span><span class="n">smiles</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">smiles</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bulk_smiles</span><span class="p">,</span> <span class="n">bulk_counts</span><span class="p">):</span>
+        <span class="n">total_heavy_atoms</span> <span class="o">+=</span> <span class="n">count</span> <span class="o">*</span> <span class="n">count_heavy_atoms</span><span class="p">(</span><span class="n">smiles</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">total_heavy_atoms</span> <span class="o">//</span> <span class="n">water_heavy_atom_equiv</span>      </div>
 </pre></div>
 
                 </article>

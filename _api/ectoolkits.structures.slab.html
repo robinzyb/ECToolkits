@@ -65,7 +65,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = '_api/ectoolkits.structures.slab';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="ectoolkits.utils package" href="ectoolkits.utils.html" />
+    <link rel="next" title="ectoolkits.structures.tools module" href="ectoolkits.structures.tools.html" />
     <link rel="prev" title="ectoolkits.structures.rutile110 module" href="ectoolkits.structures.rutile110.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -213,6 +213,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="ectoolkits.structures.interface.html">ectoolkits.structures.interface module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="ectoolkits.structures.rutile110.html">ectoolkits.structures.rutile110 module</a></li>
 <li class="toctree-l4 current active"><a class="current reference internal" href="#">ectoolkits.structures.slab module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ectoolkits.structures.tools.html">ectoolkits.structures.tools module</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="ectoolkits.utils.html">ectoolkits.utils package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -612,6 +613,47 @@ Add method for vacuum slab model</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.structures.slab.Slab.generate_components_symmetry_box">
+<span class="sig-name descname"><span class="pre">generate_components_symmetry_box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">water_box_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ads_components_smiles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ads_components_counts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bulk_components_smiles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bulk_components_counts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ads_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bulk_dw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bulk_up</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/structures/slab.html#Slab.generate_components_symmetry_box"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.structures.slab.Slab.generate_components_symmetry_box" title="Permalink to this definition">#</a></dt>
+<dd><blockquote>
+<div><p>Generate a slab-aligned box with symmetric distribution of water, adsorbed molecules, and bulk components.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>water_box_len</strong> (<em>float</em>) – Height of the water box along z-direction.</p></li>
+<li><p><strong>ads_components_smiles</strong> (<em>list</em>) – SMILES list of adsorbed components.</p></li>
+<li><p><strong>ads_components_counts</strong> (<em>list</em>) – Corresponding counts of adsorbed components.</p></li>
+<li><p><strong>bulk_components_smiles</strong> (<em>list</em>) – SMILES list of bulk components.</p></li>
+<li><p><strong>bulk_components_counts</strong> (<em>list</em>) – Corresponding counts of bulk components.</p></li>
+<li><p><strong>ads_limit</strong> (<em>float</em>) – Vertical range (in Å) above and below the surface for placing adsorbed species. Default = 0.5 Å.</p></li>
+<li><p><strong>bulk_dw</strong> (<em>float</em><em>, </em><em>optional</em>) – Lower boundary (Å) of the symmetric bulk region (below box center).</p></li>
+<li><p><strong>bulk_up</strong> (<em>float</em><em>, </em><em>optional</em>) – Upper boundary (Å) of the symmetric bulk region (below box center).
+Must satisfy: 0 &lt; bulk_dw &lt; bulk_up &lt; water_box_len / 2.
+If set, creates symmetric regions for bulk placement.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None. Generates a Packmol input file and runs Packmol to generate <cite>watbox.xyz</cite>.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.structures.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_components_symmetry_box</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">generate_components_symmetry_box</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">water_box_len</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="gp">... </span>    <span class="n">ads_components_smiles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;[Cl-]&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">ads_components_counts</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">bulk_components_smiles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;[K+]&quot;</span><span class="p">,</span> <span class="s2">&quot;[Cl-]&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">bulk_components_counts</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">ads_limit</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">bulk_dw</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">bulk_up</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="ectoolkits.structures.slab.Slab.generate_interface">
 <span class="sig-name descname"><span class="pre">generate_interface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">water_box_len</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_surface_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bottom_surface_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/structures/slab.html#Slab.generate_interface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.structures.slab.Slab.generate_interface" title="Permalink to this definition">#</a></dt>
 <dd><p>merge slab model and water box together</p>
@@ -729,11 +771,11 @@ cell z must be perpendicular to xy plane</p>
       </div>
     </a>
     <a class="right-next"
-       href="ectoolkits.utils.html"
+       href="ectoolkits.structures.tools.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">ectoolkits.utils package</p>
+        <p class="prev-next-title">ectoolkits.structures.tools module</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

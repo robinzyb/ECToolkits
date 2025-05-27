@@ -210,6 +210,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="_api/ectoolkits.structures.interface.html">ectoolkits.structures.interface module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="_api/ectoolkits.structures.rutile110.html">ectoolkits.structures.rutile110 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="_api/ectoolkits.structures.slab.html">ectoolkits.structures.slab module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_api/ectoolkits.structures.tools.html">ectoolkits.structures.tools module</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="_api/ectoolkits.utils.html">ectoolkits.utils package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -470,15 +471,17 @@ document.write(`
 </li>
       <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.cell">cell (ectoolkits.analysis.water.WaterOrientation attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.cellpar2volume">cellpar2volume() (in module ectoolkits.utils.rutile110)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_api/ectoolkits.analysis.rutile110.html#ectoolkits.analysis.rutile110.RutileDisDeg.cn2disdeg">cn2disdeg() (ectoolkits.analysis.rutile110.RutileDisDeg static method)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.reweight.html#ectoolkits.analysis.reweight.compute_bw_silverman">compute_bw_silverman() (in module ectoolkits.analysis.reweight)</a>
 </li>
       <li><a href="_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.count_cn">count_cn() (in module ectoolkits.utils.rutile110)</a>
+</li>
+      <li><a href="_api/ectoolkits.structures.tools.html#ectoolkits.structures.tools.count_heavy_atoms">count_heavy_atoms() (in module ectoolkits.structures.tools)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.UniformCharge.counter_charge_model">counter_charge_model() (ectoolkits.analysis.finite_size_correction.UniformCharge static method)</a>
 </li>
@@ -682,6 +685,13 @@ document.write(`
 </li>
       </ul></li>
       <li>
+    ectoolkits.structures.tools
+
+      <ul>
+        <li><a href="_api/ectoolkits.structures.tools.html#module-ectoolkits.structures.tools">module</a>
+</li>
+      </ul></li>
+      <li>
     ectoolkits.utils
 
       <ul>
@@ -760,6 +770,8 @@ document.write(`
 </li>
       <li><a href="_api/ectoolkits.analysis.finite_size_correction.html#ectoolkits.analysis.finite_size_correction.DielProfile.gen_diel_profile">gen_diel_profile() (ectoolkits.analysis.finite_size_correction.DielProfile method)</a>
 </li>
+      <li><a href="_api/ectoolkits.structures.slab.html#ectoolkits.structures.slab.Slab.generate_components_symmetry_box">generate_components_symmetry_box() (ectoolkits.structures.slab.Slab method)</a>
+</li>
       <li><a href="_api/ectoolkits.structures.slab.html#ectoolkits.structures.slab.Slab.generate_interface">generate_interface() (ectoolkits.structures.slab.Slab method)</a>
 </li>
       <li><a href="_api/ectoolkits.structures.slab.html#ectoolkits.structures.slab.Slab.generate_water_box">generate_water_box() (ectoolkits.structures.slab.Slab method)</a>
@@ -807,6 +819,8 @@ document.write(`
       <li><a href="_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_dummy_insert_fe">get_dummy_insert_fe() (in module ectoolkits.analysis.acidity)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.acidity.html#ectoolkits.analysis.acidity.get_dummy_insert_fe_hydronium">get_dummy_insert_fe_hydronium() (in module ectoolkits.analysis.acidity)</a>
+</li>
+      <li><a href="_api/ectoolkits.structures.tools.html#ectoolkits.structures.tools.get_exclude_water_count">get_exclude_water_count() (in module ectoolkits.structures.tools)</a>
 </li>
       <li><a href="_api/ectoolkits.analysis.uncertainty.html#ectoolkits.analysis.uncertainty.get_f_coarse_grained_data">get_f_coarse_grained_data() (in module ectoolkits.analysis.uncertainty)</a>
 </li>
@@ -867,6 +881,8 @@ document.write(`
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_api/ectoolkits.analysis.water.html#ectoolkits.analysis.water.WaterOrientation.get_origin">get_origin() (ectoolkits.analysis.water.WaterOrientation method)</a>
+</li>
+      <li><a href="_api/ectoolkits.structures.tools.html#ectoolkits.structures.tools.get_packmol_inp">get_packmol_inp() (in module ectoolkits.structures.tools)</a>
 </li>
       <li><a href="_api/ectoolkits.utils.rutile110.html#ectoolkits.utils.rutile110.get_pair">get_pair() (in module ectoolkits.utils.rutile110)</a>
 </li>
@@ -1086,6 +1102,8 @@ document.write(`
 </li>
         <li><a href="_api/ectoolkits.structures.slab.html#module-ectoolkits.structures.slab">ectoolkits.structures.slab</a>
 </li>
+        <li><a href="_api/ectoolkits.structures.tools.html#module-ectoolkits.structures.tools">ectoolkits.structures.tools</a>
+</li>
         <li><a href="_api/ectoolkits.utils.html#module-ectoolkits.utils">ectoolkits.utils</a>
 </li>
         <li><a href="_api/ectoolkits.utils.math.html#module-ectoolkits.utils.math">ectoolkits.utils.math</a>
@@ -1243,13 +1261,15 @@ document.write(`
 </li>
       <li><a href="_api/ectoolkits.plots.band_align.html#ectoolkits.plots.band_align.she_scale">she_scale() (in module ectoolkits.plots.band_align)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_api/ectoolkits.structures.slab.html#ectoolkits.structures.slab.Slab">Slab (class in ectoolkits.structures.slab)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.SlabRutile110">SlabRutile110 (class in ectoolkits.structures.rutile110)</a>
 </li>
       <li><a href="_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.SlabRutile1p11Edge">SlabRutile1p11Edge (class in ectoolkits.structures.rutile110)</a>
+</li>
+      <li><a href="_api/ectoolkits.structures.tools.html#ectoolkits.structures.tools.smiles2xyz">smiles2xyz() (in module ectoolkits.structures.tools)</a>
 </li>
       <li><a href="_api/ectoolkits.structures.rutile110.html#ectoolkits.structures.rutile110.sort_by_rows">sort_by_rows() (in module ectoolkits.structures.rutile110)</a>
 </li>

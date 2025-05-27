@@ -211,6 +211,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.structures.interface.html">ectoolkits.structures.interface module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.structures.rutile110.html">ectoolkits.structures.rutile110 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.structures.slab.html">ectoolkits.structures.slab module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_api/ectoolkits.structures.tools.html">ectoolkits.structures.tools module</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../_api/ectoolkits.utils.html">ectoolkits.utils package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -422,6 +423,7 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#check-if-slabs-cross-z-boundary">Check if slabs cross z boundary</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#obtain-the-indices-of-surface-atoms-in-slabs-interfaces">Obtain the indices of Surface Atoms in Slabs/Interfaces</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-an-interface-containing-ions-or-organic-molecules-in-distinct-regions">Generate an Interface Containing Ions or Organic Molecules in Distinct Regions</a></li>
 </ul>
             </nav>
         </div>
@@ -462,6 +464,50 @@ True
 <span class="o">[</span><span class="m">4</span>,<span class="w"> </span><span class="m">9</span>,<span class="w"> </span><span class="m">34</span>,<span class="w"> </span><span class="m">39</span>,<span class="w"> </span><span class="m">64</span>,<span class="w"> </span><span class="m">69</span>,<span class="w"> </span><span class="m">94</span>,<span class="w"> </span><span class="m">99</span>,<span class="w"> </span><span class="m">124</span>,<span class="w"> </span><span class="m">129</span>,<span class="w"> </span><span class="m">154</span>,<span class="w"> </span><span class="m">159</span>,<span class="w"> </span><span class="m">184</span>,<span class="w"> </span><span class="m">189</span>,<span class="w"> </span><span class="m">214</span>,<span class="w"> </span><span class="m">219</span><span class="o">]</span>
 <span class="c1"># bottom surface</span>
 <span class="o">[</span><span class="m">0</span>,<span class="w"> </span><span class="m">5</span>,<span class="w"> </span><span class="m">30</span>,<span class="w"> </span><span class="m">35</span>,<span class="w"> </span><span class="m">60</span>,<span class="w"> </span><span class="m">65</span>,<span class="w"> </span><span class="m">90</span>,<span class="w"> </span><span class="m">95</span>,<span class="w"> </span><span class="m">120</span>,<span class="w"> </span><span class="m">125</span>,<span class="w"> </span><span class="m">150</span>,<span class="w"> </span><span class="m">155</span>,<span class="w"> </span><span class="m">180</span>,<span class="w"> </span><span class="m">185</span>,<span class="w"> </span><span class="m">210</span>,<span class="w"> </span><span class="m">215</span><span class="o">]</span>
+</pre></div>
+</div>
+</section>
+<section id="generate-an-interface-containing-ions-or-organic-molecules-in-distinct-regions">
+<h2>Generate an Interface Containing Ions or Organic Molecules in Distinct Regions<a class="headerlink" href="#generate-an-interface-containing-ions-or-organic-molecules-in-distinct-regions" title="Permalink to this heading">#</a></h2>
+<p>In many interfacial simulations, it is necessary to include ions or organic molecules—especially those that exhibit chemical adsorption. The generate_components_symmetry_box() method allows precise control over the spatial distribution of different species in the system.</p>
+<p>For example, the image below shows an interface model constructed with ions and organics distributed in adsorption and bulk regions:
+<img alt="components" src="../../_images/slab-components.png" /></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ase.build</span><span class="w"> </span><span class="kn">import</span> <span class="n">fcc111</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ase.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.structures.slab</span><span class="w"> </span><span class="kn">import</span> <span class="n">Slab</span>
+
+<span class="c1"># Build a 6×6×6 Cu(111) slab with orthogonal unit cell and 1.5 Å vacuum</span>
+<span class="n">slab</span> <span class="o">=</span> <span class="n">fcc111</span><span class="p">(</span><span class="s1">&#39;Cu&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">a</span><span class="o">=</span><span class="mf">3.57</span><span class="p">,</span> <span class="n">vacuum</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">orthogonal</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">slab</span> <span class="o">=</span> <span class="n">Slab</span><span class="p">(</span><span class="n">slab</span><span class="p">)</span>
+
+<span class="c1"># Define water box height</span>
+<span class="n">water_box_len</span> <span class="o">=</span> <span class="mi">30</span>
+
+<span class="c1"># Generate symmetric water box with:</span>
+<span class="c1"># - [Cl-] in the adsorption region (1 molecule)</span>
+<span class="c1"># - (CCOCCO), [K+], and [Cl-] in the bulk region (1, 3, and 3 molecules respectively)</span>
+<span class="c1"># Adsorption zone is 0.5, bulk region spans from 6 Å (bottom) to 10 Å (top)</span>
+<span class="n">slab</span><span class="o">.</span><span class="n">generate_components_symmetry_box</span><span class="p">(</span>
+    <span class="n">water_box_len</span><span class="p">,</span>
+    <span class="n">ads_components_smiles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;[Cl-]&#39;</span><span class="p">],</span> <span class="n">ads_components_counts</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+    <span class="n">bulk_components_smiles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;CCOCCO&#39;</span><span class="p">,</span> <span class="s1">&#39;[K+]&#39;</span><span class="p">,</span> <span class="s1">&#39;[Cl-]&#39;</span><span class="p">],</span> <span class="n">bulk_components_counts</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+    <span class="n">ads_limit</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">bulk_dw</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">bulk_up</span><span class="o">=</span><span class="mi">10</span>
+<span class="p">)</span>
+
+<span class="c1"># Identify top and bottom surface atom indices</span>
+<span class="n">top_surface_idx</span> <span class="o">=</span> <span class="n">slab</span><span class="o">.</span><span class="n">find_surf_idx</span><span class="p">(</span><span class="n">element</span><span class="o">=</span><span class="s1">&#39;Cu&#39;</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">dsur</span><span class="o">=</span><span class="s1">&#39;up&#39;</span><span class="p">)</span>
+<span class="n">bottom_surface_idx</span> <span class="o">=</span> <span class="n">slab</span><span class="o">.</span><span class="n">find_surf_idx</span><span class="p">(</span><span class="n">element</span><span class="o">=</span><span class="s1">&#39;Cu&#39;</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">dsur</span><span class="o">=</span><span class="s1">&#39;dw&#39;</span><span class="p">)</span>
+
+<span class="c1"># Generate the final interface structure</span>
+<span class="n">interface</span> <span class="o">=</span> <span class="n">slab</span><span class="o">.</span><span class="n">generate_interface</span><span class="p">(</span>
+    <span class="n">water_box_len</span><span class="o">=</span><span class="n">water_box_len</span><span class="p">,</span>
+    <span class="n">top_surface_idx</span><span class="o">=</span><span class="n">top_surface_idx</span><span class="p">,</span>
+    <span class="n">bottom_surface_idx</span><span class="o">=</span><span class="n">bottom_surface_idx</span>
+<span class="p">)</span>
+
+<span class="c1"># Write to XYZ file</span>
+<span class="n">write</span><span class="p">(</span><span class="s1">&#39;coord.xyz&#39;</span><span class="p">,</span> <span class="n">interface</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -514,6 +560,7 @@ True
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#check-if-slabs-cross-z-boundary">Check if slabs cross z boundary</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#obtain-the-indices-of-surface-atoms-in-slabs-interfaces">Obtain the indices of Surface Atoms in Slabs/Interfaces</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-an-interface-containing-ions-or-organic-molecules-in-distinct-regions">Generate an Interface Containing Ions or Organic Molecules in Distinct Regions</a></li>
 </ul>
   </nav></div>
 

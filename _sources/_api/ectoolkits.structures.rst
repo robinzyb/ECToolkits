@@ -10,6 +10,7 @@ Submodules
    ectoolkits.structures.interface
    ectoolkits.structures.rutile110
    ectoolkits.structures.slab
+   ectoolkits.structures.tools
 
 Module contents
 ---------------

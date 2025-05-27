@@ -5,7 +5,7 @@ format: jb-book
 root: intro
 parts:
   - caption: Structures
-      - file: docs/structures/README
+      - file: docs/structures/slab
   - caption: Analysis
     chapters:
       - file: docs/analysis/atom_density

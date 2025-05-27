@@ -30,7 +30,8 @@ dependencies = [
     "MDAnalysis >= 2.1.0",
     "dpdispatcher",
     "cp2k-input-tools",
-    "pyyaml"
+    "pyyaml",
+    "rdkit"
 ]
 
 [tool.setuptools.packages.find]

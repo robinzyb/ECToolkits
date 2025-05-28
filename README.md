@@ -15,7 +15,7 @@ pip install ectoolkits
 ```
 
 ## From source
-One can download the source code of cp2kdata by
+One can download the source code of ECToolkits by
 ```bash
 git clone https://github.com/robinzyb/ECToolkits.git ectoolkits
 ```

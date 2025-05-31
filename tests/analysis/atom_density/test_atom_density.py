@@ -25,7 +25,6 @@ def analysis_and_answer(request, tmp_path_factory):
     input_param["density_type"][0]["name"] = water_density_file
 
     water_density_file_ref = system_dir/"water_density.dat"
-  #  analysis = AtomDensity(input_param)
     return input_param, water_density_file_ref, water_density_file
 
 class TestAtomDensity():

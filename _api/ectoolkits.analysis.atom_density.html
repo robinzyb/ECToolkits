@@ -433,11 +433,412 @@ document.write(`
 <span id="ectoolkits-analysis-atom-density-module"></span><h1>ectoolkits.analysis.atom_density module<a class="headerlink" href="#module-ectoolkits.analysis.atom_density" title="Permalink to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.atom_density.</span></span><span class="sig-name descname"><span class="pre">AtomDensity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.atom_density.</span></span><span class="sig-name descname"><span class="pre">AtomDensity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atomgroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AnalysisBase</span></code></p>
+<p>Class for analyzing atom density profiles along the z-axis for interface systems.</p>
+<p>This class extends the MDAnalysis <cite>AnalysisBase</cite> class and provides methods to compute and analyze
+atom density distributions along the z-axis, which is useful for studying interfaces and layered materials.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.twoD">
+<span class="sig-name descname"><span class="pre">twoD</span></span><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.twoD" title="Permalink to this definition">#</a></dt>
+<dd><p>Whether the system is a 2D material (surface 1 and 2 are the same).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.surf1">
+<span class="sig-name descname"><span class="pre">surf1</span></span><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.surf1" title="Permalink to this definition">#</a></dt>
+<dd><p>Indices of atoms defining surface 1 (left interface).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.surf2">
+<span class="sig-name descname"><span class="pre">surf2</span></span><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.surf2" title="Permalink to this definition">#</a></dt>
+<dd><p>Indices of atoms defining surface 2 (right interface).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.density_type">
+<span class="sig-name descname"><span class="pre">density_type</span></span><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.density_type" title="Permalink to this definition">#</a></dt>
+<dd><p>Parameters specifying which atom types to analyze.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.ag">
+<span class="sig-name descname"><span class="pre">ag</span></span><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.ag" title="Permalink to this definition">#</a></dt>
+<dd><p>AtomGroup of all atoms to be analyzed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>AtomGroup</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.u">
+<span class="sig-name descname"><span class="pre">u</span></span><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.u" title="Permalink to this definition">#</a></dt>
+<dd><p>The MDAnalysis Universe object containing the atomgroup and trajectory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Universe</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.cellpar">
+<span class="sig-name descname"><span class="pre">cellpar</span></span><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.cellpar" title="Permalink to this definition">#</a></dt>
+<dd><p>Unit cell parameters of the system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.n_atoms">
+<span class="sig-name descname"><span class="pre">n_atoms</span></span><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.n_atoms" title="Permalink to this definition">#</a></dt>
+<dd><p>Number of atoms in the selected atom group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.volume">
+<span class="sig-name descname"><span class="pre">volume</span></span><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.volume" title="Permalink to this definition">#</a></dt>
+<dd><p>Volume of the simulation cell.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.xy_area">
+<span class="sig-name descname"><span class="pre">xy_area</span></span><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.xy_area" title="Permalink to this definition">#</a></dt>
+<dd><p>Area of the xy-plane of the simulation cell.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.n_results">
+<span class="sig-name descname"><span class="pre">n_results</span></span><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.n_results" title="Permalink to this definition">#</a></dt>
+<dd><p>Number of results to store for each frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.all_z">
+<span class="sig-name descname"><span class="pre">all_z</span></span><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.all_z" title="Permalink to this definition">#</a></dt>
+<dd><p>Array to store z-coordinates of all atoms for each frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.surf1_z_list">
+<span class="sig-name descname"><span class="pre">surf1_z_list</span></span><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.surf1_z_list" title="Permalink to this definition">#</a></dt>
+<dd><p>Average z positions of surface 1 atoms for each frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.surf2_z_list">
+<span class="sig-name descname"><span class="pre">surf2_z_list</span></span><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.surf2_z_list" title="Permalink to this definition">#</a></dt>
+<dd><p>Average z positions of surface 2 atoms for each frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.surf1_z">
+<span class="sig-name descname"><span class="pre">surf1_z</span></span><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.surf1_z" title="Permalink to this definition">#</a></dt>
+<dd><p>Mean z position of surface 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.surf2_z">
+<span class="sig-name descname"><span class="pre">surf2_z</span></span><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.surf2_z" title="Permalink to this definition">#</a></dt>
+<dd><p>Mean z position of surface 2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.water_cent_list">
+<span class="sig-name descname"><span class="pre">water_cent_list</span></span><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.water_cent_list" title="Permalink to this definition">#</a></dt>
+<dd><p>List of water center positions along the trajectory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.atom_density">
+<span class="sig-name descname"><span class="pre">atom_density</span></span><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.atom_density" title="Permalink to this definition">#</a></dt>
+<dd><p>Dictionary to store computed atom density profiles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.atom_density_z">
+<span class="sig-name descname"><span class="pre">atom_density_z</span></span><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.atom_density_z" title="Permalink to this definition">#</a></dt>
+<dd><p>Dictionary to store z-coordinates corresponding to density profiles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity._prepare">
+<span class="sig-name descname"><span class="pre">_prepare</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity._prepare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity._prepare" title="Permalink to this definition">#</a></dt>
+<dd><p>Prepares data structures before trajectory iteration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity._single_frame">
+<span class="sig-name descname"><span class="pre">_single_frame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity._single_frame"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity._single_frame" title="Permalink to this definition">#</a></dt>
+<dd><p>Processes a single frame to extract z-coordinates.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity._conclude">
+<span class="sig-name descname"><span class="pre">_conclude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity._conclude"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity._conclude" title="Permalink to this definition">#</a></dt>
+<dd><p>Finalizes the analysis and computes density profiles.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.get_surf_z_list">
+<span class="sig-name descname"><span class="pre">get_surf_z_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idxs_surf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_surf_z_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.get_surf_z_list" title="Permalink to this definition">#</a></dt>
+<dd><p>Calculates average z positions for a given surface.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.get_water_cent_list">
+<span class="sig-name descname"><span class="pre">get_water_cent_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_water_cent_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.get_water_cent_list" title="Permalink to this definition">#</a></dt>
+<dd><p>Computes the water center positions along the trajectory.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.get_idx_list">
+<span class="sig-name descname"><span class="pre">get_idx_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_idx_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.get_idx_list" title="Permalink to this definition">#</a></dt>
+<dd><p>Determines atom indices to analyze based on input parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.get_idx_list_manual">
+<span class="sig-name descname"><span class="pre">get_idx_list_manual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_idx_list_manual"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.get_idx_list_manual" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns manually specified atom indices.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.get_idx_list_all">
+<span class="sig-name descname"><span class="pre">get_idx_list_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_idx_list_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.get_idx_list_all" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns all atom indices of a specified element.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.get_atom_density">
+<span class="sig-name descname"><span class="pre">get_atom_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_atom_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.get_atom_density" title="Permalink to this definition">#</a></dt>
+<dd><p>Calculates and saves the atom density profile.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.get_unit_conversion">
+<span class="sig-name descname"><span class="pre">get_unit_conversion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">density_unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xy_area</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_unit_conversion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.get_unit_conversion" title="Permalink to this definition">#</a></dt>
+<dd><p>Computes the unit conversion factor for density.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">get_atom_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_atom_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition">#</a></dt>
+<dd><p>Calculate and save the atom density profile.</p>
+<p>Computes the histogram of atom z-coordinates, normalizes the density,
+and saves the profile to a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>param</strong> (<em>dict</em>) – Parameters for density calculation (e.g., bin width, unit).</p></li>
+<li><p><strong>idx_list</strong> (<em>list</em><em> or </em><em>np.array</em>) – Indices of atoms to include in the density profile.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">get_idx_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_idx_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Permalink to this definition">#</a></dt>
+<dd><p>Determine atom indices to analyze based on input parameters.</p>
+<p>Selects indices either manually or by element type as specified in the parameter dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>param</strong> (<em>dict</em>) – Dictionary specifying selection method and parameters.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of atom indices to analyze.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list or np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">get_idx_list_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_idx_list_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Permalink to this definition">#</a></dt>
+<dd><p>Return all atom indices of a specified element.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>param</strong> (<em>dict</em>) – Dictionary containing ‘element’.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array of atom indices for the specified element.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">get_idx_list_manual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_idx_list_manual"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id3" title="Permalink to this definition">#</a></dt>
+<dd><p>Return manually specified atom indices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>param</strong> (<em>dict</em>) – Dictionary containing ‘idx_list’.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of atom indices.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">get_surf_z_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idxs_surf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_surf_z_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id4" title="Permalink to this definition">#</a></dt>
+<dd><p>Calculate the average z positions for a given surface.</p>
+<p>Wraps the z-coordinates of surface atoms to handle periodic boundaries and computes
+the mean z position for each frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>idxs_surf</strong> (<em>np.array</em>) – Indices of surface atoms.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Average z positions for each frame.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id5">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_unit_conversion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">density_unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xy_area</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_unit_conversion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id5" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the unit conversion factor for density.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>density_unit</strong> (<em>str</em>) – Desired density unit (‘water’ or ‘number’).</p></li>
+<li><p><strong>dz</strong> (<em>float</em>) – Bin width along z-axis.</p></li>
+<li><p><strong>xy_area</strong> (<em>float</em>) – Area of the xy-plane.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Conversion factor for density normalization.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">get_water_cent_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_water_cent_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id6" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the water center positions along the trajectory.</p>
+<p>Calculates the midpoint between the two surfaces for each frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Water center positions for each frame.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.Density">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.atom_density.</span></span><span class="sig-name descname"><span class="pre">Density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#Density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.Density" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
-<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.get_all_z">
-<span class="sig-name descname"><span class="pre">get_all_z</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_all_z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.get_all_z" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.Density.get_all_z">
+<span class="sig-name descname"><span class="pre">get_all_z</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#Density.get_all_z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.Density.get_all_z" title="Permalink to this definition">#</a></dt>
 <dd><p>get the z coordinates of atoms along trajectory</p>
 <p>_extended_summary_</p>
 <dl class="field-list simple">
@@ -451,33 +852,33 @@ document.write(`
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.get_atom_density">
-<span class="sig-name descname"><span class="pre">get_atom_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_atom_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.get_atom_density" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.Density.get_atom_density">
+<span class="sig-name descname"><span class="pre">get_atom_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#Density.get_atom_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.Density.get_atom_density" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.get_ave_density">
-<span class="sig-name descname"><span class="pre">get_ave_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">width_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_ave_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.get_ave_density" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.Density.get_ave_density">
+<span class="sig-name descname"><span class="pre">get_ave_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">width_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#Density.get_ave_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.Density.get_ave_density" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.get_idx_list">
-<span class="sig-name descname"><span class="pre">get_idx_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_idx_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.get_idx_list" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.Density.get_idx_list">
+<span class="sig-name descname"><span class="pre">get_idx_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#Density.get_idx_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.Density.get_idx_list" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.get_idx_list_all">
-<span class="sig-name descname"><span class="pre">get_idx_list_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_idx_list_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.get_idx_list_all" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.Density.get_idx_list_all">
+<span class="sig-name descname"><span class="pre">get_idx_list_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#Density.get_idx_list_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.Density.get_idx_list_all" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.get_idx_list_manual">
-<span class="sig-name descname"><span class="pre">get_idx_list_manual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_idx_list_manual"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.get_idx_list_manual" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.Density.get_idx_list_manual">
+<span class="sig-name descname"><span class="pre">get_idx_list_manual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#Density.get_idx_list_manual"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.Density.get_idx_list_manual" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.get_surf1_z_list">
-<span class="sig-name descname"><span class="pre">get_surf1_z_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_surf1_z_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.get_surf1_z_list" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.Density.get_surf1_z_list">
+<span class="sig-name descname"><span class="pre">get_surf1_z_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#Density.get_surf1_z_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.Density.get_surf1_z_list" title="Permalink to this definition">#</a></dt>
 <dd><p>calculate the surface 1 average position</p>
 <p>_extended_summary_</p>
 <dl class="field-list simple">
@@ -491,8 +892,8 @@ document.write(`
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.get_surf2_z_list">
-<span class="sig-name descname"><span class="pre">get_surf2_z_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_surf2_z_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.get_surf2_z_list" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.Density.get_surf2_z_list">
+<span class="sig-name descname"><span class="pre">get_surf2_z_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#Density.get_surf2_z_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.Density.get_surf2_z_list" title="Permalink to this definition">#</a></dt>
 <dd><p>calculate the surface 2 average position</p>
 <p>_extended_summary_</p>
 <dl class="field-list simple">
@@ -506,40 +907,28 @@ document.write(`
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.get_unit_conversion">
-<span class="sig-name descname"><span class="pre">get_unit_conversion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dz</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_unit_conversion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.get_unit_conversion" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.get_water_cent_list">
-<span class="sig-name descname"><span class="pre">get_water_cent_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.get_water_cent_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.get_water_cent_list" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.plot_density">
-<span class="sig-name descname"><span class="pre">plot_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sym</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.plot_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.plot_density" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.run">
-<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.run" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.AtomDensity.water_O_idx">
-<span class="sig-name descname"><span class="pre">water_O_idx</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#AtomDensity.water_O_idx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.AtomDensity.water_O_idx" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.Density">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.atom_density.</span></span><span class="sig-name descname"><span class="pre">Density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atomgroup</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#Density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.Density" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AnalysisBase</span></code></p>
-<p>Calculate the density profile of a group of atoms along the z-axis for interface systems</p>
-<dl class="py method">
 <dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.Density.get_unit_conversion">
-<span class="sig-name descname"><span class="pre">get_unit_conversion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#Density.get_unit_conversion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.Density.get_unit_conversion" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_unit_conversion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dz</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#Density.get_unit_conversion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.Density.get_unit_conversion" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.Density.get_water_cent_list">
+<span class="sig-name descname"><span class="pre">get_water_cent_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#Density.get_water_cent_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.Density.get_water_cent_list" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.Density.plot_density">
+<span class="sig-name descname"><span class="pre">plot_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sym</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#Density.plot_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.Density.plot_density" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.Density.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#Density.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.Density.run" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.Density.water_O_idx">
+<span class="sig-name descname"><span class="pre">water_O_idx</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#Density.water_O_idx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.Density.water_O_idx" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -547,6 +936,11 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.analysis_run">
 <span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.atom_density.</span></span><span class="sig-name descname"><span class="pre">analysis_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#analysis_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.analysis_run" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ectoolkits.analysis.atom_density.run_atom_density_analysis">
+<span class="sig-prename descclassname"><span class="pre">ectoolkits.analysis.atom_density.</span></span><span class="sig-name descname"><span class="pre">run_atom_density_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ectoolkits/analysis/atom_density.html#run_atom_density_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ectoolkits.analysis.atom_density.run_atom_density_analysis" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 </section>

@@ -386,7 +386,10 @@ document.write(`
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">ase.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">read</span><span class="p">,</span> <span class="n">write</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">ase.neighborlist</span><span class="w"> </span><span class="kn">import</span> <span class="n">neighbor_list</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ase.cell</span><span class="w"> </span><span class="kn">import</span> <span class="n">Cell</span> <span class="c1"># used for converting cell parameters.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">MDAnalysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">Universe</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">MDAnalysis.analysis.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnalysisBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">MDAnalysis.lib.mdamath</span><span class="w"> </span><span class="kn">import</span> <span class="n">box_volume</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.structures.slab</span><span class="w"> </span><span class="kn">import</span> <span class="n">Slab</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.utils.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">mic_1d</span>
@@ -394,6 +397,359 @@ document.write(`
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
+<div class="viewcode-block" id="run_atom_density_analysis"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.run_atom_density_analysis">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">run_atom_density_analysis</span><span class="p">(</span><span class="n">inp</span><span class="p">):</span>
+    <span class="n">xyz_file</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;xyz_file&quot;</span><span class="p">)</span>
+    <span class="nb">format</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;format&quot;</span><span class="p">,</span> <span class="s2">&quot;XYZ&quot;</span><span class="p">)</span>
+    <span class="n">cell</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cell&quot;</span><span class="p">)</span>
+    <span class="n">cell</span> <span class="o">=</span> <span class="n">Cell</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">Universe</span><span class="p">(</span><span class="n">xyz_file</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">)</span>
+    <span class="n">u</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">dimensions</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">cellpar</span><span class="p">()</span>
+    <span class="n">surf1</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;surf1&quot;</span><span class="p">)</span>
+    <span class="n">surf2</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;surf2&quot;</span><span class="p">)</span>
+    <span class="n">density_type</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;density_type&quot;</span><span class="p">)</span>
+
+    <span class="n">ad</span> <span class="o">=</span> <span class="n">AtomDensity</span><span class="p">(</span><span class="n">atomgroup</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">atoms</span><span class="p">,</span>
+            <span class="n">surf1</span><span class="o">=</span><span class="n">surf1</span><span class="p">,</span>
+            <span class="n">surf2</span><span class="o">=</span><span class="n">surf2</span><span class="p">,</span>
+            <span class="n">density_type</span><span class="o">=</span><span class="n">density_type</span><span class="p">)</span>
+    <span class="n">ad</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">ad</span></div>
+
+<div class="viewcode-block" id="AtomDensity"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">AtomDensity</span><span class="p">(</span><span class="n">AnalysisBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class for analyzing atom density profiles along the z-axis for interface systems.</span>
+
+<span class="sd">    This class extends the MDAnalysis `AnalysisBase` class and provides methods to compute and analyze</span>
+<span class="sd">    atom density distributions along the z-axis, which is useful for studying interfaces and layered materials.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        twoD (bool): Whether the system is a 2D material (surface 1 and 2 are the same).</span>
+<span class="sd">        surf1 (np.ndarray): Indices of atoms defining surface 1 (left interface).</span>
+<span class="sd">        surf2 (np.ndarray): Indices of atoms defining surface 2 (right interface).</span>
+<span class="sd">        density_type (Any): Parameters specifying which atom types to analyze.</span>
+<span class="sd">        ag (AtomGroup): AtomGroup of all atoms to be analyzed.</span>
+<span class="sd">        u (Universe): The MDAnalysis Universe object containing the atomgroup and trajectory.</span>
+<span class="sd">        cellpar (np.ndarray): Unit cell parameters of the system.</span>
+<span class="sd">        n_atoms (int): Number of atoms in the selected atom group.</span>
+<span class="sd">        volume (float): Volume of the simulation cell.</span>
+<span class="sd">        xy_area (float): Area of the xy-plane of the simulation cell.</span>
+<span class="sd">        n_results (int): Number of results to store for each frame.</span>
+<span class="sd">        all_z (np.ndarray): Array to store z-coordinates of all atoms for each frame.</span>
+<span class="sd">        surf1_z_list (np.ndarray): Average z positions of surface 1 atoms for each frame.</span>
+<span class="sd">        surf2_z_list (np.ndarray): Average z positions of surface 2 atoms for each frame.</span>
+<span class="sd">        surf1_z (float): Mean z position of surface 1.</span>
+<span class="sd">        surf2_z (float): Mean z position of surface 2.</span>
+<span class="sd">        water_cent_list (np.ndarray): List of water center positions along the trajectory.</span>
+<span class="sd">        atom_density (dict): Dictionary to store computed atom density profiles.</span>
+<span class="sd">        atom_density_z (dict): Dictionary to store z-coordinates corresponding to density profiles.</span>
+
+<span class="sd">    Methods:</span>
+<span class="sd">        _prepare(): Prepares data structures before trajectory iteration.</span>
+<span class="sd">        _single_frame(): Processes a single frame to extract z-coordinates.</span>
+<span class="sd">        _conclude(): Finalizes the analysis and computes density profiles.</span>
+<span class="sd">        get_surf_z_list(idxs_surf): Calculates average z positions for a given surface.</span>
+<span class="sd">        get_water_cent_list(): Computes the water center positions along the trajectory.</span>
+<span class="sd">        get_idx_list(param): Determines atom indices to analyze based on input parameters.</span>
+<span class="sd">        get_idx_list_manual(param): Returns manually specified atom indices.</span>
+<span class="sd">        get_idx_list_all(param): Returns all atom indices of a specified element.</span>
+<span class="sd">        get_atom_density(param, idx_list): Calculates and saves the atom density profile.</span>
+<span class="sd">        get_unit_conversion(density_unit, dz, xy_area): Computes the unit conversion factor for density.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">atomgroup</span><span class="p">,</span>
+                 <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">trajectory</span> <span class="o">=</span> <span class="n">atomgroup</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">trajectory</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">AtomDensity</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">trajectory</span><span class="p">,</span>
+                                      <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the Density analysis.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            atomgroup (AtomGroup): The atom group to analyze.</span>
+<span class="sd">            verbose (bool): Whether to print verbose output. Defaults to True.</span>
+<span class="sd">            **kwargs: Additional keyword arguments, including:</span>
+<span class="sd">                twoD (bool): Whether the system is a 2D material (surface 1 and 2 are the same).</span>
+<span class="sd">                surf1 (List[int]): Indices of atoms defining surface 1 (left interface).</span>
+<span class="sd">                surf2 (List[int]): Indices of atoms defining surface 2 (right interface).</span>
+<span class="sd">                density_type (Dict): Parameters specifying which atom types to analyze.</span>
+
+<span class="sd">        Sets up the initial analysis parameters, parses input surfaces and density types,</span>
+<span class="sd">        and initializes attributes for cell, atom group, and logging.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Params</span>
+        <span class="c1"># solid |(surface left) liquid |(surface_right) solid</span>
+        <span class="c1"># dz: default 0.05 resolution for density profile</span>
+
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Analysis of Atom Density along Z axis&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Only trajectory from NVT ensemble is supported&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Parse external input parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">twoD</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;twoD&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="c1"># better to change the names of surf1 and surf2 to left and right</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surf1</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;surf1&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Read Surface 1 Atoms Index: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surf1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surf1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surf1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surf2</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;surf2&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Read Surface 2 Atoms Index: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surf2</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surf2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surf2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surf1</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf2</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">twoD</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Surface 1 and Surface 2 are the same, this is a 2D material.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">density_type</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;density_type&quot;</span><span class="p">)</span>
+
+        <span class="c1">#TODO: MDA cellpar only accepts [a, b, c, alpha, beta, gamma] format</span>
+        <span class="c1"># use ase cells to covert to this format.</span>
+        <span class="c1"># ensure the dimensions are not empty.</span>
+        <span class="c1"># internal variable</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ag</span> <span class="o">=</span> <span class="n">atomgroup</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ag</span><span class="o">.</span><span class="n">universe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ag</span><span class="o">.</span><span class="n">dimensions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_atoms</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ag</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">box_volume</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xy_area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atom_density</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atom_density_z</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Read Frame Number: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">n_frames</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Read Atom Number: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_atoms</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Read Cell Parameters: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Read z length: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Read XY Area: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xy_area</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Read Cell Volume: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="p">))</span>
+
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_results</span> <span class="o">=</span> <span class="mi">2</span>
+
+<div class="viewcode-block" id="AtomDensity._prepare"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity._prepare">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">_prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prepare data structures before trajectory iteration.</span>
+
+<span class="sd">        Initializes the array to store z-coordinates of all atoms for each frame.</span>
+<span class="sd">        Called before the trajectory iteration begins.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_atoms</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="AtomDensity._single_frame"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity._single_frame">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">_single_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Process a single frame to extract z-coordinates.</span>
+
+<span class="sd">        Stores the z-coordinates of all atoms in the current frame into the results array.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#TODO: all_z seems not necessary, since we can get the z from u.atoms.positions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_z</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ag</span><span class="o">.</span><span class="n">positions</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="AtomDensity._conclude"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity._conclude">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">_conclude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Finalize the analysis and compute density profiles.</span>
+
+<span class="sd">        Calculates average surface positions, water center positions, and computes</span>
+<span class="sd">        atom density profiles for each specified atom type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surf1_z_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_surf_z_list</span><span class="p">(</span><span class="n">idxs_surf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">surf1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surf2_z_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_surf_z_list</span><span class="p">(</span><span class="n">idxs_surf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">surf2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surf1_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf1_z_list</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surf2_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf2_z_list</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="c1"># find the water center along the trajectory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">water_cent_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_water_cent_list</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">density_type</span><span class="p">:</span>
+            <span class="n">idx_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx_list</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_atom_density</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">idx_list</span><span class="o">=</span><span class="n">idx_list</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AtomDensity.get_surf_z_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_surf_z_list">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_surf_z_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idxs_surf</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the average z positions for a given surface.</span>
+
+<span class="sd">        Wraps the z-coordinates of surface atoms to handle periodic boundaries and computes</span>
+<span class="sd">        the mean z position for each frame.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            idxs_surf (np.array): Indices of surface atoms.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            np.array: Average z positions for each frame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">surf_z_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_z</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">idxs_surf</span><span class="p">]</span>
+        <span class="n">surf_z_list</span> <span class="o">=</span> <span class="n">surf_z_list</span><span class="o">.</span><span class="n">T</span>
+
+        <span class="c1"># Wrap the surface atoms.</span>
+        <span class="c1"># Sometimes atoms on surfaces are distributed around the cell boundary.</span>
+        <span class="c1"># The absolute positions of certain atoms may differ by cell length.</span>
+        <span class="c1"># This will cause the average position of surface atoms to be wrong.</span>
+        <span class="n">new_surf_z_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">surf_z</span> <span class="ow">in</span> <span class="n">surf_z_list</span><span class="p">:</span>
+            <span class="n">surf_z</span> <span class="o">=</span> <span class="n">mic_1d</span><span class="p">(</span><span class="n">surf_z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">new_surf_z_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">surf_z</span><span class="p">)</span>
+
+        <span class="n">surf_z_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">new_surf_z_list</span><span class="p">)</span>
+
+        <span class="n">surf_z_list</span> <span class="o">=</span> <span class="n">surf_z_list</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># all the z positions are wrapped to the first frame</span>
+        <span class="n">surf_z_list</span> <span class="o">=</span> <span class="n">mic_1d</span><span class="p">(</span><span class="n">surf_z_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">surf_z_list</span></div>
+
+<div class="viewcode-block" id="AtomDensity.get_water_cent_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_water_cent_list">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_water_cent_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the water center positions along the trajectory.</span>
+
+<span class="sd">        Calculates the midpoint between the two surfaces for each frame.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            np.array: Water center positions for each frame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">water_cent_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">surf1_z</span><span class="p">,</span> <span class="n">surf2_z</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surf1_z_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf2_z_list</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">surf2_z</span> <span class="o">&lt;</span> <span class="n">surf1_z</span><span class="p">:</span>
+                <span class="n">surf2_z</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">water_cent</span> <span class="o">=</span> <span class="p">(</span><span class="n">surf1_z</span> <span class="o">+</span> <span class="n">surf2_z</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+            <span class="n">water_cent_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">water_cent</span><span class="p">)</span>
+        <span class="n">water_cent_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">water_cent_list</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">water_cent_list</span></div>
+
+<div class="viewcode-block" id="AtomDensity.get_idx_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_idx_list">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_idx_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determine atom indices to analyze based on input parameters.</span>
+
+<span class="sd">        Selects indices either manually or by element type as specified in the parameter dictionary.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            param (dict): Dictionary specifying selection method and parameters.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list or np.array: List of atom indices to analyze.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">idx_method</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;idx_method&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">idx_method</span> <span class="o">==</span> <span class="s2">&quot;manual&quot;</span><span class="p">:</span>
+            <span class="n">idx_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx_list_manual</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">idx_method</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+            <span class="n">idx_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx_list_all</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Not implement&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span>
+        <span class="k">return</span> <span class="n">idx_list</span></div>
+
+<div class="viewcode-block" id="AtomDensity.get_idx_list_manual"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_idx_list_manual">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_idx_list_manual</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return manually specified atom indices.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            param (dict): Dictionary containing &#39;idx_list&#39;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: List of atom indices.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">idx_list</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;idx_list&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">idx_list</span></div>
+
+<div class="viewcode-block" id="AtomDensity.get_idx_list_all"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_idx_list_all">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_idx_list_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return all atom indices of a specified element.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            param (dict): Dictionary containing &#39;element&#39;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            np.array: Array of atom indices for the specified element.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">element</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;element&quot;</span><span class="p">)</span>
+        <span class="n">idx_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;type </span><span class="si">{</span><span class="n">element</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">idx_list</span></div>
+
+<div class="viewcode-block" id="AtomDensity.get_atom_density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_atom_density">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_atom_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">idx_list</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate and save the atom density profile.</span>
+
+<span class="sd">        Computes the histogram of atom z-coordinates, normalizes the density,</span>
+<span class="sd">        and saves the profile to a file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            param (dict): Parameters for density calculation (e.g., bin width, unit).</span>
+<span class="sd">            idx_list (list or np.array): Indices of atoms to include in the density profile.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;START GETTING ATOM DENSITY&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;----------------------------&quot;</span><span class="p">)</span>
+        <span class="c1"># dz: default 0.05 resolution for density profile</span>
+        <span class="c1"># dz is different for different systems.</span>
+        <span class="n">dz</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dz&quot;</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>
+        <span class="n">atom_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_z</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">idx_list</span><span class="p">]</span>
+        <span class="c1"># atoms are aligned to the left surface</span>
+        <span class="c1"># TODO: we can also align to the center of water.</span>
+        <span class="n">atom_z</span> <span class="o">=</span> <span class="n">atom_z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf1_z_list</span>
+
+        <span class="c1"># A certain atom_z possibly exceeds cell boundary, need wrap its value.</span>
+        <span class="n">atom_z_new</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">cell_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">atom_z</span><span class="o">.</span><span class="n">flatten</span><span class="p">():</span>
+            <span class="n">atom_z_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span> <span class="o">%</span> <span class="n">cell_z</span><span class="p">)</span>
+        <span class="n">atom_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">atom_z_new</span><span class="p">)</span>
+
+        <span class="c1"># find the length between two surface</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surf1_z</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf2_z</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">twoD</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">surf_space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf2_z</span> <span class="o">+</span> <span class="n">cell_z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf1_z</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">surf_space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf2_z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf1_z</span>
+
+        <span class="n">bins</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surf_space</span><span class="o">/</span><span class="n">dz</span><span class="p">)</span>
+
+        <span class="n">density</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span>
+            <span class="n">atom_z</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf_space</span><span class="p">))</span>
+
+        <span class="c1"># throw the last one and shift half bin</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">z</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">dz</span><span class="o">/</span><span class="mi">2</span>
+
+        <span class="n">density_unit</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;density_unit&quot;</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">)</span>
+        <span class="n">unit_conversion</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_unit_conversion</span><span class="p">(</span><span class="n">density_unit</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xy_area</span><span class="p">)</span>
+
+
+        <span class="c1"># normalized wrt density of bulk water</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="n">density</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span> <span class="o">*</span> <span class="n">unit_conversion</span>
+
+        <span class="n">element</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;element&quot;</span><span class="p">)</span>
+        <span class="n">output_file</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">element</span><span class="si">}</span><span class="s2">_output&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">atom_density_z</span><span class="p">[</span><span class="n">output_file</span><span class="p">]</span> <span class="o">=</span> <span class="n">z</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atom_density</span><span class="p">[</span><span class="n">output_file</span><span class="p">]</span> <span class="o">=</span> <span class="n">density</span>
+
+        <span class="n">output_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s2">.dat&quot;</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span>
+            <span class="n">output_file</span><span class="p">,</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">z</span><span class="p">,</span> <span class="n">density</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+            <span class="n">header</span><span class="o">=</span><span class="s2">&quot;FIELD: z[A], atom_density&quot;</span>
+        <span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Density Profile Data Save to </span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AtomDensity.get_unit_conversion"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_unit_conversion">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_unit_conversion</span><span class="p">(</span><span class="n">density_unit</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">xy_area</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the unit conversion factor for density.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            density_unit (str): Desired density unit (&#39;water&#39; or &#39;number&#39;).</span>
+<span class="sd">            dz (float): Bin width along z-axis.</span>
+<span class="sd">            xy_area (float): Area of the xy-plane.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Conversion factor for density normalization.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">density_unit</span> <span class="o">==</span> <span class="s2">&quot;water&quot;</span><span class="p">:</span>
+            <span class="n">bulk_density</span> <span class="o">=</span> <span class="mi">32</span><span class="o">/</span><span class="mf">9.86</span><span class="o">**</span><span class="mi">3</span>
+            <span class="n">unit_conversion</span> <span class="o">=</span> <span class="n">xy_area</span><span class="o">*</span><span class="n">dz</span><span class="o">*</span><span class="n">bulk_density</span>
+            <span class="n">unit_conversion</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">unit_conversion</span>
+        <span class="k">elif</span> <span class="n">density_unit</span> <span class="o">==</span> <span class="s2">&quot;number&quot;</span><span class="p">:</span>
+            <span class="n">unit_conversion</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+        <span class="k">return</span> <span class="n">unit_conversion</span></div></div>
+
+
+
+
+<span class="c1"># old density analysis function/class</span>
 
 <div class="viewcode-block" id="analysis_run"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.analysis_run">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">analysis_run</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">CONFIG</span><span class="p">:</span>
@@ -401,16 +757,18 @@ document.write(`
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Analysis Start!&quot;</span><span class="p">)</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">CONFIG</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">inp</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-        <span class="n">system</span> <span class="o">=</span> <span class="n">AtomDensity</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+        <span class="n">system</span> <span class="o">=</span> <span class="n">Density</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
         <span class="n">system</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;FINISHED&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="AtomDensity"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">AtomDensity</span><span class="p">():</span>
+<div class="viewcode-block" id="Density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.Density">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Density</span><span class="p">():</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inp</span><span class="p">):</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Perform Atom Density Analysis&quot;</span><span class="p">)</span>
         <span class="c1"># print file name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">twoD</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># this is not refactored</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">xyz_file</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;xyz_file&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz_file</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">FileNotFoundError</span>
@@ -459,7 +817,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">natom</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Read Atom Number: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">natom</span><span class="p">))</span>
 
-<div class="viewcode-block" id="AtomDensity.run"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.run">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Density.run"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.Density.run">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># read all structure and corresponding z</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">all_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_z</span><span class="p">()</span>
 
@@ -492,7 +850,7 @@ document.write(`
         <span class="c1"># self.get_o_density()</span>
         <span class="c1"># self.dump_o_density()</span>
 
-<div class="viewcode-block" id="AtomDensity.get_all_z"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_all_z">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_all_z</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<div class="viewcode-block" id="Density.get_all_z"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.Density.get_all_z">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_all_z</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;get the z coordinates of atoms along trajectory</span>
 
 <span class="sd">        _extended_summary_</span>
@@ -508,7 +866,7 @@ document.write(`
         <span class="n">all_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">all_z</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">all_z</span></div>
 
-<div class="viewcode-block" id="AtomDensity.get_surf1_z_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_surf1_z_list">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_surf1_z_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<div class="viewcode-block" id="Density.get_surf1_z_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.Density.get_surf1_z_list">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_surf1_z_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;calculate the surface 1 average position</span>
 
 <span class="sd">        _extended_summary_</span>
@@ -533,7 +891,7 @@ document.write(`
         <span class="n">surf1_z_list</span> <span class="o">=</span> <span class="n">mic_1d</span><span class="p">(</span><span class="n">surf1_z_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">surf1_z_list</span></div>
 
-<div class="viewcode-block" id="AtomDensity.get_surf2_z_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_surf2_z_list">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_surf2_z_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<div class="viewcode-block" id="Density.get_surf2_z_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.Density.get_surf2_z_list">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_surf2_z_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;calculate the surface 2 average position</span>
 
 <span class="sd">        _extended_summary_</span>
@@ -557,7 +915,7 @@ document.write(`
         <span class="n">surf2_z_list</span> <span class="o">=</span> <span class="n">mic_1d</span><span class="p">(</span><span class="n">surf2_z_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">surf2_z_list</span></div>
 
-<div class="viewcode-block" id="AtomDensity.get_water_cent_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_water_cent_list">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_water_cent_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<div class="viewcode-block" id="Density.get_water_cent_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.Density.get_water_cent_list">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_water_cent_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
         <span class="n">water_cent_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">surf1_z</span><span class="p">,</span> <span class="n">surf2_z</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surf1_z_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">surf2_z_list</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">surf2_z</span> <span class="o">&lt;</span> <span class="n">surf1_z</span><span class="p">:</span>
@@ -567,7 +925,7 @@ document.write(`
         <span class="n">water_cent_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">water_cent_list</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">water_cent_list</span></div>
 
-<div class="viewcode-block" id="AtomDensity.water_O_idx"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.water_O_idx">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">water_O_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Density.water_O_idx"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.Density.water_O_idx">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">water_O_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># guess the o index of water</span>
         <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">neighbor_list</span><span class="p">(</span><span class="s1">&#39;ij&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">{(</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">):</span> <span class="mf">1.3</span><span class="p">})</span>
         <span class="n">cn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
@@ -578,7 +936,7 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">xyz_file</span><span class="p">),</span> <span class="s2">&quot;Ow_idx.dat&quot;</span><span class="p">),</span> <span class="n">Ow_idx</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Ow_idx</span></div>
 
-<div class="viewcode-block" id="AtomDensity.get_idx_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_idx_list">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_idx_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+<div class="viewcode-block" id="Density.get_idx_list"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.Density.get_idx_list">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_idx_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
         <span class="c1"># get the idx from external input</span>
 
         <span class="n">idx_method</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;idx_method&quot;</span><span class="p">)</span>
@@ -591,16 +949,16 @@ document.write(`
             <span class="k">raise</span> <span class="ne">ValueError</span>
         <span class="k">return</span> <span class="n">idx_list</span></div>
 
-<div class="viewcode-block" id="AtomDensity.get_idx_list_manual"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_idx_list_manual">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_idx_list_manual</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+<div class="viewcode-block" id="Density.get_idx_list_manual"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.Density.get_idx_list_manual">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_idx_list_manual</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
         <span class="n">idx_list</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;idx_list&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">idx_list</span></div>
 
-<div class="viewcode-block" id="AtomDensity.get_idx_list_all"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_idx_list_all">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_idx_list_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+<div class="viewcode-block" id="Density.get_idx_list_all"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.Density.get_idx_list_all">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_idx_list_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
         <span class="n">element</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;element&quot;</span><span class="p">)</span>
         <span class="n">idx_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">poses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">find_element_idx_list</span><span class="p">(</span><span class="n">element</span><span class="o">=</span><span class="n">element</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">idx_list</span></div>
 
-<div class="viewcode-block" id="AtomDensity.get_atom_density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_atom_density">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_atom_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">idx_list</span><span class="p">):</span>
+<div class="viewcode-block" id="Density.get_atom_density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.Density.get_atom_density">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_atom_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">idx_list</span><span class="p">):</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;START GETTING ATOM DENSITY&quot;</span><span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;----------------------------&quot;</span><span class="p">)</span>
 
@@ -651,7 +1009,7 @@ document.write(`
         <span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Density Profile Data Save to </span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="AtomDensity.get_unit_conversion"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_unit_conversion">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_unit_conversion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">dz</span><span class="p">):</span>
+<div class="viewcode-block" id="Density.get_unit_conversion"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.Density.get_unit_conversion">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_unit_conversion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">dz</span><span class="p">):</span>
         <span class="n">density_unit</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;density_unit&quot;</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">density_unit</span> <span class="o">==</span> <span class="s2">&quot;water&quot;</span><span class="p">:</span>
             <span class="n">bulk_density</span> <span class="o">=</span> <span class="mi">32</span><span class="o">/</span><span class="mf">9.86</span><span class="o">**</span><span class="mi">3</span>
@@ -662,7 +1020,7 @@ document.write(`
 
         <span class="k">return</span> <span class="n">unit_conversion</span></div>
 
-<div class="viewcode-block" id="AtomDensity.get_ave_density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.get_ave_density">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_ave_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width_list</span><span class="p">):</span>
+<div class="viewcode-block" id="Density.get_ave_density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.Density.get_ave_density">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_ave_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width_list</span><span class="p">):</span>
         <span class="n">all_cent_density</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">all_cent_density</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;width&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">width_list</span>
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">density</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">atom_density</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -681,7 +1039,7 @@ document.write(`
 
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">all_cent_density</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="AtomDensity.plot_density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.AtomDensity.plot_density">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Density.plot_density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.Density.plot_density">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;font&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>  <span class="c1"># controls default text size</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">titlesize</span><span class="o">=</span><span class="mi">23</span><span class="p">)</span>  <span class="c1"># fontsize of the title</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>  <span class="c1"># fontsize of the x and y labels</span>
@@ -707,117 +1065,6 @@ document.write(`
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Density&quot;</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;z [A]&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">fig</span></div></div>
-
-
-
-<div class="viewcode-block" id="Density"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.Density">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Density</span><span class="p">(</span><span class="n">AnalysisBase</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calculate the density profile of a group of atoms along the z-axis for interface systems</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atomgroup</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Density</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">atomgroup</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">trajectory</span><span class="p">,</span>
-                                          <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-        <span class="c1"># Params</span>
-        <span class="c1"># selection_area</span>
-        <span class="c1"># selection_left_surface</span>
-        <span class="c1"># selection_right_surface</span>
-        <span class="c1"># solid |(surface left) liquid |(surface_right) solid</span>
-        <span class="c1"># dz: default 0.05 resolution for density profile</span>
-
-        <span class="c1">#self._param = param</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">selection_area</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;selection_area&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">selection_left_surface</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;selection_left_surface&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">selection_right_surface</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;selection_right_surface&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dz</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dz&quot;</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">output_file</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;output_file&quot;</span><span class="p">,</span> <span class="s2">&quot;density.dat&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">density_type</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;density_type&quot;</span><span class="p">,</span> <span class="s2">&quot;water&quot;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ag</span> <span class="o">=</span> <span class="n">atomgroup</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ag</span><span class="o">.</span><span class="n">dimensions</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ag</span><span class="o">.</span><span class="n">volume</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">xy_area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">_prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># OPTIONAL</span>
-        <span class="c1"># Called before iteration on the trajectory has begun.</span>
-        <span class="c1"># Data structures can be set up at this time</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">example_result</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ag_area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ag</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selection_area</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ag_left_surface</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ag</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selection_left_surface</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ag_right_surface</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ag</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selection_right_surface</span><span class="p">)</span>
-
-
-        <span class="c1"># store the histogram of z area</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">z_area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ag_area</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">z_left_surface</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">z_right_surface</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span><span class="p">)</span>
-
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">_single_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># REQUIRED</span>
-        <span class="c1"># Called after the trajectory is moved onto each new frame.</span>
-        <span class="c1"># store an example_result of `some_function` for a single frame</span>
-        <span class="c1"># water density at each frame</span>
-        <span class="c1">#self.results.example_result.append(some_function(self._ag,</span>
-        <span class="c1">#                                                self._parameter))</span>
-
-        <span class="c1"># get the z coordinates of atoms along trajectory</span>
-        <span class="c1">#self._ag_area =</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">z_left_surface</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ag_left_surface</span><span class="o">.</span><span class="n">positions</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">z_right_surface</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ag_right_surface</span><span class="o">.</span><span class="n">positions</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">z_area</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ag_area</span><span class="o">.</span><span class="n">positions</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">_conclude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># OPTIONAL</span>
-        <span class="c1"># Called once iteration on the trajectory is finished.</span>
-        <span class="c1"># Apply normalisation and averaging to results here.</span>
-
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">z_area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_area</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_left_surface</span>
-
-        <span class="n">cell_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cellpar</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z_left_surface</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_right_surface</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">twoD</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">electrolyte_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_right_surface</span> <span class="o">+</span> <span class="n">cell_z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_left_surface</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">electrolyte_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_right_surface</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_left_surface</span>
-
-        <span class="n">bins</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">electrolyte_widthe</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">dz</span><span class="p">)</span>
-
-        <span class="n">density</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">z_area</span><span class="p">,</span>
-            <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span>
-            <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">electrolyte_width</span><span class="p">)</span>
-            <span class="p">)</span>
-
-        <span class="c1"># throw the last value and increase the half bin</span>
-        <span class="n">z</span> <span class="o">=</span> <span class="n">z</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dz</span><span class="o">/</span><span class="mi">2</span>
-
-        <span class="n">unit_conversion</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_unit_conversion</span><span class="p">()</span>
-
-        <span class="n">density</span> <span class="o">=</span> <span class="n">density</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span> <span class="o">*</span> <span class="n">unit_conversion</span>
-
-        <span class="c1"># self.atom_density_z[output_file] = z</span>
-        <span class="c1"># self.atom_density[output_file] = density</span>
-
-        <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">output_file</span><span class="p">,</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">z</span><span class="p">,</span> <span class="n">density</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
-            <span class="n">header</span><span class="o">=</span><span class="s2">&quot;FIELD: z[A], atom_density&quot;</span>
-        <span class="p">)</span>
-
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Density Profile Data Save to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<div class="viewcode-block" id="Density.get_unit_conversion"><a class="viewcode-back" href="../../../_api/ectoolkits.analysis.atom_density.html#ectoolkits.analysis.atom_density.Density.get_unit_conversion">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_unit_conversion</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">density_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">density_type</span>
-        <span class="k">if</span> <span class="n">density_type</span> <span class="o">==</span> <span class="s2">&quot;water&quot;</span><span class="p">:</span>
-            <span class="n">bulk_density</span> <span class="o">=</span> <span class="mi">32</span><span class="o">/</span><span class="mf">9.86</span><span class="o">**</span><span class="mi">3</span>
-            <span class="n">unit_conversion</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xy_area</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dz</span><span class="o">*</span><span class="n">bulk_density</span>
-            <span class="n">unit_conversion</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">unit_conversion</span>
-        <span class="k">elif</span> <span class="n">density_type</span> <span class="o">==</span> <span class="s2">&quot;number&quot;</span><span class="p">:</span>
-            <span class="n">unit_conversion</span> <span class="o">=</span> <span class="mf">1.0</span>
-
-        <span class="k">return</span> <span class="n">unit_conversion</span></div></div>
 </pre></div>
 
                 </article>

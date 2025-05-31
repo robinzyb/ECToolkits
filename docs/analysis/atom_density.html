@@ -429,6 +429,7 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#old-inputs">Old inputs</a></li>
 </ul>
             </nav>
         </div>
@@ -482,8 +483,74 @@ The reason two interfaces exist is that the model is symmetric with respect to t
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
-<p>Now, we import the analysis class <code class="docutils literal notranslate"><span class="pre">AtomDensity</span></code> and gather the following mentioned parameters.</p>
+<p>Now, we import the analysis class <code class="docutils literal notranslate"><span class="pre">AtomDensity</span></code> and gather the above mentioned parameters into a dictionary <code class="docutils literal notranslate"><span class="pre">inp</span></code>. Because the <code class="docutils literal notranslate"><span class="pre">AtomDensity</span></code> class is based on the <code class="docutils literal notranslate"><span class="pre">AnalysisBase</span></code> class from the MDAnalysis package, an <code class="docutils literal notranslate"><span class="pre">Universe</span></code> object is necessary to use the class.
+We recommend that users instantiate an <code class="docutils literal notranslate"><span class="pre">Universe</span></code> object by themselves as follows. The dictionary <code class="docutils literal notranslate"><span class="pre">inp</span></code> is not required.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.analysis.atom_density</span><span class="w"> </span><span class="kn">import</span> <span class="n">AtomDensity</span>
+
+<span class="c1"># The following input</span>
+<span class="n">inp</span><span class="o">=</span><span class="p">{</span>
+     <span class="s2">&quot;xyz_file&quot;</span><span class="p">:</span> <span class="s2">&quot;./Hematite-pos-1.xyz&quot;</span><span class="p">,</span> <span class="c1"># the path to the xyz trajecotry.</span>
+     <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;XYZ&quot;</span><span class="p">,</span> <span class="c1"># could be other formats for trajectories. Please refer to MDAnalysis</span>
+     <span class="c1"># https://userguide.mdanalysis.org/stable/formats/index.html#id1</span>
+     <span class="s2">&quot;cell&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">10.0564</span><span class="p">,</span> <span class="mf">8.7091</span><span class="p">,</span> <span class="mf">38.506</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">],</span> <span class="c1"># the cell parameters</span>
+     <span class="s2">&quot;surf2&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">43</span><span class="p">],</span> <span class="c1"># the interface on the right</span>
+     <span class="s2">&quot;surf1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">112</span><span class="p">,</span> <span class="mi">113</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">115</span><span class="p">,</span> <span class="mi">116</span><span class="p">,</span> <span class="mi">117</span><span class="p">,</span> <span class="mi">118</span><span class="p">,</span> <span class="mi">119</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">122</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span> <span class="c1"># the interface on the left</span>
+     <span class="s2">&quot;density_type&quot;</span><span class="p">:[</span>
+         <span class="p">{</span>
+             <span class="s2">&quot;element&quot;</span><span class="p">:</span> <span class="s2">&quot;O&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;idx_method&quot;</span><span class="p">:</span> <span class="s2">&quot;manual&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;idx_list&quot;</span><span class="p">:</span> <span class="n">O_idx</span><span class="p">,</span>
+             <span class="s2">&quot;density_unit&quot;</span><span class="p">:</span> <span class="s2">&quot;water&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;dz&quot;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span>
+             <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;O_density&quot;</span>
+             <span class="p">},</span>
+         <span class="p">{</span>
+             <span class="s2">&quot;element&quot;</span><span class="p">:</span> <span class="s2">&quot;H&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;idx_method&quot;</span><span class="p">:</span> <span class="s2">&quot;manual&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;idx_list&quot;</span><span class="p">:</span> <span class="n">H_idx</span><span class="p">,</span>
+             <span class="s2">&quot;density_unit&quot;</span><span class="p">:</span> <span class="s2">&quot;water&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;dz&quot;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span>
+             <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;H_density&quot;</span>
+             <span class="p">}</span>
+         <span class="p">]</span>
+ <span class="p">}</span>
+
+<span class="n">xyz_file</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;xyz_file&quot;</span><span class="p">)</span>
+<span class="n">fmt</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;format&quot;</span><span class="p">,</span> <span class="s2">&quot;XYZ&quot;</span><span class="p">)</span>
+<span class="n">cell</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cell&quot;</span><span class="p">)</span>
+<span class="n">cell</span> <span class="o">=</span> <span class="n">Cell</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
+<span class="n">u</span> <span class="o">=</span> <span class="n">Universe</span><span class="p">(</span><span class="n">xyz_file</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">fmt</span><span class="p">)</span>
+<span class="n">u</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">dimensions</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">cellpar</span><span class="p">()</span>
+<span class="n">surf1</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;surf1&quot;</span><span class="p">)</span>
+<span class="n">surf2</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;surf2&quot;</span><span class="p">)</span>
+<span class="n">density_type</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;density_type&quot;</span><span class="p">)</span>
+<span class="n">ad</span> <span class="o">=</span> <span class="n">AtomDensity</span><span class="p">(</span><span class="n">atomgroup</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">atoms</span><span class="p">,</span>
+                 <span class="n">surf1</span><span class="o">=</span><span class="n">surf1</span><span class="p">,</span>
+                 <span class="n">surf2</span><span class="o">=</span><span class="n">surf2</span><span class="p">,</span>
+                 <span class="n">density_type</span><span class="o">=</span><span class="n">density_type</span><span class="p">)</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+
+<span class="c1"># detail information is accessible in</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">atom_density</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">atom_density_z</span>
+
+<span class="c1"># get average denstiy from center</span>
+<span class="n">width_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+<span class="n">all_cent_density</span> <span class="o">=</span> <span class="n">ad</span><span class="o">.</span><span class="n">get_ave_density</span><span class="p">(</span><span class="n">width_list</span><span class="p">)</span>
+
+<span class="c1"># quick plot for denstiy</span>
+<span class="c1"># if you want to symmetrize the density profile, set sym=True</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">plot_density</span><span class="p">(</span><span class="n">sym</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+</pre></div>
+</div>
+<p><img alt="density" src="../../_images/density.png" /></p>
+</section>
+<section id="old-inputs">
+<h2>Old inputs<a class="headerlink" href="#old-inputs" title="Permalink to this heading">#</a></h2>
+<p>For users using the following old input. We recommend use the function <code class="docutils literal notranslate"><span class="pre">run_atom_density_analysis</span></code> to parse the input. The usage is present as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.analysis.atom_density</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_atom_density_analysis</span>
 
 <span class="c1"># from</span>
 <span class="n">inp_dict</span><span class="o">=</span><span class="p">{</span>
@@ -511,24 +578,9 @@ The reason two interfaces exist is that the model is symmetric with respect to t
          <span class="p">]</span>
  <span class="p">}</span>
 
-<span class="n">ad</span> <span class="o">=</span> <span class="n">AtomDensity</span><span class="p">(</span><span class="n">inp_dict</span><span class="p">)</span>
-<span class="n">ad</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-
-<span class="c1"># detail information is accessible in</span>
-<span class="n">ad</span><span class="o">.</span><span class="n">atom_density</span>
-<span class="n">ad</span><span class="o">.</span><span class="n">atom_density_z</span>
-
-<span class="c1"># get average denstiy from center</span>
-<span class="n">width_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
-<span class="n">all_cent_density</span> <span class="o">=</span> <span class="n">ad</span><span class="o">.</span><span class="n">get_ave_density</span><span class="p">(</span><span class="n">width_list</span><span class="p">)</span>
-
-<span class="c1"># quick plot for denstiy</span>
-<span class="c1"># if you want to symmetrize the density profile, set sym=True</span>
-<span class="n">ad</span><span class="o">.</span><span class="n">plot_density</span><span class="p">(</span><span class="n">sym</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
+<span class="n">ad</span> <span class="o">=</span> <span class="n">run_atom_density_analysis</span><span class="p">(</span><span class="n">input_dict</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><img alt="density" src="../../_images/density.png" /></p>
 </section>
 </section>
 
@@ -597,6 +649,7 @@ The reason two interfaces exist is that the model is symmetric with respect to t
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#old-inputs">Old inputs</a></li>
 </ul>
   </nav></div>
 

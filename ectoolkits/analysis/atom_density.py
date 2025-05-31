@@ -32,7 +32,7 @@ def run_atom_density_analysis(inp):
             surf2=surf2,
             density_type=density_type)
     ad.run()
-
+    return ad
 
 class AtomDensity(AnalysisBase):
     """

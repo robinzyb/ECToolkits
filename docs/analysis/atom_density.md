@@ -78,10 +78,10 @@ inp={
  }
 
 xyz_file = inp.get("xyz_file")
-format = inp.get("format", "XYZ")
+fmt = inp.get("format", "XYZ")
 cell = inp.get("cell")
 cell = Cell.new(cell)
-u = Universe(xyz_file, format=format)
+u = Universe(xyz_file, format=fmt)
 u.atoms.dimensions = cell.cellpar()
 surf1 = inp.get("surf1")
 surf2 = inp.get("surf2")

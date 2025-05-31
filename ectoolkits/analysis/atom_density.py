@@ -5,7 +5,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from ase.io import read, write
 from ase.neighborlist import neighbor_list
+from ase.cell import Cell # used for converting cell parameters.
+from MDAnalysis import Universe
 from MDAnalysis.analysis.base import AnalysisBase
+from MDAnalysis.lib.mdamath import box_volume
 
 from ectoolkits.structures.slab import Slab
 from ectoolkits.utils.utils import mic_1d
@@ -13,6 +16,359 @@ from ectoolkits.log import get_logger
 
 logger = get_logger(__name__)
 
+def run_atom_density_analysis(inp):
+    xyz_file = inp.get("xyz_file")
+    format = inp.get("format", "XYZ")
+    cell = inp.get("cell")
+    cell = Cell.new(cell)
+    u = Universe(xyz_file, format=format)
+    u.atoms.dimensions = cell.cellpar()
+    surf1 = inp.get("surf1")
+    surf2 = inp.get("surf2")
+    density_type = inp.get("density_type")
+
+    ad = AtomDensity(atomgroup=u.atoms,
+            surf1=surf1,
+            surf2=surf2,
+            density_type=density_type)
+    ad.run()
+    return ad
+
+class AtomDensity(AnalysisBase):
+    """
+    Class for analyzing atom density profiles along the z-axis for interface systems.
+
+    This class extends the MDAnalysis `AnalysisBase` class and provides methods to compute and analyze
+    atom density distributions along the z-axis, which is useful for studying interfaces and layered materials.
+
+    Attributes:
+        twoD (bool): Whether the system is a 2D material (surface 1 and 2 are the same).
+        surf1 (np.ndarray): Indices of atoms defining surface 1 (left interface).
+        surf2 (np.ndarray): Indices of atoms defining surface 2 (right interface).
+        density_type (Any): Parameters specifying which atom types to analyze.
+        ag (AtomGroup): AtomGroup of all atoms to be analyzed.
+        u (Universe): The MDAnalysis Universe object containing the atomgroup and trajectory.
+        cellpar (np.ndarray): Unit cell parameters of the system.
+        n_atoms (int): Number of atoms in the selected atom group.
+        volume (float): Volume of the simulation cell.
+        xy_area (float): Area of the xy-plane of the simulation cell.
+        n_results (int): Number of results to store for each frame.
+        all_z (np.ndarray): Array to store z-coordinates of all atoms for each frame.
+        surf1_z_list (np.ndarray): Average z positions of surface 1 atoms for each frame.
+        surf2_z_list (np.ndarray): Average z positions of surface 2 atoms for each frame.
+        surf1_z (float): Mean z position of surface 1.
+        surf2_z (float): Mean z position of surface 2.
+        water_cent_list (np.ndarray): List of water center positions along the trajectory.
+        atom_density (dict): Dictionary to store computed atom density profiles.
+        atom_density_z (dict): Dictionary to store z-coordinates corresponding to density profiles.
+
+    Methods:
+        _prepare(): Prepares data structures before trajectory iteration.
+        _single_frame(): Processes a single frame to extract z-coordinates.
+        _conclude(): Finalizes the analysis and computes density profiles.
+        get_surf_z_list(idxs_surf): Calculates average z positions for a given surface.
+        get_water_cent_list(): Computes the water center positions along the trajectory.
+        get_idx_list(param): Determines atom indices to analyze based on input parameters.
+        get_idx_list_manual(param): Returns manually specified atom indices.
+        get_idx_list_all(param): Returns all atom indices of a specified element.
+        get_atom_density(param, idx_list): Calculates and saves the atom density profile.
+        get_unit_conversion(density_unit, dz, xy_area): Computes the unit conversion factor for density.
+    """
+    def __init__(self,
+                 atomgroup,
+                 verbose=True,
+                 **kwargs):
+        trajectory = atomgroup.universe.trajectory
+        super(AtomDensity, self).__init__(trajectory,
+                                      verbose=verbose)
+        """
+        Initialize the Density analysis.
+
+        Parameters:
+            atomgroup (AtomGroup): The atom group to analyze.
+            verbose (bool): Whether to print verbose output. Defaults to True.
+            **kwargs: Additional keyword arguments, including:
+                twoD (bool): Whether the system is a 2D material (surface 1 and 2 are the same).
+                surf1 (List[int]): Indices of atoms defining surface 1 (left interface).
+                surf2 (List[int]): Indices of atoms defining surface 2 (right interface).
+                density_type (Dict): Parameters specifying which atom types to analyze.
+
+        Sets up the initial analysis parameters, parses input surfaces and density types,
+        and initializes attributes for cell, atom group, and logging.
+        """
+        # Params
+        # solid |(surface left) liquid |(surface_right) solid
+        # dz: default 0.05 resolution for density profile
+
+
+        logger.info("Analysis of Atom Density along Z axis")
+        logger.info("Only trajectory from NVT ensemble is supported")
+
+        # Parse external input parameters
+        self.twoD = kwargs.get("twoD", False)
+        # better to change the names of surf1 and surf2 to left and right
+        self.surf1 = kwargs.get("surf1", None)
+        logger.info("Read Surface 1 Atoms Index: {0}".format(self.surf1))
+        self.surf1 = np.array(self.surf1)
+        self.surf2 = kwargs.get("surf2", None)
+        logger.info("Read Surface 2 Atoms Index: {0}".format(self.surf2))
+        self.surf2 = np.array(self.surf2)
+        if np.all(self.surf1 == self.surf2):
+            self.twoD = True
+            logger.info("Surface 1 and Surface 2 are the same, this is a 2D material.")
+        self.density_type = kwargs.get("density_type")
+
+        #TODO: MDA cellpar only accepts [a, b, c, alpha, beta, gamma] format
+        # use ase cells to covert to this format.
+        # ensure the dimensions are not empty.
+        # internal variable
+        self.ag = atomgroup
+        self.u = self.ag.universe
+        self.cellpar = self.ag.dimensions
+        self.n_atoms = len(self.ag)
+        self.volume = box_volume(self.cellpar)
+        self.xy_area = self.volume/self.cellpar[2]
+        self.atom_density = {}
+        self.atom_density_z = {}
+
+        logger.info("Read Frame Number: {0}".format(self.u.trajectory.n_frames))
+        logger.info("Read Atom Number: {0}".format(self.n_atoms))
+        logger.info("Read Cell Parameters: {0}".format(self.cellpar))
+        logger.info("Read z length: {0}".format(self.cellpar[2]))
+        logger.info("Read XY Area: {0}".format(self.xy_area))
+        logger.info("Read Cell Volume: {0}".format(self.volume))
+
+
+
+        self.n_results = 2
+
+    def _prepare(self):
+        """
+        Prepare data structures before trajectory iteration.
+
+        Initializes the array to store z-coordinates of all atoms for each frame.
+        Called before the trajectory iteration begins.
+        """
+        self.all_z = np.zeros((self.n_frames, self.n_atoms))
+
+    def _single_frame(self):
+        """
+        Process a single frame to extract z-coordinates.
+
+        Stores the z-coordinates of all atoms in the current frame into the results array.
+        """
+        #TODO: all_z seems not necessary, since we can get the z from u.atoms.positions
+        self.all_z[self._frame_index] = self.ag.positions[:, 2]
+
+    def _conclude(self):
+        """
+        Finalize the analysis and compute density profiles.
+
+        Calculates average surface positions, water center positions, and computes
+        atom density profiles for each specified atom type.
+        """
+        self.surf1_z_list = self.get_surf_z_list(idxs_surf=self.surf1)
+        self.surf2_z_list = self.get_surf_z_list(idxs_surf=self.surf2)
+        self.surf1_z = self.surf1_z_list.mean()
+        self.surf2_z = self.surf2_z_list.mean()
+        # find the water center along the trajectory
+        self.water_cent_list = self.get_water_cent_list()
+
+        for param in self.density_type:
+            idx_list = self.get_idx_list(param)
+            self.get_atom_density(param, idx_list=idx_list)
+
+
+    def get_surf_z_list(self, idxs_surf: np.array) -> np.array:
+        """
+        Calculate the average z positions for a given surface.
+
+        Wraps the z-coordinates of surface atoms to handle periodic boundaries and computes
+        the mean z position for each frame.
+
+        Args:
+            idxs_surf (np.array): Indices of surface atoms.
+
+        Returns:
+            np.array: Average z positions for each frame.
+        """
+
+        surf_z_list = self.all_z.T[idxs_surf]
+        surf_z_list = surf_z_list.T
+
+        # Wrap the surface atoms.
+        # Sometimes atoms on surfaces are distributed around the cell boundary.
+        # The absolute positions of certain atoms may differ by cell length.
+        # This will cause the average position of surface atoms to be wrong.
+        new_surf_z_list = []
+        for surf_z in surf_z_list:
+            surf_z = mic_1d(surf_z, self.cellpar[2])
+            new_surf_z_list.append(surf_z)
+
+        surf_z_list = np.stack(new_surf_z_list)
+
+        surf_z_list = surf_z_list.mean(axis=1)
+        # all the z positions are wrapped to the first frame
+        surf_z_list = mic_1d(surf_z_list, self.cellpar[2])
+        return surf_z_list
+
+    def get_water_cent_list(self) -> np.array:
+        """
+        Compute the water center positions along the trajectory.
+
+        Calculates the midpoint between the two surfaces for each frame.
+
+        Returns:
+            np.array: Water center positions for each frame.
+        """
+        water_cent_list = []
+        for surf1_z, surf2_z in zip(self.surf1_z_list, self.surf2_z_list):
+            if surf2_z < surf1_z:
+                surf2_z += self.cellpar[2]
+            water_cent = (surf1_z + surf2_z)/2
+            water_cent_list.append(water_cent)
+        water_cent_list = np.array(water_cent_list)
+        return water_cent_list
+
+    def get_idx_list(self, param):
+        """
+        Determine atom indices to analyze based on input parameters.
+
+        Selects indices either manually or by element type as specified in the parameter dictionary.
+
+        Args:
+            param (dict): Dictionary specifying selection method and parameters.
+
+        Returns:
+            list or np.array: List of atom indices to analyze.
+        """
+
+        idx_method = param.get("idx_method")
+        if idx_method == "manual":
+            idx_list = self.get_idx_list_manual(param)
+        elif idx_method == "all":
+            idx_list = self.get_idx_list_all(param)
+        else:
+            logger.info("Not implement")
+            raise ValueError
+        return idx_list
+
+    def get_idx_list_manual(self, param):
+        """
+        Return manually specified atom indices.
+
+        Args:
+            param (dict): Dictionary containing 'idx_list'.
+
+        Returns:
+            list: List of atom indices.
+        """
+        idx_list = param.get("idx_list")
+        return idx_list
+
+    def get_idx_list_all(self, param):
+        """
+        Return all atom indices of a specified element.
+
+        Args:
+            param (dict): Dictionary containing 'element'.
+
+        Returns:
+            np.array: Array of atom indices for the specified element.
+        """
+        element = param.get("element")
+        idx_list = self.u.select_atoms(f'type {element}')
+        return idx_list
+
+    def get_atom_density(self, param, idx_list):
+        """
+        Calculate and save the atom density profile.
+
+        Computes the histogram of atom z-coordinates, normalizes the density,
+        and saves the profile to a file.
+
+        Args:
+            param (dict): Parameters for density calculation (e.g., bin width, unit).
+            idx_list (list or np.array): Indices of atoms to include in the density profile.
+        """
+        logger.info("START GETTING ATOM DENSITY")
+        logger.info("----------------------------")
+        # dz: default 0.05 resolution for density profile
+        # dz is different for different systems.
+        dz = param.get("dz", 0.05)
+        atom_z = self.all_z.T[idx_list]
+        # atoms are aligned to the left surface
+        # TODO: we can also align to the center of water.
+        atom_z = atom_z - self.surf1_z_list
+
+        # A certain atom_z possibly exceeds cell boundary, need wrap its value.
+        atom_z_new = []
+        cell_z = self.cellpar[2]
+        for num in atom_z.flatten():
+            atom_z_new.append(num % cell_z)
+        atom_z = np.array(atom_z_new)
+
+        # find the length between two surface
+        if (self.surf1_z > self.surf2_z) or self.twoD:
+            self.surf_space = self.surf2_z + cell_z - self.surf1_z
+        else:
+            self.surf_space = self.surf2_z - self.surf1_z
+
+        bins = int(self.surf_space/dz)
+
+        density, z = np.histogram(
+            atom_z, bins=bins, range=(0, self.surf_space))
+
+        # throw the last one and shift half bin
+        z = z[:-1] + dz/2
+
+        density_unit = param.get("density_unit", "number")
+        unit_conversion = self.get_unit_conversion(density_unit, dz, self.xy_area)
+
+
+        # normalized wrt density of bulk water
+        density = density/self.n_frames * unit_conversion
+
+        element = param.get("element")
+        output_file = param.get("name", f"{element}_output")
+
+        self.atom_density_z[output_file] = z
+        self.atom_density[output_file] = density
+
+        output_file = f"{output_file}.dat"
+        np.savetxt(
+            output_file,
+            np.stack((z, density)).T,
+            header="FIELD: z[A], atom_density"
+        )
+        logger.info(f"Density Profile Data Save to {output_file}")
+
+    @staticmethod
+    def get_unit_conversion(density_unit, dz, xy_area):
+        """
+        Compute the unit conversion factor for density.
+
+        Args:
+            density_unit (str): Desired density unit ('water' or 'number').
+            dz (float): Bin width along z-axis.
+            xy_area (float): Area of the xy-plane.
+
+        Returns:
+            float: Conversion factor for density normalization.
+        """
+        if density_unit == "water":
+            bulk_density = 32/9.86**3
+            unit_conversion = xy_area*dz*bulk_density
+            unit_conversion = 1.0/unit_conversion
+        elif density_unit == "number":
+            unit_conversion = 1.0
+
+        return unit_conversion
+
+
+
+
+# old density analysis function/class
 
 def analysis_run(args):
     if args.CONFIG:
@@ -20,16 +376,18 @@ def analysis_run(args):
         logger.info("Analysis Start!")
         with open(args.CONFIG, 'r') as f:
             inp = json.load(f)
-        system = AtomDensity(inp)
+        system = Density(inp)
         system.run()
         logger.info("FINISHED")
 
 
-class AtomDensity():
+class Density():
     def __init__(self, inp):
         logger.info("Perform Atom Density Analysis")
         # print file name
         self.twoD = False
+
+        # this is not refactored
         self.xyz_file = inp.get("xyz_file")
         if not os.path.isfile(self.xyz_file):
             raise FileNotFoundError
@@ -326,114 +684,3 @@ class AtomDensity():
         ax.set_ylabel("Density")
         ax.set_xlabel("z [A]")
         return fig
-
-
-
-class Density(AnalysisBase):
-    """
-    Calculate the density profile of a group of atoms along the z-axis for interface systems
-    """
-    def __init__(self, atomgroup, **kwargs):
-        super(Density, self).__init__(atomgroup.universe.trajectory,
-                                          **kwargs)
-
-        # Params
-        # selection_area
-        # selection_left_surface
-        # selection_right_surface
-        # solid |(surface left) liquid |(surface_right) solid
-        # dz: default 0.05 resolution for density profile
-
-        #self._param = param
-        self.selection_area = kwargs.get("selection_area")
-        self.selection_left_surface = kwargs.get("selection_left_surface")
-        self.selection_right_surface = kwargs.get("selection_right_surface")
-        self.dz = kwargs.get("dz", 0.05)
-        self.output_file = kwargs.get("output_file", "density.dat")
-        self.density_type = kwargs.get("density_type", "water")
-
-        self._ag = atomgroup
-        self.cellpar = self._ag.dimensions
-        self.volume = self._ag.volume
-        self.xy_area = self.volume/self.cellpar[2]
-
-    def _prepare(self):
-        # OPTIONAL
-        # Called before iteration on the trajectory has begun.
-        # Data structures can be set up at this time
-        self.results.example_result = []
-        self._ag_area = self._ag.select_atoms(self.selection_area)
-        self._ag_left_surface = self._ag.select_atoms(self.selection_left_surface)
-        self._ag_right_surface = self._ag.select_atoms(self.selection_right_surface)
-
-
-        # store the histogram of z area
-        self.z_area = np.zeros(self.n_frames, len(self._ag_area))
-        self.z_left_surface = np.zeros(self.n_frames)
-        self.z_right_surface = np.zeros(self.n_frames)
-
-
-    def _single_frame(self):
-        # REQUIRED
-        # Called after the trajectory is moved onto each new frame.
-        # store an example_result of `some_function` for a single frame
-        # water density at each frame
-        #self.results.example_result.append(some_function(self._ag,
-        #                                                self._parameter))
-
-        # get the z coordinates of atoms along trajectory
-        #self._ag_area =
-        self.z_left_surface[self._frame_index] = self._ag_left_surface.positions.T[2].mean()
-        self.z_right_surface[self._frame_index] = self._ag_right_surface.positions.T[2].mean()
-        self.z_area[self._frame_index] = self._ag_area.positions.T[2]
-
-    def _conclude(self):
-        # OPTIONAL
-        # Called once iteration on the trajectory is finished.
-        # Apply normalisation and averaging to results here.
-
-
-        self.z_area = self.z_area - self.z_left_surface
-
-        cell_z = self.cellpar[2]
-        if (self.z_left_surface > self.z_right_surface) or self.twoD:
-            self.electrolyte_width = self.z_right_surface + cell_z - self.z_left_surface
-        else:
-            self.electrolyte_width = self.z_right_surface - self.z_left_surface
-
-        bins = int(self.electrolyte_widthe/self.dz)
-
-        density, z = np.histogram(
-            self.z_area,
-            bins=bins,
-            range=(0, self.electrolyte_width)
-            )
-
-        # throw the last value and increase the half bin
-        z = z[:-1] + self.dz/2
-
-        unit_conversion = self.get_unit_conversion()
-
-        density = density/self.n_frames * unit_conversion
-
-        # self.atom_density_z[output_file] = z
-        # self.atom_density[output_file] = density
-
-        np.savetxt(
-            self.output_file,
-            np.stack((z, density)).T,
-            header="FIELD: z[A], atom_density"
-        )
-
-        logger.info(f"Density Profile Data Save to {self.output_file}")
-
-    def get_unit_conversion(self):
-        density_type = self.density_type
-        if density_type == "water":
-            bulk_density = 32/9.86**3
-            unit_conversion = self.xy_area*self.dz*bulk_density
-            unit_conversion = 1.0/unit_conversion
-        elif density_type == "number":
-            unit_conversion = 1.0
-
-        return unit_conversion

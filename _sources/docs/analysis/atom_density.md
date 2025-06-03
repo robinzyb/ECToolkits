@@ -48,6 +48,7 @@ Now, we import the analysis class `AtomDensity` and gather the above mentioned p
 We recommend that users instantiate an `Universe` object by themselves as follows. The dictionary `inp` is not required.
 ```python
 from ectoolkits.analysis.atom_density import AtomDensity
+from MDAnalysis import Universe
 
 # The following input
 inp={
@@ -103,8 +104,8 @@ all_cent_density = ad.get_ave_density(width_list)
 
 # quick plot for denstiy
 # if you want to symmetrize the density profile, set sym=True
-ad.plot_density(sym=False)
-
+fig = ad.plot_density(sym=False)
+fig.savefig('density.png', bbox_inches='tight')
 ```
 ![density](./figures/density.png)
 

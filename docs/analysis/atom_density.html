@@ -486,6 +486,7 @@ The reason two interfaces exist is that the model is symmetric with respect to t
 <p>Now, we import the analysis class <code class="docutils literal notranslate"><span class="pre">AtomDensity</span></code> and gather the above mentioned parameters into a dictionary <code class="docutils literal notranslate"><span class="pre">inp</span></code>. Because the <code class="docutils literal notranslate"><span class="pre">AtomDensity</span></code> class is based on the <code class="docutils literal notranslate"><span class="pre">AnalysisBase</span></code> class from the MDAnalysis package, an <code class="docutils literal notranslate"><span class="pre">Universe</span></code> object is necessary to use the class.
 We recommend that users instantiate an <code class="docutils literal notranslate"><span class="pre">Universe</span></code> object by themselves as follows. The dictionary <code class="docutils literal notranslate"><span class="pre">inp</span></code> is not required.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ectoolkits.analysis.atom_density</span><span class="w"> </span><span class="kn">import</span> <span class="n">AtomDensity</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">MDAnalysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">Universe</span>
 
 <span class="c1"># The following input</span>
 <span class="n">inp</span><span class="o">=</span><span class="p">{</span>
@@ -541,8 +542,8 @@ We recommend that users instantiate an <code class="docutils literal notranslate
 
 <span class="c1"># quick plot for denstiy</span>
 <span class="c1"># if you want to symmetrize the density profile, set sym=True</span>
-<span class="n">ad</span><span class="o">.</span><span class="n">plot_density</span><span class="p">(</span><span class="n">sym</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
+<span class="n">fig</span> <span class="o">=</span> <span class="n">ad</span><span class="o">.</span><span class="n">plot_density</span><span class="p">(</span><span class="n">sym</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;density.png&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><img alt="density" src="../../_images/density.png" /></p>

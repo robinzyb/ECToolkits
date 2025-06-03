@@ -10,6 +10,9 @@ from MDAnalysis import Universe
 from MDAnalysis.analysis.base import AnalysisBase
 from MDAnalysis.lib.mdamath import box_volume
 
+import matplotlib as mpl
+import cp2kdata.plots.colormaps
+
 from ectoolkits.structures.slab import Slab
 from ectoolkits.utils.utils import mic_1d
 from ectoolkits.log import get_logger
@@ -365,7 +368,41 @@ class AtomDensity(AnalysisBase):
 
         return unit_conversion
 
+    def get_ave_density(self, width_list):
+        all_cent_density = {}
+        all_cent_density[f"width"] = width_list
+        for name, density in self.atom_density.items():
+            z = self.atom_density_z[name]
+            cent = z[-1]/2
+            cent_density_list = []
+            for width in width_list:
+                left_bound = cent - width/2
+                right_bound = cent + width/2
+                part_density = density[np.logical_and(
+                    (z >= left_bound), (z <= right_bound))]
+                cent_density = part_density.mean()
+                cent_density_list.append(cent_density)
 
+            all_cent_density[f"{name}"] = cent_density_list
+
+        return pd.DataFrame(all_cent_density)
+
+    def plot_density(self, sym=False):
+        plt.style.use('cp2kdata.matplotlibstyle.jcp')
+        cp2kdata_cb_lcmap = mpl.colormaps['cp2kdata_cb_lcmap']
+        plt.rcParams["axes.prop_cycle"] = plt.cycler("color", cp2kdata_cb_lcmap.colors)
+        fig = plt.figure(figsize=(3.37, 1.89), dpi=400, facecolor='white')
+        ax = fig.add_subplot()
+        for name, density in self.atom_density.items():
+            z = self.atom_density_z[name]
+            density = density
+            if sym:
+                density = (np.flip(density) + density)/2
+            ax.plot(z, density, label=name)
+        ax.legend()
+        ax.set_ylabel("Density")
+        ax.set_xlabel(r"z ($\mathrm{\AA}$)")
+        return fig
 
 
 # old density analysis function/class

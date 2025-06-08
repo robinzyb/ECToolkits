@@ -1,7 +1,7 @@
 # Introduction
 
 
-ElectroChemical Toolkits(ECToolkits), the package to calculate electrochemical results from atomistic simulations.
+ElectroChemical Toolkits (ECToolkits) is a package for calculating electrochemical results from atomistic simulations.
 
 ![Python package](https://github.com/robinzyb/ectoolkits/actions/workflows/ci.yml/badge.svg)
 ![codecov](https://codecov.io/github/robinzyb/ECToolkits/graph/badge.svg?token=8M5ULYLP2U)
